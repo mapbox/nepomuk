@@ -1,6 +1,21 @@
 # define a set of sources to compile
 set(gtfs_SOURCES
-    gtfs_reader.cpp)
+    read_csv.cpp
+    accessibility.cpp
+    agency.cpp
+    calendar.cpp
+    fare.cpp
+    date.cpp
+    feed_info.cpp
+    frequency.cpp
+    time.cpp
+    route.cpp
+    shape.cpp
+    schedule.cpp
+    stop.cpp
+    transfer.cpp
+    trip.cpp
+    provider.cpp)
 
 # export source files as library
 add_library(transitgtfs STATIC
@@ -11,7 +26,10 @@ target_link_libraries(transitgtfs
     ${Boost_LIBRARIES}
     ${PROTOBUF_LITE_LIBRARIES}
     ${Zmq_LIBRARIES}
-    ${MAYBE_COVERAGE_LIBRARIES})
+    ${MAYBE_COVERAGE_LIBRARIES}
+    transitproto
+    transittool
+    transitgeometric)
 
 # define additional include directories
 target_include_directories(transitgtfs SYSTEM PUBLIC

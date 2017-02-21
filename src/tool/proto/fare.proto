@@ -1,0 +1,36 @@
+package transit.io.gtfs.proto;
+
+message Fare
+{
+    required uint32 id = 1;
+    required sfixed32 price = 2;
+    required uint32 currency_code = 3;
+
+    enum PaymentType
+    {
+        PRIOR_TO_BORDING = 0;
+        PAYABLE_ON_BOARD = 1;
+    }
+    required PaymentType payment_type = 4;
+
+    enum TransferPolicy
+    {
+        FORBIDDEN = 0;
+        SINGLE = 1;
+        DOUBLE = 2;
+        UNLIMITED = 3;
+    }
+    required TransferPolicy transfer_policy = 5;
+    optional uint32 transfer_duration = 6;
+}
+
+message FareRule
+{
+    required uint32 id = 1;
+
+    optional uint32 route_id = 2;
+    optional uint32 stop_origin_id = 3;
+    optional uint32 stop_destination_id = 4;
+    optional uint32 stop_contains_id = 5;
+}
+

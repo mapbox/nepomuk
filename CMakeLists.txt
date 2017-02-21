@@ -10,6 +10,11 @@ set(TRANSIT_VERSION_MAJOR 0)
 set(TRANSIT_VERSION_MINOR 0)
 set(TRANSIT_VERSION_PATCH 0)
 
+# fileformat versioning scheme
+set(TRANSIT_FILEFORMAT_VERSION_MAJOR 0)
+set(TRANSIT_FILEFORMAT_VERSION_MINOR 0)
+set(TRANSIT_FILEFORMAT_VERSION_PATCH 0)
+
 option(DEBUG_MODE "Compile in debug mode" OFF)
 option(SANITIZE "Run adress sanitizer" OFF)
 option(COVERAGE "Generate test converage data" OFF)
@@ -18,12 +23,12 @@ option(COVERAGE "Generate test converage data" OFF)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -pedantic -fvisibility=hidden -fPIC -fno-rtti")
   set(directions_transit_os unix)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -pedantic -fvisibility=hidden -fPIC -fno-rtti")
   set(directions_transit_os mac)
+  link_directories(/usr/local/lib)
+  include_directories(/usr/local/include)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   message(FATAL_ERROR "Windows not yet supported")
@@ -34,27 +39,28 @@ else()
 endif()
 
 # set compile flags based on optimisation / debug mode
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Wuninitialized -Wunreachable-code -Wstrict-overflow=2")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIC")
+add_compile_options(${CMAKE_CXX_FLAGS} -std=c++14 -fvisibility=hidden -fPIC)
+add_compile_options(${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Wuninitialized -Wunreachable-code -Wstrict-overflow=2)
+add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIC)
+
 if(DEBUG_MODE)
-    add_definitions(-DBOOST_ENABLE_ASSERT_HANDLER)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-inline -fno-omit-frame-pointer")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -ggdb")
+    add_compile_options(${CMAKE_CXX_FLAGS} -fno-inline -fno-omit-frame-pointer)
+    add_compile_options(${CMAKE_CXX_FLAGS} -g -ggdb)
 endif()
 if(SANITIZE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+    add_compile_options(${CMAKE_CXX_FLAGS} -fsanitize=address)
 endif()
 if(COVERAGE)
     if(!DEBUG_MODE)
         message(FATAL_ERROR "Configuration unreasonable: coverage requires debug mode.")
     endif()
     set(MAYBE_COVERAGE_LIBRARIES "-lgcov")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftest-coverage -fprofile-arcs")
+    add_compile_options(${CMAKE_CXX_FLAGS} -ftest-coverage -fprofile-arcs)
 endif()
 
 #setup versioning scheme in header
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/version.h)
+               ${CMAKE_CURRENT_SOURCE_DIR}/include/version.h)
 
 include(mason)
 
@@ -81,41 +87,38 @@ set(BOOST_VERSION 1.63.0)
 set(Boost_USE_STATIC_LIBS ON)
 mason_use(boost VERSION ${BOOST_VERSION} HEADER_ONLY)
 mason_use(boost_libfilesystem VERSION ${BOOST_VERSION})
-mason_use(boost_libiostreams VERSION ${BOOST_VERSION})
+#mason_use(boost_libiostreams VERSION ${BOOST_VERSION})
 mason_use(boost_libprogram_options VERSION ${BOOST_VERSION})
-mason_use(boost_libregex VERSION ${BOOST_VERSION})
+#mason_use(boost_libregex VERSION ${BOOST_VERSION})
 mason_use(boost_libtest VERSION ${BOOST_VERSION})
 mason_use(boost_libdate_time VERSION ${BOOST_VERSION})
-mason_use(boost_libthread VERSION ${BOOST_VERSION})
+#mason_use(boost_libthread VERSION ${BOOST_VERSION})
 mason_use(boost_libsystem VERSION ${BOOST_VERSION})
 
 set(Boost_INCLUDE_DIRS ${MASON_PACKAGE_boost_INCLUDE_DIRS})
 set(Boost_LIBRARIES
   ${MASON_PACKAGE_boost_libfilesystem_STATIC_LIBS}
-  ${MASON_PACKAGE_boost_libiostreams_STATIC_LIBS}
+#  ${MASON_PACKAGE_boost_libiostreams_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libprogram_options_STATIC_LIBS}
-  ${MASON_PACKAGE_boost_libregex_STATIC_LIBS}
+#  ${MASON_PACKAGE_boost_libregex_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libtest_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libdate_time_STATIC_LIBS}
-  ${MASON_PACKAGE_boost_libthread_STATIC_LIBS}
+#  ${MASON_PACKAGE_boost_libthread_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libsystem_STATIC_LIBS})
 
 # required due to mason
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+message(STATUS "Build Configuration: " ${CMAKE_CXX_FLAGS})
 
 # Optional Protobuf + ZeroMQ networking example
 find_package(Protobuf 2.4.1 REQUIRED)
-
-if (PROTOBUF_FOUND)
-  #protobuf_generate_cpp(ProtoSources ProtoHeaders net.proto)
-endif()
-
-message(STATUS "Build Configuration: " ${CMAKE_CXX_FLAGS})
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
 add_subdirectory(src/tool)
 # add_subdirectory(src/transit)
 add_subdirectory(src/gtfs)
+add_subdirectory(src/geometric)
+add_subdirectory(src/apps)
 
 # testing, build unconditionally
 enable_testing()

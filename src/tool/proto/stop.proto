@@ -1,0 +1,53 @@
+package transit.io.gtfs.proto;
+
+import "accessibility.proto";
+import "coordinate.proto";
+
+message Stop
+{
+    required uint32 id = 1;
+    required string name = 2;
+    required Coordinate location = 3;
+
+    optional string code = 4;
+    optional string description = 5;
+    optional string url = 6;
+
+    enum LocationType
+    {
+        STOP = 0;
+        STATION = 1;
+    }
+    optional LocationType location_type = 7;
+    optional uint32 zone_id = 8;
+    optional uint32 parent_stop_id = 9;
+    optional string timezone = 10;
+    optional WheelchairAccessibility wheelchair_access = 11;
+}
+
+message StopTime
+{
+    required uint32 trip_id = 1;
+    required string arrival_time = 2;
+    required string departure_time = 3;
+    required uint32 stop_id = 4;
+    required uint32 sequence_id = 5;
+
+    optional string headsign = 6;
+    enum StopType
+    {
+        REGULAR = 0;
+        NOT_AVAILABLE = 1;
+        PHONE_AGENCY = 2;
+        COORDINATE_DRIVER = 3;
+    }
+    optional StopType pickup = 7;
+    optional StopType dropoff = 8;
+    optional fixed64 shape_distance_travelled = 9;
+    enum TimePointType
+    {
+        EXACT = 0;
+        APPROXIMATE = 1;
+    }
+    optional TimePointType timepoint = 10;
+}

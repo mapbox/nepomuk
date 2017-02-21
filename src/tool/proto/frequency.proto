@@ -1,0 +1,16 @@
+package transit.io.gtfs.proto;
+
+message Frequency
+{
+    required uint32 trip_id = 1;
+    required string begin = 2;
+    required string end = 3;
+    required uint32 headway = 4;
+
+    enum FrequencyType
+    {
+        INEXACT = 0;
+        EXACT = 1;
+    }
+    optional FrequencyType type = 5;
+}

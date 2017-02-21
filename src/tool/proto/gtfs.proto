@@ -1,0 +1,57 @@
+package transit.io.gtfs.proto;
+
+option optimize_for = LITE_RUNTIME;
+
+import "calendar.proto";
+import "fare.proto";
+import "schedule.proto";
+import "stop.proto";
+import "trip.proto";
+import "agency.proto";
+import "frequency.proto";
+import "route.proto";
+import "shape.proto";
+import "transfer.proto";
+
+message FileFormatVersion
+{
+    required uint32 major = 1;
+    required uint32 minor = 2;
+}
+
+message FeedInfo
+{
+    required string publisher = 1;
+    required string publisher_url = 2;
+    required string language = 3;
+
+    optional string start_date = 4;
+    optional string end_date = 5;
+    optional string version = 6;
+}
+
+message GTFSStaticFeed
+{
+    optional FeedInfo feed_info = 1;
+    //required
+    repeated Agency agencies = 2;
+    repeated Stop stops = 3;
+    repeated Route routes = 4;
+    repeated Trip trips = 5;
+    repeated StopTime stop_times = 6;
+    repeated WeeklySchedule schedule = 7;
+    // optional
+    repeated CalendarDate calendar_dates = 8;
+    repeated Fare fare_attributes = 9;
+    repeated FareRule fare_rules = 10;
+    repeated Shape shapes = 11;
+    repeated Frequency frequencies = 12;
+    repeated Transfer transfers = 13;
+}
+
+// one file can have a series of GTFSFeeds associated with it
+message GTFSFile
+{
+    required FileFormatVersion version = 1;
+    repeated GTFSStaticFeed gtfs_stream = 2;
+}

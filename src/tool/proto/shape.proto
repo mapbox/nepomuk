@@ -1,0 +1,11 @@
+package transit.io.gtfs.proto;
+
+import "coordinate.proto";
+
+message Shape
+{
+    required uint32 id = 1;
+    required Coordinate location = 2;
+    required uint32 sequence_id = 3;
+    optional fixed32 distance_travelled = 4;
+}

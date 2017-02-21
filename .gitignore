@@ -2,3 +2,4 @@ build
 data
 *.swp
 mason_packages
+include/version.h

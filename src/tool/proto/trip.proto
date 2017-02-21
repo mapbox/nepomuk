@@ -1,0 +1,31 @@
+package transit.io.gtfs.proto;
+
+import "accessibility.proto";
+
+message Trip
+{
+    required uint32 id = 1;
+    required uint32 route_id = 2;
+    required uint32 service_id = 3;
+
+    optional string headsign = 4;
+    optional string short_name = 5;
+
+    enum TripDirection
+    {
+        INBOUND = 0;
+        OUTBOUND = 1;
+    }
+    optional TripDirection direction = 6;
+    optional uint32 block_id = 7;
+    optional uint32 shape_id = 8;
+
+    enum BikeAccess
+    {
+        UNKNOWN = 0;
+        ALLOWED = 1;
+        FORBIDDEN = 2;
+    }
+    optional BikeAccess bike_access = 9;
+    optional WheelchairAccessibility wheelchair_access = 10;
+}

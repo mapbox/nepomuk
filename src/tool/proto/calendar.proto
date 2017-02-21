@@ -1,0 +1,13 @@
+package transit.io.gtfs.proto;
+
+message CalendarDate
+{
+    required uint32 service_id = 1;
+    required string date = 2;
+    enum ExceptionType
+    {
+        ADDED = 0;
+        REMOVED = 1;
+    }
+    required ExceptionType exception_type = 3;
+};

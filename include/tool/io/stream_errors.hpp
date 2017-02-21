@@ -3,25 +3,41 @@
 
 #include <stdexcept>
 
-namespace transit {
-namespace tool {
-namespace io {
+namespace transit
+{
+namespace tool
+{
+namespace io
+{
 
 // Error Handling for Streams
-struct StreamError : std::runtime_error {
+struct StreamError : std::runtime_error
+{
     using std::runtime_error::runtime_error;
 };
 
-struct InputStreamError : StreamError {
+struct InputStreamError : StreamError
+{
     using StreamError::StreamError;
 };
 
-struct OutputStreamError : StreamError {
+struct OutputStreamError : StreamError
+{
     using StreamError::StreamError;
 };
 
-}  // namespace io
-}  // namespace tool
-}  // namespace transit
+struct FileNotFoundError : std::runtime_error
+{
+    using std::runtime_error::runtime_error;
+};
 
-#endif  // TRANSIT_TOOL_IO_STREAM_ERRORS_HPP_
+struct InvalidFileError : std::runtime_error
+{
+    using std::runtime_error::runtime_error;
+};
+
+} // namespace io
+} // namespace tool
+} // namespace transit
+
+#endif // TRANSIT_TOOL_IO_STREAM_ERRORS_HPP_

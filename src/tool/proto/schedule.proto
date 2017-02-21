@@ -1,0 +1,15 @@
+package transit.io.gtfs.proto;
+
+message WeeklySchedule
+{
+    required uint32 service_id = 1;
+    required bool monday = 2;
+    required bool tuesday = 3;
+    required bool wednesday = 4;
+    required bool thursday = 5;
+    required bool friday = 6;
+    required bool saturday = 7;
+    required bool sunday = 8;
+    required string begin = 9;
+    required string end = 10;
+}

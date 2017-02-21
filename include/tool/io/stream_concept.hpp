@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <string>
 
 namespace transit
 {
@@ -22,6 +23,16 @@ struct InputStream
 struct OutputStream
 {
     void write_bytes(const void *from, std::int64_t size);
+};
+
+struct LineInputStream
+{
+    void getline(std::string &line);
+};
+
+struct LineOutputStream
+{
+    void putline(const std::string &line);
 };
 
 } // namespace io
