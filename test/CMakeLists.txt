@@ -15,3 +15,4 @@ macro(add_unit_test target source libs includes)
 endmacro()
 
 add_subdirectory(tool)
+add_subdirectory(gtfs)

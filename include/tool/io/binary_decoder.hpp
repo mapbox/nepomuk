@@ -20,13 +20,15 @@ template <typename InputStream> struct BinaryDecoder
     BinaryDecoder(InputStream &in_stream) : in_stream{in_stream} {}
 
     // For all memcpy-able types we dump byte-wise
-    template <typename T> typename std::enable_if<std::is_trivially_copyable<T>::value>::type decode(T &value)
+    template <typename T>
+    typename std::enable_if<std::is_trivially_copyable<T>::value>::type decode(T &value)
     {
         in_stream.read_bytes(&value, sizeof(T));
     }
 
     // For std::string we first write out the string's size and then the data
-    template <typename T> typename std::enable_if<std::is_same<T, std::string>::value>::type decode(T &value)
+    template <typename T>
+    typename std::enable_if<std::is_same<T, std::string>::value>::type decode(T &value)
     {
         std::uint64_t length;
         decode(length);
@@ -38,7 +40,10 @@ template <typename InputStream> struct BinaryDecoder
     InputStream &in_stream;
 };
 
-template <typename InputStream> auto makeBinaryDecoder(InputStream &is) { return BinaryDecoder<InputStream>(is); }
+template <typename InputStream> auto makeBinaryDecoder(InputStream &is)
+{
+    return BinaryDecoder<InputStream>(is);
+}
 
 } // namespace io
 } // namespace tool

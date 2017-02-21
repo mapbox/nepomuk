@@ -1,0 +1,8 @@
+package transit.io.gtfs.proto;
+
+message Coordinate
+{
+    required fixed64 longitude = 1;
+    required fixed64 latitude = 2;
+}
+

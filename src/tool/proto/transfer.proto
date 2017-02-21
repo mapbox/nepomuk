@@ -1,0 +1,17 @@
+package transit.io.gtfs.proto;
+
+message Transfer
+{
+    required uint32 from_stop = 1;
+    required uint32 to_stop = 2;
+
+    enum TransferType
+    {
+        RECOMMENDED = 0;
+        TIMED = 1;
+        LONG = 2;
+        IMPOSSIBLE = 3;
+    }
+    required TransferType type = 3;
+    optional uint32 duration = 4;
+}

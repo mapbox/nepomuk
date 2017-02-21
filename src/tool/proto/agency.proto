@@ -1,0 +1,11 @@
+package transit.io.gtfs.proto;
+
+message Agency
+{
+    required uint32 id = 1;
+    required string name = 2;
+    required string url = 3;
+    required string timezone = 4;
+    required string language = 5;
+    required string phone = 6;
+}

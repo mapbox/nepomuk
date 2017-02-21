@@ -1,0 +1,12 @@
+package transit.io.gtfs.proto;
+
+message WheelchairAccessibility
+{
+	enum AccessibilityType
+	{
+	    INHERIT_OR_NONE = 0;
+	    SOME_OR_ALL = 1;
+	    NONE = 2;
+	}
+	required AccessibilityType type = 1;
+}

@@ -1,5 +1,4 @@
 codecov:
-  bot: jacquestardie
   token: b747f973-f345-4855-b769-afb4a8814530
 
 coverage:
@@ -26,5 +25,12 @@ coverage:
     - data/
     - mason_packages/
     - /usr/include/
+    - *CMakeLists\.txt
+    - *\.pb\.cc
+    - *\.pb\.h
+    - .clang-format
+    - *\.proto
+    - *\.md
+    - .gitignore
 
 comment: off
