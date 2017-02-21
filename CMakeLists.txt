@@ -7,9 +7,9 @@ project(transit C CXX)
 
 # Major for breaking ABI changes. Minor for features. Patch for bugfixes.
 # see http://semver.org/ for context
-set(SWEEP_VERSION_MAJOR 0)
-set(SWEEP_VERSION_MINOR 0)
-set(SWEEP_VERSION_PATCH 0)
+set(TRANSIT_VERSION_MAJOR 0)
+set(TRANSIT_VERSION_MINOR 0)
+set(TRANSIT_VERSION_PATCH 0)
 
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
