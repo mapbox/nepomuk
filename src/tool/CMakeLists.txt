@@ -8,7 +8,8 @@ ADD_LIBRARY(transittool
 
 # link all required items
 TARGET_LINK_LIBRARIES(transittool
-    ${Boost_LIBRARIES})
+    ${Boost_LIBRARIES}
+    ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories
 TARGET_INCLUDE_DIRECTORIES(transittool SYSTEM PUBLIC

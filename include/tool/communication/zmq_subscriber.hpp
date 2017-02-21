@@ -30,7 +30,7 @@ template <typename BaseClass>
 ZMQSubscriber<BaseClass>::ZMQSubscriber(const std::uint32_t port)
     : zmq_context(/*no of threads*/ 1), zmq_socket(zmq_context, ZMQ_SUB)
 {
-    zmq_socket.connect("tcp://127.0.0.1:" + std::to_string(port));
+    zmq_socket.connect(("tcp://127.0.0.1:" + std::to_string(port)).c_str());
     zmq_socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 }
 

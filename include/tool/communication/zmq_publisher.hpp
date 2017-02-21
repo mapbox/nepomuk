@@ -30,7 +30,7 @@ template <typename BaseClass>
 ZMQPublisher<BaseClass>::ZMQPublisher(const std::uint32_t port)
     : zmq_context(/*no of threads*/ 1), zmq_socket(zmq_context, ZMQ_PUB)
 {
-    zmq_socket.bind("tcp://127.0.0.1:" + std::to_string(port));
+    zmq_socket.bind(("tcp://127.0.0.1:" + std::to_string(port)).c_str());
 }
 
 } // namespace communication
