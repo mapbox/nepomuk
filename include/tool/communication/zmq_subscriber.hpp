@@ -4,30 +4,34 @@
 #include <cstdint>
 #include <zmq.hpp>
 
-namespace transit {
-namespace tool {
-namespace communication {
+namespace transit
+{
+namespace tool
+{
+namespace communication
+{
 
-template <class BaseClass> class Subscriber {
-public:
-  using message_type = typename BaseClass::message_type;
+template <class BaseClass> class ZMQSubscriber
+{
+  public:
+    ZMQSubscriber(const std::uint32_t port);
 
-  Subscriber(const std::uint32_t port);
+    void subscribe();
 
-  void subscribe();
+  private:
+    zmq::context_t zmq_context;
+    zmq::socket_t zmq_socket;
 
-private:
-  zmq::context_t zmq_context;
-  zmq::socket_t zmq_socket;
-
-  auto self() { return static_cast<BaseClas*>(this); }
-  auto self() const { return static_cast<const BaseClas*>(this); }
+    auto self() { return static_cast<BaseClas *>(this); }
+    auto self() const { return static_cast<const BaseClas *>(this); }
 };
 
-template <typename BaseClas>
-Subscriber::Subscriber(const std::uint32_t port) : zmq_context(/*no of threads*/ 1), zmq_socket(zmq_context, ZMQ_SUB) {
-  zmq_socket.connect("tcp://127.0.0.1:" + std::to_string(port));
-  zmq_socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+template <typename BaseClass>
+ZMQSubscriber<BaseClass>::ZMQSubscriber(const std::uint32_t port)
+    : zmq_context(/*no of threads*/ 1), zmq_socket(zmq_context, ZMQ_SUB)
+{
+    zmq_socket.connect("tcp://127.0.0.1:" + std::to_string(port));
+    zmq_socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 }
 
 } // namespace communication
