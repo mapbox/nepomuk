@@ -3,7 +3,8 @@ macro(add_unit_test target source libs includes)
         ${source})
 
     target_link_libraries("test_${target}"
-        ${libs})
+        ${libs}
+        ${MAYBE_COVERAGE_LIBRARIES})
 
     target_include_directories("test_${target}" SYSTEM PUBLIC
           ${includes})

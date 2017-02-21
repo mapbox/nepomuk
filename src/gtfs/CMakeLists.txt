@@ -10,10 +10,11 @@ add_library(transitgtfs STATIC
 target_link_libraries(transitgtfs
     ${Boost_LIBRARIES}
     ${PROTOBUF_LITE_LIBRARIES}
-    ${LIBZMQ_LIBRARIES})
+    ${Zmq_LIBRARIES}
+    ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories
 target_include_directories(transitgtfs SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS}
     ${PROTOBUF_INCLUDE_DIRS}
-    ${LIBZMQ_INCLUDE_DIR})
+    ${Zmq_INCLUDE_DIRS})

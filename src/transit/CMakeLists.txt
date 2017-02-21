@@ -7,7 +7,8 @@ ADD_LIBRARY(transit, ${transit_SOURCES})
 
 # link all required items
 TARGET_LINK_LIBRARIES(transit,
-    ${Boost_LIBRARIES})
+    ${Boost_LIBRARIES}
+    ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories
 TARGET_INCLUDE_DIRECTORIES(transit SYSTEM PUBLIC

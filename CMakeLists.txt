@@ -4,13 +4,18 @@ cmake_policy(SET CMP0037 NEW)
 
 project(transit C CXX)
 
-
 # Major for breaking ABI changes. Minor for features. Patch for bugfixes.
 # see http://semver.org/ for context
 set(TRANSIT_VERSION_MAJOR 0)
 set(TRANSIT_VERSION_MINOR 0)
 set(TRANSIT_VERSION_PATCH 0)
 
+option(DEBUG_MODE "Compile in debug mode" OFF)
+option(SANITIZE "Run adress sanitizer" OFF)
+option(COVERAGE "Generate test converage data" OFF)
+
+# include cmake modules from cmake folder
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -pedantic -fvisibility=hidden -fPIC -fno-rtti")
@@ -28,12 +33,32 @@ else()
   message(FATAL_ERROR "System not yet supported. Please open a ticket.")
 endif()
 
+# set compile flags based on optimisation / debug mode
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Wuninitialized -Wunreachable-code -Wstrict-overflow=2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIC")
+if(DEBUG_MODE)
+    add_definitions(-DBOOST_ENABLE_ASSERT_HANDLER)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-inline -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -ggdb")
+endif()
+if(SANITIZE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+endif()
+if(COVERAGE)
+    if(!DEBUG_MODE)
+        message(FATAL_ERROR "Configuration unreasonable: coverage requires debug mode.")
+    endif()
+    set(MAYBE_COVERAGE_LIBRARIES "-lgcov")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftest-coverage -fprofile-arcs")
+endif()
+
 #setup versioning scheme in header
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/include/version.h)
 
+include(mason)
 
-option(USE_LTO "Use link-time optimization if compiler support can be detected" ON)
+option(USE_LTO "Use link-time optimization if compiler support can be detected" OFF)
 set_property(GLOBAL PROPERTY INTERPROCEDURAL_OPTIMIZATION ${USE_LTO})
 
 # third party libraries
@@ -42,21 +67,50 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 # Global include directory
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
+# pull in mason dependencies
+mason_use(libzmq VERSION 4.2.2)
+mason_use(cppzmq VERSION 4.2.1 HEADER_ONLY)
+set(Zmq_INCLUDE_DIRS
+    ${MASON_PACKAGE_libzmq_INCLUDE_DIRS}
+    ${MASON_PACKAGE_cppzmq_INCLUDE_DIRS})
+set(Zmq_LIBRARIES
+    ${MASON_PACKAGE_libzmq_STATIC_LIBS})
+
 # add support for boost
-find_package(Boost 1.61.0 REQUIRED COMPONENTS filesystem system program_options thread timer log log_setup unit_test_framework)
-add_definitions(-DBOOST_ALL_DYN_LINK)
-add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+set(BOOST_VERSION 1.63.0)
+set(Boost_USE_STATIC_LIBS ON)
+mason_use(boost VERSION ${BOOST_VERSION} HEADER_ONLY)
+mason_use(boost_libfilesystem VERSION ${BOOST_VERSION})
+mason_use(boost_libiostreams VERSION ${BOOST_VERSION})
+mason_use(boost_libprogram_options VERSION ${BOOST_VERSION})
+mason_use(boost_libregex VERSION ${BOOST_VERSION})
+mason_use(boost_libtest VERSION ${BOOST_VERSION})
+mason_use(boost_libdate_time VERSION ${BOOST_VERSION})
+mason_use(boost_libthread VERSION ${BOOST_VERSION})
+mason_use(boost_libsystem VERSION ${BOOST_VERSION})
+
+set(Boost_INCLUDE_DIRS ${MASON_PACKAGE_boost_INCLUDE_DIRS})
+set(Boost_LIBRARIES
+  ${MASON_PACKAGE_boost_libfilesystem_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libiostreams_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libprogram_options_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libregex_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libtest_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libdate_time_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libthread_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libsystem_STATIC_LIBS})
+
+# required due to mason
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_CXX11_ABI=0")
 
 # Optional Protobuf + ZeroMQ networking example
 find_package(Protobuf 2.4.1 REQUIRED)
 
-include(FindPkgConfig)
-pkg_check_modules(LIBZMQ libzmq)
-
-if (PROTOBUF_FOUND AND LIBZMQ_FOUND)
+if (PROTOBUF_FOUND)
   #protobuf_generate_cpp(ProtoSources ProtoHeaders net.proto)
 endif()
+
+message(STATUS "Build Configuration: " ${CMAKE_CXX_FLAGS})
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
 add_subdirectory(src/tool)

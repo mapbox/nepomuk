@@ -1,0 +1,8 @@
+coverage:
+
+  ignore:
+    - test/.*
+    - data/.*
+    - mason_packages/.*
+
+comment: off
