@@ -1,0 +1,51 @@
+language: generic
+sudo: required
+dist: trusty
+
+matrix:
+  fast_finish: true
+
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'libzmq-dev']
+      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6'
+
+    - os: linux
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'libzmq-dev']
+      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5'
+
+    - os: linux
+      addons:
+        apt:
+          sources: ['llvm-toolchain-precise-3.8']
+          packages: ['clang-3.8', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'libzmq-dev']
+      env: CCOMPILER='clang-3.8' CXXCOMPILER='clang++-3.8'
+
+    - os: osx
+      osx_image: xcode8.2
+      node_js: 4
+      env: CCOMPILER='clang' CXXCOMPILER='clang++'
+
+    - os: osx
+      osx_image: xcode8.2
+      node_js: 6
+      env: CCOMPILER='clang' CXXCOMPILER='clang++'
+
+before_install:
+  - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf zmq; fi
+
+install:
+  - mkdir -p build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug
+  - cmake --build .
+
+script:
+  - echo "Hello"
