@@ -33,19 +33,19 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/include/version.h)
 
 
-OPTION(USE_LTO "Use link-time optimization if compiler support can be detected" ON)
-SET_PROPERTY(GLOBAL PROPERTY INTERPROCEDURAL_OPTIMIZATION ${USE_LTO})
+option(USE_LTO "Use link-time optimization if compiler support can be detected" ON)
+set_property(GLOBAL PROPERTY INTERPROCEDURAL_OPTIMIZATION ${USE_LTO})
 
 # third party libraries
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Global include directory
-INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
+include_directories("${PROJECT_SOURCE_DIR}/include")
 
 # add support for boost
-FIND_PACKAGE(Boost 1.59.0 REQUIRED COMPONENTS filesystem system program_options thread timer log log_setup unit_test_framework)
-ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
-ADD_DEFINITIONS(-DBOOST_FILESYSTEM_NO_DEPRECATED)
+find_package(Boost 1.61.0 REQUIRED COMPONENTS filesystem system program_options thread timer log log_setup unit_test_framework)
+add_definitions(-DBOOST_ALL_DYN_LINK)
+add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 # Optional Protobuf + ZeroMQ networking example
@@ -59,6 +59,10 @@ if (PROTOBUF_FOUND AND LIBZMQ_FOUND)
 endif()
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
-# ADD_SUBDIRECTORY(src/tool)
-# ADD_SUBDIRECTORY(src/transit)
-ADD_SUBDIRECTORY(src/gtfs)
+add_subdirectory(src/tool)
+# add_subdirectory(src/transit)
+add_subdirectory(src/gtfs)
+
+# testing, build unconditionally
+enable_testing()
+add_subdirectory(test)
