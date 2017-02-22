@@ -56,6 +56,7 @@ pkg_check_modules(LIBZMQ libzmq)
 
 if (PROTOBUF_FOUND AND LIBZMQ_FOUND)
   #protobuf_generate_cpp(ProtoSources ProtoHeaders net.proto)
+  set(LIBZMQ_INCLUDE_DIR ${LIBZMQ_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/third_party/zmqpp/)
 endif()
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
