@@ -14,7 +14,7 @@ template <typename T, typename = void>
 struct IsInputStream : std::false_type {};
 
 template <typename T>
-struct IsInputStream<T, decltype((void)std::declval<T>().ReadBytes(nullptr, 0))>
+struct IsInputStream<T, decltype((void)std::declval<T>().read_bytes(nullptr, 0))>
     : std::true_type {};
 
 template <typename T, typename = void>
@@ -22,7 +22,7 @@ struct IsOutputStream : std::false_type {};
 
 template <typename T>
 struct IsOutputStream<T,
-                      decltype((void)std::declval<T>().WriteBytes(nullptr, 0))>
+                      decltype((void)std::declval<T>().write_bytes(nullptr, 0))>
     : std::true_type {};
 
 template <typename T>
