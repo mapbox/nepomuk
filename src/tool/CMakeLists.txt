@@ -1,6 +1,6 @@
 # define a set of sources to compile
 SET(tool_SOURCES
-    io/stream_concepts/binary_stream.cpp)
+    io/std_stream.cpp)
 
 # export source files as library
 ADD_LIBRARY(transittool
