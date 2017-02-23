@@ -2,6 +2,10 @@ language: generic
 sudo: required
 dist: trusty
 
+branches:
+  only:
+    - master
+
 env:
   global:
     - CMAKE_VERSION=3.7.1
