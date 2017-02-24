@@ -2,25 +2,28 @@ codecov:
   token: b747f973-f345-4855-b769-afb4a8814530
 
 coverage:
+  status:
+    project:
+      default:
+        enabled: yes
+        target: auto
+        threshold: 0.5% # allow minimal decreases in coverage
+        if_no_uploads: error
+        if_ci_failed: error
+        paths: null
+
+    patch:
+      default:
+        enabled: yes
+        target: 95%
+        if_no_upload: error
+        if_ci_failed: error
+        paths: null
+
   ignore:
     - test/
     - data/
     - mason_packages/
     - /usr/include/
 
-  status:
-    project:
-      enabled: yes
-      target: auto
-      threshold: 0.5% # allow minimal decreases in coverage
-      if_no_uploads: error
-      if_ci_failed: error
-
-  patch:
-    enabled: yes
-    target: 95%
-    if_no_upload: error
-    if_ci_failed: error
-
-comment:
-    layout: "header, diff"
+comment: off
