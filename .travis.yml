@@ -78,6 +78,7 @@ script:
   - ctest #run unit test framework
 
 after_success:
+  - cd ..
   - |
     if [ -n "${COVERAGE}" ]; then
       bash <(curl -s https://codecov.io/bash)
