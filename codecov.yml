@@ -5,5 +5,6 @@ coverage:
     - test/
     - data/
     - mason_packages/
+    - /usr/include/
 
 comment: off
