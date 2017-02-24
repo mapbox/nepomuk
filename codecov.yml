@@ -1,8 +1,9 @@
 coverage:
+  token: b747f973-f345-4855-b769-afb4a8814530
 
   ignore:
-    - test
-    - data
-    - mason_packages
+    - test/
+    - data/
+    - mason_packages/
 
 comment: off
