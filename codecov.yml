@@ -1,6 +1,7 @@
-coverage:
+codecov:
   token: b747f973-f345-4855-b769-afb4a8814530
 
+coverage:
   ignore:
     - test/
     - data/
@@ -21,4 +22,5 @@ coverage:
     if_no_upload: error
     if_ci_failed: error
 
-comment: off
+comment:
+    layout: "header, diff"
