@@ -7,4 +7,18 @@ coverage:
     - mason_packages/
     - /usr/include/
 
+  status:
+    project:
+      enabled: yes
+      target: auto
+      threshold: 0.5% # allow minimal decreases in coverage
+      if_no_uploads: error
+      if_ci_failed: error
+
+  patch:
+    enabled: yes
+    target: 95%
+    if_no_upload: error
+    if_ci_failed: error
+
 comment: off
