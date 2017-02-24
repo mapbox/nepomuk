@@ -2,6 +2,7 @@
 #include "tool/io/binary_encoder.hpp"
 #include "tool/io/serialisation.hpp"
 #include "tool/io/std_stream.hpp"
+#include "tool/io/stream_errors.hpp"
 
 #include <fstream>
 #include <string>
@@ -39,31 +40,14 @@ BOOST_AUTO_TEST_CASE(handle_unopened_streams)
     transit::tool::io::StdOutputStream outstream(ofs);
     auto binary_encoder = transit::tool::io::makeBinaryEncoder(outstream);
     std::string test{"Don't panic!"};
-    bool thrown = false;
-    try
-    {
-        transit::tool::io::Serialize(test, binary_encoder);
-    }
-    catch (std::exception)
-    {
-        thrown = true;
-    }
-    BOOST_CHECK(thrown);
 
-    thrown = false;
+    BOOST_CHECK_THROW(transit::tool::io::Serialize(test, binary_encoder), transit::tool::io::OutputStreamError);
+
     std::ifstream ifs;
     transit::tool::io::StdInputStream instream(ifs);
     auto binary_decoder = transit::tool::io::makeBinaryDecoder(instream);
     std::string result;
-    try
-    {
-        transit::tool::io::Deserialize(result, binary_decoder);
-    }
-    catch (std::exception)
-    {
-        thrown = true;
-    }
-    BOOST_CHECK(thrown);
+    BOOST_CHECK_THROW(transit::tool::io::Deserialize(result, binary_decoder), transit::tool::io::InputStreamError);
 }
 
 BOOST_AUTO_TEST_CASE(zero_length)
@@ -91,29 +75,14 @@ BOOST_AUTO_TEST_CASE(zero_length)
 
 BOOST_AUTO_TEST_CASE(broken_encode)
 {
-    bool thrown = false;
     std::ofstream ofs("write_and_read_bytes.tmp");
     transit::tool::io::StdOutputStream outstream(ofs);
-    try
-    {
-        outstream.write_bytes(NULL, 64);
-    }
-    catch (std::exception)
-    {
-        thrown = true;
-    }
+    BOOST_CHECK_NO_THROW(outstream.write_bytes(NULL, 64));
 
     std::ifstream ifs("write_and_read_bytes.tmp");
     transit::tool::io::StdInputStream instream(ifs);
-    try
-    {
-        instream.read_bytes(NULL, 64);
-    }
-    catch (std::exception)
-    {
-        thrown = true;
-    }
-    BOOST_CHECK(!thrown);
+    BOOST_CHECK_NO_THROW(instream.read_bytes(NULL, 64));
+
     BOOST_CHECK(static_cast<bool>(ofs));
     BOOST_CHECK(static_cast<bool>(ifs));
 }
