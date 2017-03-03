@@ -11,6 +11,7 @@ target_link_libraries(csv-import
     ${MAYBE_COVERAGE_LIBRARIES}
     transittool
     transitgtfs
+    transittimetable
     transitgeometric)
 
 target_include_directories(csv-import SYSTEM PUBLIC

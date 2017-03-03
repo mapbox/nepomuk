@@ -46,7 +46,7 @@ matrix:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' DEBUG_MODE=ON SANITIZE=OFF COVERAGE=ON
+      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' DEBUG_MODE=ON COVERAGE=ON SANITIZE=On
 
     - os: linux
       addons:
@@ -58,7 +58,7 @@ matrix:
     - os: osx
       osx_image: xcode8.2
       node_js: 6
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' DEBUG_MODE=On
+      env: CCOMPILER='clang' CXXCOMPILER='clang++' DEBUG_MODE=On SANITIZE=On
 
 before_install:
   - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
@@ -75,7 +75,7 @@ install:
   - cmake --build .
 
 script:
-  - ctest #run unit test framework
+  - ctest --verbose #run unit test framework
 
 after_success:
   - cd ..

@@ -49,9 +49,18 @@ template <typename InputStream> struct CSVDecoder
             throw InvalidFileError("Token count does not match header size.");
 
         auto trim_special_chars = [](std::string token) {
-            if (!token.empty() && token.back() == '\r')
-                token.pop_back();
-            return token;
+            if (token.empty())
+                return token;
+
+            // trim spaces front
+            const auto begin_non_whitespace = token.find_first_not_of(" \t\r");
+
+            if (begin_non_whitespace == std::string::npos)
+                return std::string{};
+
+            const auto end_non_whitespace = token.find_last_not_of(" \t\r");
+            return token.substr(begin_non_whitespace,
+                                end_non_whitespace - begin_non_whitespace + 1);
         };
 
         std::transform(tokens.begin(), tokens.end(), value.begin(), trim_special_chars);

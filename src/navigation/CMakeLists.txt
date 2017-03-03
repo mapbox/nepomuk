@@ -1,15 +1,15 @@
 # define a set of sources to compile
-SET(transit_SOURCES
-                   )
-
+SET(navigation_SOURCES
+    )
 # export source files as library
-ADD_LIBRARY(transit, ${transit_SOURCES})
+ADD_LIBRARY(transitnavigation
+    ${navigation_SOURCES})
 
 # link all required items
-TARGET_LINK_LIBRARIES(transit,
+TARGET_LINK_LIBRARIES(transitnavigation
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories
-TARGET_INCLUDE_DIRECTORIES(transit SYSTEM PUBLIC
+TARGET_INCLUDE_DIRECTORIES(transitnavigation SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS})

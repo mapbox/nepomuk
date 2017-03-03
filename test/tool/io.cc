@@ -24,11 +24,11 @@ void makeTripFixture()
     std::ofstream ofs(trip_fixture);
     transit::tool::io::StdLineOutputStream outstream(ofs);
     outstream.putline(
-        "\"route_id\",\"service_id\",\"trip_id\",\"trip_headsign\",\"trip_short_name\","
-        "\"direction_id\",\"block_id\",\"shape_id\"");
+        "\"route_id\",\"  service_id\",\"trip_id  \",\"  trip_headsign  \",\"trip_short_name\","
+        "\"direction_id\",\"block_id\",\"shape_id  \"");
     outstream.putline("17289_700,1,59129500,\"Berlin, S+U "
-                      "Alexanderplatz Bhf/Memhardstr. (Berlin)\",\"\",\"0\",,48");
-};
+                      "Alexanderplatz Bhf/Memhardstr. (Berlin)\",\"\",\"0\",     ,48");
+}
 } // namespace
 
 BOOST_AUTO_TEST_CASE(write_and_read_bytes)
