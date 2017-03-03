@@ -39,23 +39,45 @@ else()
 endif()
 
 # set compile flags based on optimisation / debug mode
-add_compile_options(${CMAKE_CXX_FLAGS} -std=c++14 -fvisibility=hidden -fPIC)
-add_compile_options(${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Wuninitialized -Wunreachable-code -Wstrict-overflow=2)
-add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -fPIC)
+add_compile_options(${CMAKE_CXX_FLAGS} -std=c++14)
+add_compile_options(${CMAKE_CXX_FLAGS} -fvisibility=hidden)
+add_compile_options(${CMAKE_CXX_FLAGS} -fPIC)
+add_compile_options(${CMAKE_CXX_FLAGS} -Wall)
+add_compile_options(${CMAKE_CXX_FLAGS} -Wextra)
+add_compile_options(${CMAKE_CXX_FLAGS} -pedantic)
+add_compile_options(${CMAKE_CXX_FLAGS} -Wuninitialized)
+add_compile_options(${CMAKE_CXX_FLAGS} -Wunreachable-code)
+add_compile_options(${CMAKE_CXX_FLAGS} -Wstrict-overflow=2)
+add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE)
+add_compile_options(${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2)
 
 if(DEBUG_MODE)
-    add_compile_options(${CMAKE_CXX_FLAGS} -fno-inline -fno-omit-frame-pointer)
-    add_compile_options(${CMAKE_CXX_FLAGS} -g -ggdb)
+    add_compile_options(${CMAKE_CXX_FLAGS} -fno-inline)
+    add_compile_options(${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer)
+    add_compile_options(${CMAKE_CXX_FLAGS} -g)
+    add_compile_options(${CMAKE_CXX_FLAGS} -ggdb)
 endif()
+
 if(SANITIZE)
     add_compile_options(${CMAKE_CXX_FLAGS} -fsanitize=address)
+    link_libraries(${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address)
+    if(${directions_transit_os} MATCHES "unix")
+        link_libraries(${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold)
+    endif()
 endif()
+
 if(COVERAGE)
     if(!DEBUG_MODE)
         message(FATAL_ERROR "Configuration unreasonable: coverage requires debug mode.")
     endif()
-    set(MAYBE_COVERAGE_LIBRARIES "-lgcov")
-    add_compile_options(${CMAKE_CXX_FLAGS} -ftest-coverage -fprofile-arcs)
+    if(${directions_transit_os} MATCHES "unix")
+        set(MAYBE_COVERAGE_LIBRARIES "-lgcov")
+    elseif(${directions_transit_os} MATCHES "mac")
+        set(MAYBE_COVERAGE_LIBRARIES "-fprofile-arcs -ftest-coverage")
+    endif()
+
+    add_compile_options(${CMAKE_CXX_FLAGS} -ftest-coverage)
+    add_compile_options(${CMAKE_CXX_FLAGS} -fprofile-arcs)
 endif()
 
 #setup versioning scheme in header
@@ -108,16 +130,16 @@ set(Boost_LIBRARIES
 
 # required due to mason
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
-message(STATUS "Build Configuration: " ${CMAKE_CXX_FLAGS})
 
 # Optional Protobuf + ZeroMQ networking example
 find_package(Protobuf 2.4.1 REQUIRED)
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
 add_subdirectory(src/tool)
-# add_subdirectory(src/transit)
+add_subdirectory(src/timetable)
 add_subdirectory(src/gtfs)
 add_subdirectory(src/geometric)
+
 add_subdirectory(src/apps)
 
 # testing, build unconditionally
