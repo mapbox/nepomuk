@@ -47,7 +47,7 @@ void makeAgency(std::string const &name)
 
 void checkAgencyFixture(Agency const &agency)
 {
-    const auto valid_id = agency.id && *agency.id == "1";
+    const auto valid_id = agency.id && *agency.id == AgencyID{0};
     BOOST_CHECK(valid_id);
     const auto valid_name = agency.name == "S-Bahn Berlin GmbH";
     BOOST_CHECK(valid_name);
@@ -112,8 +112,10 @@ void checkStopFixture(std::vector<Stop> const &stops)
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);
 
-    const auto valid_ids = (stops[0].id == StopID{8012716}) && (stops[1].id == StopID{8012717}) &&
-                           (stops[2].id == StopID{8012718});
+    // stops include parent stop ids in every location
+    const auto valid_ids = (stops[0].id == StopID{0}) && (stops[1].id == StopID{2}) &&
+                           (stops[2].id == StopID{4});
+
     BOOST_CHECK(valid_ids);
 
     const auto valid_codes = stops[0].code && (*stops[0].code == "123") && stops[1].code &&
@@ -144,9 +146,9 @@ void checkStopFixture(std::vector<Stop> const &stops)
     BOOST_CHECK(valid_types);
 
     const auto valid_parents =
-        stops[0].parent_station && (*stops[0].parent_station == StopID{550215}) &&
-        stops[1].parent_station && (*stops[1].parent_station == StopID{550216}) &&
-        stops[2].parent_station && (*stops[2].parent_station == StopID{550217});
+        stops[0].parent_station && (*stops[0].parent_station == StopID{1}) &&
+        stops[1].parent_station && (*stops[1].parent_station == StopID{3}) &&
+        stops[2].parent_station && (*stops[2].parent_station == StopID{5});
     BOOST_CHECK(valid_parents);
 
     const auto valid_descriptions =
@@ -154,9 +156,9 @@ void checkStopFixture(std::vector<Stop> const &stops)
         (*stops[1].description == "so beautiful") && !stops[2].description;
     BOOST_CHECK(valid_descriptions);
 
-    const auto valid_zones = stops[0].zone_id && (stops[0].zone_id == ZoneID{1}) &&
-                             stops[1].zone_id && (stops[1].zone_id == ZoneID{2}) &&
-                             stops[2].zone_id && (stops[2].zone_id == ZoneID{3});
+    const auto valid_zones = stops[0].zone_id && (stops[0].zone_id == ZoneID{0}) &&
+                             stops[1].zone_id && (stops[1].zone_id == ZoneID{1}) &&
+                             stops[2].zone_id && (stops[2].zone_id == ZoneID{2});
     BOOST_CHECK(valid_zones);
 
     const auto valid_urls =
@@ -194,8 +196,9 @@ void checkMinimalStopFixture(std::vector<Stop> const &stops)
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);
 
-    const auto valid_ids = (stops[0].id == StopID{8012716}) && (stops[1].id == StopID{8012717}) &&
-                           (stops[2].id == StopID{8012718});
+    // minimal IDs do not conatin parent stop stations
+    const auto valid_ids = (stops[0].id == StopID{0}) && (stops[1].id == StopID{2}) &&
+                           (stops[2].id == StopID{4});
     BOOST_CHECK(valid_ids);
 
     const auto valid_names = (stops[0].name == "Rastow, Bahnhof") &&
