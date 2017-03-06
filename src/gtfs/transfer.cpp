@@ -32,11 +32,11 @@ Transfer makeTransfer(std::map<std::string, std::size_t> const &header,
             return TransferType::RECOMMENDED;
         }
     };
-    return {construct<StopID>("from_stop_id", stringToID<StopID>, header, values),
-            construct<StopID>("to_stop_id", stringToID<StopID>, header, values),
-            to_type(construct<std::string>("transfer_type", forward, header, values)),
-            construct<boost::optional<std::uint64_t>>(
-                "min_transfer_time", asOptionalInt, header, values)};
+    return {
+        construct<StopID>("from_stop_id", stringToID<StopID>, header, values),
+        construct<StopID>("to_stop_id", stringToID<StopID>, header, values),
+        to_type(construct<std::string>("transfer_type", forward, header, values)),
+        construct_as_optional<std::uint64_t, false>("min_transfer_time", toInt, header, values)};
 }
 
 } // namespace gtfs

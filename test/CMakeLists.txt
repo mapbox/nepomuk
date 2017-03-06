@@ -14,7 +14,9 @@ macro(add_unit_test target source libs includes)
              WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 endmacro()
 
-add_subdirectory(tool)
-add_subdirectory(gtfs)
+add_subdirectory(adaptor)
 add_subdirectory(algorithm)
+add_subdirectory(gtfs)
 add_subdirectory(timetable)
+add_subdirectory(tool)
+

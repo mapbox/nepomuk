@@ -3,25 +3,12 @@ package transit.io.gtfs.proto;
 message Route
 {
     required uint32 route = 1;
-    required string short_name = 2;
-    required string long_name = 3;
-
-    enum RouteType
-    {
-        LIGHT_RAIL = 0;
-        SUBWAY = 1;
-        RAIL = 2;
-        BUS = 3;
-        FERRY = 4;
-        CABLE_CAR = 5;
-        GONDOLA = 6;
-        FUNICULAR = 7;
-    }
-
-    required RouteType type = 4;
+    required uint32 short_name = 2;
+    required uint32 long_name = 3;
+    required uint32 type = 4;
     optional uint32 agency_id = 5;
-    optional string description = 6;
-    optional string url = 7;
+    optional uint32 description = 6;
+    optional uint32 url = 7;
     optional string color = 8;
     optional string text_color = 9;
 }

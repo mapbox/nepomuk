@@ -6,7 +6,8 @@ namespace transit
 namespace timetable
 {
 
-// Public transit routing consists of timetable routing. The linetables define which connections leave certain stops.
+// Public transit routing consists of timetable routing. The linetables define which connections
+// leave certain stops.
 // It provides access to all possible lines.
 class LineTable
 {

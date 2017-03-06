@@ -2,8 +2,8 @@
 #define TRANSIT_GTFS_TIME_HPP_
 
 #include <cstdint>
-#include <string>
 #include <iostream>
+#include <string>
 
 namespace transit
 {
@@ -30,7 +30,7 @@ class Time
     friend Time operator+(Time lhs, std::uint32_t seconds);
     friend Time operator+(std::uint32_t seconds, Time lhs);
 
-    friend std::ostream& operator<<(std::ostream &os, Time const& time);
+    friend std::ostream &operator<<(std::ostream &os, Time const &time);
 };
 
 std::uint32_t operator-(Time const &lhs, Time const &rhs);
@@ -41,7 +41,7 @@ bool operator==(Time const &lhs, Time const &rhs);
 Time operator+(Time lhs, std::uint32_t seconds);
 Time operator+(std::uint32_t seconds, Time lhs);
 
-std::ostream& operator<<(std::ostream &os, Time const& time);
+std::ostream &operator<<(std::ostream &os, Time const &time);
 
 } // namespace gtfs
 } // namespace transit

@@ -6,9 +6,10 @@ add_executable(csv-import
 
 target_link_libraries(csv-import
     ${Boost_LIBRARIES}
-    ${PROTOBUF_LITE_LIBRARIES}
     ${LIBZMQ_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES}
+    transitadaptor
+    transitproto
     transittool
     transitgtfs
     transittimetable

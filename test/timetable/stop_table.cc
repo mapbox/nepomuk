@@ -68,15 +68,15 @@ BOOST_AUTO_TEST_CASE(check_interpolation)
     std::vector<StopTime> data;
 
     StopTime stop_time = {TripID{42},
-                      Time("00:10:00"),
-                      Time("00:10:00"),
-                      StopID{0},
-                      SequenceID{0},
-                      boost::none,
-                      boost::none,
-                      boost::none,
-                      boost::none,
-                      boost::none};
+                          Time("00:10:00"),
+                          Time("00:10:00"),
+                          StopID{0},
+                          SequenceID{0},
+                          boost::none,
+                          boost::none,
+                          boost::none,
+                          boost::none,
+                          boost::none};
 
     data.push_back(stop_time);
     stop_time.sequence_id = SequenceID{1};
@@ -94,19 +94,17 @@ BOOST_AUTO_TEST_CASE(check_interpolation)
     const auto stop_table = StopTableFactory::produce(data);
     auto range = stop_table.list(StopID{0});
     auto itr = range.begin();
-    BOOST_CHECK(std::distance(range.begin(),range.end()) == 3);
-    BOOST_CHECK_EQUAL(itr->stop_id,StopID{0});
-    BOOST_CHECK_EQUAL(itr->delta_t,0);
+    BOOST_CHECK(std::distance(range.begin(), range.end()) == 3);
+    BOOST_CHECK_EQUAL(itr->stop_id, StopID{0});
+    BOOST_CHECK_EQUAL(itr->delta_t, 0);
 
     ++itr;
-    BOOST_CHECK_EQUAL(itr->stop_id,StopID{1});
-    BOOST_CHECK_EQUAL(itr->delta_t,300);
+    BOOST_CHECK_EQUAL(itr->stop_id, StopID{1});
+    BOOST_CHECK_EQUAL(itr->delta_t, 300);
 
     ++itr;
-    BOOST_CHECK_EQUAL(itr->stop_id,StopID{2});
-    BOOST_CHECK_EQUAL(itr->delta_t,600);
+    BOOST_CHECK_EQUAL(itr->stop_id, StopID{2});
+    BOOST_CHECK_EQUAL(itr->delta_t, 600);
 
-    BOOST_CHECK_EQUAL(stop_table.trip_id(),TripID{42});
+    BOOST_CHECK_EQUAL(stop_table.trip_id(), TripID{42});
 }
-
-

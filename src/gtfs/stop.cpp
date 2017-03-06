@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <boost/assert.hpp>
-#include <boost/optional.hpp>
 
 namespace transit
 {
@@ -16,7 +15,9 @@ bool checkStopCSVHeader(std::map<std::string, std::size_t> const &header)
            header.count("stop_lon");
 }
 
-Stop makeStop(std::map<std::string, std::size_t> const &header, std::vector<std::string> &values)
+Stop makeStop(std::map<std::string, std::size_t> const &header,
+              std::vector<std::string> &values,
+              tool::container::Dictionary &dictionary)
 {
     auto const to_type = [](std::string const &value) {
         if (value == "1")
@@ -31,35 +32,23 @@ Stop makeStop(std::map<std::string, std::size_t> const &header, std::vector<std:
     const double lat = std::stof(construct<std::string>("stop_lat", forward, header, values));
     const double lon = std::stof(construct<std::string>("stop_lon", forward, header, values));
 
-    const auto type_optional =
-        construct<boost::optional<std::string>>("location_type", asOptionalString, header, values);
-    boost::optional<LocationType> type =
-        header.count("location_type")
-            ? (type_optional ? boost::optional<LocationType>(to_type(*type_optional))
-                             : boost::optional<LocationType>(to_type("")))
-            : boost::none;
-
-    const auto wheelchair_optional = construct<boost::optional<std::string>>(
-        "wheelchair_boarding", asOptionalString, header, values);
-    const boost::optional<accessibility::Wheelchair> wheelchair =
-        wheelchair_optional ? boost::optional<accessibility::Wheelchair>(
-                                  accessibility::makeWheelchair(*wheelchair_optional))
-                            : boost::none;
-
     return {
         construct<StopID>("stop_id", stringToID<StopID>, header, values),
-        construct<std::string>("stop_name", forward, header, values),
+        construct<tool::container::DictionaryID>(
+            "stop_name", DictionaryConverter(dictionary), header, values),
         geometric::Coordinate(geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
                               geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)),
-        construct<boost::optional<std::string>>("stop_code", asOptionalString, header, values),
-        construct<boost::optional<std::string>>("stop_desc", asOptionalString, header, values),
-        construct<boost::optional<ZoneID>>("zone_id", stringToOptionalID<ZoneID>, header, values),
-        construct<boost::optional<std::string>>("stop_url", asOptionalString, header, values),
-        type,
-        construct<boost::optional<StopID>>(
-            "parent_station", stringToOptionalID<StopID>, header, values),
-        construct<boost::optional<std::string>>("stop_timezone", asOptionalString, header, values),
-        wheelchair};
+        construct_as_optional<std::string, false>("stop_code", forward, header, values),
+        construct_as_optional<tool::container::DictionaryID, false>(
+            "stop_desc", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<ZoneID, false>("zone_id", stringToID<ZoneID>, header, values),
+        construct_as_optional<tool::container::DictionaryID, false>(
+            "stop_url", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<LocationType, true>("location_type", to_type, header, values),
+        construct_as_optional<StopID, false>("parent_station", stringToID<StopID>, header, values),
+        construct_as_optional<std::string, false>("stop_timezone", forward, header, values),
+        construct_as_optional<accessibility::Wheelchair, true>(
+            "wheelchair_boarding", accessibility::makeWheelchair, header, values)};
 }
 
 bool checkStopTimeCSVHeader(std::map<std::string, std::size_t> const &header)
@@ -96,37 +85,26 @@ StopTime makeStopTime(std::map<std::string, std::size_t> const &header,
         }
     };
 
-    const auto pickup_str =
-        construct<boost::optional<std::string>>("pickup_type", asOptionalString, header, values);
-    const auto drop_off_str =
-        construct<boost::optional<std::string>>("drop_off_type", asOptionalString, header, values);
-
-    boost::optional<StopType> pickup =
-        pickup_str ? boost::optional<StopType>(to_type(*pickup_str)) : boost::none;
-    boost::optional<StopType> drop_off =
-        drop_off_str ? boost::optional<StopType>(to_type(*drop_off_str)) : boost::none;
-
-    const auto dist_travelled_str = construct<boost::optional<std::string>>(
-        "shape_dist_traveled", asOptionalString, header, values);
+    const auto dist_travelled_str =
+        construct_as_optional<std::string, false>("shape_dist_traveled", forward, header, values);
     const auto timepoint_str =
-        construct<boost::optional<std::string>>("timepoint", asOptionalString, header, values);
+        construct_as_optional<std::string, true>("timepoint", forward, header, values);
 
     boost::optional<double> dist_travelled =
         dist_travelled_str ? boost::optional<double>(std::stof(*dist_travelled_str)) : boost::none;
     boost::optional<TimepointType> timepoint =
         timepoint_str ? boost::optional<TimepointType>(to_point(*timepoint_str)) : boost::none;
 
-    return {
-        construct<TripID>("trip_id", stringToID<TripID>, header, values),
-        construct<Time>("arrival_time", constructFromString<Time>, header, values),
-        construct<Time>("departure_time", constructFromString<Time>, header, values),
-        construct<StopID>("stop_id", stringToID<StopID>, header, values),
-        construct<SequenceID>("stop_sequence", stringToID<SequenceID>, header, values),
-        construct<boost::optional<std::string>>("stop_headsign", asOptionalString, header, values),
-        pickup,
-        drop_off,
-        dist_travelled,
-        timepoint};
+    return {construct<TripID>("trip_id", stringToID<TripID>, header, values),
+            construct<Time>("arrival_time", constructFromString<Time>, header, values),
+            construct<Time>("departure_time", constructFromString<Time>, header, values),
+            construct<StopID>("stop_id", stringToID<StopID>, header, values),
+            construct<SequenceID>("stop_sequence", stringToID<SequenceID>, header, values),
+            construct_as_optional<std::string, false>("stop_headsign", forward, header, values),
+            construct_as_optional<StopType, true>("pickup_type", to_type, header, values),
+            construct_as_optional<StopType, true>("drop_off_type", to_type, header, values),
+            dist_travelled,
+            construct_as_optional<TimepointType, true>("timepoint", to_point, header, values)};
 }
 
 } // namespace gtfs

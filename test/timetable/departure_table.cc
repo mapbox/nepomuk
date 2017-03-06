@@ -24,19 +24,19 @@ BOOST_AUTO_TEST_CASE(check_input_validity_and_parsing)
     BOOST_CHECK_THROW(DepartureTableFactory::produce(data.begin(), data.end()), InvalidInputError);
 
     // hourly trips between 0:00 and 6:00
-    data.push_back({TripID{0}, Time{"00:00:00"}, Time{"06:00:00"}, 3600});
+    data.push_back({TripID{0}, Time{"00:00:00"}, Time{"06:00:00"}, 3600, boost::none});
     // every 5 minutes until 10:00
-    data.push_back({TripID{0}, Time{"06:00:00"}, Time{"10:00:00"}, 300});
+    data.push_back({TripID{0}, Time{"06:00:00"}, Time{"10:00:00"}, 300, boost::none});
     // every 10 minutes between 10:00 and 16:00
-    data.push_back({TripID{0}, Time{"10:00:00"}, Time{"16:00:00"}, 600});
+    data.push_back({TripID{0}, Time{"10:00:00"}, Time{"16:00:00"}, 600, boost::none});
     // every 30 minutes from 16:00 to 24:00
-    data.push_back({TripID{0}, Time{"16:00:00"}, Time{"24:00:00"}, 1800});
+    data.push_back({TripID{0}, Time{"16:00:00"}, Time{"24:00:00"}, 1800, boost::none});
 
-    data.push_back({TripID{1}, Time{"00:00:00"}, Time{"06:00:00"}, 1800});
+    data.push_back({TripID{1}, Time{"00:00:00"}, Time{"06:00:00"}, 1800, boost::none});
     // every 10 minutes for most of the day
-    data.push_back({TripID{1}, Time{"06:00:00"}, Time{"16:00:00"}, 600});
+    data.push_back({TripID{1}, Time{"06:00:00"}, Time{"16:00:00"}, 600, boost::none});
     // every 30 minutes from 16:00 to 24:00
-    data.push_back({TripID{1}, Time{"16:00:00"}, Time{"24:00:00"}, 1800});
+    data.push_back({TripID{1}, Time{"16:00:00"}, Time{"24:00:00"}, 1800, boost::none});
 
     BOOST_CHECK_THROW(DepartureTableFactory::produce(data.begin(), data.end()), InvalidInputError);
 

@@ -20,6 +20,7 @@
 #include "gtfs/transfer.hpp"
 #include "gtfs/trip.hpp"
 
+#include "tool/container/dictionary.hpp"
 #include "tool/io/serialisation.hpp"
 #include "tool/io/stream_errors.hpp"
 
@@ -47,6 +48,8 @@ struct Dataset
     boost::optional<FeedInfo> feed_info;
     boost::optional<std::vector<Transfer>> transfers;
     boost::optional<std::vector<Frequency>> frequencies;
+
+    tool::container::Dictionary dictionary;
 };
 
 template <class result_type, class converter_operator, class csv_decoder>
@@ -62,6 +65,25 @@ std::vector<result_type> decodeDataFromCSV(converter_operator converter, csv_dec
             break;
 
         results.push_back(converter(decoder.header, values));
+    }
+    return results;
+}
+
+template <class result_type, class converter_operator, class csv_decoder>
+std::vector<result_type> decodeDataFromCSV(converter_operator converter,
+                                           csv_decoder decoder,
+                                           tool::container::Dictionary &dictionary)
+{
+    std::vector<result_type> results;
+    std::vector<std::string> values;
+    while (true)
+    {
+        tool::io::deserialize(values, decoder);
+        // past eof
+        if (values.empty())
+            break;
+
+        results.push_back(converter(decoder.header, values, dictionary));
     }
     return results;
 }

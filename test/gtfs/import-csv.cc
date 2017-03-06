@@ -9,6 +9,8 @@
 #include "gtfs/trip.hpp"
 #include "gtfs/zone.hpp"
 
+#include "tool/container/dictionary.hpp"
+
 #include <iostream>
 #include <string>
 
@@ -107,14 +109,15 @@ void makeStops(std::string const &name)
            "Bahnhof\",,\"3.0000000\",\"3.0000000\",,00000550217,3,,\"us\",2\n";
 }
 
-void checkStopFixture(std::vector<Stop> const &stops)
+void checkStopFixture(std::vector<Stop> const &stops,
+                      transit::tool::container::Dictionary const &dictionary)
 {
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);
 
     // stops include parent stop ids in every location
-    const auto valid_ids = (stops[0].id == StopID{0}) && (stops[1].id == StopID{2}) &&
-                           (stops[2].id == StopID{4});
+    const auto valid_ids =
+        (stops[0].id == StopID{0}) && (stops[1].id == StopID{2}) && (stops[2].id == StopID{4});
 
     BOOST_CHECK(valid_ids);
 
@@ -122,9 +125,9 @@ void checkStopFixture(std::vector<Stop> const &stops)
                              (*stops[1].code == "456") && !stops[2].code;
     BOOST_CHECK(valid_codes);
 
-    const auto valid_names = (stops[0].name == "Rastow, Bahnhof") &&
-                             (stops[1].name == "Restow, Bahnhof") &&
-                             (stops[2].name == "Ristow, Bahnhof");
+    const auto valid_names = (dictionary.get_string(stops[0].name) == "Rastow, Bahnhof") &&
+                             (dictionary.get_string(stops[1].name) == "Restow, Bahnhof") &&
+                             (dictionary.get_string(stops[2].name) == "Ristow, Bahnhof");
     BOOST_CHECK(valid_names);
 
     auto check_lat_lon = [](auto const lat_or_lon, const std::uint32_t expected) {
@@ -145,15 +148,15 @@ void checkStopFixture(std::vector<Stop> const &stops)
         stops[2].location_type && (*stops[2].location_type == LocationType::STOP);
     BOOST_CHECK(valid_types);
 
-    const auto valid_parents =
-        stops[0].parent_station && (*stops[0].parent_station == StopID{1}) &&
-        stops[1].parent_station && (*stops[1].parent_station == StopID{3}) &&
-        stops[2].parent_station && (*stops[2].parent_station == StopID{5});
+    const auto valid_parents = stops[0].parent_station && (*stops[0].parent_station == StopID{1}) &&
+                               stops[1].parent_station && (*stops[1].parent_station == StopID{3}) &&
+                               stops[2].parent_station && (*stops[2].parent_station == StopID{5});
     BOOST_CHECK(valid_parents);
 
     const auto valid_descriptions =
-        stops[0].description && (*stops[0].description == "its") && stops[1].description &&
-        (*stops[1].description == "so beautiful") && !stops[2].description;
+        stops[0].description && (dictionary.get_string(*stops[0].description) == "its") &&
+        stops[1].description && (dictionary.get_string(*stops[1].description) == "so beautiful") &&
+        !stops[2].description;
     BOOST_CHECK(valid_descriptions);
 
     const auto valid_zones = stops[0].zone_id && (stops[0].zone_id == ZoneID{0}) &&
@@ -161,8 +164,9 @@ void checkStopFixture(std::vector<Stop> const &stops)
                              stops[2].zone_id && (stops[2].zone_id == ZoneID{2});
     BOOST_CHECK(valid_zones);
 
-    const auto valid_urls =
-        !stops[0].url && stops[1].url && (*stops[1].url == "www.someurl.com") && !stops[2].url;
+    const auto valid_urls = !stops[0].url && stops[1].url &&
+                            (dictionary.get_string(*stops[1].url) == "www.someurl.com") &&
+                            !stops[2].url;
     BOOST_CHECK(valid_urls);
 
     const auto valid_timezones = stops[0].timezone && (*stops[0].timezone == "de") &&
@@ -191,19 +195,20 @@ void makeMinimalStops(std::string const &name)
     ofs << "000008012718,\"Ristow, "
            "Bahnhof\",\"3.00000\",\"3.00000\"\n";
 }
-void checkMinimalStopFixture(std::vector<Stop> const &stops)
+void checkMinimalStopFixture(std::vector<Stop> const &stops,
+                             transit::tool::container::Dictionary const &dictionary)
 {
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);
 
     // minimal IDs do not conatin parent stop stations
-    const auto valid_ids = (stops[0].id == StopID{0}) && (stops[1].id == StopID{2}) &&
-                           (stops[2].id == StopID{4});
+    const auto valid_ids =
+        (stops[0].id == StopID{0}) && (stops[1].id == StopID{2}) && (stops[2].id == StopID{4});
     BOOST_CHECK(valid_ids);
 
-    const auto valid_names = (stops[0].name == "Rastow, Bahnhof") &&
-                             (stops[1].name == "Restow, Bahnhof") &&
-                             (stops[2].name == "Ristow, Bahnhof");
+    const auto valid_names = (dictionary.get_string(stops[0].name) == "Rastow, Bahnhof") &&
+                             (dictionary.get_string(stops[1].name) == "Restow, Bahnhof") &&
+                             (dictionary.get_string(stops[2].name) == "Ristow, Bahnhof");
     BOOST_CHECK(valid_names);
 
     auto check_lat_lon = [](auto const lat_or_lon, const std::uint32_t expected) {
@@ -355,14 +360,14 @@ void checkDatasetRequired(Dataset const &dataset)
 {
     BOOST_CHECK(dataset.agencies.size() == 1);
     checkAgencyFixture(dataset.agencies.front());
-    checkStopFixture(dataset.stops);
+    checkStopFixture(dataset.stops, dataset.dictionary);
 }
 
 void checkMinimalDataset(Dataset const &dataset)
 {
     BOOST_CHECK(dataset.agencies.size() == 1);
     checkMinimalAgencyFixture(dataset.agencies.front());
-    checkMinimalStopFixture(dataset.stops);
+    checkMinimalStopFixture(dataset.stops, dataset.dictionary);
 }
 void makeCalendarDates(std::string const &name)
 {

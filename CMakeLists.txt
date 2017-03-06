@@ -135,10 +135,14 @@ add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 find_package(Protobuf 2.4.1 REQUIRED)
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
+# tool needs to be first to set proto headers
 add_subdirectory(src/tool)
-add_subdirectory(src/timetable)
-add_subdirectory(src/gtfs)
+
+add_subdirectory(src/adaptor)
 add_subdirectory(src/geometric)
+add_subdirectory(src/gtfs)
+add_subdirectory(src/timetable)
+
 
 add_subdirectory(src/apps)
 
