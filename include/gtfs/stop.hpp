@@ -13,6 +13,7 @@
 #include "gtfs/time.hpp"
 #include "gtfs/trip.hpp"
 #include "gtfs/zone.hpp"
+#include "tool/container/dictionary.hpp"
 #include "tool/types_and_traits/strong_typedef.hpp"
 
 namespace transit
@@ -31,14 +32,14 @@ enum class LocationType
 struct Stop
 {
     StopID id;
-    std::string name;
+    tool::container::DictionaryID name;
     geometric::Coordinate location;
 
     // optional additional features
     boost::optional<std::string> code;
-    boost::optional<std::string> description;
+    boost::optional<tool::container::DictionaryID> description;
     boost::optional<ZoneID> zone_id;
-    boost::optional<std::string> url;
+    boost::optional<tool::container::DictionaryID> url;
     boost::optional<LocationType> location_type;
     boost::optional<StopID> parent_station;
     boost::optional<std::string> timezone;
@@ -46,7 +47,9 @@ struct Stop
 };
 
 bool checkStopCSVHeader(std::map<std::string, std::size_t> const &header);
-Stop makeStop(std::map<std::string, std::size_t> const &header, std::vector<std::string> &values);
+Stop makeStop(std::map<std::string, std::size_t> const &header,
+              std::vector<std::string> &values,
+              tool::container::Dictionary &dictionary);
 
 enum class StopType
 {

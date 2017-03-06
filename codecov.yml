@@ -33,4 +33,6 @@ coverage:
     - *\.md
     - .gitignore
 
-comment: off
+comment:
+  layout: "header, diff"
+  behavior: default  # update if exists else create new

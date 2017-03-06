@@ -10,6 +10,7 @@
 #include "gtfs/route.hpp"
 #include "gtfs/service.hpp"
 #include "gtfs/shape.hpp"
+#include "tool/container/dictionary.hpp"
 #include "tool/types_and_traits/strong_typedef.hpp"
 
 namespace transit
@@ -41,8 +42,8 @@ struct Trip
     ServiceID service_id;
 
     // optional additional features
-    boost::optional<std::string> headsign;
-    boost::optional<std::string> short_name;
+    boost::optional<tool::container::DictionaryID> headsign;
+    boost::optional<tool::container::DictionaryID> short_name;
     boost::optional<TripDirection> direction;
     boost::optional<BlockID> block_id; // same block == transfer without changing cars
     boost::optional<ShapeID> shape_id;
@@ -51,7 +52,9 @@ struct Trip
 };
 
 bool checkTripCSVHeader(std::map<std::string, std::size_t> const &header);
-Trip makeTrip(std::map<std::string, std::size_t> const &header, std::vector<std::string> &values);
+Trip makeTrip(std::map<std::string, std::size_t> const &header,
+              std::vector<std::string> &values,
+              tool::container::Dictionary &dictionary);
 
 } // namespace gtfs
 } // namespace transit

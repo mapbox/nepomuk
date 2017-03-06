@@ -3,8 +3,8 @@
 #include <numeric>
 #include <vector>
 
-#include "gtfs/stop.hpp"
 #include "gtfs/agency.hpp"
+#include "gtfs/stop.hpp"
 #include "gtfs/trip.hpp"
 #include "tool/container/id_hasher.hpp"
 
@@ -23,22 +23,22 @@ BOOST_AUTO_TEST_CASE(handle_different_ids)
     std::random_shuffle(data.begin(), data.end());
 
     for (std::uint32_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<AgencyID>(
-                              std::to_string(data[i]), "default"),
-                          AgencyID{i});
+        BOOST_CHECK_EQUAL(
+            transit::tool::container::id_hash::get_id<AgencyID>(std::to_string(data[i]), "default"),
+            AgencyID{i});
 
     // make sure IDS don't change between hashes
     for (std::uint32_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<AgencyID>(
-                              std::to_string(data[i]), "default"),
-                          AgencyID{i});
+        BOOST_CHECK_EQUAL(
+            transit::tool::container::id_hash::get_id<AgencyID>(std::to_string(data[i]), "default"),
+            AgencyID{i});
 
     // reshuffle, check if types actually get their own IDs
     std::random_shuffle(data.begin(), data.end());
     for (std::uint64_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<StopID>(
-                              std::to_string(data[i]), "default"),
-                          StopID{i});
+        BOOST_CHECK_EQUAL(
+            transit::tool::container::id_hash::get_id<StopID>(std::to_string(data[i]), "default"),
+            StopID{i});
 }
 
 BOOST_AUTO_TEST_CASE(handle_different_sources)
@@ -48,14 +48,14 @@ BOOST_AUTO_TEST_CASE(handle_different_sources)
     std::random_shuffle(data.begin(), data.end());
 
     for (std::uint32_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<TripID>(
-                              std::to_string(data[i]), "default"),
-                          TripID{i});
+        BOOST_CHECK_EQUAL(
+            transit::tool::container::id_hash::get_id<TripID>(std::to_string(data[i]), "default"),
+            TripID{i});
 
     std::random_shuffle(data.begin(), data.end());
     // make sure IDS don't change between hashes
     for (std::uint32_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<TripID>(
-                              std::to_string(data[i]), "other_source"),
-                          TripID{i+num_ids});
+        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<TripID>(std::to_string(data[i]),
+                                                                            "other_source"),
+                          TripID{i + num_ids});
 }

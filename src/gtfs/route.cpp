@@ -16,19 +16,24 @@ bool checkRouteCSVHeader(std::map<std::string, std::size_t> const &header)
            header.count("route_long_name") && header.count("route_type");
 }
 
-Route makeRoute(std::map<std::string, std::size_t> const &header, std::vector<std::string> &values)
+Route makeRoute(std::map<std::string, std::size_t> const &header,
+                std::vector<std::string> &values,
+                tool::container::Dictionary &dictionary)
 {
     return {
         construct<RouteID>("route_id", stringToID<RouteID>, header, values),
-        construct<std::string>("route_short_name", forward, header, values),
-        construct<std::string>("route_long_name", forward, header, values),
+        construct<tool::container::DictionaryID>(
+            "route_short_name", DictionaryConverter(dictionary), header, values),
+        construct<tool::container::DictionaryID>(
+            "route_long_name", DictionaryConverter(dictionary), header, values),
         construct<std::uint64_t>("route_type", toInt, header, values),
-        construct<boost::optional<std::string>>("agency_id", asOptionalString, header, values),
-        construct<boost::optional<std::string>>("route_desc", asOptionalString, header, values),
-        construct<boost::optional<std::string>>("route_url", asOptionalString, header, values),
-        construct<boost::optional<std::string>>("route_color", asOptionalString, header, values),
-        construct<boost::optional<std::string>>(
-            "route_text_color", asOptionalString, header, values)};
+        construct_as_optional<AgencyID, false>("agency_id", stringToID<AgencyID>, header, values),
+        construct_as_optional<tool::container::DictionaryID, false>(
+            "route_desc", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<tool::container::DictionaryID, false>(
+            "route_url", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<std::string, false>("route_color", forward, header, values),
+        construct_as_optional<std::string, false>("route_text_color", forward, header, values)};
 }
 
 } // namespace gtfs

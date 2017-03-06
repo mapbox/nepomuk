@@ -1,8 +1,8 @@
 # define a set of sources to compile
-
-PROTOBUF_GENERATE_CPP(proto_SOURCES proto_HEADERS
+PROTOBUF_GENERATE_CPP(proto_SOURCES local_proto_HEADERS
     proto/accessibility.proto
     proto/calendar.proto
+    proto/dictionary.proto
     proto/fare.proto
     proto/gtfs.proto
     proto/schedule.proto
@@ -15,23 +15,34 @@ PROTOBUF_GENERATE_CPP(proto_SOURCES proto_HEADERS
     proto/shape.proto
     proto/transfer.proto)
 
-ADD_LIBRARY(transitproto
+add_library(transitproto
     ${proto_SOURCES}
-    ${proto_HEADERS})
+    ${local_proto_HEADERS})
+
+target_link_libraries(transitproto
+    ${PROTOBUF_LIBRARIES})
+
+# add protobuf include dir to parent scope
+set(PROTOBUF_INCLUDE_DIRS ${PROTOBUF_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
 #since protoc generates a lot of warnings, we disable diagnostics for protoc files
 target_compile_options(transitproto PUBLIC -w)
 
-SET(tool_SOURCES
+#pass on variables to parent scope
+set(proto_HEADERS ${local_proto_HEADERS} PARENT_SCOPE)
+
+set(tool_SOURCES
     io/std_stream.cpp
-    io/std_line_stream.cpp)
+    io/std_line_stream.cpp
+    container/dictionary.cpp
+    container/string_table.cpp)
 
 # export source files as library
-ADD_LIBRARY(transittool
+add_library(transittool
     ${tool_SOURCES})
 
 # link all required items
-TARGET_LINK_LIBRARIES(transittool
+target_link_libraries(transittool
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
 

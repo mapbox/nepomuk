@@ -16,7 +16,7 @@ using namespace transit;
 
 int main(int argc, char **argv) try
 {
-    //transit::gtfs::CSVDiscSource source("data/example");
+    // transit::gtfs::CSVDiscSource source("data/example");
     transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
     auto dataset = transit::gtfs::readCSV(source);
 

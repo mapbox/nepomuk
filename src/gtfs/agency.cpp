@@ -24,12 +24,11 @@ Agency makeAgency(std::map<std::string, std::size_t> const &header,
         construct<std::string>("agency_name", forward, header, values),
         construct<std::string>("agency_url", forward, header, values),
         construct<std::string>("agency_timezone", forward, header, values),
-        construct<boost::optional<AgencyID>>("agency_id", stringToOptionalID<AgencyID>, header, values),
-        construct<boost::optional<std::string>>("agency_lang", asOptionalString, header, values),
-        construct<boost::optional<std::string>>("agency_phone", asOptionalString, header, values),
-        construct<boost::optional<std::string>>(
-            "agency_fare_url", asOptionalString, header, values),
-        construct<boost::optional<std::string>>("agency_email", asOptionalString, header, values)};
+        construct_as_optional<AgencyID, false>("agency_id", stringToID<AgencyID>, header, values),
+        construct_as_optional<std::string, false>("agency_lang", forward, header, values),
+        construct_as_optional<std::string, false>("agency_phone", forward, header, values),
+        construct_as_optional<std::string, false>("agency_fare_url", forward, header, values),
+        construct_as_optional<std::string, false>("agency_email", forward, header, values)};
 }
 
 } // namespace gtfs

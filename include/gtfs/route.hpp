@@ -8,6 +8,7 @@
 #include <string>
 
 #include "gtfs/agency.hpp"
+#include "tool/container/dictionary.hpp"
 #include "tool/types_and_traits/strong_typedef.hpp"
 
 namespace transit
@@ -23,22 +24,24 @@ STRONG_ID_TYPE(std::uint64_t, RouteID)
 struct Route
 {
     RouteID id;
-    std::string short_name;
-    std::string long_name;
+    tool::container::DictionaryID short_name;
+    tool::container::DictionaryID long_name;
     std::uint64_t type;
 
     using HexColorCode = std::string;
 
     // optional additional features
-    boost::optional<std::string> agency_id;
-    boost::optional<std::string> description;
-    boost::optional<std::string> url;
+    boost::optional<AgencyID> agency_id;
+    boost::optional<tool::container::DictionaryID> description;
+    boost::optional<tool::container::DictionaryID> url;
     boost::optional<HexColorCode> color;
     boost::optional<HexColorCode> text_color;
 };
 
 bool checkRouteCSVHeader(std::map<std::string, std::size_t> const &header);
-Route makeRoute(std::map<std::string, std::size_t> const &header, std::vector<std::string> &values);
+Route makeRoute(std::map<std::string, std::size_t> const &header,
+                std::vector<std::string> &values,
+                tool::container::Dictionary &dictionary);
 
 } // namespace gtfs
 } // namespace transit

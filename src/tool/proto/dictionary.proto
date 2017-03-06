@@ -1,0 +1,13 @@
+package transit.io.container;
+
+message DictionaryEntry {
+  required string display = 1;     // the resultl on a query for ID
+  required int64 id = 2;           // unique ID over all data entries
+  optional string categorized = 3; // if there is a category, this string
+                                   // contains the categorized hash value
+}
+
+message Dictionary_proto
+{
+    repeated DictionaryEntry entries = 1;
+}

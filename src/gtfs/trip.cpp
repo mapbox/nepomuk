@@ -14,7 +14,9 @@ bool checkTripCSVHeader(std::map<std::string, std::size_t> const &header)
     return header.count("route_id") && header.count("service_id") && header.count("trip_id");
 }
 
-Trip makeTrip(std::map<std::string, std::size_t> const &header, std::vector<std::string> &values)
+Trip makeTrip(std::map<std::string, std::size_t> const &header,
+              std::vector<std::string> &values,
+              tool::container::Dictionary &dictionary)
 {
     auto const to_direction = [](std::string const &value) {
         if (value.empty())
@@ -40,40 +42,20 @@ Trip makeTrip(std::map<std::string, std::size_t> const &header, std::vector<std:
         }
     };
 
-    const auto direction_str =
-        construct<boost::optional<std::string>>("direction_id", asOptionalString, header, values);
-    const boost::optional<TripDirection> direction =
-        direction_str
-            ? boost::optional<TripDirection>(to_direction(*direction_str))
-            : ((header.count("direction_id")) ? boost::optional<TripDirection>(to_direction(""))
-                                              : boost::none);
-
-    const auto wheelchair_optional = construct<boost::optional<std::string>>(
-        "wheelchair_boarding", asOptionalString, header, values);
-    const boost::optional<accessibility::Wheelchair> wheelchair =
-        wheelchair_optional ? boost::optional<accessibility::Wheelchair>(
-                                  accessibility::makeWheelchair(*wheelchair_optional))
-                            : boost::none;
-
-    const auto bike_str =
-        construct<boost::optional<std::string>>("bikes_allowed", asOptionalString, header, values);
-    const boost::optional<BikeTransport> bike =
-        bike_str ? boost::optional<BikeTransport>(to_bike(*bike_str)) : boost::none;
-
     return {
         construct<TripID>("trip_id", stringToID<TripID>, header, values),
         construct<RouteID>("route_id", stringToID<RouteID>, header, values),
         construct<ServiceID>("service_id", stringToID<ServiceID>, header, values),
-        construct<boost::optional<std::string>>("trip_headsign", asOptionalString, header, values),
-        construct<boost::optional<std::string>>(
-            "trip_short_name", asOptionalString, header, values),
-        direction,
-        construct<boost::optional<BlockID>>(
-            "block_id", stringToOptionalID<BlockID>, header, values),
-        construct<boost::optional<ShapeID>>(
-            "shape_id", stringToOptionalID<ShapeID>, header, values),
-        wheelchair,
-        bike};
+        construct_as_optional<tool::container::DictionaryID, false>(
+            "trip_headsign", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<tool::container::DictionaryID, false>(
+            "trip_short_name", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<TripDirection, true>("direction_id", to_direction, header, values),
+        construct_as_optional<BlockID, false>("block_id", stringToID<BlockID>, header, values),
+        construct_as_optional<ShapeID, false>("shape_id", stringToID<ShapeID>, header, values),
+        construct_as_optional<accessibility::Wheelchair, true>(
+            "wheelchair_boarding", accessibility::makeWheelchair, header, values),
+        construct_as_optional<BikeTransport, true>("bikes_allowed", to_bike, header, values)};
 }
 
 } // namespace gtfs

@@ -1,4 +1,5 @@
 #include "gtfs/read_csv.hpp"
+#include "tool/container/dictionary.hpp"
 #include "tool/io/csv_decoder.hpp"
 #include "tool/io/serialisation.hpp"
 #include "tool/io/std_line_stream.hpp"
@@ -55,6 +56,19 @@ void readData(boost::filesystem::path const &path,
         converter, makeDecoder(checker, checked_stream));
 }
 
+template <typename destination_container, typename converter_type, typename checker_type>
+void readData(boost::filesystem::path const &path,
+              destination_container &destination,
+              converter_type converter,
+              checker_type checker,
+              transit::tool::container::Dictionary &dictionary)
+{
+    std::ifstream ifs(path.string());
+    transit::tool::io::StdLineInputStream checked_stream(ifs);
+    destination = transit::gtfs::decodeDataFromCSV<typename destination_container::value_type>(
+        converter, makeDecoder(checker, checked_stream), dictionary);
+}
+
 } // namespace
 
 namespace transit
@@ -96,16 +110,16 @@ Dataset readCSV(CSVDiscSource const &source)
     readData(source.calendar, data.schedules, makeWeeklySchedule, checkWeeklyScheduleCSVHeader);
     std::cout << " done." << std::endl;
     std::cout << "Reading routes..." << std::flush;
-    readData(source.routes, data.routes, makeRoute, checkRouteCSVHeader);
+    readData(source.routes, data.routes, makeRoute, checkRouteCSVHeader, data.dictionary);
     std::cout << " done." << std::endl;
     std::cout << "Reading stops..." << std::flush;
-    readData(source.stops, data.stops, makeStop, checkStopCSVHeader);
+    readData(source.stops, data.stops, makeStop, checkStopCSVHeader, data.dictionary);
     std::cout << " done." << std::endl;
     std::cout << "Reading stop times..." << std::flush;
     readData(source.stop_times, data.stop_times, makeStopTime, checkStopTimeCSVHeader);
     std::cout << " done." << std::endl;
     std::cout << "Reading trips..." << std::flush;
-    readData(source.trips, data.trips, makeTrip, checkTripCSVHeader);
+    readData(source.trips, data.trips, makeTrip, checkTripCSVHeader, data.dictionary);
     std::cout << " done." << std::endl;
 
     // read optionals
