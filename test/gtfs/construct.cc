@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(optional_id)
     BOOST_CHECK_EQUAL(transit::gtfs::stringToOptionalID<std::uint64_t>(""), boost::none);
     BOOST_CHECK_EQUAL(transit::gtfs::stringToOptionalID<std::uint64_t>(""), boost::none);
     auto optional_int = transit::gtfs::stringToOptionalID<std::uint64_t>("123");
-    BOOST_CHECK(optional_int && (*optional_int == 123));
+    BOOST_CHECK(optional_int && (*optional_int == 0));
 }
 
 BOOST_AUTO_TEST_CASE(not_in_header)

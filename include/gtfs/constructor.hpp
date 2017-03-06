@@ -7,6 +7,8 @@
 #include <utility>
 #include <vector>
 
+#include "tool/container/id_hasher.hpp"
+
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
 
@@ -35,13 +37,13 @@ template <typename string_constructable> string_constructable constructFromStrin
 template <typename IDType> IDType stringToID(std::string id)
 {
     BOOST_ASSERT(id != "");
-    return IDType{static_cast<std::uint64_t>(std::stoll(id))};
+    return transit::tool::container::id_hash::get_id<IDType>(id, "default");
 }
 
 template <typename IDType> boost::optional<IDType> stringToOptionalID(std::string id)
 {
     if (!id.empty())
-        return {IDType{static_cast<std::uint64_t>(std::stoll(id))}};
+        return {stringToID<IDType>(id)};
     else
         return boost::none;
 }

@@ -22,7 +22,7 @@ struct Agency
     std::string name;
     std::string url;
     std::string timezone;
-    boost::optional<std::string> id;
+    boost::optional<AgencyID> id;
     boost::optional<std::string> language;
     boost::optional<std::string> phone;
     boost::optional<std::string> fare_url;

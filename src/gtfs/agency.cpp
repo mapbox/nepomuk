@@ -24,7 +24,7 @@ Agency makeAgency(std::map<std::string, std::size_t> const &header,
         construct<std::string>("agency_name", forward, header, values),
         construct<std::string>("agency_url", forward, header, values),
         construct<std::string>("agency_timezone", forward, header, values),
-        construct<boost::optional<std::string>>("agency_id", asOptionalString, header, values),
+        construct<boost::optional<AgencyID>>("agency_id", stringToOptionalID<AgencyID>, header, values),
         construct<boost::optional<std::string>>("agency_lang", asOptionalString, header, values),
         construct<boost::optional<std::string>>("agency_phone", asOptionalString, header, values),
         construct<boost::optional<std::string>>(
