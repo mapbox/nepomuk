@@ -119,7 +119,7 @@ void checkStopFixture(std::vector<Stop> const &stops)
     BOOST_CHECK(valid_ids);
 
     const auto valid_codes = stops[0].code && (*stops[0].code == "123") && stops[1].code &&
-                             (*stops[1].code == "456") && !stops[3].code;
+                             (*stops[1].code == "456") && !stops[2].code;
     BOOST_CHECK(valid_codes);
 
     const auto valid_names = (stops[0].name == "Rastow, Bahnhof") &&
