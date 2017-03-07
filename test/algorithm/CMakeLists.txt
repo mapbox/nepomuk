@@ -4,4 +4,4 @@ set(algorithmLIBS
 set(algorithmINCLUDES
         ${Boost_INCLUDE_DIRS})
 
-add_unit_test(group_by group_by.cc "${algorithmLIBS}" "${algorithmINCLUDES}")
+add_unit_test(ranges ranges.cc "${algorithmLIBS}" "${algorithmINCLUDES}")
