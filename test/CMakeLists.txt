@@ -16,3 +16,4 @@ endmacro()
 
 add_subdirectory(tool)
 add_subdirectory(gtfs)
+add_subdirectory(algorithm)
