@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(check_interpolation)
     // cannot use empty vectors
     std::vector<StopTime> data;
 
-    StopTime stop_time = {TripID{0},
+    StopTime stop_time = {TripID{42},
                       Time("00:10:00"),
                       Time("00:10:00"),
                       StopID{0},
@@ -105,6 +105,8 @@ BOOST_AUTO_TEST_CASE(check_interpolation)
     ++itr;
     BOOST_CHECK_EQUAL(itr->stop_id,StopID{2});
     BOOST_CHECK_EQUAL(itr->delta_t,600);
+
+    BOOST_CHECK_EQUAL(stop_table.trip_id(),TripID{42});
 }
 
 

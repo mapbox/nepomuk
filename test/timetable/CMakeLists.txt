@@ -9,4 +9,4 @@ set(timetableINCLUDES
         ${PROTOBUF_INCLUDE_DIRS})
 
 add_unit_test(timetable_stop_table stop_table.cc "${timetableLIBS}" "${timetableINCLUDES}")
-
+add_unit_test(timetable_departure_table departure_table.cc "${timetableLIBS}" "${timetableINCLUDES}")

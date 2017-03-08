@@ -1,4 +1,5 @@
 #include "gtfs/time.hpp"
+#include <sstream>
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -16,7 +17,7 @@ BOOST_AUTO_TEST_CASE(construct_time)
 BOOST_AUTO_TEST_CASE(check_normalisation)
 {
     transit::gtfs::Time time(0, 62, 65);
-    BOOST_CHECK_EQUAL(time.seconds_since_midnight, 62*60+65);
+    BOOST_CHECK_EQUAL(time.seconds_since_midnight, 62 * 60 + 65);
 }
 
 BOOST_AUTO_TEST_CASE(check_delta)
@@ -24,7 +25,7 @@ BOOST_AUTO_TEST_CASE(check_delta)
     transit::gtfs::Time lhs(1, 2, 3);
     transit::gtfs::Time rhs(2, 3, 4);
 
-    BOOST_CHECK_EQUAL(rhs - lhs, 24 * 60 + 60 + 1);
+    BOOST_CHECK_EQUAL(rhs - lhs, 3600 + 60 + 1);
 }
 
 BOOST_AUTO_TEST_CASE(interpolated)
@@ -54,7 +55,17 @@ BOOST_AUTO_TEST_CASE(check_addition)
 
     transit::gtfs::Time zero("00:00:00");
 
-    BOOST_CHECK(a+59 == b);
-    BOOST_CHECK(59+a ==  b);
-    BOOST_CHECK(a + (a-zero) == transit::gtfs::Time("00:00:02"));
+    BOOST_CHECK(a + 59 == b);
+    BOOST_CHECK(59 + a == b);
+    BOOST_CHECK(a + (a - zero) == transit::gtfs::Time("00:00:02"));
+}
+
+BOOST_AUTO_TEST_CASE(serialisation)
+{
+    transit::gtfs::Time a("00:00:01");
+    transit::gtfs::Time b("00:01:10");
+
+    std::ostringstream oss;
+    oss << a << " " << b;
+    BOOST_CHECK_EQUAL(oss.str().c_str(), "0:00:01 0:01:10");
 }

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "gtfs/stop.hpp"
+#include "gtfs/trip.hpp"
 
 #include <boost/range/iterator_range.hpp>
 
@@ -35,12 +36,14 @@ class StopTable
     // list stations along the line, and their departure
     const_iterator_range list(gtfs::StopID start_id) const;
 
+    gtfs::TripID trip_id() const { return _trip_id; }
+
   private:
+    gtfs::TripID _trip_id;
     std::vector<Arrival> stop_arrivals;
 
     friend class StopTableFactory;
 };
-
 
 } // namespace timetable
 } // namespace transit
