@@ -1,0 +1,75 @@
+#include "timetable/departure_table.hpp"
+#include "timetable/departure_table_factory.hpp"
+#include "timetable/exceptions.hpp"
+
+#include "gtfs/time.hpp"
+#include "gtfs/trip.hpp"
+
+#include <algorithm>
+
+#include <boost/optional.hpp>
+
+using namespace transit::timetable;
+using namespace transit::gtfs;
+
+// make sure we get a new main function here
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
+
+BOOST_AUTO_TEST_CASE(check_input_validity_and_parsing)
+{
+    // cannot use empty vectors
+    std::vector<Frequency> data;
+    BOOST_CHECK_THROW(DepartureTableFactory::produce(data.begin(), data.end()), InvalidInputError);
+
+    // hourly trips between 0:00 and 6:00
+    data.push_back({TripID{0}, Time{"00:00:00"}, Time{"06:00:00"}, 3600});
+    // every 5 minutes until 10:00
+    data.push_back({TripID{0}, Time{"06:00:00"}, Time{"10:00:00"}, 300});
+    // every 10 minutes between 10:00 and 16:00
+    data.push_back({TripID{0}, Time{"10:00:00"}, Time{"16:00:00"}, 600});
+    // every 30 minutes from 16:00 to 24:00
+    data.push_back({TripID{0}, Time{"16:00:00"}, Time{"24:00:00"}, 1800});
+
+    data.push_back({TripID{1}, Time{"00:00:00"}, Time{"06:00:00"}, 1800});
+    // every 10 minutes for most of the day
+    data.push_back({TripID{1}, Time{"06:00:00"}, Time{"16:00:00"}, 600});
+    // every 30 minutes from 16:00 to 24:00
+    data.push_back({TripID{1}, Time{"16:00:00"}, Time{"24:00:00"}, 1800});
+
+    BOOST_CHECK_THROW(DepartureTableFactory::produce(data.begin(), data.end()), InvalidInputError);
+
+    const auto first_table = DepartureTableFactory::produce(data.begin(), data.begin() + 4);
+    const auto second_table = DepartureTableFactory::produce(data.begin() + 4, data.end());
+
+    BOOST_CHECK_EQUAL(first_table.trip_id(), TripID{0});
+    BOOST_CHECK_EQUAL(second_table.trip_id(), TripID{1});
+
+    {
+        auto reachable_departures = first_table.list(Time("06:00:00"));
+        BOOST_CHECK_EQUAL(std::distance(reachable_departures.begin(), reachable_departures.end()),
+                          3ll);
+    }
+    {
+        auto reachable_departures = first_table.list(Time("05:00:00"));
+        BOOST_CHECK_EQUAL(std::distance(reachable_departures.begin(), reachable_departures.end()),
+                          4ll);
+    }
+    {
+        // missing the "5:00:00" train by a second
+        auto reachable_departures = first_table.list(Time("05:00:01"));
+        BOOST_CHECK_EQUAL(std::distance(reachable_departures.begin(), reachable_departures.end()),
+                          3ll);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(test_departure)
+{
+    DepartureTable::Departure frequency_departure = {Time{"10:00:00"}, Time{"16:00:00"}, 600};
+
+    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("00:01:23")), Time("10:00:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:00:00")), Time("10:00:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:00:01")), Time("10:10:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:10:01")), Time("10:20:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:10:00")), Time("10:10:00"));
+}
