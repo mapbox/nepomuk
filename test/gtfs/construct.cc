@@ -17,11 +17,11 @@ BOOST_AUTO_TEST_CASE(convert_ints)
 
     // repeat the branch a few times so coverage does not cry about it :)
     BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt(""), boost::none);
+    BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt("1"), boost::optional<std::uint64_t>(1));
     BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt(""), boost::none);
+    BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt("2"),  boost::optional<std::uint64_t>(2));
     BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt(""), boost::none);
-    BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt(""), boost::none);
-    BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt(""), boost::none);
-    BOOST_CHECK(transit::gtfs::asOptionalInt("") == boost::none);
+    BOOST_CHECK_EQUAL(transit::gtfs::asOptionalInt("3"), boost::optional<std::uint64_t>(3));
     auto valid_optional = transit::gtfs::asOptionalInt("123");
     BOOST_CHECK(valid_optional && *valid_optional == 123);
 }
