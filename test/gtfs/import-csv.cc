@@ -31,8 +31,6 @@ void makeInvalidAgency(std::string const &name)
     // presenting 'agencyname' instead of 'agencyname'. Should throw.
     ofs << "\"agencyname\",\"agency_url\",\"agency_timezone\"D,\"agency_lang\","
            "\"agency_phone\"\n";
-    ofs << "\"S-Bahn Berlin "
-           "GmbH\",\"http://www.s-bahn-berlin.de\",\"Europe/Berlin\",\"de\",\"\"\n";
 }
 
 void makeAgency(std::string const &name)
@@ -41,8 +39,11 @@ void makeAgency(std::string const &name)
     ofs << "\"agency_id\",\"agency_name\",\"agency_url\",\"agency_timezone\",\"agency_lang\","
            "\"agency_phone\",\"agency_fare_url\",\"agency_email\r\"\n";
     ofs << "1,\"S-Bahn Berlin "
-           "GmbH\",\"http://www.s-bahn-berlin.de\",\"Europe/"
-           "Berlin\",\"de\",\"030\",\"www.fare.url\",\"mail@agency.de\r\"\n";
+           "GmbH\",\"http://www.s-bahn-berlin.de\",\"  Europe/"
+           "Berlin\",\"de\",\"  030  \",\"www.fare.url\",\"mail@agency.de\r\"\n";
+    ofs << ",\"S-Bahn Berlin "
+           "GmbH\",\"http://www.s-bahn-berlin.de\",\"  Europe/"
+           "Berlin\",\"de\",\"  030  \",\"www.fare.url\",\"mail@agency.de\r\"\n";
 }
 
 void checkAgencyFixture(Agency const &agency)
@@ -353,7 +354,7 @@ void makeInvalidRequired(std::string const &name)
 
 void checkDatasetRequired(Dataset const &dataset)
 {
-    BOOST_CHECK(dataset.agencies.size() == 1);
+    BOOST_CHECK(dataset.agencies.size() == 2);
     checkAgencyFixture(dataset.agencies.front());
     checkStopFixture(dataset.stops);
 }
@@ -387,7 +388,7 @@ void makeFareAttributes(std::string const &name)
     ofs << "1,2.3,EUR,0,,23\n";
     ofs << "1,2.3,EUR,0,0,23\n";
     ofs << "1,2.3,EUR,1,1,23\n";
-    ofs << "1,2.3,EUR,1,2,23\n";
+    ofs << "1,2.3,EUR,1,2,\n";
 }
 
 void makeShapes(std::string const &name)
@@ -412,11 +413,11 @@ void makeTransfers(std::string const &name)
     std::ofstream ofs(name + "/transfers.txt");
     ofs << "\"from_stop_id\",\"to_stop_id\",\"transfer_type\",\"min_transfer_time\",\"from_route_"
            "id\",\"to_route_id\",\"from_trip_id\",\"to_trip_id\"\n";
-    ofs << "000008012716,000008012716,,1300,,,,\n";
+    ofs << "000008012716,000008012716,,1300,20,,,\n";
     ofs << "000008012716,000008012716,1,2300,,,,\n";
     ofs << "000008012716,000008012716,2,4300,,,,\n";
     ofs << "000008012716,000008012716,3,5300,,,,\n";
-    ofs << "000008010327,000008010327,2,240,,,61814935,61815841\n";
+    ofs << "000008010327,000008010327,2,240,25,,61814935,61815841\n";
 }
 
 void makeFeedInfo(std::string const &name)
