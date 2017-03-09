@@ -62,8 +62,16 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
         return lhs.trip_id < rhs.trip_id;
     };
     if (dataset.frequencies)
+    {
         produceByEqualRanges<DepartureTableFactory>(
             result.departure_tables, *dataset.frequencies, by_trip_id, by_trip_id);
+    }
+    else
+    {
+        // sort is stable, so we don't don anything to the stop_times here
+        produceByEqualRanges<DepartureTableFactory>(
+            result.departure_tables, dataset.stop_times, by_trip_id, by_trip_id);
+    }
 
     return result;
 }

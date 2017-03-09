@@ -2,6 +2,7 @@
 #include "timetable/exceptions.hpp"
 
 #include <algorithm>
+
 #include <boost/numeric/conversion/cast.hpp>
 
 namespace transit
@@ -47,6 +48,19 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::Frequency>::iter
     table._trip_id = begin->trip_id;
 
     std::sort(table.departures.begin(), table.departures.end());
+    return table;
+}
+
+DepartureTable DepartureTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
+                                              std::vector<gtfs::StopTime>::iterator end)
+{
+    DepartureTable table;
+    // at some time frequency / stop time might need different checks, right now we are fine doing
+    // it this way and miss-using the input validity template
+    check_input_validity(begin, end);
+
+    table._trip_id = begin->trip_id;
+    table.departures.push_back({begin->departure, begin->departure, 0u});
     return table;
 }
 

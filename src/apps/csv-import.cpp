@@ -16,7 +16,8 @@ using namespace transit;
 
 int main(int argc, char **argv) try
 {
-    transit::gtfs::CSVDiscSource source("data/example");
+    //transit::gtfs::CSVDiscSource source("data/example");
+    transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
     auto dataset = transit::gtfs::readCSV(source);
 
     auto timetable = transit::timetable::TimeTableFactory::produce(dataset);
@@ -25,7 +26,7 @@ int main(int argc, char **argv) try
 
     if (trip)
     {
-        gtfs::Time time("12:31:13");
+        gtfs::Time time("00:00:00");
         for (auto const departure : trip->departures.list(time))
         {
             auto const depart = departure.getNextDeparture(time);
