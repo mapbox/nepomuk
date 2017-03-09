@@ -2,6 +2,7 @@
 #include "timetable/departure_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 
+#include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
 #include "gtfs/trip.hpp"
 
@@ -72,4 +73,56 @@ BOOST_AUTO_TEST_CASE(test_departure)
     BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:00:01")), Time("10:10:00"));
     BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:10:01")), Time("10:20:00"));
     BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:10:00")), Time("10:10:00"));
+}
+
+BOOST_AUTO_TEST_CASE(construct_from_stops)
+{
+    std::vector<StopTime> data;
+    BOOST_CHECK_THROW(DepartureTableFactory::produce(data.begin(), data.end()), InvalidInputError);
+
+    StopTime first = {TripID{0},
+                      Time("00:10:00"),
+                      Time("00:10:00"),
+                      StopID{0},
+                      SequenceID{0},
+                      boost::none,
+                      boost::none,
+                      boost::none,
+                      boost::none,
+                      boost::none};
+
+    StopTime second = {TripID{0},
+                       Time("00:15:00"),
+                       Time("00:15:00"),
+                       StopID{1},
+                       SequenceID{1},
+                       boost::none,
+                       boost::none,
+                       boost::none,
+                       boost::none,
+                       boost::none};
+
+    StopTime second_invalid_trip = {TripID{1},
+                                    Time("00:15:00"),
+                                    Time("00:15:00"),
+                                    StopID{1},
+                                    SequenceID{1},
+                                    boost::none,
+                                    boost::none,
+                                    boost::none,
+                                    boost::none,
+                                    boost::none};
+
+    data.push_back(first);
+    data.push_back(second);
+    data.push_back(second_invalid_trip);
+    BOOST_CHECK_THROW(DepartureTableFactory::produce(data.begin(), data.end()), InvalidInputError);
+
+    data.pop_back();
+    const auto table = DepartureTableFactory::produce(data.begin(), data.end());
+
+    Time time("00:02:23");
+    const auto departure = table.list(time);
+    BOOST_CHECK(std::distance(departure.begin(), departure.end()) == 1);
+    BOOST_CHECK_EQUAL(departure.begin()->getNextDeparture(time), Time("00:10:00"));
 }
