@@ -249,11 +249,23 @@ void makeRoutes(std::string const &name)
            "route\"\n";
 }
 
+void checkRoutesFixture(std::vector<Route> const &routes)
+{
+    // TODO implement
+    BOOST_CHECK(false);
+}
+
 void makeMinimalRoutes(std::string const &name)
 {
     std::ofstream ofs(name + "/routes.txt");
     ofs << "\"route_id\",\"route_short_name\",\"route_long_name\",\"route_type\"\n";
     ofs << "17289_700,\"100\",\"100\",700\n";
+}
+
+void checkMinimalRoutesFixture(std::vector<Route> const &routes)
+{
+    // TODO implement
+    BOOST_CHECK(false);
 }
 
 void makeTrips(std::string const &name)
@@ -273,11 +285,24 @@ void makeTrips(std::string const &name)
     ofs << "17289_700,1,59129500,\"Berlin, S+U Alexanderplatz Bhf/Memhardstr. "
            "(Berlin)\",\"\",\"1\",,48,2,\n";
 }
+
+void checkTripsFixture(std::vector<Trip> const &trips)
+{
+    // TODO implement
+    BOOST_CHECK(false);
+}
+
 void makeMinimalTrips(std::string const &name)
 {
     std::ofstream ofs(name + "/trips.txt");
     ofs << "\"route_id\",\"service_id\",\"trip_id\"\n";
     ofs << "17289_700,1,59129500";
+}
+
+void checkMinimalTripsFixture(std::vector<Trip> const &trips)
+{
+    // TODO implement
+    BOOST_CHECK(false);
 }
 
 void makeStopTimes(std::string const &name)
@@ -291,6 +316,13 @@ void makeStopTimes(std::string const &name)
     ofs << "61699126,6:29:00,6:29:00,070101003212,0,1,2,\"S+U Alexanderplatz\",,0.1103\n";
     ofs << "61699126,6:29:00,6:29:00,070101003212,0,3,3,\"S+U Alexanderplatz\",,0.1103\n";
 }
+
+void checkStopTimesFixture(std::vector<StopTime> const &stop_times)
+{
+    // TODO implement
+    BOOST_CHECK(false);
+}
+
 void makeMinimalStopTimes(std::string const &name)
 {
     std::ofstream ofs(name + "/stop_times.txt");
@@ -301,6 +333,11 @@ void makeMinimalStopTimes(std::string const &name)
     ofs << "61699126,6:29:00,6:29:00,070101003212,3\n";
     ofs << "61699126,6:29:00,6:29:00,070101003212,4\n";
 }
+void checkMinimalStopTimesFixture(std::vector<StopTime> const &stop_times)
+{
+    // TODO implement
+    BOOST_CHECK(false);
+}
 
 void makeCalendar(std::string const &name)
 {
@@ -309,6 +346,11 @@ void makeCalendar(std::string const &name)
            "\"saturday\",\"sunday\",\"start_date\",\"end_date\"\n";
     ofs << "1,1,1,1,1,1,0,0,20170119,20171209\n";
     ofs << "1,0,0,0,0,0,1,1,20170119,20171209\n";
+}
+void checkCalendarFixture(std::vector<WeeklySchedule> const &calendar)
+{
+    // TODO implement
+    BOOST_CHECK(false);
 }
 
 void makeRequired(std::string const &name)
@@ -356,6 +398,10 @@ void checkDatasetRequired(Dataset const &dataset)
     BOOST_CHECK(dataset.agencies.size() == 1);
     checkAgencyFixture(dataset.agencies.front());
     checkStopFixture(dataset.stops);
+    checkRoutesFixture(dataset.routes);
+    checkTripsFixture(dataset.trips);
+    checkStopTimesFixture(dataset.stop_times);
+    checkCalendarFixture(dataset.schedules);
 }
 
 void checkMinimalDataset(Dataset const &dataset)
@@ -363,6 +409,10 @@ void checkMinimalDataset(Dataset const &dataset)
     BOOST_CHECK(dataset.agencies.size() == 1);
     checkMinimalAgencyFixture(dataset.agencies.front());
     checkMinimalStopFixture(dataset.stops);
+    checkMinimalRoutesFixture(dataset.routes);
+    checkMinimalTripsFixture(dataset.trips);
+    checkMinimalStopTimesFixture(dataset.stop_times);
+    checkCalendarFixture(dataset.schedules);
 }
 void makeCalendarDates(std::string const &name)
 {
