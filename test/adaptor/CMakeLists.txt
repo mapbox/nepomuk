@@ -4,8 +4,6 @@ set(adaptorLIBS
         transitproto
         transittool)
 
-message(STATUS "PBF: " ${PROTOBUF_LITE_LIBRARIES})
-
 set(adaptorINCLUDES
         ${Boost_INCLUDE_DIRS}
         ${PROTOBUF_INCLUDE_DIRS})

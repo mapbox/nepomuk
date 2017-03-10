@@ -9,11 +9,13 @@ target_link_libraries(csv-import
     ${LIBZMQ_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES}
     transitadaptor
+    transitannotate
     transitproto
     transittool
     transitgtfs
-    transittimetable
-    transitgeometric)
+    transitgeometric
+    transitnavigation
+    transittimetable)
 
 target_include_directories(csv-import SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS}
