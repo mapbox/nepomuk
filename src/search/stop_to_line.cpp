@@ -5,7 +5,7 @@ namespace transit
 namespace search
 {
 
-iterator_range StopToLine::operator()(gtfs::StopID stop)
+StopToLine::iterator_range StopToLine::operator()(gtfs::StopID stop) const
 {
     return boost::make_iterator_range(trip_table[static_cast<std::uint64_t>(stop)].begin(),
                                       trip_table[static_cast<std::uint64_t>(stop)].end());

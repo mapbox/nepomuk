@@ -143,6 +143,7 @@ add_subdirectory(src/annotation)
 add_subdirectory(src/geometric)
 add_subdirectory(src/gtfs)
 add_subdirectory(src/navigation)
+add_subdirectory(src/search)
 add_subdirectory(src/timetable)
 
 

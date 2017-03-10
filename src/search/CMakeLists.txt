@@ -1,6 +1,7 @@
 # define a set of sources to compile
 set(search_SOURCES
-    stop_to_line.cpp)
+    stop_to_line.cpp
+    stop_to_line_factory.cpp)
 
 # export source files as library
 add_library(transitsearch STATIC
