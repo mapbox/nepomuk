@@ -13,6 +13,7 @@
 #include "annotation/stop_info.hpp"
 #include "annotation/trip.hpp"
 #include "navigation/algorithm/timetable.hpp"
+#include "search/stop_to_line_factory.hpp"
 #include "tool/container/string_table.hpp"
 
 #include <cstdlib>
@@ -22,7 +23,7 @@ using namespace transit;
 
 int main(int argc, char **argv) try
 {
-    //transit::gtfs::CSVDiscSource source("data/example");
+    // transit::gtfs::CSVDiscSource source("data/example");
     transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
     auto dataset = transit::gtfs::readCSV(source);
     auto const message = transit::adaptor::Dictionary::encode(dataset.dictionary);
@@ -31,7 +32,10 @@ int main(int argc, char **argv) try
 
     auto const timetable = transit::timetable::TimeTableFactory::produce(dataset);
 
-    navigation::algorithm::TimeTable timetable_router(timetable);
+    auto const trip_look_up =
+        transit::search::StopToLineFactory::produce(dataset.stops.size(), dataset.stop_times);
+
+    navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
 
     auto trip = timetable_router(gtfs::Time("00:00:00"), gtfs::StopID{0}, gtfs::StopID{1});
 
