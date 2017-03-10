@@ -6,8 +6,6 @@
 
 #include "gtfs/trip.hpp"
 
-#include <boost/optional.hpp>
-
 namespace transit
 {
 namespace timetable
@@ -33,7 +31,7 @@ class TimeTable
         Trip(StopTable const &stops, DepartureTable const &departures);
     };
 
-    boost::optional<Trip> get_trip(gtfs::TripID trip_id) const;
+    Trip get_trip(gtfs::TripID trip_id) const;
 
   private:
     friend class TimeTableFactory;
