@@ -139,8 +139,10 @@ find_package(Protobuf 2.4.1 REQUIRED)
 add_subdirectory(src/tool)
 
 add_subdirectory(src/adaptor)
+add_subdirectory(src/annotation)
 add_subdirectory(src/geometric)
 add_subdirectory(src/gtfs)
+add_subdirectory(src/navigation)
 add_subdirectory(src/timetable)
 
 

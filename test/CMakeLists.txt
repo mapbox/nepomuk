@@ -16,6 +16,8 @@ endmacro()
 
 add_subdirectory(adaptor)
 add_subdirectory(algorithm)
+add_subdirectory(annotation)
+add_subdirectory(geometric)
 add_subdirectory(gtfs)
 add_subdirectory(timetable)
 add_subdirectory(tool)

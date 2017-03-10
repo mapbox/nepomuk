@@ -1,6 +1,10 @@
 # define a set of sources to compile
 SET(navigation_SOURCES
-    )
+    leg.cpp
+    trip.cpp
+    routing_algorithm.cpp
+    algorithm/timetable.cpp)
+
 # export source files as library
 ADD_LIBRARY(transitnavigation
     ${navigation_SOURCES})

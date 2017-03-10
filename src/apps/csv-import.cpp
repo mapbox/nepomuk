@@ -9,6 +9,12 @@
 #include "timetable/timetable.hpp"
 #include "timetable/timetable_factory.hpp"
 
+#include "adaptor/dictionary.hpp"
+#include "annotation/stop_info.hpp"
+#include "annotation/trip.hpp"
+#include "navigation/algorithm/timetable.hpp"
+#include "tool/container/string_table.hpp"
+
 #include <cstdlib>
 #include <iostream>
 
@@ -16,28 +22,23 @@ using namespace transit;
 
 int main(int argc, char **argv) try
 {
-    // transit::gtfs::CSVDiscSource source("data/example");
+    //transit::gtfs::CSVDiscSource source("data/example");
     transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
     auto dataset = transit::gtfs::readCSV(source);
+    auto const message = transit::adaptor::Dictionary::encode(dataset.dictionary);
+    transit::tool::container::StringTable dictionary;
+    transit::adaptor::Dictionary::decode_into(dictionary, message);
 
-    auto timetable = transit::timetable::TimeTableFactory::produce(dataset);
+    auto const timetable = transit::timetable::TimeTableFactory::produce(dataset);
 
-    auto trip = timetable.get_trip(gtfs::TripID{0});
+    navigation::algorithm::TimeTable timetable_router(timetable);
 
-    if (trip)
-    {
-        gtfs::Time time("00:00:00");
-        for (auto const departure : trip->departures.list(time))
-        {
-            auto const depart = departure.getNextDeparture(time);
-            std::cout << "Departing at: " << depart << std::endl;
-            for (auto const stop : trip->stops.list(gtfs::StopID{0}))
-            {
-                std::cout << "\tHold: " << stop.stop_id << " at " << (depart + stop.delta_t)
-                          << std::endl;
-            }
-        }
-    }
+    auto trip = timetable_router(gtfs::Time("00:00:00"), gtfs::StopID{0}, gtfs::StopID{1});
+
+    transit::annotation::StopInfoTable stop_info(dataset.stops);
+
+    transit::annotation::Trip const annotator(stop_info, dictionary);
+    std::cout << annotator(trip) << std::endl;
 
     return EXIT_SUCCESS;
 }
