@@ -84,6 +84,8 @@ endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
                ${CMAKE_CURRENT_SOURCE_DIR}/include/version.h)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fixtures.h.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/include/fixtures.h)
 include(mason)
 
 option(USE_LTO "Use link-time optimization if compiler support can be detected" OFF)

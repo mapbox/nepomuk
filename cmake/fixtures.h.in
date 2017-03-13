@@ -1,0 +1,6 @@
+#ifndef TRANSIT_FIXTURES_H_IN_
+#define TRANSIT_FIXTURES_H_IN_
+
+#define TRANSIT_GOOGLE_EXAMPLE_FIXTURE "@CMAKE_CURRENT_SOURCE_DIR@/fixtures/google-example"
+
+#endif /* TRANSIT_FIXTURES_H_IN_ */

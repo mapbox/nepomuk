@@ -3,3 +3,4 @@ data
 *.swp
 mason_packages
 include/version.h
+include/fixtures.h
