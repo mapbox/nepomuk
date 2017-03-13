@@ -8,17 +8,10 @@ namespace transit
 namespace timetable
 {
 
-TimeTable::Trip::Trip(StopTable const &stops, DepartureTable const &departures)
-    : stops(stops), departures(departures)
+LineTable::Trip TimeTable::get(LineID const line, gtfs::Time const departure) const
 {
-}
-
-TimeTable::Trip TimeTable::get_trip(gtfs::TripID trip_id) const
-{
-    BOOST_ASSERT(static_cast<std::uint64_t>(trip_id) < stop_tables.size());
-
-    return Trip{stop_tables[static_cast<std::uint64_t>(trip_id)],
-                departure_tables[static_cast<std::uint64_t>(trip_id)]};
+    BOOST_ASSERT(static_cast<std::uint64_t>(line) < line_tables.size());
+    return line_tables[static_cast<std::uint64_t>(line)].get(departure);
 }
 
 } // namespace timetable

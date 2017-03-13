@@ -1,0 +1,4 @@
+route_id,route_short_name,route_long_name,route_desc,route_type
+abcde,H1,"Horizontal Route Top","Route running from left to right on top",3
+fcg,V1,"Vertical Route","Vertical route running cross to H1",3
+hij,H2,"Horizontal Route Bottom","Route running from left to right on bottom",3

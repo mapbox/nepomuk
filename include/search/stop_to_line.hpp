@@ -4,6 +4,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <vector>
 
+#include "timetable/line_table.hpp"
+
 #include "gtfs/trip.hpp"
 #include "gtfs/stop.hpp"
 
@@ -20,14 +22,14 @@ class StopToLineFactory;
 class StopToLine
 {
     public:
-        using iterator = std::vector<gtfs::TripID>::const_iterator;
+        using iterator = std::vector<timetable::LineID>::const_iterator;
         using iterator_range = boost::iterator_range<iterator>;
 
         iterator_range operator()(gtfs::StopID stop) const;
 
         friend class StopToLineFactory;
     protected:
-        std::vector<std::vector<gtfs::TripID>> trip_table;
+        std::vector<std::vector<timetable::LineID>> trip_table;
 };
 
 } // namespace search

@@ -1,13 +1,13 @@
 #include "timetable/timetable.hpp"
-#include "timetable/departure_table_factory.hpp"
-#include "timetable/stop_table_factory.hpp"
 #include "timetable/timetable_factory.hpp"
+#include "timetable/line_table_factory.hpp"
 
 #include "gtfs/stop.hpp"
 
 #include "algorithm/ranges.hpp"
 
 #include <tuple>
+#include <unordered_map>
 #include <utility>
 
 namespace transit
@@ -29,6 +29,7 @@ void produceByEqualRanges(std::vector<result_type> &output,
                           sorting_predicate sort_by,
                           grouping_predicate group_by)
 {
+    BOOST_ASSERT(input.begin() != input.end());
     // ensure correct ordering.
     std::stable_sort(input.begin(), input.end(), sort_by);
 
@@ -48,30 +49,27 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
 {
     TimeTable result;
 
-    produceByEqualRanges<StopTableFactory>(
-        result.stop_tables,
-        dataset.stop_times,
-        [](auto const &lhs, auto const &rhs) {
-            return std::tie(lhs.trip_id, lhs.sequence_id) < std::tie(rhs.trip_id, rhs.sequence_id);
-        },
-        [](gtfs::StopTime const &value, gtfs::StopTime const &candidate) {
-            return value.trip_id < candidate.trip_id;
-        });
-
-    auto const by_trip_id = [](auto const &lhs, auto const &rhs) {
-        return lhs.trip_id < rhs.trip_id;
+    // prepare routes for trips
+    std::unordered_map<gtfs::TripID, gtfs::RouteID> route_id_by_trip;
+    auto const add_trip_route_mapping = [&route_id_by_trip](auto const &trip) {
+        route_id_by_trip[trip.id] = trip.route_id;
     };
-    if (dataset.frequencies)
-    {
-        produceByEqualRanges<DepartureTableFactory>(
-            result.departure_tables, *dataset.frequencies, by_trip_id, by_trip_id);
-    }
-    else
-    {
-        // sort is stable, so we don't don anything to the stop_times here
-        produceByEqualRanges<DepartureTableFactory>(
-            result.departure_tables, dataset.stop_times, by_trip_id, by_trip_id);
-    }
+    std::for_each(dataset.trips.begin(), dataset.trips.end(), add_trip_route_mapping);
+
+    produceByEqualRanges<LineTableFactory>(
+        result.line_tables,
+        dataset.stop_times,
+        [&route_id_by_trip](auto const &lhs, auto const &rhs) {
+            // group all trips by their route-id, their trip id, their sequence id
+            return std::tie(
+                       route_id_by_trip.find(lhs.trip_id)->second, lhs.trip_id, lhs.sequence_id) <
+                   std::tie(
+                       route_id_by_trip.find(rhs.trip_id)->second, rhs.trip_id, rhs.sequence_id);
+        },
+        // process elements by their trip id
+        [&route_id_by_trip](gtfs::StopTime const &value, gtfs::StopTime const &candidate) {
+            return route_id_by_trip.find(value.trip_id)->second < route_id_by_trip.find(candidate.trip_id)->second;
+        });
 
     return result;
 }
