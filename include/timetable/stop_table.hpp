@@ -28,25 +28,17 @@ class StopTableFactory;
 class StopTable
 {
   public:
-    struct Arrival
-    {
-        // the ID of the stop / station
-        gtfs::StopID stop_id;
-        // the time along the line to reach the station
-        std::uint32_t delta_t;
-
-        bool operator==(Arrival const &other) const;
-    };
-
-    using const_iterator = std::vector<Arrival>::const_iterator;
+    using const_iterator = std::vector<gtfs::StopID>::const_iterator;
     using const_iterator_range = boost::iterator_range<const_iterator>;
 
     // list stations along the line, and their departure
-    const_iterator_range list(gtfs::StopID start_id) const;
+    const_iterator_range list(gtfs::StopID const start_id) const;
+    const_iterator_range list() const;
+
     bool operator==(StopTable const &other) const;
 
   private:
-    std::vector<Arrival> stop_arrivals;
+    std::vector<gtfs::StopID> stops;
 
     friend class StopTableFactory;
     friend class transit::search::StopToLineFactory;

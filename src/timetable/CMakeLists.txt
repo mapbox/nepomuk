@@ -5,6 +5,8 @@ SET(timetable_SOURCES
     line_table.cpp
     departure_table.cpp
     departure_table_factory.cpp
+    duration_table.cpp
+    duration_table_factory.cpp
     line_table.cpp
     line_table_factory.cpp
     timetable_factory.cpp

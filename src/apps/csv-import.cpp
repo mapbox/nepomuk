@@ -19,14 +19,22 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 using namespace transit;
 
 int main(int argc, char **argv) try
 {
-    // transit::gtfs::CSVDiscSource source("data/example");
-    //transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
-    transit::gtfs::CSVDiscSource source("fixtures/three_lines");
+    std::string path = "data/example";
+
+    if (argc > 1)
+        path = argv[1];
+
+    if (path.back() == '/')
+        path.pop_back();
+
+    transit::gtfs::CSVDiscSource source(path.c_str());
+
     auto dataset = transit::gtfs::readCSV(source);
     auto const message = transit::adaptor::Dictionary::encode(dataset.dictionary);
     transit::tool::container::StringTable dictionary;
@@ -40,17 +48,40 @@ int main(int argc, char **argv) try
     navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
     transit::annotation::StopInfoTable stop_info(dataset.stops);
 
-    TIMER_START(query);
-    auto trip = timetable_router(gtfs::Time("00:51:00"), gtfs::StopID{0}, gtfs::StopID{1});
-    TIMER_STOP(query);
+    while (true)
+    {
+        std::cout << "Enter Source..." << std::flush;
+        std::string line;
+        std::getline(std::cin, line);
+        auto source = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        std::cout << "Enter Target..." << std::flush;
+        std::getline(std::cin, line);
+        auto target = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        std::cout << "Enter Departure..." << std::flush;
+        std::getline(std::cin, line);
+        gtfs::Time time(line);
 
-    TIMER_START(annotate);
-    transit::annotation::Trip const annotator(stop_info, dictionary);
-    TIMER_STOP(annotate);
-    std::cout << annotator(trip) << std::endl;
+        TIMER_START(query);
+        auto trip = timetable_router(time, source, target);
+        TIMER_STOP(query);
+        /*
+            for (std::uint64_t i = 0; i < 20; ++i)
+            {
+                TIMER_START(query);
+                auto trip = timetable_router(gtfs::Time("00:00:00"), gtfs::StopID{i},
+           gtfs::StopID{101});
+                TIMER_STOP(query);
+        */
+        transit::annotation::Trip const annotator(stop_info, dictionary);
 
-    std::cout << "Query took: " << TIMER_SEC(query)
-              << " seconds, annotation: " << TIMER_SEC(annotate) << std::endl;
+        TIMER_START(annotate);
+        if (trip)
+            std::cout << annotator(*trip) << std::endl;
+        TIMER_STOP(annotate);
+
+        std::cout << "Query took: " << TIMER_SEC(query)
+                  << " seconds, annotation: " << TIMER_SEC(annotate) << std::endl;
+    }
 
     return EXIT_SUCCESS;
 }

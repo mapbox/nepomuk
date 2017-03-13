@@ -4,6 +4,7 @@
 #include "timetable/line_table.hpp"
 
 #include "gtfs/trip.hpp"
+#include <vector>
 
 namespace transit
 {
@@ -24,7 +25,7 @@ class TimeTable
   public:
     // a trip is specified by the list of stops along its path and the departures from the first
     // station
-    LineTable::Trip get(LineID const line, gtfs::Time const departure) const;
+    std::vector<LineTable::Trip> get(LineID const line, gtfs::Time const departure) const;
 
   private:
     std::vector<LineTable> line_tables;

@@ -3,8 +3,10 @@
 
 #include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
-#include "navigation/trip.hpp"
 #include "navigation/leg.hpp"
+#include "navigation/trip.hpp"
+
+#include <boost/optional.hpp>
 
 namespace transit
 {
@@ -15,9 +17,9 @@ namespace navigation
 class RoutingAlgorithm
 {
   public:
-    virtual Trip operator()(gtfs::Time const departure,
-                            gtfs::StopID const origin,
-                            gtfs::StopID const destination) const = 0;
+    virtual boost::optional<Trip> operator()(gtfs::Time const departure,
+                                             gtfs::StopID const origin,
+                                             gtfs::StopID const destination) const = 0;
 
   protected:
     void add_leg(Trip &trip, Leg leg) const;

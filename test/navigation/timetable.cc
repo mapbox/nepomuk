@@ -7,8 +7,11 @@
 #include "gtfs/read_csv.hpp"
 #include "gtfs/time.hpp"
 
+#include "navigation/algorithm/timetable.hpp"
 #include "search/stop_to_line_factory.hpp"
 #include "timetable/timetable_factory.hpp"
+
+#include <iterator>
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {
@@ -21,21 +24,11 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto const trip_look_up =
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
-    auto trips = trip_look_up(transit::gtfs::StopID{1});
-    for (auto tid : trips)
-    {
-        auto routes = timetable.get(tid, transit::gtfs::Time("00:00:00"));
-        BOOST_CHECK(std::distance(routes.begin(), routes.end()) > 0);
-        for (auto const &route : routes)
-        {
-            auto stops = route.stop_table->list();
-            BOOST_CHECK(stops.end() !=
-                        std::find_if(stops.begin(), stops.end(), [tid](auto const stop) {
-                            return stop == transit::gtfs::StopID{1};
-                        }));
+    transit::navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
 
-            auto stops_from_searches = route.stop_table->list(transit::gtfs::StopID{1});
-            BOOST_CHECK_EQUAL(*stops_from_searches.begin(), transit::gtfs::StopID{1});
-        }
-    }
+    auto route = timetable_router(
+        transit::gtfs::Time("00:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{6});
+    BOOST_CHECK((bool)route);
+    auto leg_range = route->list();
+    BOOST_CHECK(std::distance(leg_range.begin(), leg_range.end()) == 2);
 }

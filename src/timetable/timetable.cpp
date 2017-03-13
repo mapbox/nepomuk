@@ -8,7 +8,7 @@ namespace transit
 namespace timetable
 {
 
-LineTable::Trip TimeTable::get(LineID const line, gtfs::Time const departure) const
+std::vector<LineTable::Trip> TimeTable::get(LineID const line, gtfs::Time const departure) const
 {
     BOOST_ASSERT(static_cast<std::uint64_t>(line) < line_tables.size());
     return line_tables[static_cast<std::uint64_t>(line)].get(departure);

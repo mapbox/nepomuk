@@ -43,9 +43,6 @@ BOOST_AUTO_TEST_CASE(check_input_validity_and_parsing)
     const auto first_table = DepartureTableFactory::produce(data.begin(), data.begin() + 4);
     const auto second_table = DepartureTableFactory::produce(data.begin() + 4, data.end());
 
-    BOOST_CHECK_EQUAL(first_table.trip_id(), TripID{0});
-    BOOST_CHECK_EQUAL(second_table.trip_id(), TripID{1});
-
     {
         auto reachable_departures = first_table.list(Time("06:00:00"));
         BOOST_CHECK_EQUAL(std::distance(reachable_departures.begin(), reachable_departures.end()),
@@ -66,13 +63,13 @@ BOOST_AUTO_TEST_CASE(check_input_validity_and_parsing)
 
 BOOST_AUTO_TEST_CASE(test_departure)
 {
-    DepartureTable::Departure frequency_departure = {Time{"10:00:00"}, Time{"16:00:00"}, 600};
+    DepartureTable::Departure frequency_departure = {Time{"10:00:00"}, Time{"16:00:00"}, 600, 0ull, 0ull};
 
-    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("00:01:23")), Time("10:00:00"));
-    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:00:00")), Time("10:00:00"));
-    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:00:01")), Time("10:10:00"));
-    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:10:01")), Time("10:20:00"));
-    BOOST_CHECK_EQUAL(frequency_departure.getNextDeparture(Time("10:10:00")), Time("10:10:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("00:01:23")), Time("10:00:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("10:00:00")), Time("10:00:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("10:00:01")), Time("10:10:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("10:10:01")), Time("10:20:00"));
+    BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("10:10:00")), Time("10:10:00"));
 }
 
 BOOST_AUTO_TEST_CASE(construct_from_stops)
@@ -124,5 +121,5 @@ BOOST_AUTO_TEST_CASE(construct_from_stops)
     Time time("00:02:23");
     const auto departure = table.list(time);
     BOOST_CHECK(std::distance(departure.begin(), departure.end()) == 1);
-    BOOST_CHECK_EQUAL(departure.begin()->getNextDeparture(time), Time("00:10:00"));
+    BOOST_CHECK_EQUAL(departure.begin()->get_next_departure(time), Time("00:10:00"));
 }
