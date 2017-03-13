@@ -39,13 +39,14 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::Frequency>::iter
     table.departures.reserve(std::distance(begin, end));
 
     const auto to_departure = [](auto const &frequency) -> DepartureTable::Departure {
-        return {
-            frequency.begin, frequency.end, boost::numeric_cast<std::uint32_t>(frequency.headway)};
+        return {frequency.begin,
+                frequency.end,
+                boost::numeric_cast<std::uint32_t>(frequency.headway),
+                0ull,
+                0ull};
     };
 
     std::transform(begin, end, std::back_inserter(table.departures), to_departure);
-
-    table._trip_id = begin->trip_id;
 
     std::sort(table.departures.begin(), table.departures.end());
     return table;
@@ -59,8 +60,7 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::StopTime>::itera
     // it this way and miss-using the input validity template
     check_input_validity(begin, end);
 
-    table._trip_id = begin->trip_id;
-    table.departures.push_back({begin->departure, begin->departure, 0u});
+    table.departures.push_back({begin->departure, begin->departure, 0u, 0ull, 0ull});
     return table;
 }
 

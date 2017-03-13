@@ -25,7 +25,7 @@ std::string Trip::operator()(navigation::Trip const &trip) const
         for (auto const &hold : leg.list())
         {
             auto const info = stop_info.get_info(hold.stop_id);
-            oss << "\t" << (leg.departure() + hold.delta_t) << " at stop: " << hold.stop_id
+            oss << "\t" << (hold.arrival) << " at stop: " << hold.stop_id
                 << " name: " << dictionary.get_string(info.name_id)
                 << " located at: " << info.location << "\n";
         }

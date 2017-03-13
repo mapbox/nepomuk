@@ -8,6 +8,7 @@
 
 #include "timetable/stop_table.hpp"
 #include "gtfs/time.hpp"
+#include "gtfs/stop.hpp"
 
 namespace transit
 {
@@ -24,7 +25,11 @@ class RoutingAlgorithm;
 class Leg
 {
   public:
-    using stop_type = timetable::StopTable::Arrival;
+    struct stop_type
+    {
+        gtfs::StopID stop_id;
+        gtfs::Time arrival;
+    };
     using iterator = std::vector<stop_type>::const_iterator;
 
     boost::iterator_range<iterator> list() const;

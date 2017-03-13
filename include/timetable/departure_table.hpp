@@ -2,6 +2,7 @@
 #define TRANSIT_TIMETABLE_DEPARTURETABLE_HPP_
 
 #include <cstdint>
+#include <cstddef>
 
 #include <boost/range/iterator_range.hpp>
 
@@ -30,9 +31,12 @@ class DepartureTable
         gtfs::Time end;
         std::uint32_t headway;
 
+        std::size_t stop_table_index;
+        std::size_t duration_table_index;
+
         bool operator<(Departure const &other) const;
 
-        gtfs::Time getNextDeparture(gtfs::Time const starting_at) const;
+        gtfs::Time get_next_departure(gtfs::Time const starting_at) const;
     };
 
     // iterator types
@@ -43,14 +47,9 @@ class DepartureTable
     friend class DepartureTableFactory;
     friend class LineTableFactory;
 
-    // access methods
-    gtfs::TripID trip_id() const { return _trip_id; }
-
     // list all valid departures from a given time
     const_iterator_range list(gtfs::Time starting_at) const;
-
   private:
-    gtfs::TripID _trip_id;
     std::vector<Departure> departures;
 };
 

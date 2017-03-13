@@ -1,21 +1,14 @@
-#include "timetable/stop_table_factory.hpp"
+#include "timetable/duration_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 
 #include "algorithm/ranges.hpp"
-
-#include <boost/assert.hpp>
-
-#include <algorithm>
-#include <iterator>
 
 namespace transit
 {
 namespace timetable
 {
-
 namespace
 {
-// validate the input
 template <typename iterator_type> void validate_input(iterator_type begin, iterator_type end)
 {
     if (std::distance(begin, end) == 0)
@@ -38,26 +31,27 @@ template <typename iterator_type> void validate_input(iterator_type begin, itera
 }
 } // namespace
 
-StopTable StopTableFactory::produce(std::vector<gtfs::StopTime> &stop_times)
+DurationTable DurationTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
+                                            const std::vector<gtfs::StopTime>::iterator end)
 {
-    return StopTableFactory::produce(stop_times.begin(), stop_times.end());
-}
-
-StopTable StopTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
-                                    const std::vector<gtfs::StopTime>::iterator end)
-{
-    // make sure our input is sane
+    // make sure our input is fine
     validate_input(begin, end);
 
-    // extract the stop-ids from the stop_times
-    StopTable result;
-    result.stops.reserve(std::distance(begin, end));
+    DurationTable result;
+    result.arrival_delta.reserve(std::distance(begin, end));
 
-    // every stop is reached after X seconds, where X is the different between the arrival at the
+    // every stop is reached after X seconds, where X is
+    // the different between the arrival at the
     // stop and the departure from the very first stop.
-    const auto to_stop = [](auto const &stop_time) mutable { return stop_time.stop_id; };
+    const auto to_delta = [base_time = begin->departure](auto const &stop_time) mutable
+    {
+        auto result = stop_time.arrival - base_time;
+        base_time = stop_time.arrival;
+        return result;
+    };
 
-    std::transform(begin, end, std::back_inserter(result.stops), to_stop);
+    std::transform(begin, end, std::back_inserter(result.arrival_delta), to_delta);
+
     return result;
 }
 
