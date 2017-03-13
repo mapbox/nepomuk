@@ -91,7 +91,6 @@ StopTable StopTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
 
     // transfer the arrival times to the stop table
     StopTable result;
-    result._trip_id = begin->trip_id;
     result.stop_arrivals = std::move(stop_arrivals);
     return result;
 }

@@ -1,2 +1,0 @@
-feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version
-PalmTran,http://www.pbcgov.com/palmtran/,en,20160411,20161231,20160411

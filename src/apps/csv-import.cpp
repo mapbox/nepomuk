@@ -25,7 +25,8 @@ using namespace transit;
 int main(int argc, char **argv) try
 {
     // transit::gtfs::CSVDiscSource source("data/example");
-    transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
+    //transit::gtfs::CSVDiscSource source("data/berlin-gtfs");
+    transit::gtfs::CSVDiscSource source("fixtures/three_lines");
     auto dataset = transit::gtfs::readCSV(source);
     auto const message = transit::adaptor::Dictionary::encode(dataset.dictionary);
     transit::tool::container::StringTable dictionary;
@@ -34,13 +35,13 @@ int main(int argc, char **argv) try
     auto const timetable = transit::timetable::TimeTableFactory::produce(dataset);
 
     auto const trip_look_up =
-        transit::search::StopToLineFactory::produce(dataset.stops.size(), dataset.stop_times);
+        transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
     navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
     transit::annotation::StopInfoTable stop_info(dataset.stops);
 
     TIMER_START(query);
-    auto trip = timetable_router(gtfs::Time("00:00:00"), gtfs::StopID{0}, gtfs::StopID{1});
+    auto trip = timetable_router(gtfs::Time("00:51:00"), gtfs::StopID{0}, gtfs::StopID{1});
     TIMER_STOP(query);
 
     TIMER_START(annotate);
@@ -48,7 +49,8 @@ int main(int argc, char **argv) try
     TIMER_STOP(annotate);
     std::cout << annotator(trip) << std::endl;
 
-    std::cout << "Query took: " << TIMER_SEC(query) << " seconds, annotation: " << TIMER_SEC(annotate) << std::endl;
+    std::cout << "Query took: " << TIMER_SEC(query)
+              << " seconds, annotation: " << TIMER_SEC(annotate) << std::endl;
 
     return EXIT_SUCCESS;
 }

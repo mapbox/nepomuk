@@ -36,7 +36,6 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
                        boost::none,
                        boost::none,
                        boost::none};
-
     StopTime second_invalid_trip = {TripID{1},
                                     Time("00:15:00"),
                                     Time("00:15:00"),
@@ -55,6 +54,11 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
     data.pop_back();
     data.push_back(second);
     BOOST_CHECK_NO_THROW(StopTableFactory::produce(data));
+
+    // check equal comparison
+    auto const a = StopTableFactory::produce(data);
+    auto const b = StopTableFactory::produce(data);
+    BOOST_CHECK(a == b);
 
     data.clear();
     data.push_back(second);
@@ -105,6 +109,5 @@ BOOST_AUTO_TEST_CASE(check_interpolation)
     ++itr;
     BOOST_CHECK_EQUAL(itr->stop_id, StopID{2});
     BOOST_CHECK_EQUAL(itr->delta_t, 600);
-
-    BOOST_CHECK_EQUAL(stop_table.trip_id(), TripID{42});
 }
+

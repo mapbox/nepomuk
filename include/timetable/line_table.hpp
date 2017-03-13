@@ -1,18 +1,52 @@
 #ifndef TRANSIT_TIMETABLE_LINETABLE_HPP_
 #define TRANSIT_TIMETABLE_LINETABLE_HPP_
 
+#include "gtfs/time.hpp"
+#include "timetable/departure_table.hpp"
+#include "timetable/stop_table.hpp"
+
+#include "tool/types_and_traits/strong_typedef.hpp"
+
 namespace transit
 {
+namespace search
+{
+class StopToLineFactory;
+} // namespace search
+
 namespace timetable
 {
 
-// Public transit routing consists of timetable routing. The linetables define which connections
-// leave certain stops.
-// It provides access to all possible lines.
+STRONG_ID_TYPE(std::uint64_t, LineID);
+
+class LineTableFactory;
+
+// A line table describes a line within the public transit network. It consists of a single entry of
+// stops serviced along the line. The line allows a series of departures and a list of arrivals that
+// can be computed via delta times relative to the departure at the very first station.
 class LineTable
 {
+  public:
+    struct Trip
+    {
+        StopTable const &stop_table;
+        gtfs::Time const departure;
+
+        Trip(StopTable const &stop_table, gtfs::Time const time);
+    };
+
     // give access to the next departure of the given line
-    void list(/*stop*/);
+    Trip get(gtfs::Time const departure) const;
+
+  private:
+    // the list of arrivals of a line
+    StopTable serviced_stops;
+
+    // the list of departure times available
+    DepartureTable departures;
+
+    friend class LineTableFactory;
+    friend class transit::search::StopToLineFactory;
 };
 
 } // namespace timetable

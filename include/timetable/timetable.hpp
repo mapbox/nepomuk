@@ -1,13 +1,17 @@
 #ifndef TRANSIT_TIMETABLE_HPP_
 #define TRANSIT_TIMETABLE_HPP_
 
-#include "timetable/departure_table.hpp"
-#include "timetable/stop_table.hpp"
+#include "timetable/line_table.hpp"
 
 #include "gtfs/trip.hpp"
 
 namespace transit
 {
+namespace search
+{
+class StopToLineFactory;
+} // namespace search
+
 namespace timetable
 {
 
@@ -18,23 +22,15 @@ class TimeTableFactory;
 class TimeTable
 {
   public:
-    std::vector<StopTable> stop_tables;
-    std::vector<DepartureTable> departure_tables;
-
     // a trip is specified by the list of stops along its path and the departures from the first
     // station
-    struct Trip
-    {
-        const StopTable &stops;
-        const DepartureTable &departures;
-
-        Trip(StopTable const &stops, DepartureTable const &departures);
-    };
-
-    Trip get_trip(gtfs::TripID trip_id) const;
+    LineTable::Trip get(LineID const line, gtfs::Time const departure) const;
 
   private:
+    std::vector<LineTable> line_tables;
+
     friend class TimeTableFactory;
+    friend class transit::search::StopToLineFactory;
 };
 
 } // namespace timetable

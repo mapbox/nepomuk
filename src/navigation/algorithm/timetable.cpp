@@ -26,17 +26,14 @@ Trip TimeTable::operator()(gtfs::Time const departure,
     auto trip_range = stop_to_line(origin);
     for (auto trip_id : trip_range)
     {
-        auto trip = time_table.get_trip(trip_id);
-        for (auto const trip_departure : trip.departures.list(departure))
-        {
-            Leg leg;
+        auto trip = time_table.get(trip_id, departure);
+        Leg leg;
 
-            set_departure(leg, trip_departure.getNextDeparture(departure));
-            for (auto const stop : trip.stops.list(origin))
-                add_stop(leg, stop);
+        set_departure(leg, trip.departure);
+        for (auto const stop : trip.stop_table.list(origin))
+            add_stop(leg, stop);
 
-            add_leg(result, std::move(leg));
-        }
+        add_leg(result, std::move(leg));
     }
     return result;
 }

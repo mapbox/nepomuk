@@ -14,6 +14,7 @@ namespace timetable
 {
 
 class DepartureTableFactory;
+class LineTableFactory;
 
 // Public transit routing consists of timetable routing. The departuretables define when connections
 // leave certain stops. In general these occurr in certain periodic settings. For any time at any
@@ -40,6 +41,7 @@ class DepartureTable
 
     // access for construction
     friend class DepartureTableFactory;
+    friend class LineTableFactory;
 
     // access methods
     gtfs::TripID trip_id() const { return _trip_id; }
