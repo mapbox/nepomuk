@@ -63,7 +63,8 @@ BOOST_AUTO_TEST_CASE(check_input_validity_and_parsing)
 
 BOOST_AUTO_TEST_CASE(test_departure)
 {
-    DepartureTable::Departure frequency_departure = {Time{"10:00:00"}, Time{"16:00:00"}, 600, 0ull, 0ull};
+    DepartureTable::Departure frequency_departure = {
+        Time{"10:00:00"}, Time{"16:00:00"}, 600, 0ull, 0ull};
 
     BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("00:01:23")), Time("10:00:00"));
     BOOST_CHECK_EQUAL(frequency_departure.get_next_departure(Time("10:00:00")), Time("10:00:00"));

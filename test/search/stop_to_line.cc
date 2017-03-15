@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto trips = trip_look_up(transit::gtfs::StopID{1});
     for (auto tid : trips)
     {
-        auto routes = timetable.get(tid, transit::gtfs::Time("00:00:00"));
+        auto routes = timetable.list_trips(tid, transit::gtfs::Time("00:00:00"));
         BOOST_CHECK(std::distance(routes.begin(), routes.end()) > 0);
         for (auto const &route : routes)
         {

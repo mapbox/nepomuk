@@ -1,9 +1,11 @@
 #ifndef TRANSIT_TIMETABLE_HPP_
 #define TRANSIT_TIMETABLE_HPP_
 
-#include "timetable/line_table.hpp"
-
 #include "gtfs/trip.hpp"
+#include "timetable/line_table.hpp"
+#include "timetable/transfer_table.hpp"
+
+#include <boost/assert.hpp>
 #include <vector>
 
 namespace transit
@@ -16,8 +18,6 @@ class StopToLineFactory;
 namespace timetable
 {
 
-class TimeTableFactory;
-
 // The timetable class groups all the different tables together that make up the transit network. It
 // essentially provides the graph and the travel times for the navigation algorithm
 class TimeTable
@@ -25,10 +25,17 @@ class TimeTable
   public:
     // a trip is specified by the list of stops along its path and the departures from the first
     // station
-    std::vector<LineTable::Trip> get(LineID const line, gtfs::Time const departure) const;
+    auto list_trips(LineID const line, gtfs::Time const departure) const
+    {
+        BOOST_ASSERT(static_cast<std::uint64_t>(line) < line_tables.size());
+        return line_tables[static_cast<std::uint64_t>(line)].get(departure);
+    }
+
+    auto list_transfers(gtfs::StopID const stop_id) const { return transfer_table.get(stop_id); }
 
   private:
     std::vector<LineTable> line_tables;
+    TransferTable transfer_table;
 
     friend class TimeTableFactory;
     friend class transit::search::StopToLineFactory;

@@ -22,14 +22,15 @@ class DurationTable
     // list stations along the line, and their departure
     const_iterator_range list(std::size_t const offset) const;
 
-    friend bool operator==(DurationTable const&lhs, DurationTable const&rhs);
+    friend bool operator==(DurationTable const &lhs, DurationTable const &rhs);
+
   private:
     std::vector<std::uint32_t> arrival_delta;
 
     friend class DurationTableFactory;
 };
 
-bool operator==(DurationTable const&lhs, DurationTable const&rhs);
+bool operator==(DurationTable const &lhs, DurationTable const &rhs);
 
 } // namespace timetable
 } // namespace transit

@@ -31,14 +31,14 @@ class Coordinate
     Coordinate(FixedLongitude, FixedLatitude);
 
     friend std::ostream &operator<<(std::ostream &os, Coordinate const &location);
-    friend bool operator==(Coordinate const&lhs, Coordinate const&rhs);
+    friend bool operator==(Coordinate const &lhs, Coordinate const &rhs);
 
     FixedLongitude longitude;
     FixedLongitude latitude;
 };
 
 std::ostream &operator<<(std::ostream &os, Coordinate const &location);
-bool operator==(Coordinate const&lhs, Coordinate const&rhs);
+bool operator==(Coordinate const &lhs, Coordinate const &rhs);
 
 } // namespace geometric
 } // namespace transit

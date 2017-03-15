@@ -10,7 +10,9 @@ SET(timetable_SOURCES
     line_table.cpp
     line_table_factory.cpp
     timetable_factory.cpp
-    timetable.cpp)
+    timetable.cpp
+    transfer_table.cpp
+    transfer_table_factory.cpp)
 
 # export source files as library
 ADD_LIBRARY(transittimetable
