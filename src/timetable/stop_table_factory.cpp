@@ -19,7 +19,7 @@ namespace
 template <typename iterator_type> void validate_input(iterator_type begin, iterator_type end)
 {
     if (std::distance(begin, end) == 0)
-        throw InvalidInputError("Stop times cannot be an empty set.");
+        throw InvalidInputError("StopTableFactory:: Stop times cannot be an empty set.");
 
     // trip has to be unique over all stop times
     const auto invalid_trip_id = [desired_id = begin->trip_id](auto const &stop_time)
@@ -27,14 +27,18 @@ template <typename iterator_type> void validate_input(iterator_type begin, itera
         return stop_time.trip_id != desired_id;
     };
     if (std::any_of(begin, end, invalid_trip_id))
-        throw InvalidInputError("Stop times have to belong to the same trip");
+        throw InvalidInputError("StopTableFactory:: Stop times have to belong to the same trip");
 
     // stop times have to be sorted by arrival
     const auto compare_by_arrival = [](auto const &lhs, auto const &rhs) {
         return lhs.arrival < rhs.arrival;
     };
     if (!std::is_sorted(begin, end, compare_by_arrival))
-        throw InvalidInputError("Stop times need to be sorted by arrival time.");
+    {
+        for( auto itr = begin; itr != end; ++itr )
+            std::cout << "Station: " << itr->stop_id << " " << itr->arrival << std::endl;
+        throw InvalidInputError("StopTableFactory:: Stop times need to be sorted by arrival time.");
+    }
 }
 } // namespace
 

@@ -5,6 +5,8 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/optional.hpp>
 
+#include <tuple>
+
 namespace transit
 {
 namespace gtfs
@@ -37,6 +39,12 @@ Transfer makeTransfer(std::map<std::string, std::size_t> const &header,
         construct<StopID>("to_stop_id", stringToID<StopID>, header, values),
         to_type(construct<std::string>("transfer_type", forward, header, values)),
         construct_as_optional<std::uint64_t, false>("min_transfer_time", toInt, header, values)};
+}
+
+bool Transfer::operator==(Transfer const &other) const
+{
+    return std::tie(from, to, type, minimum_duration) ==
+           std::tie(other.from, other.to, other.type, other.minimum_duration);
 }
 
 } // namespace gtfs

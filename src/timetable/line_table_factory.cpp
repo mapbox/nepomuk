@@ -43,11 +43,11 @@ void interpolate_times(iterator_type begin, const iterator_type end)
                          interpolate);
 }
 
-LineTable LineTableFactory::produce(std::vector<gtfs::StopTime>::iterator const begin,
-                                    std::vector<gtfs::StopTime>::iterator const end)
+std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::iterator const begin,
+                                                 std::vector<gtfs::StopTime>::iterator const end)
 {
     BOOST_ASSERT(std::distance(begin, end) != 0);
-    LineTable line_table;
+    std::vector<LineTable> line_tables;
 
     auto const by_trip_id = [](auto const &lhs, auto const &rhs) {
         return lhs.trip_id < rhs.trip_id;
@@ -57,64 +57,73 @@ LineTable LineTableFactory::produce(std::vector<gtfs::StopTime>::iterator const 
     using InputIterRange = std::pair<InputIter, InputIter>;
 
     // compute all departures for the line
-    const auto output_inserter = [&line_table](InputIterRange const range) {
+    const auto output_inserter = [&line_tables](InputIterRange const range) {
         interpolate_times(range.first, range.second);
-        auto duration_table = DurationTableFactory::produce(range.first, range.second);
+
         auto stop_table = StopTableFactory::produce(range.first, range.second);
 
-        auto const duration_index = [&line_table, duration_table]() {
-            auto const itr = std::find(line_table.duration_tables.begin(),
-                                       line_table.duration_tables.end(),
+        auto const line_index = [&line_tables, stop_table]() {
+            auto const itr =
+                std::find_if(line_tables.begin(), line_tables.end(), [&](auto const &line) {
+                    return line.stop_table == stop_table;
+                });
+
+            if (itr == line_tables.end())
+            {
+                std::cout << "New Line Table:";
+                for (auto s : stop_table.list())
+                    std::cout << " " << s;
+                std::cout << std::endl;
+                line_tables.push_back(LineTable());
+                line_tables.back().stop_table = stop_table;
+                return line_tables.size() - 1;
+            }
+            else
+            {
+                std::cout << "Found line table at index: "
+                          << std::distance(line_tables.begin(), itr) << std::endl;
+                return static_cast<std::size_t>(std::distance(line_tables.begin(), itr));
+            }
+        }();
+
+        auto duration_table = DurationTableFactory::produce(range.first, range.second);
+        auto const duration_index = [&line_tables, &duration_table, line_index]() {
+            auto const itr = std::find(line_tables[line_index].duration_tables.begin(),
+                                       line_tables[line_index].duration_tables.end(),
                                        duration_table);
-            if (itr == line_table.duration_tables.end())
+            if (itr == line_tables[line_index].duration_tables.end())
             {
                 std::cout << "New Duration Table:";
                 for (auto s : duration_table.list(0))
                     std::cout << " " << s;
                 std::cout << std::endl;
-                line_table.duration_tables.push_back(duration_table);
-                return line_table.duration_tables.size() - 1;
+                line_tables[line_index].duration_tables.push_back(duration_table);
+                return line_tables[line_index].duration_tables.size() - 1;
             }
             else
             {
                 std::cout << "Found duration table at index: "
-                          << std::distance(line_table.duration_tables.begin(), itr) << std::endl;
+                          << std::distance(line_tables[line_index].duration_tables.begin(), itr)
+                          << std::endl;
                 return static_cast<std::size_t>(
-                    std::distance(line_table.duration_tables.begin(), itr));
-            }
-        }();
-        auto const stop_index = [&line_table, stop_table]() {
-            auto const itr =
-                std::find(line_table.stop_tables.begin(), line_table.stop_tables.end(), stop_table);
-            if (itr == line_table.stop_tables.end())
-            {
-                std::cout << "New Stop Table:";
-                for (auto s : stop_table.list())
-                    std::cout << " " << s;
-                std::cout << std::endl;
-                line_table.stop_tables.push_back(stop_table);
-                return line_table.stop_tables.size() - 1;
-            }
-            else
-            {
-                std::cout << "Found stop table at index: "
-                          << std::distance(line_table.stop_tables.begin(), itr) << std::endl;
-                return static_cast<std::size_t>(std::distance(line_table.stop_tables.begin(), itr));
+                    std::distance(line_tables[line_index].duration_tables.begin(), itr));
             }
         }();
 
-        // BOOST_ASSERT(tables_are_identical());
-        line_table.departures.departures.push_back(
-            {range.first->departure, range.first->departure, 0, stop_index, duration_index});
+        line_tables[line_index].departures.departures.push_back(
+            {range.first->departure, range.first->departure, 0, duration_index});
     };
 
+    std::cout << "New Line Group" << std::endl;
     algorithm::by_equal_ranges(begin, end, by_trip_id, output_inserter);
 
-    std::sort(line_table.departures.departures.begin(),
-              line_table.departures.departures.end(),
-              [](auto const &lhs, auto const &rhs) { return lhs.begin < rhs.begin; });
+    // sort departures
+    for (auto &line_table : line_tables)
+        std::sort(line_table.departures.departures.begin(),
+                  line_table.departures.departures.end(),
+                  [](auto const &lhs, auto const &rhs) { return lhs.begin < rhs.begin; });
 
-    return line_table;
+    return line_tables;
 }
 
 } // namespace timetable

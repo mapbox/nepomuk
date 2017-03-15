@@ -30,8 +30,6 @@ class DepartureTable
         gtfs::Time begin;
         gtfs::Time end;
         std::uint32_t headway;
-
-        std::size_t stop_table_index;
         std::size_t duration_table_index;
 
         bool operator<(Departure const &other) const;

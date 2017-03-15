@@ -34,4 +34,8 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto route2 = timetable_router(
         transit::gtfs::Time("00:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{9});
     BOOST_CHECK((bool)route2);
+
+    auto route3 = timetable_router(
+        transit::gtfs::Time("36:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{6});
+    BOOST_CHECK((bool)!route3);
 }
