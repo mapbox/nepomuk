@@ -33,6 +33,12 @@ template <typename IDType> IDType stringToID(std::string id)
     return transit::tool::container::id_hash::get_id<IDType>(id, "default");
 }
 
+template <typename IDType> IDType stringToIDDirect(std::string id)
+{
+    BOOST_ASSERT(id != "");
+    return IDType{static_cast<std::uint64_t>(std::stol(id))};
+}
+
 struct DictionaryConverter
 {
     DictionaryConverter(tool::container::Dictionary &dictionary) : dictionary(dictionary) {}

@@ -12,6 +12,7 @@
 #include "adaptor/dictionary.hpp"
 #include "annotation/stop_info.hpp"
 #include "annotation/trip.hpp"
+#include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "navigation/algorithm/timetable.hpp"
 #include "search/stop_to_line_factory.hpp"
 #include "tool/container/string_table.hpp"
@@ -45,6 +46,7 @@ int main(int argc, char **argv) try
     auto const trip_look_up =
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
+    //navigation::algorithm::TimeTableDijkstra timetable_router(timetable, trip_look_up);
     navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
     transit::annotation::StopInfoTable stop_info(dataset.stops);
 

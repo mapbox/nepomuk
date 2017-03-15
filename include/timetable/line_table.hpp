@@ -7,6 +7,7 @@
 #include "timetable/stop_table.hpp"
 
 #include "tool/types_and_traits/strong_typedef.hpp"
+#include <boost/optional.hpp>
 #include <vector>
 
 namespace transit
@@ -19,7 +20,7 @@ class StopToLineFactory;
 namespace timetable
 {
 
-STRONG_ID_TYPE(std::uint64_t, LineID);
+STRONG_ID_TYPE(std::uint64_t, LineID)
 
 class LineTableFactory;
 
@@ -31,21 +32,26 @@ class LineTable
   public:
     struct Trip
     {
-        StopTable const *const stop_table;
-        DurationTable const *const duration_table;
+        StopTable const &stop_table;
+        DurationTable const &duration_table;
         gtfs::Time const departure;
 
-        Trip(StopTable const *const stop_table = NULL,
-             DurationTable const *const duration_table = NULL,
-             gtfs::Time const time = gtfs::Time());
+        Trip(StopTable const &stop_table,
+             DurationTable const &duration_table,
+             gtfs::Time const time);
     };
 
     // give access to the next departure of the given line
-    std::vector<Trip> get(gtfs::Time const departure) const;
+    boost::optional<Trip> get(gtfs::Time const departure) const;
+
+    using stop_iterator = StopTable::const_iterator;
+    using stop_iterator_range = StopTable::const_iterator_range;
+
+    stop_iterator_range list_stops() const;
 
   private:
     // the list of arrivals of a line
-    std::vector<StopTable> stop_tables;
+    StopTable stop_table;
     std::vector<DurationTable> duration_tables;
 
     // the list of departure times available

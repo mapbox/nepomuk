@@ -42,7 +42,6 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::Frequency>::iter
         return {frequency.begin,
                 frequency.end,
                 boost::numeric_cast<std::uint32_t>(frequency.headway),
-                0ull,
                 0ull};
     };
 
@@ -60,7 +59,7 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::StopTime>::itera
     // it this way and miss-using the input validity template
     check_input_validity(begin, end);
 
-    table.departures.push_back({begin->departure, begin->departure, 0u, 0ull, 0ull});
+    table.departures.push_back({begin->departure, begin->departure, 0u, 0ull});
     return table;
 }
 

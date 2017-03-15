@@ -3,7 +3,8 @@ SET(navigation_SOURCES
     leg.cpp
     trip.cpp
     routing_algorithm.cpp
-    algorithm/timetable.cpp)
+    algorithm/timetable.cpp
+    algorithm/timetable_dijkstra.cpp)
 
 # export source files as library
 ADD_LIBRARY(transitnavigation

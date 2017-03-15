@@ -44,6 +44,32 @@ void produceByEqualRanges(std::vector<result_type> &output,
     algorithm::by_equal_ranges(input.begin(), input.end(), group_by, output_inserter);
 }
 
+template <typename factory,
+          typename result_type,
+          typename input_type,
+          typename sorting_predicate,
+          typename grouping_predicate>
+void produceByEqualRangesVector(std::vector<result_type> &output,
+                                std::vector<input_type> &input,
+                                sorting_predicate sort_by,
+                                grouping_predicate group_by)
+{
+    BOOST_ASSERT(input.begin() != input.end());
+    // ensure correct ordering.
+    std::stable_sort(input.begin(), input.end(), sort_by);
+
+    using InputIter = typename std::vector<input_type>::iterator;
+    using InputIterRange = std::pair<InputIter, InputIter>;
+
+    const auto output_inserter = [&output](InputIterRange const range) {
+        auto result_range = factory::produce(range.first, range.second);
+        for (auto itr = result_range.begin(); itr != result_range.end(); ++itr)
+            output.push_back(std::move(*itr));
+    };
+
+    algorithm::by_equal_ranges(input.begin(), input.end(), group_by, output_inserter);
+}
+
 } // namespace
 
 TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
@@ -57,7 +83,7 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
     };
     std::for_each(dataset.trips.begin(), dataset.trips.end(), add_trip_route_mapping);
 
-    produceByEqualRanges<LineTableFactory>(
+    produceByEqualRangesVector<LineTableFactory>(
         result.line_tables,
         dataset.stop_times,
         [&route_id_by_trip](auto const &lhs, auto const &rhs) {
@@ -75,11 +101,18 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
 
     if (dataset.transfers)
     {
+        /*
         std::sort(dataset.transfers->begin(),
                   dataset.transfers->end(),
                   [](auto const &lhs, auto const &rhs) { return lhs.from < rhs.from; });
         result.transfer_table =
             TransferTableFactory::produce(dataset.transfers->begin(), dataset.transfers->end());
+        */
+        // sorts internally
+        result.transfer_table = TransferTableFactory::produce(dataset.transfers->begin(),
+                                                              dataset.transfers->end(),
+                                                              dataset.stops.size(),
+                                                              result.line_tables);
     }
 
     return result;

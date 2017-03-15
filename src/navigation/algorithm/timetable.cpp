@@ -91,39 +91,37 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             // get all lines at the given stop
             auto trip_range = stop_to_line(state.stop_id);
             auto const relax_line = [&](auto const line_id) {
-                auto const trips = time_table.list_trips(line_id, state.arrival);
-                for (auto const &trip : trips)
-                {
-                    auto time = trip.departure;
-                    auto const stop_range = trip.stop_table->list(state.stop_id);
-                    auto const duration_range = trip.duration_table->list(
-                        std::distance(trip.stop_table->list().begin(), stop_range.begin()));
-                    auto duration_itr = duration_range.begin();
-                    for (auto stop_itr = stop_range.begin(); stop_itr != stop_range.end();
-                         ++stop_itr, ++duration_itr)
-                    {
-                        auto const stop_id = *stop_itr;
-                        if (add_if_improved(stop_id, time, state.stop_id, line_id))
-                        {
-                            // reach node:
-                            auto transfers = time_table.list_transfers(stop_id);
-                            // add all transfers
-                            for (auto transfer : transfers)
-                            {
-                                auto transfer_time = time + transfer.duration;
-                                if (add_if_improved(transfer.stop_id, transfer_time, stop_id, {0}))
-                                {
-                                    // needs to be a transfer line instead of 0
-                                    que.push({transfer.stop_id, time + transfer.duration});
-                                }
-                            }
+                auto const trip_optional = time_table.list_trips(line_id, state.arrival);
+                if (!trip_optional)
+                    return;
 
-                            auto inner_trip_range = stop_to_line(stop_id);
-                            if (std::distance(inner_trip_range.begin(), inner_trip_range.end()) > 1)
-                                que.push({stop_id, time});
+                auto const &trip = *trip_optional;
+                auto time = trip.departure;
+                auto const stop_range = trip.stop_table.list(state.stop_id);
+                auto const duration_range = trip.duration_table.list(
+                    std::distance(trip.stop_table.list().begin(), stop_range.begin()));
+                auto duration_itr = duration_range.begin();
+                for (auto stop_itr = stop_range.begin(); stop_itr != stop_range.end();
+                     ++stop_itr, ++duration_itr)
+                {
+                    auto const stop_id = *stop_itr;
+                    if (add_if_improved(stop_id, time, state.stop_id, line_id))
+                    {
+                        // reach node:
+                        auto transfers = time_table.list_transfers(stop_id);
+                        // add all transfers
+                        for (auto transfer : transfers)
+                        {
+                            auto transfer_time = time + transfer.duration;
+                            if (add_if_improved(transfer.stop_id, transfer_time, stop_id, {0}) ||
+                                (transfer.stop_id == stop_id))
+                            {
+                                // needs to be a transfer line instead of 0
+                                que.push({transfer.stop_id, time + transfer.duration});
+                            }
                         }
-                        time = time + *duration_itr;
                     }
+                    time = time + *duration_itr;
                 }
             };
 
@@ -168,7 +166,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             add_leg(result, std::move(leg));
             current_line = itr->line_id;
             leg = Leg();
-            set_departure(leg,itr->arrival);
+            set_departure(leg, itr->arrival);
             // add the location of the step again
             add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
         }
