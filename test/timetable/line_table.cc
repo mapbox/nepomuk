@@ -1,5 +1,5 @@
-#include "timetable/stop_table.hpp"
 #include "timetable/exceptions.hpp"
+#include "timetable/stop_table.hpp"
 #include "timetable/stop_table_factory.hpp"
 
 using namespace transit::timetable;
@@ -110,4 +110,3 @@ BOOST_AUTO_TEST_CASE(check_interpolation)
     BOOST_CHECK_EQUAL(itr->stop_id, StopID{2});
     BOOST_CHECK_EQUAL(itr->delta_t, 600);
 }
-

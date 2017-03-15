@@ -1,6 +1,7 @@
 #include "timetable/timetable.hpp"
-#include "timetable/timetable_factory.hpp"
 #include "timetable/line_table_factory.hpp"
+#include "timetable/timetable_factory.hpp"
+#include "timetable/transfer_table_factory.hpp"
 
 #include "gtfs/stop.hpp"
 
@@ -68,8 +69,18 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
         },
         // process elements by their trip id
         [&route_id_by_trip](gtfs::StopTime const &value, gtfs::StopTime const &candidate) {
-            return route_id_by_trip.find(value.trip_id)->second < route_id_by_trip.find(candidate.trip_id)->second;
+            return route_id_by_trip.find(value.trip_id)->second <
+                   route_id_by_trip.find(candidate.trip_id)->second;
         });
+
+    if (dataset.transfers)
+    {
+        std::sort(dataset.transfers->begin(),
+                  dataset.transfers->end(),
+                  [](auto const &lhs, auto const &rhs) { return lhs.from < rhs.from; });
+        result.transfer_table =
+            TransferTableFactory::produce(dataset.transfers->begin(), dataset.transfers->end());
+    }
 
     return result;
 }

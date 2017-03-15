@@ -31,4 +31,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     BOOST_CHECK((bool)route);
     auto leg_range = route->list();
     BOOST_CHECK(std::distance(leg_range.begin(), leg_range.end()) == 2);
+    auto route2 = timetable_router(
+        transit::gtfs::Time("00:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{9});
+    BOOST_CHECK((bool)route2);
 }

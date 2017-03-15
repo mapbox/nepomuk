@@ -1,8 +1,8 @@
 #ifndef TRANSIT_TIMETABLE_DEPARTURETABLE_HPP_
 #define TRANSIT_TIMETABLE_DEPARTURETABLE_HPP_
 
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 
 #include <boost/range/iterator_range.hpp>
 
@@ -49,6 +49,7 @@ class DepartureTable
 
     // list all valid departures from a given time
     const_iterator_range list(gtfs::Time starting_at) const;
+
   private:
     std::vector<Departure> departures;
 };

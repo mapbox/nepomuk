@@ -49,7 +49,6 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
     // relax by lines, in order of hops
     while (!que.empty())
     {
-
         // relax all hops
         auto reachable_this_hop = que.size();
         std::vector<State> this_round;
@@ -64,16 +63,35 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             return lhs.arrival < rhs.arrival;
         });
 
+        auto const add_if_improved = [&](gtfs::StopID const stop,
+                                         gtfs::Time const time,
+                                         gtfs::StopID const parent,
+                                         timetable::LineID const line) {
+            if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
+            {
+                BOOST_ASSERT(parent != stop);
+                earliest_arrival[stop] = {time, parent, line};
+                return true;
+            }
+            else
+                return false;
+        };
+
         for (auto state : this_round)
         {
             // stop when the earliest arrival is known
             if (earliest_arrival.count(destination) &&
-                earliest_arrival[destination].arrival < state.arrival)
+                earliest_arrival[destination].arrival <= state.arrival)
                 continue;
+
+            // don't consider elements already looked at
+            if (earliest_arrival[state.stop_id].arrival < state.arrival)
+                continue;
+
             // get all lines at the given stop
             auto trip_range = stop_to_line(state.stop_id);
             auto const relax_line = [&](auto const line_id) {
-                auto const trips = time_table.get(line_id, state.arrival);
+                auto const trips = time_table.list_trips(line_id, state.arrival);
                 for (auto const &trip : trips)
                 {
                     auto time = trip.departure;
@@ -85,11 +103,21 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
                          ++stop_itr, ++duration_itr)
                     {
                         auto const stop_id = *stop_itr;
-                        if (!earliest_arrival.count(stop_id) ||
-                            time < earliest_arrival.find(stop_id)->second.arrival)
+                        if (add_if_improved(stop_id, time, state.stop_id, line_id))
                         {
                             // reach node:
-                            earliest_arrival[stop_id] = {time, state.stop_id, line_id};
+                            auto transfers = time_table.list_transfers(stop_id);
+                            // add all transfers
+                            for (auto transfer : transfers)
+                            {
+                                auto transfer_time = time + transfer.duration;
+                                if (add_if_improved(transfer.stop_id, transfer_time, stop_id, {0}))
+                                {
+                                    // needs to be a transfer line instead of 0
+                                    que.push({transfer.stop_id, time + transfer.duration});
+                                }
+                            }
+
                             auto inner_trip_range = stop_to_line(stop_id);
                             if (std::distance(inner_trip_range.begin(), inner_trip_range.end()) > 1)
                                 que.push({stop_id, time});
@@ -100,9 +128,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             };
 
             for (auto line : trip_range)
-            {
                 relax_line(line);
-            }
         }
     }
 
@@ -142,6 +168,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             add_leg(result, std::move(leg));
             current_line = itr->line_id;
             leg = Leg();
+            set_departure(leg,itr->arrival);
             // add the location of the step again
             add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
         }

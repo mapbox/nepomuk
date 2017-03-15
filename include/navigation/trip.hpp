@@ -17,12 +17,13 @@ class RoutingAlgorithm;
 // route. The trip is the result of a earliest arrival query
 class Trip
 {
-    public:
-        using iterator = std::vector<Leg>::const_iterator;
+  public:
+    using iterator = std::vector<Leg>::const_iterator;
 
-        boost::iterator_range<iterator> list() const;
-    private:
-        std::vector<Leg> legs;
+    boost::iterator_range<iterator> list() const;
+
+  private:
+    std::vector<Leg> legs;
 
     // make sure routing algorithms are allowed to construct trips
     friend class RoutingAlgorithm;
