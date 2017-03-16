@@ -21,24 +21,24 @@ matrix:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6'
+      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release
 
     - os: linux
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5'
+      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Release
 
     - os: osx
       osx_image: xcode8.2
       node_js: 4
-      env: CCOMPILER='clang' CXXCOMPILER='clang++'
+      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
 
     - os: osx
       osx_image: xcode8.2
       node_js: 6
-      env: CCOMPILER='clang' CXXCOMPILER='clang++'
+      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
 
     #Debug Builds
     - os: linux
@@ -46,19 +46,19 @@ matrix:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' DEBUG_MODE=ON COVERAGE=ON SANITIZE=On
+      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On
 
     - os: linux
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' DEBUG_MODE=ON
+      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Debug
 
     - os: osx
       osx_image: xcode8.2
       node_js: 6
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' DEBUG_MODE=On SANITIZE=On
+      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Debug SANITIZE=On
 
 before_install:
   - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
@@ -71,7 +71,7 @@ before_install:
 install:
   - mkdir -p build
   - cd build
-  - cmake .. -DDEBUG_MODE=${DEBUG_MODE:-OFF} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF}
+  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF}
   - cmake --build .
 
 script:
