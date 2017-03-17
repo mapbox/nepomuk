@@ -1,5 +1,6 @@
 # define a set of sources to compile
 set(search_SOURCES
+    coordinate_to_stop.cpp
     stop_to_line.cpp
     stop_to_line_factory.cpp)
 

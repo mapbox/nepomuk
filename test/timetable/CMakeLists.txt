@@ -11,3 +11,4 @@ set(timetableINCLUDES
 add_unit_test(timetable_stop_table stop_table.cc "${timetableLIBS}" "${timetableINCLUDES}")
 add_unit_test(timetable_departure_table departure_table.cc "${timetableLIBS}" "${timetableINCLUDES}")
 add_unit_test(timetable_transfer_table transfer_table.cc "${timetableLIBS}" "${timetableINCLUDES}")
+add_unit_test(timetable_station_table station_table.cc "${timetableLIBS}" "${timetableINCLUDES}")

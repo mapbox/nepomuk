@@ -9,6 +9,8 @@ SET(timetable_SOURCES
     duration_table_factory.cpp
     line_table.cpp
     line_table_factory.cpp
+    station_table.cpp
+    station_table_factory.cpp
     timetable_factory.cpp
     timetable.cpp
     transfer_table.cpp

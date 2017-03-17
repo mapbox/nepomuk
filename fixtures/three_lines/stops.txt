@@ -1,11 +1,12 @@
-stop_id,stop_name,stop_desc,stop_lat,stop_lon
-a,Stop A,First stop on Line A-E,0.0,0.0
-b,Stop B,Second stop on Line A-E,0.0,1.0
-c,Stop C,Third stop on Line A-E,0.0,2.0
-d,Stop D,Fourth stop on Line A-E,0.0,3.0
-e,Stop E,Fifth stop on Line A-E,0.0,4.0
-f,Stop F,First stop on Line FCG,-1.0,2.0
-g,Stop G,Third stop on Line FCG,1.0,2.0
-h,Stop H,First stop on Line HIJ,1.0,3.0
-i,Stop I,Second stop on Line HIJ,1.0,4.0
-j,Stop J,Third stop on Line HIJ,1.0,5.0
+stop_id,stop_name,stop_desc,stop_lat,stop_lon,parent_station
+a1,Stop A Platform 1,First stop on Line A-E,0.0,0.1,
+a2,Stop A Platform 2,First stop on Line A-E,0.0,-0.1,a1
+b,Stop B,Second stop on Line A-E,0.0,1.0,
+c,Stop C,Third stop on Line A-E,0.0,2.0,
+d,Stop D,Fourth stop on Line A-E,0.0,3.0,
+e,Stop E,Fifth stop on Line A-E,0.0,4.0,
+f,Stop F,First stop on Line FCG,-1.0,2.0,
+g,Stop G,Third stop on Line FCG,1.0,2.0,
+h,Stop H,First stop on Line HIJ,1.0,3.0,
+i,Stop I,Second stop on Line HIJ,1.0,4.0,
+j,Stop J,Third stop on Line HIJ,1.0,5.0,

@@ -27,15 +27,22 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     transit::navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
 
     auto route = timetable_router(
-        transit::gtfs::Time("00:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{6});
+        transit::gtfs::Time("00:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{7});
     BOOST_CHECK((bool)route);
+    BOOST_CHECK_EQUAL(route->list().begin()->list().begin()->stop_id, transit::gtfs::StopID{0});
+    route = timetable_router(
+        transit::gtfs::Time("12:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{7});
+    BOOST_CHECK((bool)route);
+    BOOST_CHECK_EQUAL(route->list().begin()->list().begin()->stop_id, transit::gtfs::StopID{1});
+
     auto leg_range = route->list();
     BOOST_CHECK(std::distance(leg_range.begin(), leg_range.end()) == 2);
     auto route2 = timetable_router(
         transit::gtfs::Time("00:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{9});
     BOOST_CHECK((bool)route2);
 
+    // when cyclic times routes are implemented, this will return a route again
     auto route3 = timetable_router(
-        transit::gtfs::Time("36:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{6});
+        transit::gtfs::Time("36:00:00"), transit::gtfs::StopID{0}, transit::gtfs::StopID{7});
     BOOST_CHECK((bool)!route3);
 }

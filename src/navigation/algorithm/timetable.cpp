@@ -6,6 +6,7 @@
 #include "gtfs/trip.hpp"
 
 #include <algorithm>
+#include <limits>
 #include <queue>
 #include <unordered_map>
 #include <vector>
@@ -42,10 +43,18 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
     std::unordered_map<gtfs::StopID, ReachedState> earliest_arrival;
 
     std::queue<State> que;
-    que.push({origin, departure});
-    earliest_arrival[origin] = {
-        departure, origin, timetable::LineID{static_cast<std::uint64_t>(-1)}};
 
+    // add all stops of the initial station into the que
+    for (auto start : time_table.stops(time_table.station(origin)))
+    {
+        que.push({start, departure});
+        earliest_arrival[start] = {
+            departure, start, timetable::LineID{static_cast<std::uint64_t>(-1)}};
+    }
+
+    gtfs::Time upper_bound;
+    gtfs::StopID reached_destination = destination;
+    upper_bound = upper_bound + std::numeric_limits<std::uint32_t>::max();
     // relax by lines, in order of hops
     while (!que.empty())
     {
@@ -63,12 +72,18 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             return lhs.arrival < rhs.arrival;
         });
 
+        auto const destination_station = time_table.station(destination);
         auto const add_if_improved = [&](gtfs::StopID const stop,
                                          gtfs::Time const time,
                                          gtfs::StopID const parent,
                                          timetable::LineID const line) {
             if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
             {
+                if (time_table.station(stop) == destination_station && time < upper_bound)
+                {
+                    upper_bound = time;
+                    reached_destination = stop;
+                }
                 BOOST_ASSERT(parent != stop);
                 earliest_arrival[stop] = {time, parent, line};
                 return true;
@@ -80,8 +95,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
         for (auto state : this_round)
         {
             // stop when the earliest arrival is known
-            if (earliest_arrival.count(destination) &&
-                earliest_arrival[destination].arrival <= state.arrival)
+            if (upper_bound <= state.arrival)
                 continue;
 
             // don't consider elements already looked at
@@ -112,7 +126,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
                         // add all transfers
                         for (auto transfer : transfers)
                         {
-                            auto transfer_time = time + transfer.duration;
+                            auto transfer_time = time + std::max<int>(transfer.duration, 60);
                             if (add_if_improved(transfer.stop_id, transfer_time, stop_id, {0}) ||
                                 (transfer.stop_id == stop_id))
                             {
@@ -130,7 +144,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
         }
     }
 
-    if (!earliest_arrival.count(destination))
+    if (!earliest_arrival.count(reached_destination))
         return boost::none;
 
     struct ReachedOnPath
@@ -140,17 +154,18 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
         timetable::LineID line_id;
     };
     std::vector<ReachedOnPath> path;
-    auto current_stop = destination;
-    path.push_back({destination,
-                    earliest_arrival[destination].arrival,
-                    earliest_arrival[destination].line_id});
-    while (current_stop != origin)
+    auto current_stop = reached_destination;
+    path.push_back({reached_destination,
+                    earliest_arrival[reached_destination].arrival,
+                    earliest_arrival[reached_destination].line_id});
+    do
     {
         current_stop = earliest_arrival[current_stop].parent;
         path.push_back({current_stop,
                         earliest_arrival[current_stop].arrival,
                         earliest_arrival[current_stop].line_id});
-    }
+    } while (earliest_arrival[current_stop].parent != current_stop);
+
     std::reverse(path.begin(), path.end());
 
     Trip result;

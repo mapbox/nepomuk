@@ -37,6 +37,8 @@ class Coordinate
     FixedLongitude latitude;
 };
 
+double distance(Coordinate const lhs, Coordinate const rhs);
+
 std::ostream &operator<<(std::ostream &os, Coordinate const &location);
 bool operator==(Coordinate const &lhs, Coordinate const &rhs);
 

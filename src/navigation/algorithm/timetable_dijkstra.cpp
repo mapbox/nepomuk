@@ -30,6 +30,12 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
         KAryHeap<gtfs::StopID, gtfs::Time, 4, std::pair<gtfs::StopID, timetable::LineID>>;
     FourHeap heap;
 
+    auto const destination_station = time_table.station(destination);
+    // std::cout << "Running to station: " << destination_station << "(Stops:";
+    // for (auto stop : time_table.stops(destination_station))
+    // std::cout << " " << stop;
+    // std::cout << std::endl;
+
     auto const reach = [&](gtfs::StopID const stop,
                            gtfs::Time const time,
                            gtfs::StopID from_stop,
@@ -94,7 +100,11 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
         {
             auto const stop_id = *stop_itr;
             auto transfers = time_table.list_transfers(stop_id);
-            if (reach(stop_id, time, from_stop_id, from_line_id, false))
+            if (reach(stop_id,
+                      time,
+                      from_stop_id,
+                      from_line_id,
+                      destination_station == time_table.station(stop_id)))
             {
                 // add all transfers
                 for (auto transfer : transfers)
@@ -114,20 +124,28 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
             run_trip(stop_id, line_id, *trip);
     };
 
-    heap.insert(origin, departure, std::make_pair(origin, timetable::LineID{0}));
+    // add all stops of the starting station to the heap
+    for (auto start : time_table.stops(time_table.station(origin)))
+        heap.insert(start, departure, std::make_pair(start, timetable::LineID{0}));
+
+    gtfs::StopID reached_destination = destination;
 
     // relax by lines, in order of hops
     while (!heap.empty())
     {
         // found destination
         auto const stop = heap.min();
-        if (stop == destination)
+        // reached the station
+        if (time_table.station(stop) == destination_station)
+        {
+            reached_destination = stop;
             break;
+        }
 
         auto const arrival = heap.min_key();
+        // std::cout << "at: " << stop << " with " << arrival << std::endl;
         heap.delete_min();
 
-        // std::cout << "At: " << stop << " " << arrival << std::endl;
         auto const lines = stop_to_line(stop);
         for (auto line_id : lines)
             traverse_line(line_id, stop, arrival);
@@ -142,14 +160,16 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
         gtfs::Time arrival;
         timetable::LineID line_id;
     };
+
     std::vector<ReachedOnPath> path;
     auto current_stop = destination;
     path.push_back({destination, heap.key(current_stop), heap.data(current_stop).second});
-    while (current_stop != origin)
+    do
     {
         current_stop = heap.data(current_stop).first;
         path.push_back({current_stop, heap.key(current_stop), heap.data(current_stop).second});
-    }
+    } while (heap.data(current_stop).first != current_stop);
+
     std::reverse(path.begin(), path.end());
 
     Trip result;

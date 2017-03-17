@@ -32,3 +32,14 @@ BOOST_AUTO_TEST_CASE(coordinate_construction)
         BOOST_CHECK_EQUAL(oss.str(), "-1.1 -1.1");
     }
 }
+
+BOOST_AUTO_TEST_CASE(compute_distance)
+{
+    Coordinate coordinate(makeLatLonFromDouble<FixedLongitude>(0.0),
+                          makeLatLonFromDouble<FixedLatitude>(0.0));
+    Coordinate coordinate2(makeLatLonFromDouble<FixedLongitude>(90.0),
+                           makeLatLonFromDouble<FixedLatitude>(0.0));
+
+    auto const dist = distance(coordinate,coordinate2);
+    BOOST_CHECK( 10010360 < dist && dist < 10010374);
+}
