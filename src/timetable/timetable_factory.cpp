@@ -1,5 +1,6 @@
 #include "timetable/timetable.hpp"
 #include "timetable/line_table_factory.hpp"
+#include "timetable/station_table_factory.hpp"
 #include "timetable/timetable_factory.hpp"
 #include "timetable/transfer_table_factory.hpp"
 
@@ -98,6 +99,8 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
             return route_id_by_trip.find(value.trip_id)->second <
                    route_id_by_trip.find(candidate.trip_id)->second;
         });
+
+    result.station_table = StationTableFactory::produce(dataset.stops.begin(), dataset.stops.end());
 
     if (dataset.transfers)
     {

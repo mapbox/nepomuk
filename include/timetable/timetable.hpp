@@ -2,8 +2,10 @@
 #define TRANSIT_TIMETABLE_HPP_
 
 #include "gtfs/trip.hpp"
+#include "gtfs/stop.hpp"
 #include "timetable/line_table.hpp"
 #include "timetable/transfer_table.hpp"
+#include "timetable/station_table.hpp"
 
 #include <boost/assert.hpp>
 #include <vector>
@@ -33,9 +35,14 @@ class TimeTable
 
     auto list_transfers(gtfs::StopID const stop_id) const { return transfer_table.get(stop_id); }
 
+    // map stations to/from stops
+    auto station(gtfs::StopID const stop_id) const { return station_table.station(stop_id); }
+    auto stops(gtfs::StopID const station_id) const { return station_table.stops(station_id); }
+
   private:
     std::vector<LineTable> line_tables;
     TransferTable transfer_table;
+    StationTable station_table;
 
     friend class TimeTableFactory;
     friend class transit::search::StopToLineFactory;

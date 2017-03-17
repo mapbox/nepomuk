@@ -2,6 +2,7 @@
 #include "gtfs/provider.hpp"
 #include "gtfs/read_csv.hpp"
 
+#include "geometric/coordinate.hpp"
 #include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
 #include "gtfs/trip.hpp"
@@ -12,14 +13,16 @@
 #include "adaptor/dictionary.hpp"
 #include "annotation/stop_info.hpp"
 #include "annotation/trip.hpp"
-#include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "navigation/algorithm/timetable.hpp"
+#include "navigation/algorithm/timetable_dijkstra.hpp"
+#include "search/coordinate_to_stop.hpp"
 #include "search/stop_to_line_factory.hpp"
 #include "tool/container/string_table.hpp"
 #include "tool/timing.hpp"
 
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 using namespace transit;
@@ -46,19 +49,41 @@ int main(int argc, char **argv) try
     auto const trip_look_up =
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
-    //navigation::algorithm::TimeTableDijkstra timetable_router(timetable, trip_look_up);
-    navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
+    auto make_coordinate_lookup = [&]() {
+        std::vector<std::pair<geometric::Coordinate, gtfs::StopID>> data;
+        std::for_each(dataset.stops.begin(), dataset.stops.end(), [&](auto const &element) {
+            if (!element.location_type || *element.location_type == gtfs::LocationType::STOP)
+                data.push_back(std::make_pair(element.location, element.id));
+        });
+        return search::CoordinateToStop(data);
+    };
+
+    auto coordinate_lookup = make_coordinate_lookup();
+
+    navigation::algorithm::TimeTableDijkstra timetable_router(timetable, trip_look_up);
+    //navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
     transit::annotation::StopInfoTable stop_info(dataset.stops);
+
+    auto to_coordinate = [](std::string const &line) {
+        std::istringstream iss(line);
+        double lat, lon;
+        iss >> lat >> lon;
+        return geometric::Coordinate(
+            geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
+            geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
+    };
 
     while (true)
     {
         std::cout << "Enter Source..." << std::flush;
         std::string line;
         std::getline(std::cin, line);
-        auto source = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        // auto source = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        auto source = coordinate_lookup.nearest(to_coordinate(line));
         std::cout << "Enter Target..." << std::flush;
         std::getline(std::cin, line);
-        auto target = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        // auto target = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        auto target = coordinate_lookup.nearest(to_coordinate(line));
         std::cout << "Enter Departure..." << std::flush;
         std::getline(std::cin, line);
         gtfs::Time time(line);
