@@ -27,6 +27,9 @@ class StopToLine
 
     iterator_range operator()(gtfs::StopID stop) const;
 
+    // the size of the look-up in number of stops
+    auto size() const { return trip_table.size(); }
+
     friend class StopToLineFactory;
 
   protected:
