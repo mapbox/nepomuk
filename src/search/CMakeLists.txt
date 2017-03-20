@@ -10,6 +10,7 @@ add_library(transitsearch STATIC
 
 # link all required items
 target_link_libraries(transitsearch
+    transitgeometric
     ${Boost_LIBRARIES})
 
 # define additional include directories

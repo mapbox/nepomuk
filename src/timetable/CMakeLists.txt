@@ -23,6 +23,7 @@ ADD_LIBRARY(transittimetable
 
 # link all required items
 TARGET_LINK_LIBRARIES(transittimetable
+    transitsearch
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
 

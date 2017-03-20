@@ -18,7 +18,7 @@
 #include "search/coordinate_to_stop.hpp"
 #include "search/stop_to_line_factory.hpp"
 #include "tool/container/string_table.hpp"
-#include "tool/timing.hpp"
+#include "tool/status/timing.hpp"
 
 #include <cstdlib>
 #include <iostream>
@@ -61,7 +61,7 @@ int main(int argc, char **argv) try
     auto coordinate_lookup = make_coordinate_lookup();
 
     navigation::algorithm::TimeTableDijkstra timetable_router(timetable, trip_look_up);
-    //navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
+    // navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
     transit::annotation::StopInfoTable stop_info(dataset.stops);
 
     auto to_coordinate = [](std::string const &line) {
@@ -88,9 +88,9 @@ int main(int argc, char **argv) try
         std::getline(std::cin, line);
         gtfs::Time time(line);
 
-        TIMER_START(query);
+        tool::status::Timer query_timer;
         auto trip = timetable_router(time, source, target);
-        TIMER_STOP(query);
+        query_timer.stop();
         /*
             for (std::uint64_t i = 0; i < 20; ++i)
             {
@@ -101,13 +101,13 @@ int main(int argc, char **argv) try
         */
         transit::annotation::Trip const annotator(stop_info, dictionary);
 
-        TIMER_START(annotate);
+        tool::status::Timer annotation_timer;
         if (trip)
             std::cout << annotator(*trip) << std::endl;
-        TIMER_STOP(annotate);
+        annotation_timer.stop();
 
-        std::cout << "Query took: " << TIMER_SEC(query)
-                  << " seconds, annotation: " << TIMER_SEC(annotate) << std::endl;
+        std::cout << "Query took: " << query_timer.milliseconds()
+                  << " seconds, annotation: " << annotation_timer.milliseconds() << std::endl;
     }
 
     return EXIT_SUCCESS;

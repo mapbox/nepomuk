@@ -21,6 +21,7 @@ add_subdirectory(geometric)
 add_subdirectory(gtfs)
 add_subdirectory(navigation)
 add_subdirectory(search)
+add_subdirectory(service)
 add_subdirectory(timetable)
 add_subdirectory(tool)
 

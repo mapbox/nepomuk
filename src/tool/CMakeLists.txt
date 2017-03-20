@@ -35,7 +35,9 @@ set(tool_SOURCES
     io/std_stream.cpp
     io/std_line_stream.cpp
     container/dictionary.cpp
-    container/string_table.cpp)
+    container/string_table.cpp
+    container/mapbox_vector_tile.cpp
+    status/progress.cpp)
 
 # export source files as library
 add_library(transittool
@@ -48,4 +50,5 @@ target_link_libraries(transittool
 
 # define additional include directories
 TARGET_INCLUDE_DIRECTORIES(transittool SYSTEM PUBLIC
+    ${protozero_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS})

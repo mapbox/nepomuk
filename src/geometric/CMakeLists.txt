@@ -1,5 +1,6 @@
 # define a set of sources to compile
 set(geometric_SOURCES
+    bounding_box.cpp
     coordinate.cpp)
 
 # export source files as library

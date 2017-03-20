@@ -90,6 +90,7 @@ ForwardStarGraphFactory::add_node(ForwardStarGraph<external_node_type, edge_data
     auto const index = add_node(graph);
     graph._nodes[index] = typename ForwardStarGraph<external_node_type, edge_data_class>::node_type(
         graph._nodes[index]._offset, node_data);
+    return index;
 }
 
 // add an edge to the last added node
@@ -115,8 +116,9 @@ void ForwardStarGraphFactory::add_edge(ForwardStarGraph<external_node_type, edge
         throw SizeError("Adding more edges than allocated");
 
     // create a new edge containing the data
-    graph._edges.push_back(ForwardStarGraph<external_node_type, edge_data_class>::edge_type(
-        graph._nodes.begin() + target, edge_data));
+    graph._edges.push_back(
+        typename ForwardStarGraph<external_node_type, edge_data_class>::edge_type(
+            graph._nodes.begin() + target, edge_data));
     --required_edges;
 }
 
