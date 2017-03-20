@@ -7,6 +7,7 @@ SET(timetable_SOURCES
     departure_table_factory.cpp
     duration_table.cpp
     duration_table_factory.cpp
+    graph_adaptor.cpp
     line_table.cpp
     line_table_factory.cpp
     station_table.cpp
