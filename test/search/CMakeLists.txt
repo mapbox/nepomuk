@@ -10,3 +10,4 @@ set(searchINCLUDES
         ${PROTOBUF_INCLUDE_DIRS})
 
 add_unit_test(search_lookup_line stop_to_line.cc "${searchLIBS}" "${searchINCLUDES}")
+add_unit_test(search_lookup_coordinates coordinate_to_stop.cc "${searchLIBS}" "${searchINCLUDES}")

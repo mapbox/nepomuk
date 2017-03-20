@@ -1,10 +1,11 @@
 #ifndef TRANSIT_CONTAINER_SEARCH_HEAP_HPP_
 #define TRANSIT_CONTAINER_SEARCH_HEAP_HPP_
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 #include <boost/heap/d_ary_heap.hpp>
-#include <boost/multi_index/hashed_index.hpp>
-#include <boost/multi_index/member.hpp>
-#include <boost/multi_index_container.hpp>
+#pragma GCC diagnostic pop
 
 #include <boost/assert.hpp>
 

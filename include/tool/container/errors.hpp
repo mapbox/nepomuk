@@ -22,11 +22,6 @@ struct SizeError : FatalError
     using FatalError::FatalError;
 };
 
-struct ConstructionError : FatalError
-{
-    using FatalError::FatalError;
-};
-
 } // namespace container
 } // namespace tool
 } // namespace transit

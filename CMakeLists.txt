@@ -50,6 +50,10 @@ add_compile_options(${CMAKE_CXX_FLAGS} -Wstrict-overflow=2)
 add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE)
 add_compile_options(${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2)
 
+# do not allow deprecrated calls
+add_definitions(-DPROTOZERO_STRICT_API)
+
+
 if(SANITIZE)
     add_compile_options(${CMAKE_CXX_FLAGS} -fsanitize=address)
     link_libraries(${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address)
@@ -98,6 +102,10 @@ set(Zmq_INCLUDE_DIRS
 set(Zmq_LIBRARIES
     ${MASON_PACKAGE_libzmq_STATIC_LIBS})
 
+mason_use(protozero VERSION 1.5.1 HEADER_ONLY)
+set(protozero_INCLUDE_DIRS
+    ${MASON_PACKAGE_protozero_INCLUDE_DIRS})
+
 # add support for boost
 set(BOOST_VERSION 1.63.0)
 set(Boost_USE_STATIC_LIBS ON)
@@ -133,11 +141,13 @@ find_package(Protobuf 2.4.1 REQUIRED)
 add_subdirectory(src/tool)
 
 add_subdirectory(src/adaptor)
+add_subdirectory(src/algorithm)
 add_subdirectory(src/annotation)
 add_subdirectory(src/geometric)
 add_subdirectory(src/gtfs)
 add_subdirectory(src/navigation)
 add_subdirectory(src/search)
+add_subdirectory(src/service)
 add_subdirectory(src/timetable)
 
 

@@ -42,10 +42,17 @@ template <typename BaseClass> class AsForwardStarNode : public BaseClass
 
 // a class containing the edge data specified from the outside, as well as a node iterator pointing
 // to the appropriate node in the graph
-template <typename EdgeDataClass, typename node_iterator> class AsForwardStarEdge : EdgeDataClass
+template <typename BaseClass, typename node_iterator> class AsForwardStarEdge : BaseClass
 {
   public:
     auto target() const { return _target; };
+
+    AsForwardStarEdge() {}
+
+    AsForwardStarEdge(node_iterator const target, BaseClass const &base)
+        : BaseClass(base), _target(target)
+    {
+    }
 
   private:
     node_iterator _target;
@@ -79,6 +86,7 @@ template <typename external_node_type, typename edge_data_class> class ForwardSt
     edge_iterator_range edges(node_type const &node) const;
 
     bool empty() const;
+    std::size_t size() const;
 
   private:
     // make constructable only by factory
@@ -89,7 +97,7 @@ template <typename external_node_type, typename edge_data_class> class ForwardSt
 };
 
 // default adjacency graph, only containing offsets / edge.target()
-using AdjacencyGraph = ForwardStarGraph<ForwardStarZeroBaseClass,ForwardStarZeroBaseClass>;
+using AdjacencyGraph = ForwardStarGraph<ForwardStarZeroBaseClass, ForwardStarZeroBaseClass>;
 
 template <typename external_node_type, typename edge_data_class>
 ForwardStarGraph<external_node_type, edge_data_class>::ForwardStarGraph()
@@ -143,6 +151,12 @@ template <typename external_node_type, typename edge_data_class>
 bool ForwardStarGraph<external_node_type, edge_data_class>::empty() const
 {
     return _nodes.empty();
+}
+
+template <typename external_node_type, typename edge_data_class>
+std::size_t ForwardStarGraph<external_node_type, edge_data_class>::size() const
+{
+    return _nodes.size();
 }
 
 template <typename external_node_type, typename edge_data_class>

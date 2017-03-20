@@ -11,6 +11,12 @@ Coordinate::Coordinate(FixedLongitude longitude_, FixedLatitude latitude_)
 {
 }
 
+Coordinate::Coordinate()
+    : longitude(makeLatLonFromDouble<FixedLongitude>(0.0)),
+      latitude(makeLatLonFromDouble<FixedLatitude>(0.0))
+{
+}
+
 std::ostream &operator<<(std::ostream &os, Coordinate const &location)
 {
     os << static_cast<std::int32_t>(location.longitude) / COORDINATE_PRECISION << " "

@@ -29,6 +29,7 @@ class Coordinate
 {
   public:
     Coordinate(FixedLongitude, FixedLatitude);
+    Coordinate();
 
     friend std::ostream &operator<<(std::ostream &os, Coordinate const &location);
     friend bool operator==(Coordinate const &lhs, Coordinate const &rhs);
