@@ -2,6 +2,7 @@
 #define TRANSIT_GEOMETRIC_COORDINATE_HPP_
 
 #include <boost/serialization/strong_typedef.hpp>
+#include <boost/math/constants/constants.hpp>
 
 #include <cmath>
 #include <cstdint>
@@ -17,6 +18,15 @@ namespace
 constexpr auto const COORDINATE_PRECISION = 1.0e06;
 }
 
+namespace constants
+{
+const constexpr long double degree_to_rad = 0.017453292519943295769236907684886;
+const constexpr long double rad_to_degree = (1.0 / 0.017453292519943295769236907684886);
+const constexpr long double EARTH_RADIUS = 6372797.560856;
+const constexpr long double MAXEXTENT = EARTH_RADIUS * boost::math::constants::pi<long double>();
+const constexpr double EPSG3857_MAX_LATITUDE = 85.051128779806592377;
+} // namespace
+
 BOOST_STRONG_TYPEDEF(std::int32_t, FixedLatitude)
 BOOST_STRONG_TYPEDEF(std::int32_t, FixedLongitude)
 
@@ -25,24 +35,49 @@ template <typename lat_or_long> lat_or_long makeLatLonFromDouble(double const va
     return lat_or_long(std::round(COORDINATE_PRECISION * value));
 }
 
-class Coordinate
+template <typename lat_or_long> double doubleFromLatLon(lat_or_long const value)
+{
+    return static_cast<std::int32_t>(value) / COORDINATE_PRECISION;
+}
+
+class WGS84Coordinate
 {
   public:
-    Coordinate(FixedLongitude, FixedLatitude);
-    Coordinate();
+    WGS84Coordinate(FixedLongitude, FixedLatitude);
+    WGS84Coordinate();
 
-    friend std::ostream &operator<<(std::ostream &os, Coordinate const &location);
-    friend bool operator==(Coordinate const &lhs, Coordinate const &rhs);
+    friend std::ostream &operator<<(std::ostream &os, WGS84Coordinate const &location);
+    friend bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
 
     FixedLongitude longitude;
-    FixedLongitude latitude;
+    FixedLatitude latitude;
+
+    bool valid() const;
+    void clamp();
 };
 
-double distance(Coordinate const lhs, Coordinate const rhs);
+class MercatorCoordinate
+{
+  public:
+    MercatorCoordinate();
+    MercatorCoordinate(WGS84Coordinate coordinate);
 
-std::ostream &operator<<(std::ostream &os, Coordinate const &location);
-bool operator==(Coordinate const &lhs, Coordinate const &rhs);
+    FixedLongitude longitude;
+    FixedLatitude latitude;
 
+    void clamp();
+
+    friend std::ostream &operator<<(std::ostream &os, WGS84Coordinate const &location);
+    friend bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
+};
+
+double distance(WGS84Coordinate const lhs, WGS84Coordinate const rhs);
+
+std::ostream &operator<<(std::ostream &os, WGS84Coordinate const &location);
+bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
+
+std::ostream &operator<<(std::ostream &os, MercatorCoordinate const &location);
+bool operator==(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs);
 } // namespace geometric
 } // namespace transit
 

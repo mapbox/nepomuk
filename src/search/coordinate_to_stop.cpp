@@ -9,12 +9,12 @@ namespace search
 {
 
 CoordinateToStop::CoordinateToStop(
-    std::vector<std::pair<geometric::Coordinate, gtfs::StopID>> coordinates)
+    std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> coordinates)
     : coordinates(std::move(coordinates))
 {
 }
 
-gtfs::StopID CoordinateToStop::nearest(geometric::Coordinate const &location) const
+gtfs::StopID CoordinateToStop::nearest(geometric::WGS84Coordinate const &location) const
 {
     // find the closes element to location
     auto itr = std::min_element(
@@ -27,7 +27,7 @@ gtfs::StopID CoordinateToStop::nearest(geometric::Coordinate const &location) co
     return itr->second;
 }
 
-std::vector<gtfs::StopID> CoordinateToStop::all(geometric::BoundingBox const &bounding_box) const
+std::vector<gtfs::StopID> CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
 {
     std::vector<gtfs::StopID> results;
     std::for_each(coordinates.begin(),

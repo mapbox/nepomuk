@@ -15,7 +15,7 @@ namespace annotation
 struct StopInfo
 {
     tool::container::DictionaryID name_id;
-    geometric::Coordinate location;
+    geometric::WGS84Coordinate location;
 };
 
 class StopInfoTable

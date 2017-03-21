@@ -10,10 +10,7 @@ StationTable::StationTable(Lookup stop_station_lookup)
 {
 }
 
-StationTable::StationTable()
-    : stop_station_lookup(0,0)
-{
-}
+StationTable::StationTable() : stop_station_lookup(0, 0) {}
 
 } // namespace timetable
 } // namespace transit

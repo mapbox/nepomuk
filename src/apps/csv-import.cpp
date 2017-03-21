@@ -50,7 +50,7 @@ int main(int argc, char **argv) try
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
     auto make_coordinate_lookup = [&]() {
-        std::vector<std::pair<geometric::Coordinate, gtfs::StopID>> data;
+        std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> data;
         std::for_each(dataset.stops.begin(), dataset.stops.end(), [&](auto const &element) {
             if (!element.location_type || *element.location_type == gtfs::LocationType::STOP)
                 data.push_back(std::make_pair(element.location, element.id));
@@ -68,7 +68,7 @@ int main(int argc, char **argv) try
         std::istringstream iss(line);
         double lat, lon;
         iss >> lat >> lon;
-        return geometric::Coordinate(
+        return geometric::WGS84Coordinate(
             geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
             geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
     };

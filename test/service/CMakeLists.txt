@@ -1,8 +1,12 @@
 set(navigationLIBS
         ${Boost_LIBRARIES}
+        transitadaptor
+        transitannotate
         transittimetable
         transitsearch
         transitservice
+        transitproto
+        transittool
         transitgtfs)
 
 set(navigationINCLUDES

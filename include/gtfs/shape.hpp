@@ -22,7 +22,7 @@ STRONG_ID_TYPE(std::uint64_t, ShapeID)
 struct Shape
 {
     ShapeID id;
-    geometric::Coordinate location;
+    geometric::WGS84Coordinate location;
     SequenceID sequence_id;
 
     boost::optional<double> distance_traveled;

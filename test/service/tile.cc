@@ -12,7 +12,9 @@
 #include "service/tile.hpp"
 #include "service/tile_parameters.hpp"
 #include "timetable/timetable_factory.hpp"
+#include "tool/status/progress.hpp"
 
+#include <fstream>
 #include <iterator>
 
 using namespace transit;
@@ -28,7 +30,7 @@ BOOST_AUTO_TEST_CASE(render_tiles)
     auto const trip_look_up = search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
     auto make_coordinate_lookup = [&]() {
-        std::vector<std::pair<geometric::Coordinate, gtfs::StopID>> data;
+        std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> data;
         std::for_each(dataset.stops.begin(), dataset.stops.end(), [&](auto const &element) {
             if (!element.location_type || *element.location_type == gtfs::LocationType::STOP)
                 data.push_back(std::make_pair(element.location, element.id));
@@ -38,5 +40,21 @@ BOOST_AUTO_TEST_CASE(render_tiles)
 
     auto coordinate_lookup = make_coordinate_lookup();
 
-    service::Tile tileservice(timetable, coordinate_lookup, trip_look_up);
+    auto const message = transit::adaptor::Dictionary::encode(dataset.dictionary);
+    transit::tool::container::StringTable dictionary;
+    transit::adaptor::Dictionary::decode_into(dictionary, message);
+
+    transit::annotation::StopInfoTable stop_info(dataset.stops);
+
+    service::Tile tileservice(timetable, coordinate_lookup, trip_look_up, dictionary, stop_info);
+    service::ServiceParameters parameters = service::TileParameters(1 << 11, 1 << 11, 12);
+
+    // compute a tile
+    {
+        tool::status::FunctionTimingGuard guar("Tile Creation");
+        auto status = tileservice(parameters);
+        std::ofstream ofs("tile.mvt");
+        ofs << (std::string)(boost::get<service::TileParameters>(parameters).result());
+        ofs.close();
+    }
 }

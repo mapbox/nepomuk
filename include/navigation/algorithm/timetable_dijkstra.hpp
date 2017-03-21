@@ -20,7 +20,8 @@ namespace algorithm
 class TimeTableDijkstra : public RoutingAlgorithm
 {
   public:
-    TimeTableDijkstra(timetable::TimeTable const &time_table, search::StopToLine const &stop_to_line);
+    TimeTableDijkstra(timetable::TimeTable const &time_table,
+                      search::StopToLine const &stop_to_line);
 
     // query a route between two stops
     boost::optional<Trip> operator()(gtfs::Time const departure,

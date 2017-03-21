@@ -31,7 +31,7 @@ struct Transfer
     TransferType type;
     boost::optional<std::uint64_t> minimum_duration;
 
-    bool operator==(Transfer const&other) const;
+    bool operator==(Transfer const &other) const;
 };
 
 bool checkTransferCSVHeader(std::map<std::string, std::size_t> const &header);

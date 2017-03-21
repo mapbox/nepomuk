@@ -110,7 +110,8 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
     std::stable_sort(new_transfers.begin(), new_transfers.end(), by_from);
     new_transfers.erase(std::unique(new_transfers.begin(), new_transfers.end()),
                         new_transfers.end());
-    std::cout << " done (" << new_transfers.size() << " vs " << std::distance(begin,end) << ")" << std::endl;
+    std::cout << " done (" << new_transfers.size() << " vs " << std::distance(begin, end) << ")"
+              << std::endl;
     return produce(new_transfers.begin(), new_transfers.end());
 }
 

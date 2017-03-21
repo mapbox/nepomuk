@@ -1,11 +1,11 @@
 #ifndef TRANSIT_TIMETABLE_HPP_
 #define TRANSIT_TIMETABLE_HPP_
 
-#include "gtfs/trip.hpp"
 #include "gtfs/stop.hpp"
+#include "gtfs/trip.hpp"
 #include "timetable/line_table.hpp"
-#include "timetable/transfer_table.hpp"
 #include "timetable/station_table.hpp"
+#include "timetable/transfer_table.hpp"
 
 #include <boost/assert.hpp>
 #include <vector>

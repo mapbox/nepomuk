@@ -23,11 +23,12 @@ Shape makeShape(std::map<std::string, std::size_t> const &header, std::vector<st
     const double lat = std::stof(construct<std::string>("shape_pt_lat", forward, header, values));
     const double lon = std::stof(construct<std::string>("shape_pt_lon", forward, header, values));
 
-    return {construct<ShapeID>("shape_id", stringToID<ShapeID>, header, values),
-            geometric::Coordinate(geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
-                                  geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)),
-            construct<SequenceID>("shape_pt_sequence", stringToID<SequenceID>, header, values),
-            dist_traveled};
+    return {
+        construct<ShapeID>("shape_id", stringToID<ShapeID>, header, values),
+        geometric::WGS84Coordinate(geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
+                                   geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)),
+        construct<SequenceID>("shape_pt_sequence", stringToID<SequenceID>, header, values),
+        dist_traveled};
 }
 
 } // namespace gtfs
