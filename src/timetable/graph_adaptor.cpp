@@ -24,9 +24,9 @@ void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
         for (auto const &line : lines)
         {
             auto const trip_optional = timetable.list_trips(line, transit::gtfs::Time());
-            if( trip_optional )
+            if (trip_optional)
             {
-                auto const& trip = *trip_optional;
+                auto const &trip = *trip_optional;
                 auto const stops = trip.stop_table.list(stop_id);
                 on_stops(stops);
             }
@@ -62,13 +62,13 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
     auto graph = factory.allocate(stop_to_line.size(), num_edges);
 
     // also adds the new node, since it is called on each stop
-    auto const add_transfers = [&graph,&factory](auto const transfer_range) {
+    auto const add_transfers = [&graph, &factory](auto const transfer_range) {
         factory.add_node(graph);
         for (auto transfer : transfer_range)
             factory.add_edge(graph, static_cast<std::uint64_t>(transfer.stop_id));
     };
 
-    auto const add_next_stop = [&graph,&factory](auto const stop_range) {
+    auto const add_next_stop = [&graph, &factory](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             factory.add_edge(graph, static_cast<std::uint64_t>(*(stop_range.begin() + 1)));
     };

@@ -35,7 +35,7 @@ template <typename iterator_type> void validate_input(iterator_type begin, itera
     };
     if (!std::is_sorted(begin, end, compare_by_arrival))
     {
-        for( auto itr = begin; itr != end; ++itr )
+        for (auto itr = begin; itr != end; ++itr)
             std::cout << "Station: " << itr->stop_id << " " << itr->arrival << std::endl;
         throw InvalidInputError("StopTableFactory:: Stop times need to be sorted by arrival time.");
     }

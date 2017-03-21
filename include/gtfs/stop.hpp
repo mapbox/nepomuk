@@ -33,7 +33,7 @@ struct Stop
 {
     StopID id;
     tool::container::DictionaryID name;
-    geometric::Coordinate location;
+    geometric::WGS84Coordinate location;
 
     // optional additional features
     boost::optional<std::string> code;

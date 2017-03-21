@@ -27,7 +27,7 @@ class Interface
 {
   public:
     virtual ServiceStatus operator()(ServiceParameters &parameters) const = 0;
-    virtual ~Interface(){}
+    virtual ~Interface() {}
 };
 
 } // namespace service

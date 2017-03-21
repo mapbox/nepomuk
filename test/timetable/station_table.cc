@@ -20,7 +20,7 @@ Stop makeStop(std::uint64_t station, std::uint64_t parent)
     if (parent != station)
         return {StopID{station},
                 transit::tool::container::DictionaryID{0},
-                transit::geometric::Coordinate(
+                transit::geometric::WGS84Coordinate(
                     transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLongitude>(0),
                     transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLatitude>(0)),
                 boost::none,
@@ -34,7 +34,7 @@ Stop makeStop(std::uint64_t station, std::uint64_t parent)
     else
         return {StopID{station},
                 transit::tool::container::DictionaryID{0},
-                transit::geometric::Coordinate(
+                transit::geometric::WGS84Coordinate(
                     transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLongitude>(0),
                     transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLatitude>(0)),
                 boost::none,

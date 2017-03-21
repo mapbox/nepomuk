@@ -8,8 +8,9 @@ namespace service
 {
 
 TileParameters::TileParameters(std::uint32_t x, std::uint32_t y, std::uint32_t zoom)
-: _horizontal_id(x), _vertical_id(y), _zoom_level(zoom)
-{}
+    : _horizontal_id(x), _vertical_id(y), _zoom_level(zoom)
+{
+}
 
 std::uint32_t TileParameters::horizontal_id() const { return _horizontal_id; }
 std::uint32_t TileParameters::vertical_id() const { return _vertical_id; }

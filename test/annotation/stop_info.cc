@@ -20,7 +20,7 @@ using namespace transit::geometric;
 
 namespace
 {
-Stop make_stop(std::uint64_t i, DictionaryID s, transit::geometric::Coordinate c)
+Stop make_stop(std::uint64_t i, DictionaryID s, transit::geometric::WGS84Coordinate c)
 {
     return {StopID{i},
             s,
@@ -40,14 +40,14 @@ BOOST_AUTO_TEST_CASE(annotate_stops)
 {
     std::vector<Stop> stops;
     Dictionary dictionary;
-    Coordinate coordinate(makeLatLonFromDouble<FixedLongitude>(1.1),
-                          makeLatLonFromDouble<FixedLatitude>(1.1));
-    Coordinate coordinate2(makeLatLonFromDouble<FixedLongitude>(2.1),
-                           makeLatLonFromDouble<FixedLatitude>(2.1));
-    Coordinate coordinate3(makeLatLonFromDouble<FixedLongitude>(3.1),
-                           makeLatLonFromDouble<FixedLatitude>(3.1));
-    Coordinate coordinate4(makeLatLonFromDouble<FixedLongitude>(4.1),
-                           makeLatLonFromDouble<FixedLatitude>(4.1));
+    WGS84Coordinate coordinate(makeLatLonFromDouble<FixedLongitude>(1.1),
+                               makeLatLonFromDouble<FixedLatitude>(1.1));
+    WGS84Coordinate coordinate2(makeLatLonFromDouble<FixedLongitude>(2.1),
+                                makeLatLonFromDouble<FixedLatitude>(2.1));
+    WGS84Coordinate coordinate3(makeLatLonFromDouble<FixedLongitude>(3.1),
+                                makeLatLonFromDouble<FixedLatitude>(3.1));
+    WGS84Coordinate coordinate4(makeLatLonFromDouble<FixedLongitude>(4.1),
+                                makeLatLonFromDouble<FixedLatitude>(4.1));
 
     stops.push_back(make_stop(0, dictionary.add_string("first"), coordinate));
     stops.push_back(make_stop(1, dictionary.add_string("second"), coordinate2));
