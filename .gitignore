@@ -4,3 +4,5 @@ data
 mason_packages
 include/version.h
 include/fixtures.h
+node_modules
+NodeJS.cmake

@@ -1,8 +1,7 @@
 #ifndef TRANSIT_GEOMETRIC_COORDINATE_HPP_
 #define TRANSIT_GEOMETRIC_COORDINATE_HPP_
 
-#include <boost/serialization/strong_typedef.hpp>
-#include <boost/math/constants/constants.hpp>
+#include <tool/types_and_traits/strong_typedef.hpp>
 
 #include <cmath>
 #include <cstdint>
@@ -23,16 +22,17 @@ namespace constants
 const constexpr long double degree_to_rad = 0.017453292519943295769236907684886;
 const constexpr long double rad_to_degree = (1.0 / 0.017453292519943295769236907684886);
 const constexpr long double EARTH_RADIUS = 6372797.560856;
-const constexpr long double MAXEXTENT = EARTH_RADIUS * boost::math::constants::pi<long double>();
+const constexpr long double MAXEXTENT = EARTH_RADIUS * M_PI;
 const constexpr double EPSG3857_MAX_LATITUDE = 85.051128779806592377;
 } // namespace
 
-BOOST_STRONG_TYPEDEF(std::int32_t, FixedLatitude)
-BOOST_STRONG_TYPEDEF(std::int32_t, FixedLongitude)
+STRONG_ID_TYPE(std::int32_t, FixedLatitude)
+STRONG_ID_TYPE(std::int32_t, FixedLongitude)
 
 template <typename lat_or_long> lat_or_long makeLatLonFromDouble(double const value)
 {
-    return lat_or_long(std::round(COORDINATE_PRECISION * value));
+    return lat_or_long{
+        static_cast<typename lat_or_long::value_type>(std::round(COORDINATE_PRECISION * value))};
 }
 
 template <typename lat_or_long> double doubleFromLatLon(lat_or_long const value)

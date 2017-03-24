@@ -10,8 +10,8 @@
 #include <boost/variant.hpp>
 #include <protozero/pbf_writer.hpp>
 
-#include "geometric/coordinate.hpp"
 #include "geometric/bounding_box.hpp"
+#include "geometric/coordinate.hpp"
 
 // implementation of https://www.mapbox.com/vector-tiles/specification/
 

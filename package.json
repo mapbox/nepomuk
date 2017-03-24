@@ -1,0 +1,25 @@
+{
+  "name": "transit",
+  "version": "0.0.1",
+  "description": "Transit is an open source service for public transit routing on GTFS sources.",
+  "keywords": [
+    "addon",
+    "native",
+    "module"
+  ],
+  "author": "Moritz Kobitzsch",
+  "license": "MIT",
+  "main": "./build/release/src/bindings/Release/transit",
+  "dependencies": {
+    "async": "^2.2.0",
+    "cors": "^2.8.2",
+    "express": "^4.15.2",
+    "morgan": "^1.8.1",
+    "nan": "^2.5.1",
+    "node-pre-gyp": "^0.6.26"
+  },
+  "devDependencies": {
+    "node-cmake": "^2.2.1"
+  },
+  "repository": "https://github.com/mapbox/directions-transit"
+}

@@ -17,3 +17,31 @@ This repository is going to host everything for a Mapbox public transit api in t
   - other stuff that we don't know about yet? Please help me scope this out more.
 - designing and implementing the API surface area, and building documentation for it
 - getting it deployed and publishing the service
+
+## Building
+
+The main project can be build via cmake.
+For example:
+
+```
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+```
+
+### Node Bindings
+
+To build the node bindings, we require nvm / npm and node in version >= 4.
+
+```
+nvm install 4
+nvm use 4
+npm install
+node_modules/node-cmake/lib/ncmake.js update
+
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release -DNODEBINDINGS=On ..
+make
+```

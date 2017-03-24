@@ -5,6 +5,7 @@
 #include "search/coordinate_to_stop.hpp"
 #include "search/stop_to_line.hpp"
 #include "service/interface.hpp"
+#include "service/master.hpp"
 #include "timetable/timetable.hpp"
 
 #include "adaptor/dictionary.hpp"
@@ -25,11 +26,8 @@ namespace service
 class Tile : public Interface
 {
   public:
-    Tile(timetable::TimeTable const &timetable,
-         search::CoordinateToStop const &stop_lookup,
-         search::StopToLine const &stop_to_line,
-         transit::tool::container::StringTable const &dictionary,
-         annotation::StopInfoTable const &stop_info_annotation);
+    Tile(service::Master &master_service);
+    ~Tile() final override = default;
 
     ServiceStatus operator()(ServiceParameters &parameters) const final override;
 
@@ -50,6 +48,15 @@ class Tile : public Interface
     annotation::StopInfoTable const &stop_info_annotation;
 
     algorithm::StronglyConnectedComponent const components;
+
+    void add_lines(tool::container::MapboxVectorTile &vector_tile,
+                   std::vector<gtfs::StopID> const &stops) const;
+    void add_stops(tool::container::MapboxVectorTile &vector_tile,
+                   std::vector<gtfs::StopID> const &stops) const;
+    void add_transfers(tool::container::MapboxVectorTile &vector_tile,
+                       std::vector<gtfs::StopID> const &stops) const;
+    void add_components(tool::container::MapboxVectorTile &vector_tile,
+                        std::vector<gtfs::StopID> const &stops) const;
 };
 
 } // namespace service

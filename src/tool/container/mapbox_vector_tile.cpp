@@ -157,7 +157,7 @@ void VectorTileValue::write(protozero::pbf_writer &pbf_writer) const
         values_writer.add_bool(vector_tile::VARIANT_TYPE_BOOL, boost::get<bool>(value));
         break;
     case VectorTileValueType::INT:
-        values_writer.add_uint64(vector_tile::VARIANT_TYPE_UINT64, boost::get<int>(value));
+        values_writer.add_int64(vector_tile::VARIANT_TYPE_SINT64, boost::get<int>(value));
         break;
     case VectorTileValueType::DOUBLE:
         values_writer.add_double(vector_tile::VARIANT_TYPE_DOUBLE, boost::get<double>(value));

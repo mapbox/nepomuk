@@ -16,7 +16,7 @@ class Tile;
 class TileParameters final
 {
   public:
-    TileParameters(std::uint32_t x, std::uint32_t y, std::uint32_t zoom);
+    TileParameters(std::uint32_t x = 0, std::uint32_t y = 0, std::uint32_t zoom = 0);
     bool valid() const;
 
     std::uint32_t horizontal_id() const;

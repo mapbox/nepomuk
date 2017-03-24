@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(compare_print_mercator)
     BOOST_CHECK_EQUAL(oss.str(), "224 92.0896");
 }
 
-BOOST_AUTO_TEST_CASE(mercator_converion)
+BOOST_AUTO_TEST_CASE(mercator_conversion)
 {
     WGS84Coordinate upper_left(makeLatLonFromDouble<FixedLongitude>(-180),
                                makeLatLonFromDouble<FixedLatitude>(90));

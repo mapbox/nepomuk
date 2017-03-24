@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.0.2)
-cmake_policy(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.1)
+cmake_policy(VERSION 3.1)
 cmake_policy(SET CMP0037 NEW)
 
 project(transit C CXX)
+
+message(STATUS "Compiler: ${CXX_COMPILER}")
 
 # Major for breaking ABI changes. Minor for features. Patch for bugfixes.
 # see http://semver.org/ for context
@@ -17,6 +19,7 @@ set(TRANSIT_FILEFORMAT_VERSION_PATCH 0)
 
 option(SANITIZE "Run adress sanitizer" OFF)
 option(COVERAGE "Generate test converage data" OFF)
+option(NODEBINDINGS "Build node bindings" OFF)
 
 # include cmake modules from cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -150,6 +153,9 @@ add_subdirectory(src/search)
 add_subdirectory(src/service)
 add_subdirectory(src/timetable)
 
+if(${NODEBINDINGS})
+    add_subdirectory(src/bindings)
+endif()
 
 add_subdirectory(src/apps)
 

@@ -99,13 +99,13 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
              ++stop_itr, ++duration_itr)
         {
             auto const stop_id = *stop_itr;
-            auto transfers = time_table.list_transfers(stop_id);
             if (reach(stop_id,
                       time,
                       from_stop_id,
                       from_line_id,
                       destination_station == time_table.station(stop_id)))
             {
+                auto transfers = time_table.list_transfers(stop_id);
                 // add all transfers
                 for (auto transfer : transfers)
                 {
