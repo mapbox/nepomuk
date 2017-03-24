@@ -27,7 +27,8 @@ gtfs::StopID CoordinateToStop::nearest(geometric::WGS84Coordinate const &locatio
     return itr->second;
 }
 
-std::vector<gtfs::StopID> CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
+std::vector<gtfs::StopID>
+CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
 {
     std::vector<gtfs::StopID> results;
     std::for_each(coordinates.begin(),

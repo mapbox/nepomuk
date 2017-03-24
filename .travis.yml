@@ -17,11 +17,12 @@ matrix:
 
     #Release Builds
     - os: linux
+      node_js: 6
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release
+      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release NODEBINDINGS=On NODE_VERSION=6
 
     - os: linux
       addons:
@@ -33,20 +34,20 @@ matrix:
     - os: osx
       osx_image: xcode8.2
       node_js: 4
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
+      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release NODEBINDINGS=On NODE_VERSION=4
 
     - os: osx
       osx_image: xcode8.2
-      node_js: 6
       env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
 
     #Debug Builds
     - os: linux
+      node_js: 4
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On
+      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On NODEBINDINGS=On NODE_VERSION=4
 
     - os: linux
       addons:
@@ -58,11 +59,17 @@ matrix:
     - os: osx
       osx_image: xcode8.2
       node_js: 6
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Debug SANITIZE=On
+      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Debug SANITIZE=On NODEBINDINGS=On NODE_VERSION=6
 
 before_install:
   - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf; fi
+  - if [[ "${NODEBINDINGS}" == "On" ]]; then
+        nvm install ${NODE_VERSION};
+        nvm use ${NODE_VERSION};
+        npm install --unsafe-perm;
+        ./node_modules/node-cmake/lib/ncmake.js update;
+    fi
   - CMAKE_URL="https://mason-binaries.s3.amazonaws.com/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}.tar.gz"
   - CMAKE_DIR="mason_packages/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}"
   - mkdir -p ${CMAKE_DIR}
@@ -71,7 +78,7 @@ before_install:
 install:
   - mkdir -p build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF}
+  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
   - cmake --build .
 
 script:

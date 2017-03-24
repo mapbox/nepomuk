@@ -130,8 +130,8 @@ void checkStopFixture(std::vector<Stop> const &stops,
                              (dictionary.get_string(stops[2].name) == "Ristow, Bahnhof");
     BOOST_CHECK(valid_names);
 
-    auto check_lat_lon = [](auto const lat_or_lon, const std::uint32_t expected) {
-        return static_cast<std::uint32_t>(lat_or_lon) == expected;
+    auto check_lat_lon = [](auto const lat_or_lon, const std::int32_t expected) {
+        return static_cast<std::int32_t>(lat_or_lon) == expected;
     };
 
     const auto valid_location = check_lat_lon(stops[0].location.longitude, 1000000) &&
@@ -211,8 +211,8 @@ void checkMinimalStopFixture(std::vector<Stop> const &stops,
                              (dictionary.get_string(stops[2].name) == "Ristow, Bahnhof");
     BOOST_CHECK(valid_names);
 
-    auto check_lat_lon = [](auto const lat_or_lon, const std::uint32_t expected) {
-        return static_cast<std::uint32_t>(lat_or_lon) == expected;
+    auto check_lat_lon = [](auto const lat_or_lon, const std::int32_t expected) {
+        return static_cast<std::int32_t>(lat_or_lon) == expected;
     };
 
     const auto valid_location = check_lat_lon(stops[0].location.longitude, 1000000) &&

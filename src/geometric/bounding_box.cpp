@@ -72,10 +72,15 @@ double WGS84BoundingBox::height() const
     return doubleFromLatLon(upper_right.latitude) - doubleFromLatLon(lower_left.latitude);
 }
 
-MercatorBoundingBox::MercatorBoundingBox(MercatorCoordinate lower_left,
-                                         MercatorCoordinate upper_right)
-    : lower_left(lower_left), upper_right(upper_right)
+MercatorBoundingBox::MercatorBoundingBox(MercatorCoordinate lower_left_,
+                                         MercatorCoordinate upper_right_)
+    : lower_left(lower_left_), upper_right(upper_right_)
 {
+    // mercator transformations switch invert latitude (counting from upper right). If the
+    // coordinates don't match up (e.g. due to conversion issues) we need to swap them to the
+    // correct order
+    if (lower_left.latitude > upper_right.latitude)
+        std::swap(lower_left.latitude, upper_right.latitude);
 }
 
 MercatorBoundingBox::MercatorBoundingBox(std::uint32_t const horizontal,
@@ -87,7 +92,7 @@ MercatorBoundingBox::MercatorBoundingBox(std::uint32_t const horizontal,
     WGS84BoundingBox bbox(horizontal, vertical, zoom_level, tile_size, mercator_buffer);
     lower_left = MercatorCoordinate(bbox.lower_left);
     upper_right = MercatorCoordinate(bbox.upper_right);
-    std::swap(lower_left.latitude,upper_right.latitude);
+    std::swap(lower_left.latitude, upper_right.latitude);
 }
 
 bool MercatorBoundingBox::contains(MercatorCoordinate const &coordinate) const

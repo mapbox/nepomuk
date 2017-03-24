@@ -56,7 +56,7 @@ bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs)
 double distance(WGS84Coordinate const lhs, WGS84Coordinate const rhs)
 {
     auto const as_double_in_rad = [](auto const value) {
-        return static_cast<std::uint32_t>(value) / COORDINATE_PRECISION * constants::degree_to_rad;
+        return doubleFromLatLon(value) * constants::degree_to_rad;
     };
 
     const double lhs_latitude = as_double_in_rad(lhs.latitude);
@@ -86,10 +86,7 @@ MercatorCoordinate::MercatorCoordinate(WGS84Coordinate coordinate)
     auto const longitude_radians =
         doubleFromLatLon(coordinate.longitude) * constants::degree_to_rad;
 
-    auto const PI = boost::math::constants::pi<long double>();
-
-    longitude = makeLatLonFromDouble<FixedLongitude>(
-        128.0 / boost::math::constants::pi<long double>() * (longitude_radians + PI));
+    longitude = makeLatLonFromDouble<FixedLongitude>(128.0 / M_PI * (longitude_radians + M_PI));
 
     auto const latitude_radians =
         (doubleFromLatLon(coordinate.latitude)) * constants::degree_to_rad;

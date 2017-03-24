@@ -4,6 +4,8 @@
 #include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
 
+#include "tool/status/progress.hpp"
+
 #include <iterator>
 
 namespace
@@ -44,7 +46,7 @@ namespace timetable
 tool::container::AdjacencyGraph
 TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine const &stop_to_line)
 {
-    std::cout << "Creating connectivity graph ..." << std::flush;
+    tool::status::FunctionTimingGuard guard("Connectivity Graph Creation");
     tool::container::ForwardStarGraphFactory factory;
 
     // calculate the number of edges
@@ -74,8 +76,6 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
     };
 
     do_stuff_on_graph(timetable, stop_to_line, add_transfers, add_next_stop);
-
-    std::cout << " done." << std::endl;
 
     return graph;
 }

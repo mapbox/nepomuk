@@ -17,6 +17,8 @@
         explicit operator base_type &() { return __value; }                                        \
         explicit operator base_type() const { return __value; }                                    \
                                                                                                    \
+        base_type base() const { return __value; }                                                 \
+                                                                                                   \
         /* comparison for basic relative checks */                                                 \
         bool operator<(const id_type z_) const                                                     \
         {                                                                                          \

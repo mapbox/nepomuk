@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+    This viewer allows you to render the vector map tiles available
+    from a webservice supplying the a form of /tile?x={x}&y={y}&z={z} as URL.
+-->
+
+
+<!DOCTYPE html>
+<!--
+    This viewer allows you to render the vector map tiles available
+    from osrm-routed at the /tile?x={x}&y={y}&z={z} URL.
+    Simply start OSRM at localhost on port 5000 and open this html
+    file in your browser.  Requires OSRM 4.9.2 or greater.
+-->
+
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        #legend { position: absolute; bottom: 0; left: 0; font-family: sans-serif;}
+        #legend div { display: inline-block; padding: 5px; margin: 0; }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoibXNsZWUiLCJhIjoiclpiTWV5SSJ9.P_h8r37vD8jpIH1A6i1VRg';
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v9',
+    zoom: 13,
+    hash: true,
+    center: [13.3889,52.5171]
+});
+
+
+map.on('load', function () {
+    map.addSource("transit", {
+                        "type": 'vector',
+                        "tiles": ['http://0.0.0.0:5000/directions/v5/pumba/transit/tiles/{z}/{x}/{y}.mvt']
+                 });
+
+    map.addLayer({
+        "id": "transit-lines",
+		"minzoom": 12,
+        "layout": { "visibility": "visible", "line-cap": "round"},
+        "metadata": {},
+        "filter": ["==","$type","LineString"],
+        "type": "line",
+        "source": "transit",
+        "paint": { "line-width": {"base": 1.5, "stops": [ [12.5,4], [14,6], [18,24] ] },
+			       "line-color": "hsl(0, 0%, 0%)",
+                   "line-offset": {"base": 1.5, "stops": [ [12.5,0.25], [14,1], [18,9] ] }
+        },
+        "source-layer": "lines",
+        "interactive": true
+    });
+
+    map.addLayer({
+        "id": "transit-transfers",
+		"minzoom": 12,
+        "layout": { "visibility": "visible", "line-cap": "round"},
+        "metadata": {},
+        "filter": ["==","$type","LineString"],
+        "type": "line",
+        "source": "transit",
+        "paint": { "line-width": {"base": 1.1, "stops": [ [12.5,4], [14,6], [18,24] ] },
+			       "line-color": "hsl(240, 38%, 67%)",
+                   "line-offset": {"base": 1.1, "stops": [ [12.5,0.25], [14,1], [18,9] ] }
+        },
+        "source-layer": "transfers",
+        "interactive": true
+    });
+
+    map.addLayer({
+        "id": "transit-stops",
+		"minzoom": 12,
+        "layout": { "visibility": "visible"},
+        "metadata": {},
+        "type": "circle",
+        "source": "transit",
+        "paint": { "circle-radius": {"base": 8, "stops": [ [12.5,4], [14,6], [18,24] ] },
+			       "circle-color": "hsl(175, 46%, 47%)"
+        },
+        "source-layer": "stations",
+        "interactive": true
+    });
+
+});
+
+map.showTileBoundaries = true;
+
+</script>
+
+</body>
+</html>
