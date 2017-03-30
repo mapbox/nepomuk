@@ -105,7 +105,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
             // get all lines at the given stop
             auto trip_range = stop_to_line(state.stop_id);
             auto const relax_line = [&](auto const line_id) {
-                auto const trip_optional = time_table.list_trips(line_id, state.arrival);
+                auto const trip_optional = time_table.line(line_id).get(state.arrival);
                 if (!trip_optional)
                     return;
 
@@ -122,7 +122,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
                     if (add_if_improved(stop_id, time, state.stop_id, line_id))
                     {
                         // reach node:
-                        auto transfers = time_table.list_transfers(stop_id);
+                        auto transfers = time_table.transfers(stop_id);
                         // add all transfers
                         for (auto transfer : transfers)
                         {

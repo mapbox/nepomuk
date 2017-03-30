@@ -45,6 +45,7 @@ class ForwardStarGraphFactory
                   std::size_t const target,
                   edge_data_class const &edge_data);
 
+    bool valid() const { return required_nodes == 0 && required_edges == 0; }
   private:
     std::size_t required_nodes;
     std::size_t required_edges;
@@ -72,7 +73,7 @@ ForwardStarGraphFactory::add_node(ForwardStarGraph<external_node_type, edge_data
     if (!required_nodes)
         throw SizeError("Adding more nodes than allocated.");
 
-    std::size_t node_index = graph._nodes.size() - required_nodes;
+    std::size_t node_index = graph._nodes.size() - required_nodes - 1;
 
     graph._nodes[node_index]._offset = graph._edges.size();
 

@@ -25,15 +25,11 @@ namespace timetable
 class TimeTable
 {
   public:
-    // a trip is specified by the list of stops along its path and the departures from the first
-    // station
-    auto list_trips(LineID const line, gtfs::Time const departure) const
-    {
-        BOOST_ASSERT(static_cast<std::uint64_t>(line) < line_tables.size());
-        return line_tables[static_cast<std::uint64_t>(line)].get(departure);
-    }
+    // get a line by its id
+    LineTable const& line(LineID const& line) const;
 
-    auto list_transfers(gtfs::StopID const stop_id) const { return transfer_table.get(stop_id); }
+    // get all proposed transfers at a stop
+    TransferTable::iterator_range transfers(gtfs::StopID const stop) const;
 
     // map stations to/from stops
     auto station(gtfs::StopID const stop_id) const { return station_table.station(stop_id); }

@@ -85,7 +85,9 @@ template <typename external_node_type, typename edge_data_class> class ForwardSt
     edge_iterator_range edges(node_iterator const itr) const;
     edge_iterator_range edges(node_type const &node) const;
 
+    // relates to nodes, not edges
     bool empty() const;
+    // number of nodes
     std::size_t size() const;
 
   private:
@@ -131,7 +133,7 @@ typename ForwardStarGraph<external_node_type, edge_data_class>::edge_iterator_ra
 ForwardStarGraph<external_node_type, edge_data_class>::edges(node_iterator const itr) const
 {
     BOOST_ASSERT(std::distance(_nodes.begin(), itr) >= 0 &&
-                 std::distance(_nodes.begin(), itr) + 1 < _nodes.size());
+                 static_cast<std::size_t>(std::distance(_nodes.begin(), itr) + 1) < _nodes.size());
 
     // use the sentinel to find the full range
     return boost::make_iterator_range(_edges.begin() + itr->offset(),
@@ -143,7 +145,7 @@ typename ForwardStarGraph<external_node_type, edge_data_class>::edge_iterator_ra
 ForwardStarGraph<external_node_type, edge_data_class>::edges(node_type const &node) const
 {
     auto const offset = &node - _nodes.data();
-    BOOST_ASSERT(offset + 1 < _nodes.size());
+    BOOST_ASSERT(static_cast<std::size_t>(offset + 1) < _nodes.size());
     return edges(_nodes.begin() + offset);
 }
 
@@ -156,7 +158,7 @@ bool ForwardStarGraph<external_node_type, edge_data_class>::empty() const
 template <typename external_node_type, typename edge_data_class>
 std::size_t ForwardStarGraph<external_node_type, edge_data_class>::size() const
 {
-    return _nodes.size();
+    return _nodes.size() - 1;
 }
 
 template <typename external_node_type, typename edge_data_class>
@@ -164,7 +166,7 @@ std::size_t
 ForwardStarGraph<external_node_type, edge_data_class>::offset(node_iterator const node) const
 {
     auto const offset = std::distance(_nodes.begin(), node);
-    BOOST_ASSERT(offset >= 0 && offset + 1 < _nodes.size());
+    BOOST_ASSERT(offset >= 0 && static_cast<std::size_t>(offset + 1) < _nodes.size());
     return static_cast<std::size_t>(offset);
 }
 

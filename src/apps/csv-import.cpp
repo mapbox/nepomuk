@@ -1,5 +1,4 @@
 #include "gtfs/dataset.hpp"
-#include "gtfs/provider.hpp"
 #include "gtfs/read_csv.hpp"
 
 #include "geometric/coordinate.hpp"

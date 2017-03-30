@@ -4,9 +4,12 @@
 #include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <iostream>
 #include <limits>
 #include <stack>
 #include <vector>
+
+#include <boost/assert.hpp>
 
 #include "tool/status/progress.hpp"
 
@@ -46,12 +49,12 @@ template <typename graph_type> class TarjanSCCAlgorithm
 
     struct StackFrame
     {
-        explicit StackFrame(std::size_t const node_offset, std::size_t const parent_node_offset)
-            : node_offset(node_offset), parent_node_offset(parent_node_offset)
+        explicit StackFrame(std::size_t const node_offset, std::size_t const edge_offset)
+            : node_offset(node_offset), edge_offset(edge_offset)
         {
         }
         std::size_t node_offset;
-        std::size_t parent_node_offset;
+        std::size_t edge_offset;
     };
 
     struct SCCState
@@ -101,65 +104,56 @@ StronglyConnectedComponent TarjanSCCAlgorithm<graph_type>::compute(const graph_t
     StronglyConnectedComponent::ComponentID component_id = 0;
     std::uint64_t depth = 0;
 
-    // since we implement the dfs via our own stack, not backing up much state, we need to ensure
-    // not to do false processing. By using this array, we mark which kind of processing we are
-    // looking at (pre recurse/post recurse)
-    std::vector<bool> process_before_recursion(graph.size(), true);
-
     auto const depth_is_set = [](SCCState const &state) {
         return state.depth < SCCState::MAXIMUM_DEPTH;
     };
 
-    auto const update_link = [](SCCState &state, std::uint64_t const depth) {
-        state.low_link = std::min(state.low_link, depth);
+    auto const update_link = [](SCCState &state, std::uint64_t const low_link) {
+        state.low_link = std::min(state.low_link, low_link);
     };
 
     for (auto const &node : graph.nodes())
     {
         // start a component search at any uncategorised node
-        if (component.node_to_component[graph.offset(node)] == UNSET_COMPONENT_ID)
-            recursion_stack.emplace(StackFrame(graph.offset(node), graph.offset(node)));
+        if (!depth_is_set(node_state[graph.offset(node)]))
+        {
+            auto const nid = graph.offset(node);
+            node_state[nid] = SCCState(depth++);
+            component_nodes.push(nid);
+            recursion_stack.emplace(StackFrame(nid, 0));
+        }
 
         while (!recursion_stack.empty())
         {
             auto current_frame = recursion_stack.top();
-            auto const current_parent_index = current_frame.parent_node_offset;
+
             auto const current_node_index = current_frame.node_offset;
+            auto const current_edge_index = current_frame.edge_offset;
 
-            const bool before_recursion = process_before_recursion[current_node_index];
-
-            if (before_recursion && depth_is_set(node_state[current_node_index]))
+            auto edge_range = graph.edges(graph.node(current_node_index));
+            for (auto itr = edge_range.begin() + current_edge_index; itr != edge_range.end();
+                 ++itr, ++recursion_stack.top().edge_offset)
             {
-                recursion_stack.pop();
-                continue;
-            }
-
-            if (before_recursion)
-            {
-                // Mark frame to handle tail of recursion
-                process_before_recursion[current_node_index] = false;
-
-                // Mark essential information for SCC
-                node_state[current_node_index] = SCCState(depth++);
-                component_nodes.push(current_node_index);
-
-                for (auto const &edge : graph.edges(graph.node(current_parent_index)))
+                auto const neighbor = graph.offset(itr->target());
+                if (!depth_is_set(node_state[neighbor]))
                 {
-                    auto const neighbor_index = graph.offset(edge.target());
-
-                    if (node_state[neighbor_index].on_stack)
-                        update_link(node_state[current_node_index],
-                                    node_state[neighbor_index].depth);
-                    else
-                        recursion_stack.emplace(StackFrame(neighbor_index, current_node_index));
+                    // new node
+                    node_state[neighbor] = SCCState(depth++);
+                    component_nodes.push(neighbor);
+                    recursion_stack.emplace(StackFrame(neighbor, 0));
+                    break;
+                }
+                else if (node_state[neighbor].on_stack)
+                {
+                    update_link(node_state[current_node_index], node_state[neighbor].low_link);
                 }
             }
-            else
+
+            // we didn't recurse anymore, so this is where the recursive implementation is
+            // backtracking in the dfs
+            if (recursion_stack.top().node_offset == current_node_index)
             {
                 recursion_stack.pop();
-                process_before_recursion[current_node_index] = true;
-                update_link(node_state[current_parent_index],
-                            node_state[current_node_index].low_link);
 
                 // a component is strongly conneected if the low_link equals the index of the
                 // component root. In the case we find such a situaiton, all nodes on the
@@ -184,6 +178,7 @@ StronglyConnectedComponent TarjanSCCAlgorithm<graph_type>::compute(const graph_t
             }
         }
     }
+    std::cout << "[components] " << component.size() << " components.\n";
     return component;
 }
 

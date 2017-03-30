@@ -47,7 +47,7 @@ class LineTable
     using stop_iterator = StopTable::const_iterator;
     using stop_iterator_range = StopTable::const_iterator_range;
 
-    stop_iterator_range list_stops() const;
+    StopTable const& stops() const;
 
   private:
     // the list of arrivals of a line

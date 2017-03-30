@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto trips = trip_look_up(transit::gtfs::StopID{1});
     for (auto tid : trips)
     {
-        auto route = timetable.list_trips(tid, transit::gtfs::Time("00:00:00"));
+        auto route = timetable.line(tid).get(transit::gtfs::Time("00:00:00"));
         BOOST_CHECK(route != boost::none);
 
         auto stops = route->stop_table.list();

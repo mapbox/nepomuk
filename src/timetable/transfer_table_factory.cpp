@@ -82,7 +82,7 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
 
     std::vector<std::set<std::size_t>> lines(num_stops);
     for (std::size_t line = 0; line < line_tables.size(); ++line)
-        for (auto stop : line_tables[line].list_stops())
+        for (auto stop : line_tables[line].stops().list())
         {
             lines[static_cast<std::uint64_t>(stop)].insert(line);
         }
@@ -97,7 +97,7 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
 
     for (std::size_t line = 0; line < line_tables.size(); ++line)
     {
-        auto stop_range = line_tables[line].list_stops();
+        auto stop_range = line_tables[line].stops().list();
         auto last_stop = *stop_range.begin();
         for (auto stop : stop_range)
         {
