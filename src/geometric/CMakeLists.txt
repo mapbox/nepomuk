@@ -1,7 +1,8 @@
 # define a set of sources to compile
 set(geometric_SOURCES
     bounding_box.cpp
-    coordinate.cpp)
+    coordinate.cpp
+    polyline.cpp)
 
 # export source files as library
 add_library(transitgeometric STATIC

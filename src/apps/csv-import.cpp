@@ -5,6 +5,7 @@
 #include "gtfs/time.hpp"
 #include "id/stop.hpp"
 
+#include "annotation/osrm.hpp"
 #include "annotation/stop_info.hpp"
 #include "annotation/trip.hpp"
 #include "navigation/algorithm/timetable.hpp"
@@ -34,10 +35,13 @@ int main(int argc, char **argv) try
     {
         auto coordinate_lookup = data_service.coordinate_to_stop();
 
-        // navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
-        //                                                          data_service.stop_to_line());
+#if 1
+        navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
+                                                                  data_service.stop_to_line());
+#else
         navigation::algorithm::TimeTable timetable_router(data_service.timetable(),
                                                           data_service.stop_to_line());
+#endif
         auto stop_info = data_service.stop_info_annotation();
 
         auto to_coordinate = [](std::string const &line) {
@@ -48,6 +52,9 @@ int main(int argc, char **argv) try
                 geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
                 geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
         };
+
+        auto annotator = data_service.trip_annotation();
+        transit::annotation::OSRM const &osrm_annotator = data_service.osrm_annotation();
 
         while (true)
         {
@@ -65,25 +72,22 @@ int main(int argc, char **argv) try
             gtfs::Time time(line);
 
             tool::status::Timer query_timer;
+            query_timer.start();
             auto trip = timetable_router(time, source, target);
             query_timer.stop();
-            /*
-                for (std::uint64_t i = 0; i < 20; ++i)
-                {
-                    TIMER_START(query);
-                    auto trip = timetable_router(gtfs::Time("00:00:00"), StopID{i},
-               StopID{101});
-                    TIMER_STOP(query);
-            */
-            auto annotator = data_service.trip_annotation();
 
             tool::status::Timer annotation_timer;
+            annotation_timer.start();
             if (trip)
+            {
                 std::cout << annotator(*trip) << std::endl;
+                std::cout << osrm_annotator(*trip) << std::endl;
+            }
             annotation_timer.stop();
 
             std::cout << "Query took: " << query_timer.milliseconds()
-                      << " seconds, annotation: " << annotation_timer.milliseconds() << std::endl;
+                      << " milliseconds, annotation: " << annotation_timer.milliseconds()
+                      << " milliseconds" << std::endl;
         }
     }
     return EXIT_SUCCESS;

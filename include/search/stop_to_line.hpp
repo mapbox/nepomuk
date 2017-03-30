@@ -23,7 +23,7 @@ class StopToLine
     using iterator = std::vector<LineID>::const_iterator;
     using iterator_range = boost::iterator_range<iterator>;
 
-    iterator_range operator()(StopID stop) const;
+    iterator_range operator()(StopID const stop) const;
 
     // the size of the look-up in number of stops
     auto size() const { return trip_table.size(); }

@@ -27,6 +27,6 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         BOOST_CHECK(route != boost::none);
 
         BOOST_CHECK(route->stop_range.size() > 0);
-        BOOST_CHECK_EQUAL(route->stop_range.front(),transit::StopID{1});
+        BOOST_CHECK_EQUAL(route->stop_range.front(), transit::StopID{1});
     }
 }

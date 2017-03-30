@@ -1,12 +1,7 @@
 # define a set of sources to compile
-set(binding_SOURCES
-    node.cpp)
-
 project(transit VERSION ${TRANSIT_VERSION_MAJOR}.${TRANSIT_VERSION_MINOR}.${TRANSIT_VERSION_PATCH} LANGUAGES C CXX)
 
 message(STATUS "NodeCMAKE: ${CMAKE_SOURCE_DIR}/node_modules/node-cmake/")
-
-message(STATUS "LINK_FLAGS: ${LINK_FLAGS}")
 
 set(NodeJS_DOWNLOAD ON CACHE INTERNAL "Download node.js sources" FORCE)
 set(NodeJS_USE_CLANG_STDLIB OFF CACHE BOOL "Don't use libc++ by default" FORCE)
@@ -14,8 +9,7 @@ include(${CMAKE_SOURCE_DIR}/NodeJS.cmake)
 
 # Note: although we set the global property, we need this for CMake to specify -std=c++14
 nodejs_init()
-add_nodejs_module(${PROJECT_NAME}
-	${binding_SOURCES})
+add_nodejs_module(${PROJECT_NAME} node.cpp)
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC "src"
     ${Boost_INCLUDE_DIRS}

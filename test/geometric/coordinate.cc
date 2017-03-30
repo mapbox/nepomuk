@@ -31,6 +31,10 @@ BOOST_AUTO_TEST_CASE(coordinate_construction)
         oss << coordinate3;
         BOOST_CHECK_EQUAL(oss.str(), "-1.1 -1.1");
     }
+
+    MercatorCoordinate c1_merc(coordinate), c2_merc(coordinate2), c3_merc(coordinate3);
+    BOOST_CHECK(c1_merc == c2_merc);
+    BOOST_CHECK(c1_merc != c3_merc);
 }
 
 BOOST_AUTO_TEST_CASE(check_validity)

@@ -1,7 +1,11 @@
 # define a set of sources to compile
 set(annotate_SOURCES
+    geometry.cpp
+    geometry_factory.cpp
+    osrm.cpp
     stop_info.cpp
     trip.cpp)
+
 
 # export source files as library
 add_library(transitannotate STATIC
@@ -10,6 +14,7 @@ add_library(transitannotate STATIC
 # link all required items
 target_link_libraries(transitannotate
     ${Boost_LIBRARIES}
+    transitgeometric
     transitproto)
 
 # define additional include directories

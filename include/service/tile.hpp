@@ -48,6 +48,7 @@ class Tile : public Interface
     transit::tool::container::StringTable const &dictionary;
     annotation::StopInfoTable const &stop_info_annotation;
     // the lines and their actual geometry
+    annotation::Geometry const &geometry;
     timetable::SegmentTable const &segment_table;
 
     algorithm::StronglyConnectedComponent const components;

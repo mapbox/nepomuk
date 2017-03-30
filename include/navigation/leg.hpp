@@ -37,6 +37,9 @@ class Leg
     gtfs::Time departure() const;
     LineID line() const;
 
+    std::uint32_t size() const;
+    std::uint32_t duration() const;
+
   private:
     LineID _line;
     gtfs::Time _departure;

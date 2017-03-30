@@ -2,6 +2,7 @@
 #include "timetable/graph_adaptor.hpp"
 
 #include <algorithm>
+#include <iomanip>
 #include <iterator>
 #include <set>
 #include <tuple>
@@ -15,7 +16,8 @@ Tile::Tile(service::Master &master_service)
     : timetable(master_service.timetable()), stop_lookup(master_service.coordinate_to_stop()),
       stop_to_line(master_service.stop_to_line()), dictionary(master_service.dictionary()),
       stop_info_annotation(master_service.stop_info_annotation()),
-      segment_table(master_service.segment_table()), components(master_service.components())
+      geometry(master_service.geometry_annotation()), segment_table(master_service.segment_table()),
+      components(master_service.components())
 {
 }
 
@@ -61,7 +63,7 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
 
     auto connection_layer = vector_tile.new_layer("lines");
 
-    std::set<std::tuple<StopID, StopID, ShapeID>> added_shapes;
+    std::set<std::tuple<StopID, StopID, LineID>> added_shapes;
 
     for (auto const stop : stops)
     {
@@ -75,48 +77,27 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
                 auto const from_stop = *stop_range.begin();
                 auto const to_stop = *(stop_range.begin() + 1);
 
-                auto const &from_info = stop_info_annotation.get_info(from_stop);
-                auto const &to_info = stop_info_annotation.get_info(to_stop);
-
-                auto const has_correct_line = [line_id](auto const &sol) {
-                    return sol.line_id == line_id;
-                };
-
-                auto itr_from = std::find_if(from_info.shape_offset_line.begin(),
-                                             from_info.shape_offset_line.end(),
-                                             has_correct_line);
-
-                auto itr_to = std::find_if(to_info.shape_offset_line.begin(),
-                                           to_info.shape_offset_line.end(),
-                                           has_correct_line);
-
-                if (itr_from != from_info.shape_offset_line.end() &&
-                    itr_to != to_info.shape_offset_line.end() && itr_from->offset != itr_to->offset)
+                // ask for an inclusive range (to is an actual valid value, not the end)
+                auto range = geometry.get(line_id, from_stop, to_stop);
+                if (!range.empty())
                 {
-
-                    BOOST_ASSERT(itr_from->shape_id == itr_to->shape_id);
-                    auto from = std::min(itr_from->offset, itr_to->offset);
-                    auto to = std::max(itr_from->offset, itr_to->offset);
-                    auto tuple = std::make_tuple(from_stop, to_stop, itr_from->shape_id);
-                    if (added_shapes.count(tuple))
-                        continue;
-
-                    // ask for an inclusive range (to is an actual valid value, not the end)
-                    auto range = segment_table.crange(itr_from->shape_id.base(), from, to + 1);
-
-                    std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
-                    connection_layer.add_line(line, {});
-                    added_shapes.insert(tuple);
+                    auto tuple = std::make_tuple(from_stop, to_stop, line_id);
+                    if (!added_shapes.count(tuple))
+                    {
+                        std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
+                        connection_layer.add_line(line, {});
+                        added_shapes.insert(tuple);
+                    }
                 }
                 else
                 {
-                    auto const tuple = std::make_tuple(
-                        from_stop, to_stop, ShapeID{static_cast<std::uint64_t>(-1)});
+                    auto const tuple =
+                        std::make_tuple(from_stop, to_stop, LineID{static_cast<std::uint64_t>(-1)});
                     if (added_shapes.count(tuple))
                         continue;
                     std::vector<geometric::WGS84Coordinate> line;
-                    line.push_back(from_info.location);
-                    line.push_back(to_info.location);
+                    line.push_back(geometry.get(from_stop));
+                    line.push_back(geometry.get(to_stop));
                     connection_layer.add_line(line, {});
                     added_shapes.insert(tuple);
                 }
@@ -145,7 +126,7 @@ void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
         features.push_back(
             {"name",
              {tool::container::VectorTileValueType::STRING, dictionary.get_string(info.name_id)}});
-        station_layer.add_point(info.location, features);
+        station_layer.add_point(geometry.get(station), features);
     };
 
     std::for_each(stations.begin(), stations.end(), add_station);
@@ -163,8 +144,8 @@ void Tile::add_transfers(tool::container::MapboxVectorTile &vector_tile,
             if (transfer.stop_id != stop)
             {
                 std::vector<geometric::WGS84Coordinate> line;
-                line.push_back(stop_info_annotation.get_info(stop).location);
-                line.push_back(stop_info_annotation.get_info(transfer.stop_id).location);
+                line.push_back(geometry.get(stop));
+                line.push_back(geometry.get(transfer.stop_id));
                 transfer_layer.add_line(line, {});
             }
         }
@@ -190,16 +171,14 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
                 auto const next_stop = *(stop_range.begin() + 1);
                 if (components.component(stop.base()) != components.component(next_stop.base()))
                 {
-                    component_layer.add_point(stop_info_annotation.get_info(stop).location,
-                                              from_features);
-                    component_layer.add_point(stop_info_annotation.get_info(next_stop).location,
-                                              to_features);
+                    component_layer.add_point(geometry.get(stop), from_features);
+                    component_layer.add_point(geometry.get(next_stop), to_features);
                 }
             }
         }
         if (components.size(components.component(stop.base())) == 1)
         {
-            component_layer.add_point(stop_info_annotation.get_info(stop).location, from_features);
+            component_layer.add_point(geometry.get(stop), from_features);
         }
     }
 }

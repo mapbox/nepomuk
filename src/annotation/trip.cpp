@@ -7,8 +7,10 @@ namespace transit
 namespace annotation
 {
 
-Trip::Trip(StopInfoTable const &stop_info, transit::tool::container::StringTable const &dictionary)
-    : stop_info(stop_info), dictionary(dictionary)
+Trip::Trip(StopInfoTable const &stop_info,
+           Geometry const &geometry,
+           transit::tool::container::StringTable const &dictionary)
+    : stop_info(stop_info), geometry(geometry), dictionary(dictionary)
 {
 }
 
@@ -27,7 +29,7 @@ std::string Trip::operator()(navigation::Trip const &trip) const
             auto const info = stop_info.get_info(hold.stop_id);
             oss << "\t" << (hold.arrival) << " at stop: " << hold.stop_id
                 << " name: " << dictionary.get_string(info.name_id)
-                << " located at: " << info.location << "\n";
+                << " located at: " << geometry.get(hold.stop_id) << "\n";
         }
     }
 
