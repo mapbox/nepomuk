@@ -70,18 +70,12 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
 
             if (itr == line_tables.end())
             {
-                std::cout << "New Line Table:";
-                for (auto s : stop_table.list())
-                    std::cout << " " << s;
-                std::cout << std::endl;
                 line_tables.push_back(LineTable());
                 line_tables.back().stop_table = stop_table;
                 return line_tables.size() - 1;
             }
             else
             {
-                std::cout << "Found line table at index: "
-                          << std::distance(line_tables.begin(), itr) << std::endl;
                 return static_cast<std::size_t>(std::distance(line_tables.begin(), itr));
             }
         }();
@@ -93,18 +87,11 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                                        duration_table);
             if (itr == line_tables[line_index].duration_tables.end())
             {
-                std::cout << "New Duration Table:";
-                for (auto s : duration_table.list(0))
-                    std::cout << " " << s;
-                std::cout << std::endl;
                 line_tables[line_index].duration_tables.push_back(duration_table);
                 return line_tables[line_index].duration_tables.size() - 1;
             }
             else
             {
-                std::cout << "Found duration table at index: "
-                          << std::distance(line_tables[line_index].duration_tables.begin(), itr)
-                          << std::endl;
                 return static_cast<std::size_t>(
                     std::distance(line_tables[line_index].duration_tables.begin(), itr));
             }
@@ -114,7 +101,6 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
             {range.first->departure, range.first->departure, 0, duration_index});
     };
 
-    std::cout << "New Line Group" << std::endl;
     algorithm::by_equal_ranges(begin, end, by_trip_id, output_inserter);
 
     // sort departures

@@ -94,8 +94,7 @@ search::CoordinateToStop const &Master::coordinate_to_stop()
         auto make_coordinate_lookup = [&]() {
             std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> data;
             std::for_each(base_data.stops.begin(), base_data.stops.end(), [&](auto const &element) {
-                if (!element.location_type || *element.location_type == gtfs::LocationType::STOP)
-                    data.push_back(std::make_pair(element.location, element.id));
+                data.push_back(std::make_pair(element.location, element.id));
             });
             return search::CoordinateToStop(data);
         };
@@ -147,8 +146,9 @@ algorithm::StronglyConnectedComponent const &Master::components()
     if (!_components)
     {
         tool::status::FunctionTimingGuard guard("Components creation");
-        _components = std::make_unique<algorithm::StronglyConnectedComponent>(algorithm::computeSCC(
-            timetable::TimetableToGraphAdaptor::adapt(timetable(), stop_to_line())));
+        auto graph = timetable::TimetableToGraphAdaptor::adapt(timetable(), stop_to_line());
+        _components =
+            std::make_unique<algorithm::StronglyConnectedComponent>(algorithm::computeSCC(graph));
     }
     return *_components;
 }

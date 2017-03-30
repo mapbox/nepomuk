@@ -65,18 +65,13 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
         auto const lines = stop_to_line(stop);
         for (auto const line_id : lines)
         {
-            auto const trip = timetable.list_trips(line_id, gtfs::Time("00:00:00"));
-            if (trip)
+            auto const stop_range = timetable.line(line_id).stops().list(stop);
+            if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             {
-                auto const stop_range = trip->stop_table.list(stop);
-                if (std::distance(stop_range.begin(), stop_range.end()) > 1)
-                {
-                    std::vector<geometric::WGS84Coordinate> line;
-                    line.push_back(stop_info_annotation.get_info(*stop_range.begin()).location);
-                    line.push_back(
-                        stop_info_annotation.get_info(*(stop_range.begin() + 1)).location);
-                    connection_layer.add_line(line, {});
-                }
+                std::vector<geometric::WGS84Coordinate> line;
+                line.push_back(stop_info_annotation.get_info(*stop_range.begin()).location);
+                line.push_back(stop_info_annotation.get_info(*(stop_range.begin() + 1)).location);
+                connection_layer.add_line(line, {});
             }
         }
     }
@@ -114,7 +109,7 @@ void Tile::add_transfers(tool::container::MapboxVectorTile &vector_tile,
     auto transfer_layer = vector_tile.new_layer("transfers");
     for (auto const stop : stops)
     {
-        auto const transfers = timetable.list_transfers(stop);
+        auto const transfers = timetable.transfers(stop);
         for (auto transfer : transfers)
         {
             if (transfer.stop_id != stop)
@@ -141,22 +136,22 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
         auto const lines = stop_to_line(stop);
         for (auto const line_id : lines)
         {
-            auto const trip = timetable.list_trips(line_id, gtfs::Time("00:00:00"));
-            if (trip)
+            auto const stop_range = timetable.line(line_id).stops().list(stop);
+            if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             {
-                auto const stop_range = trip->stop_table.list(stop);
-                if (std::distance(stop_range.begin(), stop_range.end()) > 1)
+                auto const next_stop = *(stop_range.begin() + 1);
+                if (components.component(stop.base()) != components.component(next_stop.base()))
                 {
-                    auto const next_stop = *(stop_range.begin() + 1);
-                    if (components.component(stop.base()) != components.component(next_stop.base()))
-                    {
-                        component_layer.add_point(stop_info_annotation.get_info(stop).location,
-                                                  from_features);
-                        component_layer.add_point(stop_info_annotation.get_info(next_stop).location,
-                                                  to_features);
-                    }
+                    component_layer.add_point(stop_info_annotation.get_info(stop).location,
+                                              from_features);
+                    component_layer.add_point(stop_info_annotation.get_info(next_stop).location,
+                                              to_features);
                 }
             }
+        }
+        if (components.size(components.component(stop.base())) == 1)
+        {
+            component_layer.add_point(stop_info_annotation.get_info(stop).location, from_features);
         }
     }
 }

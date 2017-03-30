@@ -32,6 +32,13 @@ template <typename InputStream> struct CSVDecoder
 
         for (auto const &value : available_headers)
             header.insert({value, header.size()});
+
+        if (header.find("stop_name") != header.end())
+        {
+            for (auto h : header)
+                std::cout << "[" << h.first << "]";
+            std::cout << std::endl;
+        }
     }
 
     // For std::string we first write out the string's size and then the data
@@ -64,6 +71,20 @@ template <typename InputStream> struct CSVDecoder
         };
 
         std::transform(tokens.begin(), tokens.end(), value.begin(), trim_special_chars);
+
+        if (header.find("stop_name") != header.end())
+        {
+            bool print = false;
+            for (auto h : header)
+            {
+                if( print )
+                    std::cout << " ";
+
+                print = true;
+                std::cout << value[h.second];
+            }
+            std::cout << std::endl;
+        }
     }
 
     InputStream &in_stream;

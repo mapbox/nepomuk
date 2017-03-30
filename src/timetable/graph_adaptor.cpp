@@ -6,7 +6,9 @@
 
 #include "tool/status/progress.hpp"
 
+#include <boost/assert.hpp>
 #include <iterator>
+#include <set>
 
 namespace
 {
@@ -21,17 +23,11 @@ void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
     {
         auto const stop_id = transit::gtfs::StopID{static_cast<std::uint64_t>(stop)};
         auto const lines = stop_to_line(stop_id);
-        auto const transfers = timetable.list_transfers(stop_id);
+        auto const transfers = timetable.transfers(stop_id);
         on_transfers(transfers);
         for (auto const &line : lines)
         {
-            auto const trip_optional = timetable.list_trips(line, transit::gtfs::Time());
-            if (trip_optional)
-            {
-                auto const &trip = *trip_optional;
-                auto const stops = trip.stop_table.list(stop_id);
-                on_stops(stops);
-            }
+            on_stops(timetable.line(line).stops().list(stop_id));
         }
     }
 }
@@ -44,7 +40,8 @@ namespace timetable
 {
 
 tool::container::AdjacencyGraph
-TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine const &stop_to_line)
+TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
+                               search::StopToLine const &stop_to_line)
 {
     tool::status::FunctionTimingGuard guard("Connectivity Graph Creation");
     tool::container::ForwardStarGraphFactory factory;
@@ -54,9 +51,13 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
     auto const count_transfers = [&num_edges](auto const transfer_range) {
         num_edges += std::distance(transfer_range.begin(), transfer_range.end());
     };
-    auto const count_stops = [&num_edges](auto const stop_range) {
+    auto const count_stops = [&num_edges,&timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             ++num_edges;
+
+        auto direct = timetable.stops(timetable.station(*stop_range.begin())).size();
+        // don't add self-loops
+        num_edges += direct - 1;
     };
 
     do_stuff_on_graph(timetable, stop_to_line, count_transfers, count_stops);
@@ -66,16 +67,37 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
     // also adds the new node, since it is called on each stop
     auto const add_transfers = [&graph, &factory](auto const transfer_range) {
         factory.add_node(graph);
+
         for (auto transfer : transfer_range)
-            factory.add_edge(graph, static_cast<std::uint64_t>(transfer.stop_id));
+        {
+            factory.add_edge(graph, transfer.stop_id.base());
+        }
     };
 
-    auto const add_next_stop = [&graph, &factory](auto const stop_range) {
+    auto const add_next_stop = [&graph, &factory,&timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
-            factory.add_edge(graph, static_cast<std::uint64_t>(*(stop_range.begin() + 1)));
+            factory.add_edge(graph, (stop_range.begin() + 1)->base());
+        auto const me = *stop_range.begin();
+        auto const &all = timetable.stops(timetable.station(stop_range.front()));
+        for (auto other : all)
+        {
+            if (other == me)
+                continue;
+            factory.add_edge(graph, other.base());
+        }
     };
 
     do_stuff_on_graph(timetable, stop_to_line, add_transfers, add_next_stop);
+
+    for( auto const& node : graph.nodes() )
+    {
+        std::set<std::size_t> targets;
+        for( auto const& edge : graph.edges(node) )
+            targets.insert(graph.offset(edge.target()));
+    }
+
+    BOOST_ASSERT_MSG(factory.valid(),
+                     "This is seriously messed up. The timetable graph adaptor seems broken.");
 
     return graph;
 }
