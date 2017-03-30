@@ -1,6 +1,7 @@
 #ifndef TRANSIT_ANNOTATION_TRIP_HPP_
 #define TRANSIT_ANNOTATION_TRIP_HPP_
 
+#include "annotation/geometry.hpp"
 #include "annotation/stop_info.hpp"
 #include "navigation/trip.hpp"
 #include "tool/container/string_table.hpp"
@@ -13,7 +14,9 @@ namespace annotation
 class Trip
 {
   public:
-    Trip(StopInfoTable const &stop_info, transit::tool::container::StringTable const &dictionary);
+    Trip(StopInfoTable const &stop_info,
+         Geometry const &geometry,
+         transit::tool::container::StringTable const &dictionary);
 
     // should probably provide a json response at some time, right now we generate an annotated
     // string
@@ -21,6 +24,7 @@ class Trip
 
   private:
     StopInfoTable const &stop_info;
+    Geometry const &geometry;
     transit::tool::container::StringTable const &dictionary;
 };
 

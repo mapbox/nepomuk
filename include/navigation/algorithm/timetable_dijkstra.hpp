@@ -20,6 +20,7 @@ namespace algorithm
 class TimeTableDijkstra : public RoutingAlgorithm
 {
   public:
+    using Base = RoutingAlgorithm;
     TimeTableDijkstra(timetable::TimeTable const &time_table,
                       search::StopToLine const &stop_to_line);
 

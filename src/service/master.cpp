@@ -6,6 +6,7 @@
 #include "id/stop.hpp"
 
 #include "adaptor/dictionary.hpp"
+#include "annotation/geometry_factory.hpp"
 #include "annotation/stop_info.hpp"
 #include "annotation/trip.hpp"
 #include "search/stop_to_line_factory.hpp"
@@ -141,11 +142,28 @@ annotation::StopInfoTable const &Master::stop_info_annotation()
         tool::status::FunctionTimingGuard guard("Stop Info Annotation creation");
         auto const &ttable = timetable();
         BOOST_ASSERT(shape_from_line);
-        _stop_info_annotation = std::make_unique<annotation::StopInfoTable>(
-            base_data.stops, *shape_from_line, segment_table(), ttable.lines());
+        _stop_info_annotation = std::make_unique<annotation::StopInfoTable>(base_data.stops);
     }
 
     return *_stop_info_annotation;
+}
+
+annotation::Geometry const &Master::geometry_annotation()
+{
+    if (!_geometry_annotation)
+    {
+        tool::status::FunctionTimingGuard guard("Geometry Annotation - creation");
+        // required to get shape_from_line
+        auto const &ttable = timetable();
+        (void)ttable;
+        _geometry_annotation = std::make_unique<annotation::Geometry>(
+            annotation::GeometryFactory::produce(base_data.stops,
+                                                 *shape_from_line,
+                                                 stop_to_line(),
+                                                 timetable().lines(),
+                                                 segment_table()));
+    }
+    return *_geometry_annotation;
 }
 
 annotation::Trip const &Master::trip_annotation()
@@ -153,10 +171,23 @@ annotation::Trip const &Master::trip_annotation()
     if (!_trip_annotation)
     {
         tool::status::FunctionTimingGuard guard("Trip Annotation - creation");
-        _trip_annotation = std::make_unique<annotation::Trip>(stop_info_annotation(), dictionary());
+        _trip_annotation = std::make_unique<annotation::Trip>(
+            stop_info_annotation(), geometry_annotation(), dictionary());
     }
 
     return *_trip_annotation;
+}
+
+annotation::OSRM const &Master::osrm_annotation()
+{
+    if (!_osrm_annotation)
+    {
+        tool::status::FunctionTimingGuard guard("OSRM Annotation - creation");
+        _osrm_annotation = std::make_unique<annotation::OSRM>(
+            stop_info_annotation(), dictionary(), geometry_annotation());
+    }
+
+    return *_osrm_annotation;
 }
 
 algorithm::StronglyConnectedComponent const &Master::components()

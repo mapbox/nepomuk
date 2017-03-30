@@ -48,6 +48,7 @@ class WGS84Coordinate
 
     friend std::ostream &operator<<(std::ostream &os, WGS84Coordinate const &location);
     friend bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
+    friend bool operator!=(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
 
     FixedLongitude longitude;
     FixedLatitude latitude;
@@ -69,15 +70,18 @@ class MercatorCoordinate
 
     friend std::ostream &operator<<(std::ostream &os, WGS84Coordinate const &location);
     friend bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
+    friend bool operator!=(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
 };
 
 double distance(WGS84Coordinate const lhs, WGS84Coordinate const rhs);
 
 std::ostream &operator<<(std::ostream &os, WGS84Coordinate const &location);
 bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
+bool operator!=(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs);
 
 std::ostream &operator<<(std::ostream &os, MercatorCoordinate const &location);
 bool operator==(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs);
+bool operator!=(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs);
 } // namespace geometric
 } // namespace transit
 

@@ -80,10 +80,10 @@ void Dataset::filter_unreachable_stops()
     // create look-up of all reachable stop_ids
     auto reachable_stops = get_reachable_stops(stop_times);
 
-    add_stations(reachable_stops, stops);
-
     if (transfers)
         add_transfers(reachable_stops, *transfers);
+
+    add_stations(reachable_stops, stops);
 
     auto const unreachable = [&reachable_stops](auto const &stop) {
         return reachable_stops.count(stop.id) == 0;

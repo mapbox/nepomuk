@@ -139,7 +139,8 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                 {processed_until->departure, processed_until->departure, 0, duration_index});
 
             // remember the maximum times for a segment
-            for (std::size_t time_index = 0; time_index < line_tables[line_index].time_deltas.size();
+            for (std::size_t time_index = 0;
+                 time_index < line_tables[line_index].time_deltas.size();
                  ++time_index)
                 line_tables[line_index].time_deltas[time_index] =
                     std::max(line_tables[line_index].time_deltas[time_index],

@@ -42,7 +42,7 @@ const constexpr std::uint32_t FEATURE_GEOMETRIES_TAG = 4;
 const constexpr std::uint32_t GEOMETRY_TYPE_POINT = 1;
 const constexpr std::uint32_t GEOMETRY_TYPE_LINE = 2;
 
-//https://github.com/mapbox/vector-tile-spec/blob/ab55f2bd7b8c0af5d9a845e4bb0b133811ce3ccf/2.1/vector_tile.proto#L17-L28
+// https://github.com/mapbox/vector-tile-spec/blob/ab55f2bd7b8c0af5d9a845e4bb0b133811ce3ccf/2.1/vector_tile.proto#L17-L28
 const constexpr std::uint32_t VARIANT_TYPE_STRING = 1;
 const constexpr std::uint32_t VARIANT_TYPE_FLOAT = 2;
 const constexpr std::uint32_t VARIANT_TYPE_DOUBLE = 3;

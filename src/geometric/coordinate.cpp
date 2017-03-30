@@ -53,6 +53,8 @@ bool operator==(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs)
     return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude;
 }
 
+bool operator!=(WGS84Coordinate const &lhs, WGS84Coordinate const &rhs) { return !(lhs == rhs); }
+
 double distance(WGS84Coordinate const lhs, WGS84Coordinate const rhs)
 {
     auto const as_double_in_rad = [](auto const value) {
@@ -119,6 +121,10 @@ std::ostream &operator<<(std::ostream &os, MercatorCoordinate const &location)
 bool operator==(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs)
 {
     return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude;
+}
+bool operator!=(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs)
+{
+    return !(lhs == rhs);
 }
 
 } // namespace geometric

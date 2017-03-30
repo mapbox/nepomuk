@@ -1,6 +1,6 @@
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 #include "geometric/coordinate.hpp"
 #include "tool/container/mapbox_vector_tile.hpp"
@@ -169,7 +169,8 @@ BOOST_AUTO_TEST_CASE(write_values)
     {
         protozero::pbf_reader reader(buffer);
         int messages = 0;
-        bool got_string = false, got_int = false, got_double = false, got_bool = false, got_uint = false, got_float = false;
+        bool got_string = false, got_int = false, got_double = false, got_bool = false,
+             got_uint = false, got_float = false;
         while (reader.next())
         {
             auto const tag = reader.tag();

@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         timetable_router(transit::gtfs::Time("00:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(route->list().begin()->list().begin()->stop_id, transit::StopID{0});
-    BOOST_CHECK_EQUAL(route->list().begin()->line(),transit::LineID{0});
+    BOOST_CHECK_EQUAL(route->list().begin()->line(), transit::LineID{0});
     route =
         timetable_router(transit::gtfs::Time("12:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)route);

@@ -17,14 +17,20 @@ namespace algorithm
 
 TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
                                      search::StopToLine const &stop_to_line)
-    : time_table(time_table), stop_to_line(stop_to_line)
+    : RoutingAlgorithm(time_table.lines()), time_table(time_table), stop_to_line(stop_to_line)
 {
 }
 
 boost::optional<Trip> TimeTableDijkstra::
 operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const
 {
-    using FourHeap = tool::container::KAryHeap<StopID, gtfs::Time, 4, std::pair<StopID, LineID>>;
+    struct ReachedVia
+    {
+        StopID parent_stop;
+        LineID on_line;
+        gtfs::Time parent_departure;
+    };
+    using FourHeap = tool::container::KAryHeap<StopID, gtfs::Time, 4, ReachedVia>;
     FourHeap heap;
 
     auto const destination_station = time_table.station(destination);
@@ -33,27 +39,24 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
                            gtfs::Time const time,
                            StopID from_stop,
                            LineID on_line,
-                           bool use_in_heap) {
+                           bool use_in_heap,
+                           gtfs::Time const parent_departure) {
+
         if (use_in_heap)
         {
             if (!heap.reached(stop))
             {
-                heap.insert(stop, time, std::make_pair(from_stop, on_line));
+                heap.insert(stop, time, {from_stop, on_line, parent_departure});
                 return true;
             }
             else if (time < heap.key(stop))
             {
                 if (heap.contains(stop))
-                    heap.decrease_key(stop, time, std::make_pair(from_stop, on_line));
+                    heap.decrease_key(stop, time, {from_stop, on_line, parent_departure});
                 else
-                    heap.insert(stop, time, std::make_pair(from_stop, on_line));
+                    heap.insert(stop, time, {from_stop, on_line, parent_departure});
 
                 return true;
-            }
-            else if (time == heap.key(stop) && !heap.contains(stop))
-            {
-                heap.insert(stop, time, std::make_pair(from_stop, on_line));
-                return false;
             }
             else
                 return false;
@@ -62,7 +65,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         {
             if (!heap.reached(stop) || time < heap.key(stop))
             {
-                heap.reach_non_inserting(stop, time, std::make_pair(from_stop, on_line));
+                heap.reach_non_inserting(stop, time, {from_stop, on_line, parent_departure});
                 return true;
             }
             else
@@ -83,19 +86,25 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
              ++stop_itr, ++duration_itr)
         {
             auto const stop_id = *stop_itr;
+            auto transfers = time_table.transfers(stop_id);
+            auto const is_transfer_station =
+                std::find_if(transfers.begin(), transfers.end(), [stop_id](auto const &transfer) {
+                    return transfer.stop_id == stop_id;
+                }) != transfers.end();
+
             if (reach(stop_id,
                       time,
                       from_stop_id,
                       from_line_id,
-                      destination_station == time_table.station(stop_id)))
+                      is_transfer_station || (destination_station == time_table.station(stop_id)),
+                      trip.departure))
             {
-                auto transfers = time_table.transfers(stop_id);
                 // add all transfers
                 for (auto transfer : transfers)
                 {
                     auto transfer_time = time + transfer.duration;
-                    if (transfer.stop_id != stop_id)
-                        reach(transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, true);
+                    // if (transfer.stop_id != stop_id)
+                    reach(transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, true, time);
                 }
             }
             time = time + *duration_itr;
@@ -110,7 +119,9 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
 
     // add all stops of the starting station to the heap
     for (auto start : time_table.stops(time_table.station(origin)))
-        heap.insert(start, departure, std::make_pair(start, WALKING_TRANSFER));
+    {
+        heap.insert(start, departure, {start, WALKING_TRANSFER, departure});
+    }
 
     StopID reached_destination = destination;
 
@@ -131,62 +142,32 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
 
         auto const lines = stop_to_line(stop);
         for (auto line_id : lines)
+        {
             traverse_line(line_id, stop, arrival);
+        }
     }
 
     if (!heap.reached(destination))
         return boost::none;
 
-    struct ReachedOnPath
-    {
-        StopID stop_id;
-        gtfs::Time arrival;
-        LineID line_id;
-    };
-
-    std::vector<ReachedOnPath> path;
+    std::vector<Base::PathEntry> path;
     auto current_stop = destination;
-    path.push_back({destination, heap.key(current_stop), heap.data(current_stop).second});
+    path.push_back({destination,
+                    heap.data(current_stop).on_line,
+                    heap.key(current_stop),
+                    heap.data(current_stop).parent_departure});
     do
     {
-        current_stop = heap.data(current_stop).first;
-        path.push_back({current_stop, heap.key(current_stop), heap.data(current_stop).second});
-    } while (heap.data(current_stop).first != current_stop);
+        current_stop = heap.data(current_stop).parent_stop;
+        path.push_back({current_stop,
+                        heap.data(current_stop).on_line,
+                        heap.key(current_stop),
+                        heap.data(current_stop).parent_departure});
+    } while (heap.data(current_stop).parent_stop != current_stop);
 
     std::reverse(path.begin(), path.end());
 
-    Trip result;
-    Leg leg;
-    if (path.size() > 1)
-        path[0].line_id = path[1].line_id;
-    set_departure(leg, path[0].arrival);
-    set_line(leg, path[0].line_id);
-
-    auto current_line = path[0].line_id;
-    for (auto itr = path.begin(); itr != path.end(); ++itr)
-    {
-        if (itr->line_id != current_line)
-        {
-            add_leg(result, std::move(leg));
-            leg = Leg();
-            if (itr + 1 != path.end())
-            {
-                current_line = (itr + 1)->line_id;
-            }
-            else
-            {
-                current_line = WALKING_TRANSFER;
-            }
-            set_line(leg, current_line);
-            set_departure(leg, itr->arrival);
-            if (itr->line_id != WALKING_TRANSFER)
-                add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
-        }
-        add_stop(leg, Leg::stop_type{itr->stop_id, itr->arrival});
-    }
-    // add the final leg
-    add_leg(result, std::move(leg));
-    return result;
+    return make_trip(path);
 }
 
 } // namespace algorithm
