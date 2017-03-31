@@ -100,21 +100,6 @@ void Dataset::filter_unreachable_stops()
             apply_mapping(mapping, stop.parent_station.get());
     });
 
-    // remap fare
-    if (fare_rules)
-    {
-        std::for_each(fare_rules->begin(), fare_rules->end(), [&](auto &fare_rule) {
-            if (fare_rule.origin_id)
-                apply_mapping(mapping, *fare_rule.origin_id);
-
-            if (fare_rule.destination_id)
-                apply_mapping(mapping, *fare_rule.destination_id);
-
-            if (fare_rule.contains_id)
-                apply_mapping(mapping, *fare_rule.contains_id);
-        });
-    }
-
     // remap stop times
     std::for_each(stop_times.begin(), stop_times.end(), [&](auto &stop_time) {
         apply_mapping(mapping, stop_time.stop_id);

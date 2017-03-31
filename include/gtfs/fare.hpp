@@ -9,6 +9,7 @@
 
 #include "gtfs/route.hpp"
 #include "gtfs/stop.hpp"
+#include "gtfs/zone.hpp"
 #include "tool/types_and_traits/strong_typedef.hpp"
 
 namespace transit
@@ -55,9 +56,9 @@ struct FareRule
     FareID fare_id;
 
     boost::optional<RouteID> route_id;
-    boost::optional<StopID> origin_id;
-    boost::optional<StopID> destination_id;
-    boost::optional<StopID> contains_id;
+    boost::optional<ZoneID> origin_id;
+    boost::optional<ZoneID> destination_id;
+    boost::optional<ZoneID> contains_id;
 };
 
 bool checkFareRuleCSVHeader(std::map<std::string, std::size_t> const &header);

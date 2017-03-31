@@ -57,9 +57,9 @@ FareRule makeFareRule(std::map<std::string, std::size_t> const &header,
     return {
         construct<FareID>("fare_id", stringToID<FareID>, header, values),
         construct_as_optional<RouteID, false>("route_id", stringToID<RouteID>, header, values),
-        construct_as_optional<StopID, false>("origin_id", stringToID<StopID>, header, values),
-        construct_as_optional<StopID, false>("destination_id", stringToID<StopID>, header, values),
-        construct_as_optional<StopID, false>("contains_id", stringToID<StopID>, header, values)};
+        construct_as_optional<ZoneID, false>("origin_id", stringToID<ZoneID>, header, values),
+        construct_as_optional<ZoneID, false>("destination_id", stringToID<ZoneID>, header, values),
+        construct_as_optional<ZoneID, false>("contains_id", stringToID<ZoneID>, header, values)};
 }
 
 } // namespace gtfs
