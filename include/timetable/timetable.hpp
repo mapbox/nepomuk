@@ -35,6 +35,8 @@ class TimeTable
     auto station(gtfs::StopID const stop_id) const { return station_table.station(stop_id); }
     auto stops(gtfs::StopID const station_id) const { return station_table.stops(station_id); }
 
+    auto num_stops() const { return station_table.num_stops(); }
+    auto num_stations() const { return station_table.num_stations(); }
   private:
     std::vector<LineTable> line_tables;
     TransferTable transfer_table;

@@ -28,6 +28,8 @@ class StationTable
         return stop_station_lookup.codomain_mapping(stop_id);
     }
 
+    std::size_t num_stops() const;
+    std::size_t num_stations() const;
   private:
     Lookup stop_station_lookup;
 };

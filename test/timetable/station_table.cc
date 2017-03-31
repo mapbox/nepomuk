@@ -55,4 +55,7 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
     BOOST_CHECK_THROW(StationTableFactory::produce(data.begin(), data.end()), InvalidInputError);
     data.push_back(makeStop(1, 1));
     BOOST_CHECK_NO_THROW(StationTableFactory::produce(data.begin(), data.end()));
+    auto table = StationTableFactory::produce(data.begin(), data.end());
+    BOOST_CHECK_EQUAL(table.num_stations(),2);
+    BOOST_CHECK_EQUAL(table.num_stops(),2);
 }
