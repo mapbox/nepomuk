@@ -4,6 +4,7 @@ set(gtfs_SOURCES
     accessibility.cpp
     agency.cpp
     calendar.cpp
+    dataset.cpp
     fare.cpp
     date.cpp
     feed_info.cpp

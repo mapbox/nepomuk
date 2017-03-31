@@ -12,7 +12,8 @@ var corsOptions = {
 module.exports = function()
 {
     var app = express();
-    var engine = new transit.Engine("../data/sf");
+    var engine = new transit.Engine("../data/berlin-gtfs");
+    //var engine = new transit.Engine("../data/sf");
     engine.plug("tile");
 
     // allow same origin and so on
