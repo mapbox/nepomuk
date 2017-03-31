@@ -26,4 +26,6 @@ BOOST_AUTO_TEST_CASE(mapping_functionality)
     BOOST_CHECK_EQUAL(std::distance(itr_range.begin(), itr_range.end()), 3);
     auto itr_range_2 = mapping.domain_mapping(1);
     BOOST_CHECK_EQUAL(std::distance(itr_range_2.begin(), itr_range_2.end()), 1);
+    BOOST_CHECK_EQUAL(mapping.domain_size(),2);
+    BOOST_CHECK_EQUAL(mapping.codomain_size(),4);
 }

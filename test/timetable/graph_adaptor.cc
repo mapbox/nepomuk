@@ -32,8 +32,8 @@ BOOST_AUTO_TEST_CASE(adapt_fixture)
     // might be worth to eliminate duplicates, but right now we are fine
     // self loops indicate that other lines become available
     /*
-    [0]  2 1
-    [1]  2 0
+    [0]  2 1 1
+    [1]  2 0 0
     [2]  2 3 3
     [3]  3 4 4 7
     [4]  8 4 5 5
@@ -44,16 +44,16 @@ BOOST_AUTO_TEST_CASE(adapt_fixture)
     [9]  10
     [10
     */
-    BOOST_CHECK(graph.edges(graph.node(0)).size() == 2);
-    BOOST_CHECK(graph.edges(graph.node(1)).size() == 2);
-    BOOST_CHECK(graph.edges(graph.node(2)).size() == 3);
-    BOOST_CHECK(graph.edges(graph.node(3)).size() == 4);
-    BOOST_CHECK(graph.edges(graph.node(4)).size() == 4);
-    BOOST_CHECK(graph.edges(graph.node(5)).size() == 1);
-    BOOST_CHECK(graph.edges(graph.node(6)).size() == 1);
-    BOOST_CHECK(graph.edges(graph.node(7)).size() == 0);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(0)).size(), 2);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(1)).size(), 3);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(2)).size(), 3);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(3)).size(), 4);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(4)).size(), 4);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(5)).size(), 1);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(6)).size(), 1);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(7)).size(), 0);
     // lower line, only reachable by transfer
-    BOOST_CHECK(graph.edges(graph.node(8)).size() == 1);
-    BOOST_CHECK(graph.edges(graph.node(9)).size() == 1);
-    BOOST_CHECK(graph.edges(graph.node(10)).size() == 0);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(8)).size(), 1);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(9)).size(), 1);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(10)).size(), 0);
 }

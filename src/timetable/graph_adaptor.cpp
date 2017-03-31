@@ -19,12 +19,14 @@ void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
                        on_transfers_functor on_transfers,
                        on_stops_functor on_stops)
 {
-    for (std::size_t stop = 0; stop < stop_to_line.size(); ++stop)
+    for (std::size_t stop = 0; stop < timetable.num_stops(); ++stop)
     {
         auto const stop_id = transit::gtfs::StopID{static_cast<std::uint64_t>(stop)};
-        auto const lines = stop_to_line(stop_id);
+
         auto const transfers = timetable.transfers(stop_id);
         on_transfers(transfers);
+
+        auto const lines = stop_to_line(stop_id);
         for (auto const &line : lines)
         {
             on_stops(timetable.line(line).stops().list(stop_id));
@@ -55,6 +57,9 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             ++num_edges;
 
+        if( timetable.station(stop_range.front()) != stop_range.front() )
+            ++num_edges;
+
         auto direct = timetable.stops(timetable.station(*stop_range.begin())).size();
         // don't add self-loops
         num_edges += direct - 1;
@@ -78,6 +83,10 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             factory.add_edge(graph, (stop_range.begin() + 1)->base());
         auto const me = *stop_range.begin();
+
+        if( timetable.station(stop_range.front()) != stop_range.front() )
+            factory.add_edge(graph, timetable.station(stop_range.front()).base());
+
         auto const &all = timetable.stops(timetable.station(stop_range.front()));
         for (auto other : all)
         {
