@@ -50,6 +50,11 @@ struct Dataset
     boost::optional<std::vector<Frequency>> frequencies;
 
     tool::container::Dictionary dictionary;
+
+    // not all stops in the stos.txt are reachable entities. To ensure high quality of our look-up /
+    // connectivity between stops, we can filter out any unreachbale stops before creating further
+    // structures from the dataset. Stops, stop_times, and transfers are being rehashed for their stop-ids
+    void filter_unreachable_stops();
 };
 
 template <class result_type, class converter_operator, class csv_decoder>

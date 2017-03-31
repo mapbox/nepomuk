@@ -21,7 +21,6 @@ void check_input_validity(iterator_type const begin, iterator_type const end)
         auto const invalid_id = static_cast<std::uint64_t>(stop.id) >= num_stations;
         auto const invalid_parent =
             stop.parent_station && static_cast<std::uint64_t>(*stop.parent_station) >= num_stations;
-
         return invalid_id || invalid_parent;
     };
 
