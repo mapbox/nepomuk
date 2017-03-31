@@ -14,6 +14,7 @@
 #include <boost/geometry/multi/geometries/multi_linestring.hpp>
 #pragma GCC diagnostic pop
 
+#include <cmath>
 #include <functional>
 
 namespace transit
@@ -96,8 +97,8 @@ IPoint to_tile_point(geometric::WGS84Coordinate coordiante,
                               geometric::doubleFromLatLon(bounding_box.lower_left.latitude)) /
                              bounding_box.height();
 
-    return {std::round(px_longitude * vector_tile::EXTENT),
-            std::round(px_latitude * vector_tile::EXTENT)};
+    return {static_cast<std::int64_t>(std::llround(px_longitude * vector_tile::EXTENT)),
+            static_cast<std::int64_t>(std::llround(px_latitude * vector_tile::EXTENT))};
 }
 
 } // namespace
