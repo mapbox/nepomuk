@@ -21,14 +21,14 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
+          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'ninja-build']
       env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release NODEBINDINGS=On NODE_VERSION=6
 
     - os: linux
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
+          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'ninja-build']
       env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Release
 
     - os: osx
@@ -46,14 +46,14 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
+          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'ninja-build']
       env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On NODEBINDINGS=On NODE_VERSION=4
 
     - os: linux
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
+          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler', 'ninja-build']
       env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Debug
 
     - os: osx
@@ -63,7 +63,7 @@ matrix:
 
 before_install:
   - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf ninja; fi
   - if [[ "${NODEBINDINGS}" == "On" ]]; then
         nvm install ${NODE_VERSION};
         nvm use ${NODE_VERSION};
@@ -78,8 +78,8 @@ before_install:
 install:
   - mkdir -p build
   - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
-  - cmake --build .
+  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF} -GNinja
+  - ninja
 
 script:
   - ctest --verbose #run unit test framework
