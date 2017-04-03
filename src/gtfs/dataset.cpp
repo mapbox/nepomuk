@@ -45,7 +45,7 @@ void add_transfers(std::unordered_set<StopID> &reachable_stops,
 void add_stations(std::unordered_set<StopID> &reachable_stops, std::vector<Stop> const &stops)
 {
     auto const add_station_on_reachable_stop = [&](auto const &stop) {
-        if (stop.parent_station && reachable_stops.count(stop.id))
+        if (stop.parent_station && *stop.parent_station != stop.id)
             reachable_stops.insert(*stop.parent_station);
     };
 

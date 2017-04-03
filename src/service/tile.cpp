@@ -72,6 +72,15 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
                 line.push_back(stop_info_annotation.get_info(*stop_range.begin()).location);
                 line.push_back(stop_info_annotation.get_info(*(stop_range.begin() + 1)).location);
                 connection_layer.add_line(line, {});
+                auto const itr = std::find(stop_range.begin() + 1, stop_range.end(), stop);
+                if (std::distance(itr, stop_range.end()) > 1)
+                {
+                    line.clear();
+                    line.push_back(stop_info_annotation.get_info(*itr).location);
+                    line.push_back(
+                        stop_info_annotation.get_info(*(itr + 1)).location);
+                    connection_layer.add_line(line, {});
+                }
             }
         }
     }
