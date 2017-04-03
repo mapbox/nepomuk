@@ -79,7 +79,7 @@ install:
   - mkdir -p build
   - cd build
   - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
-  - cmake --build .
+  - make -j 2
 
 script:
   - ctest --verbose #run unit test framework
