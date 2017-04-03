@@ -42,8 +42,7 @@ namespace timetable
 {
 
 tool::container::AdjacencyGraph
-TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
-                               search::StopToLine const &stop_to_line)
+TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine const &stop_to_line)
 {
     tool::status::FunctionTimingGuard guard("Connectivity Graph Creation");
     tool::container::ForwardStarGraphFactory factory;
@@ -53,11 +52,17 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
     auto const count_transfers = [&num_edges](auto const transfer_range) {
         num_edges += std::distance(transfer_range.begin(), transfer_range.end());
     };
-    auto const count_stops = [&num_edges,&timetable](auto const stop_range) {
+    auto const count_stops = [&num_edges, &timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
+        {
             ++num_edges;
+            auto const itr =
+                std::find(stop_range.begin() + 1, stop_range.end(), stop_range.front());
+            if (std::distance(itr, stop_range.end()) > 1)
+                ++num_edges;
+        }
 
-        if( timetable.station(stop_range.front()) != stop_range.front() )
+        if (timetable.station(stop_range.front()) != stop_range.front())
             ++num_edges;
 
         auto direct = timetable.stops(timetable.station(*stop_range.begin())).size();
@@ -79,12 +84,19 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
         }
     };
 
-    auto const add_next_stop = [&graph, &factory,&timetable](auto const stop_range) {
+    auto const add_next_stop = [&graph, &factory, &timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
+        {
             factory.add_edge(graph, (stop_range.begin() + 1)->base());
+            auto itr = std::find(stop_range.begin() + 1, stop_range.end(), stop_range.front());
+            if (std::distance(itr, stop_range.end()) > 1)
+            {
+                factory.add_edge(graph, (itr + 1)->base());
+            }
+        }
         auto const me = *stop_range.begin();
 
-        if( timetable.station(stop_range.front()) != stop_range.front() )
+        if (timetable.station(stop_range.front()) != stop_range.front())
             factory.add_edge(graph, timetable.station(stop_range.front()).base());
 
         auto const &all = timetable.stops(timetable.station(stop_range.front()));
@@ -98,10 +110,10 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
 
     do_stuff_on_graph(timetable, stop_to_line, add_transfers, add_next_stop);
 
-    for( auto const& node : graph.nodes() )
+    for (auto const &node : graph.nodes())
     {
         std::set<std::size_t> targets;
-        for( auto const& edge : graph.edges(node) )
+        for (auto const &edge : graph.edges(node))
             targets.insert(graph.offset(edge.target()));
     }
 
