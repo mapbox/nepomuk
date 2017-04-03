@@ -10,6 +10,11 @@ env:
   global:
     - CMAKE_VERSION=3.7.1
 
+cache:
+    ccache: true
+    apt: true
+    yarn: true
+
 matrix:
   fast_finish: true
 
@@ -63,7 +68,7 @@ matrix:
 
 before_install:
   - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
   - if [[ "${NODEBINDINGS}" == "On" ]]; then
         nvm install ${NODE_VERSION};
         nvm use ${NODE_VERSION};
