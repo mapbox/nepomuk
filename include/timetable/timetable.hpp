@@ -26,7 +26,7 @@ class TimeTable
 {
   public:
     // get a line by its id
-    LineTable const& line(LineID const& line) const;
+    LineTable const &line(LineID const &line) const;
 
     // get all proposed transfers at a stop
     TransferTable::iterator_range transfers(gtfs::StopID const stop) const;

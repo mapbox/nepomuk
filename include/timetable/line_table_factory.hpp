@@ -8,6 +8,7 @@
 #include "timetable/line_table.hpp"
 
 #include "gtfs/stop.hpp"
+#include "gtfs/transfer.hpp"
 #include <vector>
 
 namespace transit
@@ -18,9 +19,14 @@ namespace timetable
 class LineTableFactory
 {
   public:
+    LineTableFactory(std::vector<gtfs::Transfer> &transfers);
+
     // create a line table from a list of stop_times
-    static std::vector<LineTable> produce(std::vector<gtfs::StopTime>::iterator const begin,
-                                          std::vector<gtfs::StopTime>::iterator const end);
+    std::vector<LineTable> produce(std::vector<gtfs::StopTime>::iterator const begin,
+                                   std::vector<gtfs::StopTime>::iterator const end);
+
+  private:
+    std::vector<gtfs::Transfer> &transfers;
 };
 
 } // namespace timetable

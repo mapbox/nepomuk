@@ -49,8 +49,10 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
     auto by_from = [](auto const &lhs, auto const &rhs) { return lhs.from < rhs.from; };
 
     auto to_transfer = [](auto const &transfer) {
-        std::uint32_t transfer_duration =
-            transfer.type == gtfs::TransferType::LONG ? *transfer.minimum_duration : 0;
+        std::uint32_t transfer_duration = (transfer.type == gtfs::TransferType::ON_ROUTE ||
+                                           transfer.type == gtfs::TransferType::LONG)
+                                              ? *transfer.minimum_duration
+                                              : 0;
         return TransferTable::Transfer{transfer.to, transfer_duration};
     };
 

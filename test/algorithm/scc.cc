@@ -59,14 +59,14 @@ BOOST_AUTO_TEST_CASE(compute_scc)
     BOOST_CHECK(components.component(0) != components.component(6));
 
     std::vector<std::size_t> sizes;
-    for( std::size_t i = 0; i < components.size(); ++i )
+    for (std::size_t i = 0; i < components.size(); ++i)
         sizes.push_back(components.size(i));
 
-    if( components.size() == 3 )
+    if (components.size() == 3)
     {
-        std::sort(sizes.begin(),sizes.end());
-        BOOST_CHECK_EQUAL(sizes[0],1);
-        BOOST_CHECK_EQUAL(sizes[1],2);
-        BOOST_CHECK_EQUAL(sizes[2],4);
+        std::sort(sizes.begin(), sizes.end());
+        BOOST_CHECK_EQUAL(sizes[0], 1);
+        BOOST_CHECK_EQUAL(sizes[1], 2);
+        BOOST_CHECK_EQUAL(sizes[2], 4);
     }
 }
