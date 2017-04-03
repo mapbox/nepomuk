@@ -30,6 +30,7 @@ class StationTable
 
     std::size_t num_stops() const;
     std::size_t num_stations() const;
+
   private:
     Lookup stop_station_lookup;
 };

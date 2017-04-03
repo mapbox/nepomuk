@@ -27,10 +27,7 @@ boost::optional<LineTable::Trip> LineTable::get(gtfs::Time const desired_departu
     return result;
 }
 
-StopTable const& LineTable::stops() const
-{
-    return stop_table;
-}
+StopTable const &LineTable::stops() const { return stop_table; }
 
 } // namespace timetable
 } // namespace transit

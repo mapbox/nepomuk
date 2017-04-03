@@ -1,4 +1,5 @@
 #include "gtfs/dataset.hpp"
+#include "algorithm/ranges.hpp"
 #include "tool/status/progress.hpp"
 
 #include <algorithm>
@@ -68,7 +69,6 @@ void apply_mapping(std::unordered_map<StopID, StopID> const &mapping, StopID &id
     BOOST_ASSERT(mapping.count(id));
     id = mapping.find(id)->second;
 }
-
 }
 
 void Dataset::filter_unreachable_stops()

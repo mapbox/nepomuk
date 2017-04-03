@@ -111,24 +111,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
 
                 auto const &trip = *trip_optional;
                 auto time = trip.departure;
-                auto stop_range = [&]() {
-                    // this part is necessary due to loops, see
-                    // https://github.com/mapbox/directions-transit/issues/66
-                    auto const stop_range = trip.stop_table.list(state.stop_id);
-                    auto const duration_range = trip.duration_table.list(
-                        std::distance(trip.stop_table.list().begin(), stop_range.begin()));
-                    if (time + duration_range.front() < state.arrival)
-                    {
-                        auto itr =
-                            std::find(stop_range.begin() + 1, stop_range.end(), state.stop_id);
-                        return boost::make_iterator_range(itr, stop_range.end());
-                    }
-                    else
-                    {
-                        return stop_range;
-                    }
-                }();
-
+                auto const stop_range = trip.stop_table.list(state.stop_id);
                 auto const duration_range = trip.duration_table.list(
                     std::distance(trip.stop_table.list().begin(), stop_range.begin()));
 

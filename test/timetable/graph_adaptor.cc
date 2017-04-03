@@ -1,6 +1,6 @@
 #include "timetable/graph_adaptor.hpp"
-#include "timetable/timetable_factory.hpp"
 #include "timetable/station_table_factory.hpp"
+#include "timetable/timetable_factory.hpp"
 
 #include "fixtures.h"
 
@@ -25,9 +25,9 @@ BOOST_AUTO_TEST_CASE(adapt_fixture)
     auto const trip_look_up =
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
-    auto graph = TimetableToGraphAdaptor::adapt(timetable,trip_look_up);
+    auto graph = TimetableToGraphAdaptor::adapt(timetable, trip_look_up);
 
-    BOOST_CHECK_EQUAL(graph.size(),11);
+    BOOST_CHECK_EQUAL(graph.size(), 11);
 
     // might be worth to eliminate duplicates, but right now we are fine
     // self loops indicate that other lines become available
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(adapt_fixture)
     BOOST_CHECK_EQUAL(graph.edges(graph.node(6)).size(), 1);
     BOOST_CHECK_EQUAL(graph.edges(graph.node(7)).size(), 0);
     // lower line, only reachable by transfer
-    BOOST_CHECK_EQUAL(graph.edges(graph.node(8)).size(), 5);
-    BOOST_CHECK_EQUAL(graph.edges(graph.node(9)).size(), 5);
-    BOOST_CHECK_EQUAL(graph.edges(graph.node(10)).size(), 2);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(8)).size(), 1);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(9)).size(), 1);
+    BOOST_CHECK_EQUAL(graph.edges(graph.node(10)).size(), 1);
 }

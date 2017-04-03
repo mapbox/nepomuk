@@ -20,7 +20,8 @@ enum class TransferType
     RECOMMENDED,
     TIMED,
     LONG,
-    IMPOSSIBLE
+    IMPOSSIBLE,
+    ON_ROUTE // dedicated transfer to split cyclic routes. Not an actual transfer
 };
 
 struct Transfer

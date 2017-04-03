@@ -53,7 +53,8 @@ struct Dataset
 
     // not all stops in the stos.txt are reachable entities. To ensure high quality of our look-up /
     // connectivity between stops, we can filter out any unreachbale stops before creating further
-    // structures from the dataset. Stops, stop_times, and transfers are being rehashed for their stop-ids
+    // structures from the dataset. Stops, stop_times, and transfers are being rehashed for their
+    // stop-ids
     void filter_unreachable_stops();
 };
 

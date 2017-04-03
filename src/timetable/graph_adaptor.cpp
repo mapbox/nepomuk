@@ -54,13 +54,7 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
     };
     auto const count_stops = [&num_edges, &timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
-        {
             ++num_edges;
-            auto const itr =
-                std::find(stop_range.begin() + 1, stop_range.end(), stop_range.front());
-            if (std::distance(itr, stop_range.end()) > 1)
-                ++num_edges;
-        }
 
         if (timetable.station(stop_range.front()) != stop_range.front())
             ++num_edges;
@@ -86,14 +80,8 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
 
     auto const add_next_stop = [&graph, &factory, &timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
-        {
             factory.add_edge(graph, (stop_range.begin() + 1)->base());
-            auto itr = std::find(stop_range.begin() + 1, stop_range.end(), stop_range.front());
-            if (std::distance(itr, stop_range.end()) > 1)
-            {
-                factory.add_edge(graph, (itr + 1)->base());
-            }
-        }
+
         auto const me = *stop_range.begin();
 
         if (timetable.station(stop_range.front()) != stop_range.front())
