@@ -62,4 +62,6 @@ class Dictionary
 } // namespace tool
 } // namespace transit
 
+// needs to be outside of namespaces to inject into std namespace
+STRONG_ID_TYPE_HASH(std::uint64_t,transit::tool::container::DictionaryID)
 #endif // TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_
