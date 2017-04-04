@@ -29,6 +29,7 @@ Master::Master(std::string const &path)
     // the constructor only reads the base data. All other classes / look-ups are constructed on
     // demand
     base_data.filter_unreachable_stops();
+    base_data.connect_stops_into_stations(100);
 }
 
 // request the plugin from the master service

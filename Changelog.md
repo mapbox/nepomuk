@@ -9,4 +9,6 @@
   - added node bindings to expose plugin architecture
   - added basic frontend for debug tiles
   - added look-ups (plain, computational expensive) for coordinate to stop, stop to trip, stop to station
-  - implemented filtering unused stops to avoid look-up pollution
+  - implemented some GTFS clean-up routines
+    - implemented filtering unused stops to avoid look-up pollution
+    - connect close stops that share a name into stations

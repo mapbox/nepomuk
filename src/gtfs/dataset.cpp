@@ -5,10 +5,12 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <unordered_map>
 #include <unordered_set>
 
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
+#include <boost/range/iterator_range.hpp>
 
 namespace transit
 {
@@ -73,7 +75,7 @@ void apply_mapping(std::unordered_map<StopID, StopID> const &mapping, StopID &id
 
 void Dataset::filter_unreachable_stops()
 {
-    tool::status::FunctionTimingGuard guard("filtering unreachable nodes");
+    tool::status::FunctionTimingGuard guard("filtering unreachable stops");
     // create look-up of all reachable stop_ids
     auto reachable_stops = get_reachable_stops(stop_times);
 
@@ -86,7 +88,7 @@ void Dataset::filter_unreachable_stops()
         return reachable_stops.count(stop.id) == 0;
     };
 
-    std::cout << "[filtering unreachable nodes]: " << stops.size();
+    std::cout << "[filtering unreachable stops]: " << stops.size();
     stops.erase(std::remove_if(stops.begin(), stops.end(), unreachable), stops.end());
     std::cout << " -> " << stops.size() << " stops." << std::endl;
 
@@ -113,6 +115,54 @@ void Dataset::filter_unreachable_stops()
             apply_mapping(mapping, transfer.to);
         });
     }
+}
+
+void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirement)
+{
+    tool::status::FunctionTimingGuard guard("stops into stations");
+    std::unordered_multimap<tool::container::DictionaryID, std::size_t> stops_by_id;
+    std::for_each(stops.begin(), stops.end(), [&, pos = std::size_t{0} ](auto const &stop) mutable {
+        stops_by_id.insert(std::make_pair(stop.name, pos++));
+    });
+
+    auto const group_close_points = [&](auto bucket) {
+        if (std::distance(bucket.begin(), bucket.end()) > 1)
+        {
+            auto const has_parent_station = [&](auto const &pair_name_offset) -> bool {
+                return stops[pair_name_offset.second].parent_station != boost::none;
+            };
+            if (std::any_of(bucket.begin(), bucket.end(), has_parent_station))
+                return;
+
+            auto reference_index =
+                std::min_element(bucket.begin(), bucket.end(), [](auto const lhs, auto const rhs) {
+                    return lhs.second < rhs.second;
+                })->second;
+
+            auto const reference_position = stops[reference_index].location;
+            auto const are_close = [&](auto const &pair_name_offset) {
+                return geometric::distance(reference_position,
+                                           stops[pair_name_offset.second].location) <=
+                       proximity_requirement;
+            };
+            if (std::all_of(bucket.begin(), bucket.end(), are_close))
+            {
+                // all elements are within the proximity distance to the first stop, make it a
+                // station. This is kind of dirty, we should calculate the center of the
+                // point cloud and check for half the proximity requirement
+                auto reference = stops[reference_index].id;
+                auto const assign_parent = [&](auto const &pair_name_offset) {
+                    if (stops[pair_name_offset.second].id != reference)
+                        stops[pair_name_offset.second].parent_station = reference;
+                };
+                std::for_each(bucket.begin(), bucket.end(), assign_parent);
+            }
+        }
+    };
+
+    for (std::size_t bucket_id = 0; bucket_id < stops_by_id.bucket_count(); ++bucket_id)
+        group_close_points(
+            boost::make_iterator_range(stops_by_id.begin(bucket_id), stops_by_id.end(bucket_id)));
 }
 
 } // namespace gtfs

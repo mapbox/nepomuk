@@ -40,6 +40,7 @@ int main(int argc, char **argv) try
 
     auto dataset = transit::gtfs::readCSV(source);
     dataset.filter_unreachable_stops();
+    dataset.connect_stops_into_stations(50);
     auto const message = transit::adaptor::Dictionary::encode(dataset.dictionary);
     transit::tool::container::StringTable dictionary;
     transit::adaptor::Dictionary::decode_into(dictionary, message);

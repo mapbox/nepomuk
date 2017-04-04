@@ -56,6 +56,12 @@ struct Dataset
     // structures from the dataset. Stops, stop_times, and transfers are being rehashed for their
     // stop-ids
     void filter_unreachable_stops();
+
+    // https://github.com/mapbox/directions-transit/issues/73
+    // Some stops offer the same name and very similar locations. In some feeds, they aren't grouped
+    // into stations. This function allows to pass over the available stops and set parent stations
+    // for stops that are close to each other and offer the same name.
+    void connect_stops_into_stations(std::uint32_t const proximity_requirement);
 };
 
 template <class result_type, class converter_operator, class csv_decoder>
