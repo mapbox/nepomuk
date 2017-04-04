@@ -13,11 +13,12 @@
 namespace
 {
 
-template <typename on_transfers_functor, typename on_stops_functor>
+template <typename on_transfers_functor, typename on_stops_functor, typename on_lines_functor>
 void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
                        transit::search::StopToLine const &stop_to_line,
                        on_transfers_functor on_transfers,
-                       on_stops_functor on_stops)
+                       on_stops_functor on_stops,
+                       on_lines_functor on_lines)
 {
     for (std::size_t stop = 0; stop < timetable.num_stops(); ++stop)
     {
@@ -26,10 +27,12 @@ void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
         auto const transfers = timetable.transfers(stop_id);
         on_transfers(transfers);
 
+        on_stops(stop_id);
+
         auto const lines = stop_to_line(stop_id);
         for (auto const &line : lines)
         {
-            on_stops(timetable.line(line).stops().list(stop_id));
+            on_lines(timetable.line(line).stops().list(stop_id));
         }
     }
 }
@@ -52,19 +55,21 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
     auto const count_transfers = [&num_edges](auto const transfer_range) {
         num_edges += std::distance(transfer_range.begin(), transfer_range.end());
     };
-    auto const count_stops = [&num_edges, &timetable](auto const stop_range) {
+    auto const count_connections = [&num_edges, &timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             ++num_edges;
-
-        if (timetable.station(stop_range.front()) != stop_range.front())
+    };
+    auto const count_direct_connections = [&num_edges, &timetable](auto const stop_id) {
+        if (timetable.station(stop_id) != stop_id)
             ++num_edges;
 
-        auto direct = timetable.stops(timetable.station(*stop_range.begin())).size();
+        auto direct = timetable.stops(timetable.station(stop_id)).size();
         // don't add self-loops
         num_edges += direct - 1;
     };
 
-    do_stuff_on_graph(timetable, stop_to_line, count_transfers, count_stops);
+    do_stuff_on_graph(
+        timetable, stop_to_line, count_transfers, count_direct_connections, count_connections);
 
     auto graph = factory.allocate(stop_to_line.size(), num_edges);
 
@@ -78,25 +83,27 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
         }
     };
 
-    auto const add_next_stop = [&graph, &factory, &timetable](auto const stop_range) {
+    auto const add_next_stop_on_line = [&graph, &factory, &timetable](auto const stop_range) {
         if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             factory.add_edge(graph, (stop_range.begin() + 1)->base());
+    };
 
-        auto const me = *stop_range.begin();
+    auto const add_station_connections = [&graph, &factory, &timetable](auto const stop_id) {
+        if (timetable.station(stop_id) != stop_id)
+            factory.add_edge(graph, timetable.station(stop_id).base());
 
-        if (timetable.station(stop_range.front()) != stop_range.front())
-            factory.add_edge(graph, timetable.station(stop_range.front()).base());
-
-        auto const &all = timetable.stops(timetable.station(stop_range.front()));
+        auto const &all = timetable.stops(timetable.station(stop_id));
         for (auto other : all)
         {
-            if (other == me)
+            // no self loop
+            if (other == stop_id)
                 continue;
             factory.add_edge(graph, other.base());
         }
     };
 
-    do_stuff_on_graph(timetable, stop_to_line, add_transfers, add_next_stop);
+    do_stuff_on_graph(
+        timetable, stop_to_line, add_transfers, add_station_connections, add_next_stop_on_line);
 
     for (auto const &node : graph.nodes())
     {
