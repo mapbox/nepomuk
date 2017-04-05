@@ -186,6 +186,8 @@ Dataset readCSV(CSVDiscSource const &source)
         readData(*source.transfers, *data.transfers, makeTransfer, checkTransferCSVHeader);
         std::cout << " done." << std::endl;
     }
+    // order all ided types by their ID
+    data.ensure_ordered();
     return data;
 }
 
