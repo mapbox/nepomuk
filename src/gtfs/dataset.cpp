@@ -166,6 +166,24 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
             boost::make_iterator_range(stops_by_id.begin(bucket_id), stops_by_id.end(bucket_id)));
 }
 
+// make sure all basic gtfs features are sorted by id, since we want to access stuff by its id
+void Dataset::ensure_ordered()
+{
+    auto const by_id = [](auto const &lhs, auto const &rhs) { return lhs.id < rhs.id; };
+    std::stable_sort(stops.begin(), stops.end(), by_id);
+    std::stable_sort(routes.begin(), routes.end(), by_id);
+    std::stable_sort(trips.begin(), trips.end(), by_id);
+
+    if (fare_attributes)
+        std::stable_sort(fare_attributes->begin(), fare_attributes->end(), by_id);
+
+    if (fare_rules)
+        std::stable_sort(fare_rules->begin(), fare_rules->end(), by_id);
+
+    if (shapes)
+        std::stable_sort(shapes->begin(), shapes->end(), by_id);
+}
+
 tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_index_vector()
 {
     // why are you calling me without checking anyhow! ;)

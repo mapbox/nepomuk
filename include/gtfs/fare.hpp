@@ -35,7 +35,7 @@ enum class TransferPolicy
 
 struct FareAttribute
 {
-    FareID fare_id;
+    FareID id;
     std::uint64_t price;
     CurrencyCode currency_type;
     PaymentType method;
@@ -51,7 +51,7 @@ FareAttribute makeFareAttribute(std::map<std::string, std::size_t> const &header
 
 struct FareRule
 {
-    FareID fare_id;
+    FareID id;
 
     boost::optional<RouteID> route_id;
     boost::optional<ZoneID> origin_id;
