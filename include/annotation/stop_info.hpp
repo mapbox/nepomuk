@@ -2,8 +2,9 @@
 #define TRANSIT_ANNOTATION_STOP_INFO_HPP_
 
 #include "geometric/coordinate.hpp"
+#include "id/stop.hpp"
 #include "gtfs/stop.hpp"
-#include "tool/container/dictionary.hpp"
+#include "id/dictionary.hpp"
 
 #include <vector>
 
@@ -14,7 +15,7 @@ namespace annotation
 
 struct StopInfo
 {
-    tool::container::DictionaryID name_id;
+    DictionaryID name_id;
     geometric::WGS84Coordinate location;
 };
 
@@ -23,7 +24,7 @@ class StopInfoTable
   public:
     StopInfoTable(std::vector<gtfs::Stop> &stops);
 
-    StopInfo get_info(gtfs::StopID const stop_id) const;
+    StopInfo get_info(StopID const stop_id) const;
 
   private:
     std::vector<StopInfo> stop_info;

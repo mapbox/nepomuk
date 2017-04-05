@@ -1,9 +1,11 @@
 #include <string>
 
 #include "adaptor/dictionary.hpp"
+#include "id/dictionary.hpp"
 #include "tool/container/dictionary.hpp"
 #include "tool/container/string_table.hpp"
 
+using namespace transit;
 using namespace transit::tool::container;
 
 // make sure we get a new main function here

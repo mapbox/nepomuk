@@ -42,7 +42,7 @@ ServiceStatus Tile::operator()(ServiceParameters &parameters) const
 tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal,
                                                   std::uint32_t const vertical,
                                                   std::uint32_t const zoom_level,
-                                                  std::vector<gtfs::StopID> const &stops) const
+                                                  std::vector<StopID> const &stops) const
 {
     // compute a vector tile from a set of stops
     tool::container::MapboxVectorTile vector_tile(horizontal, vertical, zoom_level);
@@ -56,7 +56,7 @@ tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal
 }
 
 void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
-                     std::vector<gtfs::StopID> const &stops) const
+                     std::vector<StopID> const &stops) const
 {
 
     auto connection_layer = vector_tile.new_layer("lines");
@@ -78,11 +78,11 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
 }
 
 void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
-                     std::vector<gtfs::StopID> const &stops) const
+                     std::vector<StopID> const &stops) const
 {
     auto station_layer = vector_tile.new_layer("stations");
 
-    std::vector<gtfs::StopID> stations;
+    std::vector<StopID> stations;
     stations.reserve(stops.size());
     std::transform(stops.begin(),
                    stops.end(),
@@ -104,7 +104,7 @@ void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
 }
 
 void Tile::add_transfers(tool::container::MapboxVectorTile &vector_tile,
-                         std::vector<gtfs::StopID> const &stops) const
+                         std::vector<StopID> const &stops) const
 {
     auto transfer_layer = vector_tile.new_layer("transfers");
     for (auto const stop : stops)
@@ -124,7 +124,7 @@ void Tile::add_transfers(tool::container::MapboxVectorTile &vector_tile,
 }
 
 void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
-                          std::vector<gtfs::StopID> const &stops) const
+                          std::vector<StopID> const &stops) const
 {
     auto component_layer = vector_tile.new_layer("components");
     tool::container::MapboxVectorTile::FeatureList from_features;

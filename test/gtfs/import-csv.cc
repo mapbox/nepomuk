@@ -2,12 +2,9 @@
 #include "gtfs/fare.hpp"
 #include "gtfs/read_csv.hpp"
 #include "gtfs/route.hpp"
-#include "gtfs/sequence.hpp"
-#include "gtfs/service.hpp"
 #include "gtfs/shape.hpp"
 #include "gtfs/stop.hpp"
 #include "gtfs/trip.hpp"
-#include "gtfs/zone.hpp"
 
 #include "tool/container/dictionary.hpp"
 
@@ -15,6 +12,7 @@
 #include <string>
 
 using namespace transit::gtfs;
+using namespace transit;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

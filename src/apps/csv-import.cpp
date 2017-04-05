@@ -2,9 +2,8 @@
 #include "gtfs/read_csv.hpp"
 
 #include "geometric/coordinate.hpp"
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
 
 #include "timetable/timetable.hpp"
 #include "timetable/timetable_factory.hpp"
@@ -51,7 +50,7 @@ int main(int argc, char **argv) try
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 
     auto make_coordinate_lookup = [&]() {
-        std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> data;
+        std::vector<std::pair<geometric::WGS84Coordinate, StopID>> data;
         std::for_each(dataset.stops.begin(), dataset.stops.end(), [&](auto const &element) {
             if (!element.location_type || *element.location_type == gtfs::LocationType::STOP)
                 data.push_back(std::make_pair(element.location, element.id));
@@ -79,11 +78,11 @@ int main(int argc, char **argv) try
         std::cout << "Enter Source..." << std::flush;
         std::string line;
         std::getline(std::cin, line);
-        // auto source = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        // auto source = StopID{static_cast<std::uint64_t>(std::stoi(line))};
         auto source = coordinate_lookup.nearest(to_coordinate(line));
         std::cout << "Enter Target..." << std::flush;
         std::getline(std::cin, line);
-        // auto target = gtfs::StopID{static_cast<std::uint64_t>(std::stoi(line))};
+        // auto target = StopID{static_cast<std::uint64_t>(std::stoi(line))};
         auto target = coordinate_lookup.nearest(to_coordinate(line));
         std::cout << "Enter Departure..." << std::flush;
         std::getline(std::cin, line);
@@ -96,8 +95,8 @@ int main(int argc, char **argv) try
             for (std::uint64_t i = 0; i < 20; ++i)
             {
                 TIMER_START(query);
-                auto trip = timetable_router(gtfs::Time("00:00:00"), gtfs::StopID{i},
-           gtfs::StopID{101});
+                auto trip = timetable_router(gtfs::Time("00:00:00"), StopID{i},
+           StopID{101});
                 TIMER_STOP(query);
         */
         transit::annotation::Trip const annotator(stop_info, dictionary);

@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 
 namespace transit
 {

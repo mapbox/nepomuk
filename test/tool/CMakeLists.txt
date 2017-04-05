@@ -9,7 +9,6 @@ set(toolINCLUDES
         ${PROTOBUF_INCLUDE_DIRS})
 
 add_unit_test(tool_io io.cc "${toolLIBS}" "${toolINCLUDES}")
-add_unit_test(tool_id ids.cc "${toolLIBS}" "${toolINCLUDES}")
 add_unit_test(tool_id_hasher id_hasher.cc "${toolLIBS}" "${toolINCLUDES}")
 add_unit_test(tool_decode_csv decode_csv.cc "${toolLIBS}" "${toolINCLUDES}")
 add_unit_test(tool_container_dictonary dictonary.cc "${toolLIBS}" "${toolINCLUDES}")

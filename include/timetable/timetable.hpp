@@ -1,8 +1,7 @@
 #ifndef TRANSIT_TIMETABLE_HPP_
 #define TRANSIT_TIMETABLE_HPP_
 
-#include "gtfs/stop.hpp"
-#include "gtfs/trip.hpp"
+#include "id/stop.hpp"
 #include "timetable/line_table.hpp"
 #include "timetable/station_table.hpp"
 #include "timetable/transfer_table.hpp"
@@ -29,11 +28,11 @@ class TimeTable
     LineTable const &line(LineID const &line) const;
 
     // get all proposed transfers at a stop
-    TransferTable::iterator_range transfers(gtfs::StopID const stop) const;
+    TransferTable::iterator_range transfers(StopID const stop) const;
 
     // map stations to/from stops
-    auto station(gtfs::StopID const stop_id) const { return station_table.station(stop_id); }
-    auto stops(gtfs::StopID const station_id) const { return station_table.stops(station_id); }
+    auto station(StopID const stop_id) const { return station_table.station(stop_id); }
+    auto stops(StopID const station_id) const { return station_table.stops(station_id); }
 
     auto num_stops() const { return station_table.num_stops(); }
     auto num_stations() const { return station_table.num_stations(); }

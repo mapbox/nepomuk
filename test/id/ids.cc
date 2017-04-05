@@ -3,15 +3,7 @@
 #include <sstream>
 #include <string>
 
-#include "gtfs/agency.hpp"
-#include "gtfs/fare.hpp"
-#include "gtfs/route.hpp"
-#include "gtfs/sequence.hpp"
-#include "gtfs/service.hpp"
-#include "gtfs/shape.hpp"
-#include "gtfs/stop.hpp"
-#include "gtfs/trip.hpp"
-#include "gtfs/zone.hpp"
+#include "id/convenience.hpp"
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -34,21 +26,23 @@ template <typename type> void checkIDType()
     oss << id_two;
     BOOST_CHECK_EQUAL("2", oss.str());
 
-    std::hash<std::uint32_t> control;
+    std::hash<std::uint64_t> control;
     std::hash<type> hash;
     BOOST_CHECK_EQUAL(control(2), hash(id_two));
 }
 
-BOOST_AUTO_TEST_CASE(handle_unopened_streams)
+BOOST_AUTO_TEST_CASE(check_basic_id_functionality)
 {
-    checkIDType<transit::gtfs::AgencyID>();
-    checkIDType<transit::gtfs::FareID>();
-    checkIDType<transit::gtfs::RouteID>();
-    checkIDType<transit::gtfs::SequenceID>();
-    checkIDType<transit::gtfs::ServiceID>();
-    checkIDType<transit::gtfs::ShapeID>();
-    checkIDType<transit::gtfs::StopID>();
-    checkIDType<transit::gtfs::TripID>();
-    checkIDType<transit::gtfs::BlockID>();
-    checkIDType<transit::gtfs::ZoneID>();
+    checkIDType<transit::DictionaryID>();
+
+    checkIDType<transit::AgencyID>();
+    checkIDType<transit::FareID>();
+    checkIDType<transit::RouteID>();
+    checkIDType<transit::SequenceID>();
+    checkIDType<transit::ServiceID>();
+    checkIDType<transit::ShapeID>();
+    checkIDType<transit::StopID>();
+    checkIDType<transit::TripID>();
+    checkIDType<transit::BlockID>();
+    checkIDType<transit::ZoneID>();
 }

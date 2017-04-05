@@ -1,5 +1,6 @@
 #include "gtfs/dataset.hpp"
 #include "geometric/coordinate.hpp"
+#include "id/stop.hpp"
 #include "gtfs/stop.hpp"
 #include "tool/container/dictionary.hpp"
 #include <cstdint>
@@ -19,9 +20,9 @@ auto coordinate(double lon, double lat)
 }
 
 gtfs::Stop
-stop(std::uint64_t id, tool::container::DictionaryID name, geometric::WGS84Coordinate coordinate)
+stop(std::uint64_t id, DictionaryID name, geometric::WGS84Coordinate coordinate)
 {
-    return {gtfs::StopID{id},
+    return {StopID{id},
             name,
             coordinate,
             boost::none,

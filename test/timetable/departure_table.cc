@@ -2,15 +2,19 @@
 #include "timetable/departure_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 
-#include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
+#include "id/sequence.hpp"
+#include "id/stop.hpp"
+#include "id/trip.hpp"
+#include "gtfs/frequency.hpp"
+#include "gtfs/stop.hpp"
 
 #include <algorithm>
 
 #include <boost/optional.hpp>
 
 using namespace transit::timetable;
+using namespace transit;
 using namespace transit::gtfs;
 
 // make sure we get a new main function here

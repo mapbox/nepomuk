@@ -22,15 +22,15 @@ Route makeRoute(std::map<std::string, std::size_t> const &header,
 {
     return {
         construct<RouteID>("route_id", stringToID<RouteID>, header, values),
-        construct<tool::container::DictionaryID>(
+        construct<DictionaryID>(
             "route_short_name", DictionaryConverter(dictionary), header, values),
-        construct<tool::container::DictionaryID>(
+        construct<DictionaryID>(
             "route_long_name", DictionaryConverter(dictionary), header, values),
         construct<std::uint64_t>("route_type", toInt, header, values),
         construct_as_optional<AgencyID, false>("agency_id", stringToID<AgencyID>, header, values),
-        construct_as_optional<tool::container::DictionaryID, false>(
+        construct_as_optional<DictionaryID, false>(
             "route_desc", DictionaryConverter(dictionary), header, values),
-        construct_as_optional<tool::container::DictionaryID, false>(
+        construct_as_optional<DictionaryID, false>(
             "route_url", DictionaryConverter(dictionary), header, values),
         construct_as_optional<std::string, false>("route_color", forward, header, values),
         construct_as_optional<std::string, false>("route_text_color", forward, header, values)};

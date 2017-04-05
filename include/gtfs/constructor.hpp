@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include "id/dictionary.hpp"
 #include "tool/container/dictionary.hpp"
 #include "tool/container/id_hasher.hpp"
 
@@ -44,7 +45,7 @@ struct DictionaryConverter
     DictionaryConverter(tool::container::Dictionary &dictionary) : dictionary(dictionary) {}
 
     // add an entry to the dictionary, or find its ID
-    tool::container::DictionaryID operator()(std::string const &value)
+    DictionaryID operator()(std::string const &value)
     {
         if (!dictionary.contains(value))
             return dictionary.add_string(value);

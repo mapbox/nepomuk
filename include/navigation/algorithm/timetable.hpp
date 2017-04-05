@@ -5,7 +5,7 @@
 #include "search/stop_to_line.hpp"
 #include "timetable/timetable.hpp"
 
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 #include "gtfs/time.hpp"
 
 #include <boost/optional.hpp>
@@ -24,8 +24,8 @@ class TimeTable : public RoutingAlgorithm
 
     // query a route between two stops
     boost::optional<Trip> operator()(gtfs::Time const departure,
-                                     gtfs::StopID const origin,
-                                     gtfs::StopID const destination) const override final;
+                                     StopID const origin,
+                                     StopID const destination) const override final;
 
   private:
     // the unmodified timetable data to route on

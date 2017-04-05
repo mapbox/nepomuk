@@ -5,7 +5,7 @@
 
 #include "gtfs/dataset.hpp"
 #include "gtfs/read_csv.hpp"
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 
 #include "geometric/bounding_box.hpp"
 #include "geometric/coordinate.hpp"
@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto dataset = transit::gtfs::readCSV(source);
 
     auto make_coordinate_lookup = [&]() {
-        std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> data;
+        std::vector<std::pair<geometric::WGS84Coordinate, StopID>> data;
         std::for_each(dataset.stops.begin(), dataset.stops.end(), [&](auto const &element) {
             if (!element.location_type || *element.location_type == gtfs::LocationType::STOP)
                 data.push_back(std::make_pair(element.location, element.id));
@@ -36,12 +36,12 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0.0001));
 
     auto closest_stop = coordinate_lookup.nearest(coordinate);
-    BOOST_CHECK_EQUAL(closest_stop, gtfs::StopID{0});
+    BOOST_CHECK_EQUAL(closest_stop, StopID{0});
 
     geometric::WGS84Coordinate zero;
     geometric::WGS84BoundingBox bbox(zero, coordinate);
 
     auto all = coordinate_lookup.all(bbox);
     BOOST_CHECK(all.size() == 1);
-    BOOST_CHECK_EQUAL(all.front(), gtfs::StopID{0});
+    BOOST_CHECK_EQUAL(all.front(), StopID{0});
 }

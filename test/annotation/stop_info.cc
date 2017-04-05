@@ -3,12 +3,14 @@
 
 #include "annotation/stop_info.hpp"
 #include "geometric/coordinate.hpp"
+#include "id/stop.hpp"
 #include "gtfs/stop.hpp"
 
 #include "adaptor/dictionary.hpp"
 #include "tool/container/dictionary.hpp"
 #include "tool/container/string_table.hpp"
 
+using namespace transit;
 using namespace transit::annotation;
 using namespace transit::gtfs;
 using namespace transit::tool::container;

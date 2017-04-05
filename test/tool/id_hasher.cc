@@ -3,16 +3,16 @@
 #include <numeric>
 #include <vector>
 
-#include "gtfs/agency.hpp"
-#include "gtfs/stop.hpp"
-#include "gtfs/trip.hpp"
+#include "id/agency.hpp"
+#include "id/stop.hpp"
+#include "id/trip.hpp"
 #include "tool/container/id_hasher.hpp"
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
-using namespace transit::gtfs;
+using namespace transit;
 
 const constexpr int num_ids = 10;
 

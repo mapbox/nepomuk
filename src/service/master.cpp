@@ -2,9 +2,8 @@
 
 #include "geometric/coordinate.hpp"
 #include "gtfs/read_csv.hpp"
-#include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
+#include "id/stop.hpp"
 
 #include "adaptor/dictionary.hpp"
 #include "annotation/stop_info.hpp"
@@ -94,7 +93,7 @@ search::CoordinateToStop const &Master::coordinate_to_stop()
     {
         tool::status::FunctionTimingGuard guard("Coordinate to Stop Lookup-creation");
         auto make_coordinate_lookup = [&]() {
-            std::vector<std::pair<geometric::WGS84Coordinate, gtfs::StopID>> data;
+            std::vector<std::pair<geometric::WGS84Coordinate, StopID>> data;
             std::for_each(base_data.stops.begin(), base_data.stops.end(), [&](auto const &element) {
                 data.push_back(std::make_pair(element.location, element.id));
             });

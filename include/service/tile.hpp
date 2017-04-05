@@ -10,7 +10,7 @@
 
 #include "adaptor/dictionary.hpp"
 #include "algorithm/scc.hpp"
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 #include "tool/container/mapbox_vector_tile.hpp"
 
 #include <cstdint>
@@ -36,7 +36,7 @@ class Tile : public Interface
     tool::container::MapboxVectorTile make_tile(std::uint32_t const horizontal,
                                                 std::uint32_t const vertical,
                                                 std::uint32_t const zoom_level,
-                                                std::vector<gtfs::StopID> const &stops) const;
+                                                std::vector<StopID> const &stops) const;
 
     // the general network / it's connections
     timetable::TimeTable const &timetable;
@@ -50,13 +50,13 @@ class Tile : public Interface
     algorithm::StronglyConnectedComponent const components;
 
     void add_lines(tool::container::MapboxVectorTile &vector_tile,
-                   std::vector<gtfs::StopID> const &stops) const;
+                   std::vector<StopID> const &stops) const;
     void add_stops(tool::container::MapboxVectorTile &vector_tile,
-                   std::vector<gtfs::StopID> const &stops) const;
+                   std::vector<StopID> const &stops) const;
     void add_transfers(tool::container::MapboxVectorTile &vector_tile,
-                       std::vector<gtfs::StopID> const &stops) const;
+                       std::vector<StopID> const &stops) const;
     void add_components(tool::container::MapboxVectorTile &vector_tile,
-                        std::vector<gtfs::StopID> const &stops) const;
+                        std::vector<StopID> const &stops) const;
 };
 
 } // namespace service

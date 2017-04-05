@@ -34,15 +34,15 @@ Stop makeStop(std::map<std::string, std::size_t> const &header,
 
     return {
         construct<StopID>("stop_id", stringToID<StopID>, header, values),
-        construct<tool::container::DictionaryID>(
+        construct<DictionaryID>(
             "stop_name", DictionaryConverter(dictionary), header, values),
         geometric::WGS84Coordinate(geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
                                    geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)),
         construct_as_optional<std::string, false>("stop_code", forward, header, values),
-        construct_as_optional<tool::container::DictionaryID, false>(
+        construct_as_optional<DictionaryID, false>(
             "stop_desc", DictionaryConverter(dictionary), header, values),
         construct_as_optional<ZoneID, false>("zone_id", stringToID<ZoneID>, header, values),
-        construct_as_optional<tool::container::DictionaryID, false>(
+        construct_as_optional<DictionaryID, false>(
             "stop_url", DictionaryConverter(dictionary), header, values),
         construct_as_optional<LocationType, true>("location_type", to_type, header, values),
         construct_as_optional<StopID, false>("parent_station", stringToID<StopID>, header, values),

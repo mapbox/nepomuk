@@ -9,13 +9,15 @@
 #include <boost/optional.hpp>
 
 #include "geometric/coordinate.hpp"
+#include "gtfs/agency.hpp"
 #include "gtfs/calendar.hpp"
 #include "gtfs/fare.hpp"
 #include "gtfs/feed_info.hpp"
 #include "gtfs/frequency.hpp"
 #include "gtfs/route.hpp"
 #include "gtfs/schedule.hpp"
-#include "gtfs/service.hpp"
+#include "id/service.hpp"
+#include "gtfs/shape.hpp"
 #include "gtfs/stop.hpp"
 #include "gtfs/transfer.hpp"
 #include "gtfs/trip.hpp"

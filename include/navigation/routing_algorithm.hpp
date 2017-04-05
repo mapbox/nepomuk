@@ -1,7 +1,7 @@
 #ifndef TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
 #define TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
 
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 #include "gtfs/time.hpp"
 #include "navigation/leg.hpp"
 #include "navigation/trip.hpp"
@@ -18,8 +18,8 @@ class RoutingAlgorithm
 {
   public:
     virtual boost::optional<Trip> operator()(gtfs::Time const departure,
-                                             gtfs::StopID const origin,
-                                             gtfs::StopID const destination) const = 0;
+                                             StopID const origin,
+                                             StopID const destination) const = 0;
 
   protected:
     void add_leg(Trip &trip, Leg leg) const;

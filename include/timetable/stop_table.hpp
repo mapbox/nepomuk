@@ -4,8 +4,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "gtfs/stop.hpp"
-#include "gtfs/trip.hpp"
+#include "id/stop.hpp"
 
 #include <boost/range/iterator_range.hpp>
 
@@ -28,17 +27,17 @@ class StopTableFactory;
 class StopTable
 {
   public:
-    using const_iterator = std::vector<gtfs::StopID>::const_iterator;
+    using const_iterator = std::vector<StopID>::const_iterator;
     using const_iterator_range = boost::iterator_range<const_iterator>;
 
     // list stations along the line, and their departure
-    const_iterator_range list(gtfs::StopID const start_id) const;
+    const_iterator_range list(StopID const start_id) const;
     const_iterator_range list() const;
 
     bool operator==(StopTable const &other) const;
 
   private:
-    std::vector<gtfs::StopID> stops;
+    std::vector<StopID> stops;
 
     friend class StopTableFactory;
     friend class transit::search::StopToLineFactory;

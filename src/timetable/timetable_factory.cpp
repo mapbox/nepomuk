@@ -4,6 +4,9 @@
 #include "timetable/timetable_factory.hpp"
 #include "timetable/transfer_table_factory.hpp"
 
+#include "id/stop.hpp"
+#include "id/trip.hpp"
+#include "id/route.hpp"
 #include "gtfs/stop.hpp"
 
 #include "algorithm/ranges.hpp"
@@ -105,7 +108,7 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
     TimeTable result;
 
     // prepare routes for trips
-    std::unordered_map<gtfs::TripID, gtfs::RouteID> route_id_by_trip;
+    std::unordered_map<TripID, RouteID> route_id_by_trip;
     auto const add_trip_route_mapping = [&route_id_by_trip](auto const &trip) {
         route_id_by_trip[trip.id] = trip.route_id;
     };

@@ -9,19 +9,19 @@
 #include <vector>
 
 #include "gtfs/accessibility.hpp"
-#include "gtfs/sequence.hpp"
+#include "id/sequence.hpp"
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
-#include "gtfs/zone.hpp"
+#include "id/stop.hpp"
+#include "id/trip.hpp"
+#include "id/zone.hpp"
+#include "id/dictionary.hpp"
 #include "tool/container/dictionary.hpp"
-#include "tool/types_and_traits/strong_typedef.hpp"
+#include "geometric/coordinate.hpp"
 
 namespace transit
 {
 namespace gtfs
 {
-
-STRONG_ID_TYPE(std::uint64_t, StopID)
 
 enum class LocationType
 {
@@ -32,14 +32,14 @@ enum class LocationType
 struct Stop
 {
     StopID id;
-    tool::container::DictionaryID name;
+    DictionaryID name;
     geometric::WGS84Coordinate location;
 
     // optional additional features
     boost::optional<std::string> code;
-    boost::optional<tool::container::DictionaryID> description;
+    boost::optional<DictionaryID> description;
     boost::optional<ZoneID> zone_id;
-    boost::optional<tool::container::DictionaryID> url;
+    boost::optional<DictionaryID> url;
     boost::optional<LocationType> location_type;
     boost::optional<StopID> parent_station;
     boost::optional<std::string> timezone;
@@ -89,6 +89,4 @@ StopTime makeStopTime(std::map<std::string, std::size_t> const &header,
 } // namespace gtfs
 } // namespace transit
 
-// needs to be outside of namespaces
-STRONG_ID_TYPE_HASH(std::uint64_t, transit::gtfs::StopID)
 #endif // TRANSIT_GTFS_STOP_HPP_

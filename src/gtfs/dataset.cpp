@@ -120,7 +120,7 @@ void Dataset::filter_unreachable_stops()
 void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirement)
 {
     tool::status::FunctionTimingGuard guard("stops into stations");
-    std::unordered_multimap<tool::container::DictionaryID, std::size_t> stops_by_id;
+    std::unordered_multimap<DictionaryID, std::size_t> stops_by_id;
     std::for_each(stops.begin(), stops.end(), [&, pos = std::size_t{0} ](auto const &stop) mutable {
         stops_by_id.insert(std::make_pair(stop.name, pos++));
     });
