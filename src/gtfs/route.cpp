@@ -24,8 +24,7 @@ Route makeRoute(std::map<std::string, std::size_t> const &header,
         construct<RouteID>("route_id", stringToID<RouteID>, header, values),
         construct<DictionaryID>(
             "route_short_name", DictionaryConverter(dictionary), header, values),
-        construct<DictionaryID>(
-            "route_long_name", DictionaryConverter(dictionary), header, values),
+        construct<DictionaryID>("route_long_name", DictionaryConverter(dictionary), header, values),
         construct<std::uint64_t>("route_type", toInt, header, values),
         construct_as_optional<AgencyID, false>("agency_id", stringToID<AgencyID>, header, values),
         construct_as_optional<DictionaryID, false>(

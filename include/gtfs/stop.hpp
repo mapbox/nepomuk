@@ -8,15 +8,15 @@
 #include <string>
 #include <vector>
 
+#include "geometric/coordinate.hpp"
 #include "gtfs/accessibility.hpp"
-#include "id/sequence.hpp"
 #include "gtfs/time.hpp"
+#include "id/dictionary.hpp"
+#include "id/sequence.hpp"
 #include "id/stop.hpp"
 #include "id/trip.hpp"
 #include "id/zone.hpp"
-#include "id/dictionary.hpp"
 #include "tool/container/dictionary.hpp"
-#include "geometric/coordinate.hpp"
 
 namespace transit
 {

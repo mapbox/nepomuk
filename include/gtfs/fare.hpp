@@ -8,9 +8,9 @@
 
 #include <boost/optional.hpp>
 
+#include "id/fare.hpp"
 #include "id/route.hpp"
 #include "id/zone.hpp"
-#include "id/fare.hpp"
 
 namespace transit
 {

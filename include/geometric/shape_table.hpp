@@ -14,9 +14,9 @@ namespace geometric
 
 class ShapeTable
 {
-    public:
-        using iterator = std::vector<WGS84Coordinate>::const_iterator;
-        using iterator_range = boost::range::iterator_range<iterator>;
+  public:
+    using iterator = std::vector<WGS84Coordinate>::const_iterator;
+    using iterator_range = boost::range::iterator_range<iterator>;
 
         iterator_range get(
     private:

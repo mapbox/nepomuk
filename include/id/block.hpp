@@ -5,10 +5,10 @@
 
 namespace transit
 {
-    STRONG_ID_TYPE(std::uint64_t, BlockID)
+STRONG_ID_TYPE(std::uint64_t, BlockID)
 } // namespace transit
 
 // needs to be outside of transit namespace to ingest into std namespace
 STRONG_ID_TYPE_HASH(std::uint64_t, transit::BlockID)
 
-#endif //TRANSIT_ID_BLOCK_HPP_
+#endif // TRANSIT_ID_BLOCK_HPP_

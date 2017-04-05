@@ -2,9 +2,9 @@
 #define TRANSIT_ANNOTATION_STOP_INFO_HPP_
 
 #include "geometric/coordinate.hpp"
-#include "id/stop.hpp"
 #include "gtfs/stop.hpp"
 #include "id/dictionary.hpp"
+#include "id/stop.hpp"
 
 #include <vector>
 

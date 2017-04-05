@@ -4,10 +4,10 @@
 #include "timetable/timetable_factory.hpp"
 #include "timetable/transfer_table_factory.hpp"
 
+#include "gtfs/stop.hpp"
+#include "id/route.hpp"
 #include "id/stop.hpp"
 #include "id/trip.hpp"
-#include "id/route.hpp"
-#include "gtfs/stop.hpp"
 
 #include "algorithm/ranges.hpp"
 

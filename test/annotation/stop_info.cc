@@ -3,8 +3,8 @@
 
 #include "annotation/stop_info.hpp"
 #include "geometric/coordinate.hpp"
-#include "id/stop.hpp"
 #include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 
 #include "adaptor/dictionary.hpp"
 #include "tool/container/dictionary.hpp"

@@ -3,9 +3,9 @@
 #include "timetable/exceptions.hpp"
 #include "timetable/station_table_factory.hpp"
 
+#include "gtfs/stop.hpp"
 #include "id/dictionary.hpp"
 #include "id/stop.hpp"
-#include "gtfs/stop.hpp"
 #include <boost/optional.hpp>
 #include <cstdint>
 
