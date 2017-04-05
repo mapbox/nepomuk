@@ -10,8 +10,8 @@
 
 #include "id/agency.hpp"
 #include "id/dictionary.hpp"
-#include "tool/container/dictionary.hpp"
 #include "id/route.hpp"
+#include "tool/container/dictionary.hpp"
 
 namespace transit
 {

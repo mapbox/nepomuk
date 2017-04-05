@@ -6,8 +6,8 @@
 
 #include <boost/range/iterator_range.hpp>
 
-#include "id/stop.hpp"
 #include "gtfs/time.hpp"
+#include "id/stop.hpp"
 #include "timetable/stop_table.hpp"
 
 namespace transit

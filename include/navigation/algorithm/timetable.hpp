@@ -5,8 +5,8 @@
 #include "search/stop_to_line.hpp"
 #include "timetable/timetable.hpp"
 
-#include "id/stop.hpp"
 #include "gtfs/time.hpp"
+#include "id/stop.hpp"
 
 #include <boost/optional.hpp>
 

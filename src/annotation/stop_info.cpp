@@ -27,10 +27,7 @@ StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> &stops)
                    });
 }
 
-StopInfo StopInfoTable::get_info(StopID const stop_id) const
-{
-    return stop_info[stop_id.base()];
-}
+StopInfo StopInfoTable::get_info(StopID const stop_id) const { return stop_info[stop_id.base()]; }
 
 } // namespace annotation
 } // namespace transit

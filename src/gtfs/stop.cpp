@@ -34,8 +34,7 @@ Stop makeStop(std::map<std::string, std::size_t> const &header,
 
     return {
         construct<StopID>("stop_id", stringToID<StopID>, header, values),
-        construct<DictionaryID>(
-            "stop_name", DictionaryConverter(dictionary), header, values),
+        construct<DictionaryID>("stop_name", DictionaryConverter(dictionary), header, values),
         geometric::WGS84Coordinate(geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
                                    geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)),
         construct_as_optional<std::string, false>("stop_code", forward, header, values),

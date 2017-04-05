@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "tool/types_and_traits/strong_typedef.hpp"
 #include "id/dictionary.hpp"
+#include "tool/types_and_traits/strong_typedef.hpp"
 #include <boost/range/iterator_range.hpp>
 
 namespace transit

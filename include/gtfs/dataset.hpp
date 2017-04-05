@@ -16,11 +16,11 @@
 #include "gtfs/frequency.hpp"
 #include "gtfs/route.hpp"
 #include "gtfs/schedule.hpp"
-#include "id/service.hpp"
 #include "gtfs/shape.hpp"
 #include "gtfs/stop.hpp"
 #include "gtfs/transfer.hpp"
 #include "gtfs/trip.hpp"
+#include "id/service.hpp"
 
 #include "tool/container/dictionary.hpp"
 #include "tool/io/serialisation.hpp"

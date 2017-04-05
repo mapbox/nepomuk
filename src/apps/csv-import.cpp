@@ -2,8 +2,8 @@
 #include "gtfs/read_csv.hpp"
 
 #include "geometric/coordinate.hpp"
-#include "id/stop.hpp"
 #include "gtfs/time.hpp"
+#include "id/stop.hpp"
 
 #include "timetable/timetable.hpp"
 #include "timetable/timetable_factory.hpp"
