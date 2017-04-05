@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include <iterator>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -163,6 +164,28 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
     for (std::size_t bucket_id = 0; bucket_id < stops_by_id.bucket_count(); ++bucket_id)
         group_close_points(
             boost::make_iterator_range(stops_by_id.begin(bucket_id), stops_by_id.end(bucket_id)));
+}
+
+tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_index_vector()
+{
+    // why are you calling me without checking anyhow! ;)
+    if (!shapes)
+        return {};
+
+    std::sort(shapes->begin(), shapes->end(), [](auto const &lhs, auto const &rhs) {
+        return std::tie(lhs.id, lhs.sequence_id) < std::tie(rhs.id, rhs.sequence_id);
+    });
+
+    tool::container::IndexedVector<geometric::WGS84Coordinate> result;
+    result.reserve(shapes->size());
+
+    // groupe coordinates by their shape_id as category
+    auto const add_to_result = [&result](auto const &shape) {
+        result.push_back(shape.id.base(), shape.location);
+    };
+    std::for_each(shapes->begin(), shapes->end(), add_to_result);
+
+    return result;
 }
 
 } // namespace gtfs
