@@ -23,6 +23,7 @@
 #include "id/service.hpp"
 
 #include "tool/container/dictionary.hpp"
+#include "tool/container/indexed_vector.hpp"
 #include "tool/io/serialisation.hpp"
 #include "tool/io/stream_errors.hpp"
 
@@ -64,6 +65,10 @@ struct Dataset
     // into stations. This function allows to pass over the available stops and set parent stations
     // for stops that are close to each other and offer the same name.
     void connect_stops_into_stations(std::uint32_t const proximity_requirement);
+
+    // for easy access into the geometry of routes, this function converts the internal shape
+    // information into an indexed vector of coordinates
+    tool::container::IndexedVector<geometric::WGS84Coordinate> shapes_as_index_vector();
 };
 
 template <class result_type, class converter_operator, class csv_decoder>
