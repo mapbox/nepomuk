@@ -16,9 +16,9 @@ Shape makeShape(std::map<std::string, std::size_t> const &header, std::vector<st
 {
     const auto dist_traveled_or_empty =
         construct<std::string>("shape_dist_traveled", forward, header, values);
-    boost::optional<double> dist_traveled =
-        dist_traveled_or_empty.empty() ? boost::none
-                                       : boost::optional<double>(std::stof(dist_traveled_or_empty));
+    boost::optional<double> dist_traveled = boost::none;
+    if (!dist_traveled_or_empty.empty())
+        dist_traveled = std::stof(dist_traveled_or_empty);
 
     const double lat = std::stof(construct<std::string>("shape_pt_lat", forward, header, values));
     const double lon = std::stof(construct<std::string>("shape_pt_lon", forward, header, values));
