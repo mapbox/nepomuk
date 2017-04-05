@@ -3,9 +3,8 @@
 
 #include "tool/container/kary_heap.hpp"
 
-#include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
+#include "id/stop.hpp"
 
 #include <utility>
 
@@ -22,12 +21,11 @@ TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
 {
 }
 
-boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
-                                                    gtfs::StopID const origin,
-                                                    gtfs::StopID const destination) const
+boost::optional<Trip> TimeTableDijkstra::
+operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const
 {
-    using FourHeap = tool::container::
-        KAryHeap<gtfs::StopID, gtfs::Time, 4, std::pair<gtfs::StopID, timetable::LineID>>;
+    using FourHeap =
+        tool::container::KAryHeap<StopID, gtfs::Time, 4, std::pair<StopID, timetable::LineID>>;
     FourHeap heap;
 
     auto const destination_station = time_table.station(destination);
@@ -36,9 +34,9 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
     // std::cout << " " << stop;
     // std::cout << std::endl;
 
-    auto const reach = [&](gtfs::StopID const stop,
+    auto const reach = [&](StopID const stop,
                            gtfs::Time const time,
-                           gtfs::StopID from_stop,
+                           StopID from_stop,
                            timetable::LineID on_line,
                            bool use_in_heap) {
         if (use_in_heap)
@@ -128,7 +126,7 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
     for (auto start : time_table.stops(time_table.station(origin)))
         heap.insert(start, departure, std::make_pair(start, timetable::LineID{0}));
 
-    gtfs::StopID reached_destination = destination;
+    StopID reached_destination = destination;
 
     // relax by lines, in order of hops
     while (!heap.empty())
@@ -156,7 +154,7 @@ boost::optional<Trip> TimeTableDijkstra::operator()(gtfs::Time const departure,
 
     struct ReachedOnPath
     {
-        gtfs::StopID stop_id;
+        StopID stop_id;
         gtfs::Time arrival;
         timetable::LineID line_id;
     };

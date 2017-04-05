@@ -4,6 +4,7 @@
 #include "timetable/exceptions.hpp"
 #include "timetable/transfer_table_factory.hpp"
 
+using namespace transit;
 using namespace transit::timetable;
 using namespace transit::gtfs;
 

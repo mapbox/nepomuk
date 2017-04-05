@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "tool/types_and_traits/strong_typedef.hpp"
+#include "id/dictionary.hpp"
 #include <boost/range/iterator_range.hpp>
 
 namespace transit
@@ -20,8 +21,6 @@ namespace tool
 {
 namespace container
 {
-
-STRONG_ID_TYPE(std::uint64_t, DictionaryID)
 
 class Dictionary
 {
@@ -62,6 +61,4 @@ class Dictionary
 } // namespace tool
 } // namespace transit
 
-// needs to be outside of namespaces to inject into std namespace
-STRONG_ID_TYPE_HASH(std::uint64_t,transit::tool::container::DictionaryID)
 #endif // TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_

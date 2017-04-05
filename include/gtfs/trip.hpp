@@ -7,19 +7,18 @@
 #include <vector>
 
 #include "gtfs/accessibility.hpp"
-#include "gtfs/route.hpp"
-#include "gtfs/service.hpp"
-#include "gtfs/shape.hpp"
+#include "id/block.hpp"
+#include "id/dictionary.hpp"
+#include "id/route.hpp"
+#include "id/service.hpp"
+#include "id/shape.hpp"
+#include "id/trip.hpp"
 #include "tool/container/dictionary.hpp"
-#include "tool/types_and_traits/strong_typedef.hpp"
 
 namespace transit
 {
 namespace gtfs
 {
-
-STRONG_ID_TYPE(std::uint64_t, TripID)
-STRONG_ID_TYPE(std::uint64_t, BlockID)
 
 enum class TripDirection
 {
@@ -42,8 +41,8 @@ struct Trip
     ServiceID service_id;
 
     // optional additional features
-    boost::optional<tool::container::DictionaryID> headsign;
-    boost::optional<tool::container::DictionaryID> short_name;
+    boost::optional<DictionaryID> headsign;
+    boost::optional<DictionaryID> short_name;
     boost::optional<TripDirection> direction;
     boost::optional<BlockID> block_id; // same block == transfer without changing cars
     boost::optional<ShapeID> shape_id;
@@ -59,7 +58,4 @@ Trip makeTrip(std::map<std::string, std::size_t> const &header,
 } // namespace gtfs
 } // namespace transit
 
-// needs to be outside of namespaces
-STRONG_ID_TYPE_HASH(std::uint64_t, transit::gtfs::TripID)
-STRONG_ID_TYPE_HASH(std::uint64_t, transit::gtfs::BlockID)
 #endif // TRANSIT_GTFS_TRIP_HPP_

@@ -25,7 +25,7 @@ io::container::Dictionary_proto Dictionary::encode(tool::container::Dictionary c
     auto const to_entry = [&dictionary](auto const &value) {
         io::container::DictionaryEntry entry;
         entry.set_id(value.second);
-        auto const &display = dictionary.get_string(tool::container::DictionaryID{value.second});
+        auto const &display = dictionary.get_string(DictionaryID{value.second});
         entry.set_display(display);
 
         if (display != value.first)

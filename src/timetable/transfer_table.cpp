@@ -5,7 +5,7 @@ namespace transit
 namespace timetable
 {
 
-TransferTable::iterator_range TransferTable::get(gtfs::StopID const stop_id) const
+TransferTable::iterator_range TransferTable::get(StopID const stop_id) const
 {
     auto range_itr = index.find(stop_id);
     if (range_itr == index.end())

@@ -1,7 +1,7 @@
 #include "timetable/graph_adaptor.hpp"
 #include "tool/container/forward_star_graph_factory.hpp"
 
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 #include "gtfs/time.hpp"
 
 #include "tool/status/progress.hpp"
@@ -22,7 +22,7 @@ void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
 {
     for (std::size_t stop = 0; stop < timetable.num_stops(); ++stop)
     {
-        auto const stop_id = transit::gtfs::StopID{static_cast<std::uint64_t>(stop)};
+        auto const stop_id = transit::StopID{static_cast<std::uint64_t>(stop)};
 
         auto const transfers = timetable.transfers(stop_id);
         on_transfers(transfers);

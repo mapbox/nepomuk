@@ -7,7 +7,7 @@ namespace transit
 namespace timetable
 {
 
-StopTable::const_iterator_range StopTable::list(gtfs::StopID const start_id) const
+StopTable::const_iterator_range StopTable::list(StopID const start_id) const
 {
     return boost::make_iterator_range(
         // locate the start_id within the stops

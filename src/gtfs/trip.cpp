@@ -46,9 +46,9 @@ Trip makeTrip(std::map<std::string, std::size_t> const &header,
         construct<TripID>("trip_id", stringToID<TripID>, header, values),
         construct<RouteID>("route_id", stringToID<RouteID>, header, values),
         construct<ServiceID>("service_id", stringToID<ServiceID>, header, values),
-        construct_as_optional<tool::container::DictionaryID, false>(
+        construct_as_optional<DictionaryID, false>(
             "trip_headsign", DictionaryConverter(dictionary), header, values),
-        construct_as_optional<tool::container::DictionaryID, false>(
+        construct_as_optional<DictionaryID, false>(
             "trip_short_name", DictionaryConverter(dictionary), header, values),
         construct_as_optional<TripDirection, true>("direction_id", to_direction, header, values),
         construct_as_optional<BlockID, false>("block_id", stringToID<BlockID>, header, values),

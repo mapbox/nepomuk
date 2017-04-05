@@ -1,7 +1,7 @@
 #ifndef TRANSIT_TIMETABLE_STATION_TABLE_HPP_
 #define TRANSIT_TIMETABLE_STATION_TABLE_HPP_
 
-#include "gtfs/stop.hpp"
+#include "id/stop.hpp"
 #include "tool/container/surjective_mapping.hpp"
 
 namespace transit
@@ -13,17 +13,17 @@ namespace timetable
 class StationTable
 {
   public:
-    using Lookup = tool::container::SurjectiveMapping<gtfs::StopID, gtfs::StopID>;
+    using Lookup = tool::container::SurjectiveMapping<StopID, StopID>;
 
     StationTable(Lookup stop_station_lookup);
     StationTable();
 
     // forward the wrapper mappings
-    auto stops(gtfs::StopID const station_id) const
+    auto stops(StopID const station_id) const
     {
         return stop_station_lookup.domain_mapping(station_id);
     }
-    auto station(gtfs::StopID const stop_id) const
+    auto station(StopID const stop_id) const
     {
         return stop_station_lookup.codomain_mapping(stop_id);
     }

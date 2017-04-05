@@ -2,9 +2,11 @@
 #include "timetable/duration_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 #include "timetable/stop_table_factory.hpp"
+#include "id/trip.hpp"
 
 using namespace transit::timetable;
 using namespace transit::gtfs;
+using namespace transit;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

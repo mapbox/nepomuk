@@ -4,20 +4,18 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <vector>
 
 #include <boost/optional.hpp>
 
-#include "gtfs/route.hpp"
-#include "gtfs/stop.hpp"
-#include "gtfs/zone.hpp"
-#include "tool/types_and_traits/strong_typedef.hpp"
+#include "id/route.hpp"
+#include "id/zone.hpp"
+#include "id/fare.hpp"
 
 namespace transit
 {
 namespace gtfs
 {
-
-STRONG_ID_TYPE(std::uint64_t, FareID)
 
 using CurrencyCode = std::string;
 
@@ -68,6 +66,4 @@ FareRule makeFareRule(std::map<std::string, std::size_t> const &header,
 } // namespace gtfs
 } // namespace transit
 
-// needs to be outside of namespaces
-STRONG_ID_TYPE_HASH(std::uint64_t, transit::gtfs::FareID)
 #endif // TRANSIT_GTFS_FARE_HPP_

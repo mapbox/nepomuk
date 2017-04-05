@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "gtfs/date.hpp"
-#include "gtfs/service.hpp"
+#include "id/service.hpp"
 
 namespace transit
 {

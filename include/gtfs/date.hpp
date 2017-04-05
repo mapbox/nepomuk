@@ -1,8 +1,6 @@
 #ifndef TRANSIT_GTFS_DATE_HPP_
 #define TRANSIT_GTFS_DATE_HPP_
 
-#include "gtfs/service.hpp"
-
 #include <cstdint>
 #include <string>
 

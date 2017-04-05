@@ -72,7 +72,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
         auto processed_until = range.first;
         while (processed_until != range.second)
         {
-            std::set<gtfs::StopID> distinct_stops;
+            std::set<StopID> distinct_stops;
             auto const check_and_add = [&distinct_stops](auto const &stop_time) {
                 auto non_distinct = distinct_stops.count(stop_time.stop_id) > 0;
                 distinct_stops.insert(stop_time.stop_id);

@@ -1,9 +1,9 @@
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/leg.hpp"
 
-#include "gtfs/stop.hpp"
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
+#include "id/stop.hpp"
+#include "id/trip.hpp"
 
 #include <algorithm>
 #include <limits>
@@ -23,24 +23,23 @@ TimeTable::TimeTable(timetable::TimeTable const &time_table, search::StopToLine 
 {
 }
 
-boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
-                                            gtfs::StopID const origin,
-                                            gtfs::StopID const destination) const
+boost::optional<Trip> TimeTable::
+operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const
 {
     struct State
     {
-        gtfs::StopID stop_id;
+        StopID stop_id;
         gtfs::Time arrival;
     };
 
     struct ReachedState
     {
         gtfs::Time arrival;
-        gtfs::StopID parent;
+        StopID parent;
         timetable::LineID line_id;
     };
 
-    std::unordered_map<gtfs::StopID, ReachedState> earliest_arrival;
+    std::unordered_map<StopID, ReachedState> earliest_arrival;
 
     std::queue<State> que;
 
@@ -53,7 +52,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
     }
 
     gtfs::Time upper_bound;
-    gtfs::StopID reached_destination = destination;
+    StopID reached_destination = destination;
     upper_bound = upper_bound + std::numeric_limits<std::uint32_t>::max();
     // relax by lines, in order of hops
     while (!que.empty())
@@ -73,9 +72,9 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
         });
 
         auto const destination_station = time_table.station(destination);
-        auto const add_if_improved = [&](gtfs::StopID const stop,
+        auto const add_if_improved = [&](StopID const stop,
                                          gtfs::Time const time,
-                                         gtfs::StopID const parent,
+                                         StopID const parent,
                                          timetable::LineID const line) {
             if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
             {
@@ -150,7 +149,7 @@ boost::optional<Trip> TimeTable::operator()(gtfs::Time const departure,
 
     struct ReachedOnPath
     {
-        gtfs::StopID stop_id;
+        StopID stop_id;
         gtfs::Time arrival;
         timetable::LineID line_id;
     };

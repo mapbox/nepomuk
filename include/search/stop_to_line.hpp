@@ -6,8 +6,7 @@
 
 #include "timetable/line_table.hpp"
 
-#include "gtfs/stop.hpp"
-#include "gtfs/trip.hpp"
+#include "id/stop.hpp"
 
 namespace transit
 {
@@ -25,7 +24,7 @@ class StopToLine
     using iterator = std::vector<timetable::LineID>::const_iterator;
     using iterator_range = boost::iterator_range<iterator>;
 
-    iterator_range operator()(gtfs::StopID stop) const;
+    iterator_range operator()(StopID stop) const;
 
     // the size of the look-up in number of stops
     auto size() const { return trip_table.size(); }

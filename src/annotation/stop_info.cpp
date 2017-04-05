@@ -23,13 +23,13 @@ StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> &stops)
                    std::back_inserter(stop_info),
                    [this](auto const &stop) -> StopInfo {
                        BOOST_ASSERT(stop_info.size() == static_cast<std::uint64_t>(stop.id));
-                       return {stop.name, stop.location};
+                       return {stop.name.base(), stop.location};
                    });
 }
 
-StopInfo StopInfoTable::get_info(gtfs::StopID const stop_id) const
+StopInfo StopInfoTable::get_info(StopID const stop_id) const
 {
-    return stop_info[static_cast<std::uint64_t>(stop_id)];
+    return stop_info[stop_id.base()];
 }
 
 } // namespace annotation

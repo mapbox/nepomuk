@@ -6,9 +6,10 @@
 #include <cstdint>
 #include <map>
 #include <string>
+#include <vector>
 
 #include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
+#include "id/trip.hpp"
 
 namespace transit
 {

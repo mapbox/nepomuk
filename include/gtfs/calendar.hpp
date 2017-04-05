@@ -2,7 +2,7 @@
 #define TRANSIT_GTFS_CALENDAR_HPP_
 
 #include "gtfs/date.hpp"
-#include "gtfs/service.hpp"
+#include "id/service.hpp"
 
 #include <cstdint>
 #include <map>
