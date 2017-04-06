@@ -9,6 +9,9 @@
 
 #include "gtfs/stop.hpp"
 #include "gtfs/transfer.hpp"
+#include "gtfs/trip.hpp"
+
+#include <boost/optional.hpp>
 #include <vector>
 
 namespace transit
@@ -19,7 +22,9 @@ namespace timetable
 class LineTableFactory
 {
   public:
-    LineTableFactory(std::vector<gtfs::Transfer> &transfers);
+    LineTableFactory(std::vector<gtfs::Transfer> &transfers,
+                     std::vector<gtfs::Trip> const &trips,
+                     std::vector<boost::optional<ShapeID>> &shape_by_line);
 
     // create a line table from a list of stop_times
     std::vector<LineTable> produce(std::vector<gtfs::StopTime>::iterator const begin,
@@ -27,6 +32,10 @@ class LineTableFactory
 
   private:
     std::vector<gtfs::Transfer> &transfers;
+    // to look up shape ids
+    std::vector<gtfs::Trip> const &trips;
+    // to store mapping of shape ids
+    std::vector<boost::optional<ShapeID>> &shape_by_line;
 };
 
 } // namespace timetable

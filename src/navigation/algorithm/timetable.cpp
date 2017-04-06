@@ -2,6 +2,7 @@
 #include "navigation/leg.hpp"
 
 #include "gtfs/time.hpp"
+#include "id/line.hpp"
 #include "id/stop.hpp"
 #include "id/trip.hpp"
 
@@ -36,7 +37,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
     {
         gtfs::Time arrival;
         StopID parent;
-        timetable::LineID line_id;
+        LineID line_id;
     };
 
     std::unordered_map<StopID, ReachedState> earliest_arrival;
@@ -47,8 +48,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
     for (auto start : time_table.stops(time_table.station(origin)))
     {
         que.push({start, departure});
-        earliest_arrival[start] = {
-            departure, start, timetable::LineID{static_cast<std::uint64_t>(-1)}};
+        earliest_arrival[start] = {departure, start, WALKING_TRANSFER};
     }
 
     gtfs::Time upper_bound;
@@ -72,24 +72,22 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         });
 
         auto const destination_station = time_table.station(destination);
-        auto const add_if_improved = [&](StopID const stop,
-                                         gtfs::Time const time,
-                                         StopID const parent,
-                                         timetable::LineID const line) {
-            if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
-            {
-                if (time_table.station(stop) == destination_station && time < upper_bound)
+        auto const add_if_improved =
+            [&](StopID const stop, gtfs::Time const time, StopID const parent, LineID const line) {
+                if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
                 {
-                    upper_bound = time;
-                    reached_destination = stop;
+                    if (time_table.station(stop) == destination_station && time < upper_bound)
+                    {
+                        upper_bound = time;
+                        reached_destination = stop;
+                    }
+                    BOOST_ASSERT(parent != stop);
+                    earliest_arrival[stop] = {time, parent, line};
+                    return true;
                 }
-                BOOST_ASSERT(parent != stop);
-                earliest_arrival[stop] = {time, parent, line};
-                return true;
-            }
-            else
-                return false;
-        };
+                else
+                    return false;
+            };
 
         for (auto state : this_round)
         {
@@ -127,7 +125,8 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
                         for (auto transfer : transfers)
                         {
                             auto transfer_time = time + std::max<int>(transfer.duration, 60);
-                            if (add_if_improved(transfer.stop_id, transfer_time, stop_id, {0}) ||
+                            if (add_if_improved(
+                                    transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER) ||
                                 (transfer.stop_id == stop_id))
                             {
                                 // needs to be a transfer line instead of 0
@@ -151,7 +150,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
     {
         StopID stop_id;
         gtfs::Time arrival;
-        timetable::LineID line_id;
+        LineID line_id;
     };
     std::vector<ReachedOnPath> path;
     auto current_stop = reached_destination;
@@ -179,11 +178,14 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         if (itr->line_id != current_line)
         {
             add_leg(result, std::move(leg));
-            current_line = itr->line_id;
+            BOOST_ASSERT(itr + 1 != path.end());
+            current_line = (itr+1)->line_id;
             leg = Leg();
+            set_line(leg,current_line);
             set_departure(leg, itr->arrival);
             // add the location of the step again
-            add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
+            if( itr->line_id != WALKING_TRANSFER )
+                add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
         }
         add_stop(leg, Leg::stop_type{itr->stop_id, itr->arrival});
     }

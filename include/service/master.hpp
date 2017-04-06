@@ -4,12 +4,16 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
+
+#include <boost/optional.hpp>
 
 #include "gtfs/dataset.hpp"
 #include "service/interface.hpp"
 
 // the basic timetable
 #include "timetable/timetable.hpp"
+#include "timetable/segment_table.hpp"
 
 // look-ups
 #include "search/coordinate_to_stop.hpp"
@@ -59,6 +63,7 @@ class Master
 
     // plain data
     tool::container::StringTable const &dictionary();
+    timetable::SegmentTable const& segment_table();
 
     // annotation
     annotation::Trip const &trip_annotation();
@@ -69,6 +74,7 @@ class Master
 
   private:
     gtfs::Dataset base_data;
+    std::unique_ptr<std::vector<boost::optional<ShapeID>>> shape_from_line;
 
     // timetable
     std::unique_ptr<timetable::TimeTable> _timetable;
@@ -79,6 +85,7 @@ class Master
 
     // plain data
     std::unique_ptr<tool::container::StringTable> _dictionary;
+    std::unique_ptr<timetable::SegmentTable> _segment_table;
 
     // annotation
     std::unique_ptr<annotation::Trip> _trip_annotation;

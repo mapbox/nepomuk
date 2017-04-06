@@ -37,6 +37,7 @@ BOOST_AUTO_TEST_CASE(check_basic_id_functionality)
 
     checkIDType<transit::AgencyID>();
     checkIDType<transit::FareID>();
+    checkIDType<transit::LineID>();
     checkIDType<transit::RouteID>();
     checkIDType<transit::SequenceID>();
     checkIDType<transit::ServiceID>();

@@ -2,6 +2,8 @@
 
 #include "gtfs/stop.hpp"
 
+#include "id/shape.hpp"
+
 namespace transit
 {
 namespace timetable

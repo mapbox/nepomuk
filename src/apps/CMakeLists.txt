@@ -16,6 +16,7 @@ target_link_libraries(csv-import
     transitgeometric
     transitnavigation
     transitsearch
+    transitservice
     transittimetable)
 
 target_include_directories(csv-import SYSTEM PUBLIC

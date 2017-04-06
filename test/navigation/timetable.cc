@@ -3,6 +3,8 @@
 #include "fixtures.h"
 #include <boost/test/unit_test.hpp>
 
+#include "id/shape.hpp"
+
 #include "gtfs/dataset.hpp"
 #include "gtfs/read_csv.hpp"
 #include "gtfs/time.hpp"
@@ -11,7 +13,9 @@
 #include "search/stop_to_line_factory.hpp"
 #include "timetable/timetable_factory.hpp"
 
+#include <boost/optional.hpp>
 #include <iterator>
+#include <vector>
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {
@@ -20,7 +24,8 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     transit::gtfs::CSVDiscSource source(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     auto dataset = transit::gtfs::readCSV(source);
 
-    auto const timetable = transit::timetable::TimeTableFactory::produce(dataset);
+    std::vector<boost::optional<transit::ShapeID>> shapes_by_line;
+    auto const timetable = transit::timetable::TimeTableFactory::produce(dataset, shapes_by_line);
     auto const trip_look_up =
         transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
 

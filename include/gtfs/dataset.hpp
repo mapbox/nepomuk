@@ -71,7 +71,7 @@ struct Dataset
 
     // for easy access into the geometry of routes, this function converts the internal shape
     // information into an indexed vector of coordinates
-    tool::container::IndexedVector<geometric::WGS84Coordinate> shapes_as_index_vector();
+    tool::container::IndexedVector<geometric::WGS84Coordinate> shapes_as_indexed_vector();
 };
 
 template <class result_type, class converter_operator, class csv_decoder>

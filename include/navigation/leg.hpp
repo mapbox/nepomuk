@@ -8,6 +8,7 @@
 
 #include "gtfs/time.hpp"
 #include "id/stop.hpp"
+#include "id/line.hpp"
 #include "timetable/stop_table.hpp"
 
 namespace transit
@@ -34,8 +35,10 @@ class Leg
 
     boost::iterator_range<iterator> list() const;
     gtfs::Time departure() const;
+    LineID line() const;
 
   private:
+    LineID _line;
     gtfs::Time _departure;
     // the stops along the leg
     std::vector<stop_type> stops;

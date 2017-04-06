@@ -12,5 +12,7 @@ boost::iterator_range<Leg::iterator> Leg::list() const
 
 gtfs::Time Leg::departure() const { return _departure; }
 
+LineID Leg::line() const { return _line; }
+
 } // namespace navigation
 } // namespace transit

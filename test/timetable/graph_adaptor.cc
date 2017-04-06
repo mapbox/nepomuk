@@ -7,7 +7,7 @@
 #include "gtfs/dataset.hpp"
 #include "gtfs/read_csv.hpp"
 
-#include "search/stop_to_line_factory.hpp"
+#include "service/master.hpp"
 
 using namespace transit::timetable;
 using namespace transit::gtfs;
@@ -18,12 +18,10 @@ using namespace transit::gtfs;
 
 BOOST_AUTO_TEST_CASE(adapt_fixture)
 {
-    transit::gtfs::CSVDiscSource source(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
-    auto dataset = transit::gtfs::readCSV(source);
-    auto const timetable = transit::timetable::TimeTableFactory::produce(dataset);
+    transit::service::Master master_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
+    auto const timetable = master_service.timetable();
 
-    auto const trip_look_up =
-        transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
+    auto const trip_look_up = master_service.stop_to_line();
 
     auto graph = TimetableToGraphAdaptor::adapt(timetable, trip_look_up);
 

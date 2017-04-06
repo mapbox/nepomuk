@@ -9,17 +9,16 @@
 
 #include "search/stop_to_line_factory.hpp"
 #include "timetable/timetable_factory.hpp"
+#include "service/master.hpp"
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {
     // This needs to be replaced by a dedicated fixture (see
     // https://github.com/mapbox/directions-transit/issues/37)
-    transit::gtfs::CSVDiscSource source(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
-    auto dataset = transit::gtfs::readCSV(source);
+    transit::service::Master master_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
 
-    auto const timetable = transit::timetable::TimeTableFactory::produce(dataset);
-    auto const trip_look_up =
-        transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
+    auto const timetable = master_service.timetable();
+    auto const trip_look_up = master_service.stop_to_line();
 
     auto trips = trip_look_up(transit::StopID{1});
     for (auto tid : trips)

@@ -2,6 +2,7 @@ set(searchLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
         transitsearch
+        transitservice
         transittimetable
         transitgtfs)
 

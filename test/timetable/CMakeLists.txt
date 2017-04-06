@@ -1,6 +1,7 @@
 set(timetableLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
+        transitservice
         transittimetable
         transitgtfs)
 

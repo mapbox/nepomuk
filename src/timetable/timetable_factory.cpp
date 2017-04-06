@@ -103,7 +103,8 @@ void produceByEqualRangesVector(std::vector<result_type> &output,
 
 } // namespace
 
-TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
+TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
+                                    std::vector<boost::optional<ShapeID>> &shape_from_line)
 {
     TimeTable result;
 
@@ -118,7 +119,7 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
         if (!dataset.transfers)
             dataset.transfers = std::vector<gtfs::Transfer>();
 
-        LineTableFactory factory(*dataset.transfers);
+        LineTableFactory factory(*dataset.transfers, dataset.trips, shape_from_line);
         produceByEqualRangesVector(
             result.line_tables,
             dataset.stop_times,
@@ -143,13 +144,6 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset)
 
     if (dataset.transfers)
     {
-        /*
-        std::sort(dataset.transfers->begin(),
-                  dataset.transfers->end(),
-                  [](auto const &lhs, auto const &rhs) { return lhs.from < rhs.from; });
-        result.transfer_table =
-            TransferTableFactory::produce(dataset.transfers->begin(), dataset.transfers->end());
-        */
         // sorts internally
         result.transfer_table = TransferTableFactory::produce(dataset.transfers->begin(),
                                                               dataset.transfers->end(),

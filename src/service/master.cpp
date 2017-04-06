@@ -16,6 +16,7 @@
 
 #include <utility>
 #include <vector>
+#include <boost/assert.hpp>
 
 namespace transit
 {
@@ -67,8 +68,9 @@ timetable::TimeTable const &Master::timetable()
     if (!_timetable)
     {
         tool::status::FunctionTimingGuard guard("Timetable creation");
-        _timetable =
-            std::make_unique<timetable::TimeTable>(timetable::TimeTableFactory::produce(base_data));
+        shape_from_line = std::make_unique<std::vector<boost::optional<ShapeID>>>();
+        _timetable = std::make_unique<timetable::TimeTable>(
+            timetable::TimeTableFactory::produce(base_data, *shape_from_line));
     }
 
     return *_timetable;
@@ -120,12 +122,27 @@ tool::container::StringTable const &Master::dictionary()
     return *_dictionary;
 }
 
+timetable::SegmentTable const &Master::segment_table()
+{
+    if (!_segment_table)
+    {
+        tool::status::FunctionTimingGuard guard("Segment Table Creation");
+        _segment_table =
+            std::make_unique<timetable::SegmentTable>(base_data.shapes_as_indexed_vector());
+    }
+    return *_segment_table;
+}
+
+// annotation
 annotation::StopInfoTable const &Master::stop_info_annotation()
 {
     if (!_stop_info_annotation)
     {
         tool::status::FunctionTimingGuard guard("Stop Info Annotation creation");
-        _stop_info_annotation = std::make_unique<annotation::StopInfoTable>(base_data.stops);
+        auto const &ttable = timetable();
+        BOOST_ASSERT(shape_from_line);
+        _stop_info_annotation = std::make_unique<annotation::StopInfoTable>(
+            base_data.stops, *shape_from_line, segment_table(), ttable.lines());
     }
 
     return *_stop_info_annotation;

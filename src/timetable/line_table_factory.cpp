@@ -50,7 +50,12 @@ void interpolate_times(iterator_type begin, const iterator_type end)
 
 } // namspace
 
-LineTableFactory::LineTableFactory(std::vector<gtfs::Transfer> &transfers) : transfers(transfers) {}
+LineTableFactory::LineTableFactory(std::vector<gtfs::Transfer> &transfers,
+                                   std::vector<gtfs::Trip> const &trips,
+                                   std::vector<boost::optional<ShapeID>> &shape_by_line)
+    : transfers(transfers), trips(trips), shape_by_line(shape_by_line)
+{
+}
 
 std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::iterator const begin,
                                                  std::vector<gtfs::StopTime>::iterator const end)
@@ -91,7 +96,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                 transfers.push_back(std::move(transfer));
             }
 
-            auto const line_index = [&line_tables, stop_table]() {
+            auto const line_index = [this, &range, &line_tables, stop_table]() {
                 auto const itr =
                     std::find_if(line_tables.begin(), line_tables.end(), [&](auto const &line) {
                         return line.stop_table == stop_table;
@@ -100,6 +105,8 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                 if (itr == line_tables.end())
                 {
                     line_tables.push_back(LineTable());
+                    // remember the trips shape id for later
+                    shape_by_line.push_back(trips[range.first->trip_id.base()].shape_id);
                     line_tables.back().stop_table = stop_table;
                     return line_tables.size() - 1;
                 }
