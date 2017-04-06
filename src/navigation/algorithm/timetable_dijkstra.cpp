@@ -24,8 +24,7 @@ TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
 boost::optional<Trip> TimeTableDijkstra::
 operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const
 {
-    using FourHeap =
-        tool::container::KAryHeap<StopID, gtfs::Time, 4, std::pair<StopID, LineID>>;
+    using FourHeap = tool::container::KAryHeap<StopID, gtfs::Time, 4, std::pair<StopID, LineID>>;
     FourHeap heap;
 
     auto const destination_station = time_table.station(destination);
@@ -165,8 +164,8 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
     Leg leg;
     if (path.size() > 1)
         path[0].line_id = path[1].line_id;
-    set_departure(leg,path[0].arrival);
-    set_line(leg,path[0].line_id);
+    set_departure(leg, path[0].arrival);
+    set_line(leg, path[0].line_id);
 
     auto current_line = path[0].line_id;
     for (auto itr = path.begin(); itr != path.end(); ++itr)
@@ -174,12 +173,18 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         if (itr->line_id != current_line)
         {
             add_leg(result, std::move(leg));
-            BOOST_ASSERT(itr+1 != path.end());
-            current_line = (itr+1)->line_id;
             leg = Leg();
-            set_line(leg,current_line);
+            if (itr + 1 != path.end())
+            {
+                current_line = (itr + 1)->line_id;
+            }
+            else
+            {
+                current_line = WALKING_TRANSFER;
+            }
+            set_line(leg, current_line);
             set_departure(leg, itr->arrival);
-            if( itr->line_id != WALKING_TRANSFER )
+            if (itr->line_id != WALKING_TRANSFER)
                 add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
         }
         add_stop(leg, Leg::stop_type{itr->stop_id, itr->arrival});

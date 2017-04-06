@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(render_tiles)
     service::Master master_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
 
     service::Tile tileservice(master_service);
-    service::ServiceParameters parameters = service::TileParameters(1 << 11, 1 << 11, 12);
+    service::ServiceParameters parameters = service::TileParameters(16384, 16383, 15);
     service::ServiceParameters invalid_parameters = service::TileParameters(1 << 10, 1 << 10, 11);
     service::ServiceParameters empty_parameters = service::TileParameters(0, 0, 12);
 

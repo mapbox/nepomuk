@@ -14,9 +14,9 @@
 
 #include "tool/status/progress.hpp"
 
+#include <boost/assert.hpp>
 #include <utility>
 #include <vector>
-#include <boost/assert.hpp>
 
 namespace transit
 {

@@ -173,18 +173,27 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         path[0].line_id = path[1].line_id;
 
     auto current_line = path[0].line_id;
+    set_line(leg,current_line);
     for (auto itr = path.begin(); itr != path.end(); ++itr)
     {
         if (itr->line_id != current_line)
         {
             add_leg(result, std::move(leg));
-            BOOST_ASSERT(itr + 1 != path.end());
-            current_line = (itr+1)->line_id;
+
+            // currently ignores the last walking leg
+            if (itr + 1 != path.end())
+            {
+                current_line = (itr + 1)->line_id;
+            }
+            else
+            {
+                current_line = WALKING_TRANSFER;
+            }
             leg = Leg();
-            set_line(leg,current_line);
+            set_line(leg, current_line);
             set_departure(leg, itr->arrival);
             // add the location of the step again
-            if( itr->line_id != WALKING_TRANSFER )
+            if (itr->line_id != WALKING_TRANSFER)
                 add_stop(leg, Leg::stop_type{(itr - 1)->stop_id, (itr - 1)->arrival});
         }
         add_stop(leg, Leg::stop_type{itr->stop_id, itr->arrival});

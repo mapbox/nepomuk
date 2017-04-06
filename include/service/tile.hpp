@@ -6,6 +6,7 @@
 #include "search/stop_to_line.hpp"
 #include "service/interface.hpp"
 #include "service/master.hpp"
+#include "timetable/segment_table.hpp"
 #include "timetable/timetable.hpp"
 
 #include "adaptor/dictionary.hpp"
@@ -46,6 +47,8 @@ class Tile : public Interface
     // to request coordinates / names
     transit::tool::container::StringTable const &dictionary;
     annotation::StopInfoTable const &stop_info_annotation;
+    // the lines and their actual geometry
+    timetable::SegmentTable const &segment_table;
 
     algorithm::StronglyConnectedComponent const components;
 

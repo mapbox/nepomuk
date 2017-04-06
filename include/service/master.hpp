@@ -12,8 +12,8 @@
 #include "service/interface.hpp"
 
 // the basic timetable
-#include "timetable/timetable.hpp"
 #include "timetable/segment_table.hpp"
+#include "timetable/timetable.hpp"
 
 // look-ups
 #include "search/coordinate_to_stop.hpp"
@@ -63,7 +63,7 @@ class Master
 
     // plain data
     tool::container::StringTable const &dictionary();
-    timetable::SegmentTable const& segment_table();
+    timetable::SegmentTable const &segment_table();
 
     // annotation
     annotation::Trip const &trip_annotation();

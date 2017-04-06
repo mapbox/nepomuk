@@ -3,8 +3,8 @@
 
 #include <algorithm>
 #include <iterator>
-
-#include <fstream>
+#include <set>
+#include <tuple>
 
 namespace transit
 {
@@ -15,7 +15,7 @@ Tile::Tile(service::Master &master_service)
     : timetable(master_service.timetable()), stop_lookup(master_service.coordinate_to_stop()),
       stop_to_line(master_service.stop_to_line()), dictionary(master_service.dictionary()),
       stop_info_annotation(master_service.stop_info_annotation()),
-      components(master_service.components())
+      segment_table(master_service.segment_table()), components(master_service.components())
 {
 }
 
@@ -60,6 +60,9 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
 {
 
     auto connection_layer = vector_tile.new_layer("lines");
+
+    std::set<std::tuple<StopID, StopID, ShapeID>> added_shapes;
+
     for (auto const stop : stops)
     {
         auto const lines = stop_to_line(stop);
@@ -68,10 +71,55 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
             auto const stop_range = timetable.line(line_id).stops().list(stop);
             if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             {
-                std::vector<geometric::WGS84Coordinate> line;
-                line.push_back(stop_info_annotation.get_info(*stop_range.begin()).location);
-                line.push_back(stop_info_annotation.get_info(*(stop_range.begin() + 1)).location);
-                connection_layer.add_line(line, {});
+                // find the appropriate line id in both entries stop_info_annotation:
+                auto const from_stop = *stop_range.begin();
+                auto const to_stop = *(stop_range.begin() + 1);
+
+                auto const &from_info = stop_info_annotation.get_info(from_stop);
+                auto const &to_info = stop_info_annotation.get_info(to_stop);
+
+                auto const has_correct_line = [line_id](auto const &sol) {
+                    return sol.line_id == line_id;
+                };
+
+                auto itr_from = std::find_if(from_info.shape_offset_line.begin(),
+                                             from_info.shape_offset_line.end(),
+                                             has_correct_line);
+
+                auto itr_to = std::find_if(to_info.shape_offset_line.begin(),
+                                           to_info.shape_offset_line.end(),
+                                           has_correct_line);
+
+                if (itr_from != from_info.shape_offset_line.end() &&
+                    itr_to != to_info.shape_offset_line.end() && itr_from->offset != itr_to->offset)
+                {
+
+                    BOOST_ASSERT(itr_from->shape_id == itr_to->shape_id);
+                    auto from = std::min(itr_from->offset, itr_to->offset);
+                    auto to = std::max(itr_from->offset, itr_to->offset);
+                    auto tuple = std::make_tuple(from_stop, to_stop, itr_from->shape_id);
+                    if (added_shapes.count(tuple))
+                        continue;
+
+                    // ask for an inclusive range (to is an actual valid value, not the end)
+                    auto range = segment_table.crange(itr_from->shape_id.base(), from, to + 1);
+
+                    std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
+                    connection_layer.add_line(line, {});
+                    added_shapes.insert(tuple);
+                }
+                else
+                {
+                    auto const tuple = std::make_tuple(
+                        from_stop, to_stop, ShapeID{static_cast<std::uint64_t>(-1)});
+                    if (added_shapes.count(tuple))
+                        continue;
+                    std::vector<geometric::WGS84Coordinate> line;
+                    line.push_back(from_info.location);
+                    line.push_back(to_info.location);
+                    connection_layer.add_line(line, {});
+                    added_shapes.insert(tuple);
+                }
             }
         }
     }

@@ -127,7 +127,7 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
     });
 
     auto const group_close_points = [&](auto bucket) {
-        if (std::distance(bucket.begin(), bucket.end()) > 1)
+        if (static_cast<std::size_t>(std::distance(bucket.begin(), bucket.end())) > 1)
         {
             auto const has_parent_station = [&](auto const &pair_name_offset) -> bool {
                 return stops[pair_name_offset.second].parent_station != boost::none;
@@ -199,6 +199,8 @@ tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_in
 
     // groupe coordinates by their shape_id as category
     auto const add_to_result = [&result](auto const &shape) {
+        // it's either the same size, or one less, otherwise the id hashing went wrong
+        BOOST_ASSERT((result.category_size() - shape.id.base()) <= 1);
         result.push_back(shape.id.base(), shape.location);
     };
     std::for_each(shapes->begin(), shapes->end(), add_to_result);

@@ -23,7 +23,6 @@ StopID CoordinateToStop::nearest(geometric::WGS84Coordinate const &location) con
                    geometric::distance(rhs.first, location);
         });
 
-    std::cout << "Found closest stop " << itr->second << " at " << itr->first << std::endl;
     return itr->second;
 }
 

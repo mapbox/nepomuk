@@ -32,14 +32,17 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto coordinate_lookup = make_coordinate_lookup();
 
     geometric::WGS84Coordinate coordinate(
-        geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0.01001),
-        geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0.0001));
+        geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0.00501),
+        geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0.00511));
 
     auto closest_stop = coordinate_lookup.nearest(coordinate);
     BOOST_CHECK_EQUAL(closest_stop, StopID{0});
 
-    geometric::WGS84Coordinate zero;
-    geometric::WGS84BoundingBox bbox(zero, coordinate);
+    geometric::WGS84Coordinate coordinate2(
+        geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0.004),
+        geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0.005));
+
+    geometric::WGS84BoundingBox bbox(coordinate2, coordinate);
 
     auto all = coordinate_lookup.all(bbox);
     BOOST_CHECK(all.size() == 1);
