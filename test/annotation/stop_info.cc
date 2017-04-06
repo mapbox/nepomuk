@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(annotate_stops)
     transit::adaptor::Dictionary::decode_into(table,
                                               transit::adaptor::Dictionary::encode(dictionary));
 
-    StopInfoTable stop_info(stops,{},{},{});
+    StopInfoTable stop_info(stops, {}, {}, {});
 
     auto first = stop_info.get_info(StopID{0ull});
     BOOST_CHECK_EQUAL(first.location, coordinate);

@@ -7,12 +7,12 @@
 #include "id/line.hpp"
 #include "id/shape.hpp"
 #include "id/stop.hpp"
-#include "timetable/segment_table.hpp"
 #include "timetable/line_table.hpp"
+#include "timetable/segment_table.hpp"
 
+#include <boost/optional.hpp>
 #include <cstddef>
 #include <vector>
-#include <boost/optional.hpp>
 
 namespace transit
 {

@@ -8,8 +8,8 @@
 #include "gtfs/time.hpp"
 
 #include "search/stop_to_line_factory.hpp"
-#include "timetable/timetable_factory.hpp"
 #include "service/master.hpp"
+#include "timetable/timetable_factory.hpp"
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {

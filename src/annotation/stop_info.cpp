@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <iterator>
 
+#include <boost/assert.hpp>
+
 namespace transit
 {
 namespace annotation
@@ -20,7 +22,6 @@ StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> const &stops,
     // set the names
     std::transform(
         stops.begin(), stops.end(), stop_info.begin(), [this](auto const &stop) -> StopInfo {
-            BOOST_ASSERT(stop_info.size() == static_cast<std::uint64_t>(stop.id));
             return {stop.name.base(), stop.location, {}};
         });
 
@@ -30,6 +31,7 @@ StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> const &stops,
         if (shape_from_line[index])
         {
             auto const shape_index = shape_from_line[index]->base();
+            BOOST_ASSERT(shape_index < segments.category_size());
             auto range = segments.crange(shape_index);
             auto itr = range.begin();
             for (auto stop : line_table.stops().list())
@@ -38,6 +40,7 @@ StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> const &stops,
                     return geometric::distance(stop_info[stop.base()].location, lhs) <
                            geometric::distance(stop_info[stop.base()].location, rhs);
                 });
+                BOOST_ASSERT(stop.base() < stop_info.size());
                 stop_info[stop.base()].shape_offset_line.push_back(
                     {shape_index,
                      static_cast<std::size_t>(std::distance(range.begin(), itr)),

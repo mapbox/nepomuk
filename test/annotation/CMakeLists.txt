@@ -4,7 +4,8 @@ set(annotationLIBS
         transitgtfs
         transitadaptor
         transittimetable
-        transittool)
+        transittool
+        transitgtfs)
 
 set(annotationINCLUDES
         ${Boost_INCLUDE_DIRS}

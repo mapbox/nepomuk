@@ -2,8 +2,8 @@
 #define TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
 
 #include "gtfs/time.hpp"
-#include "id/stop.hpp"
 #include "id/line.hpp"
+#include "id/stop.hpp"
 #include "navigation/leg.hpp"
 #include "navigation/trip.hpp"
 

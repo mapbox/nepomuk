@@ -5,29 +5,26 @@
 
 #include "id/shape.hpp"
 
-#include "gtfs/dataset.hpp"
-#include "gtfs/read_csv.hpp"
 #include "gtfs/time.hpp"
 
 #include "navigation/algorithm/timetable.hpp"
-#include "search/stop_to_line_factory.hpp"
-#include "timetable/timetable_factory.hpp"
+#include "service/master.hpp"
 
 #include <boost/optional.hpp>
 #include <iterator>
 #include <vector>
 
+#include <iostream>
+
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {
     // This needs to be replaced by a dedicated fixture (see
     // https://github.com/mapbox/directions-transit/issues/37)
-    transit::gtfs::CSVDiscSource source(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
-    auto dataset = transit::gtfs::readCSV(source);
+    transit::service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
 
     std::vector<boost::optional<transit::ShapeID>> shapes_by_line;
-    auto const timetable = transit::timetable::TimeTableFactory::produce(dataset, shapes_by_line);
-    auto const trip_look_up =
-        transit::search::StopToLineFactory::produce(dataset.stops.size(), timetable);
+    auto const timetable = data_service.timetable();
+    auto const trip_look_up = data_service.stop_to_line();
 
     transit::navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
 
@@ -35,6 +32,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         timetable_router(transit::gtfs::Time("00:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(route->list().begin()->list().begin()->stop_id, transit::StopID{0});
+    BOOST_CHECK_EQUAL(route->list().begin()->line(),transit::LineID{0});
     route =
         timetable_router(transit::gtfs::Time("12:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)route);
