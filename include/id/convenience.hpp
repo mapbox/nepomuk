@@ -1,16 +1,17 @@
 #ifndef TRANSIT_ID_CONVENIENCE_HPP_
 #define TRANSIT_ID_CONVENIENCE_HPP_
 
-#include "agency.hpp"
-#include "block.hpp"
-#include "dictionary.hpp"
-#include "fare.hpp"
-#include "route.hpp"
-#include "sequence.hpp"
-#include "service.hpp"
-#include "shape.hpp"
-#include "stop.hpp"
-#include "trip.hpp"
-#include "zone.hpp"
+#include "id/agency.hpp"
+#include "id/block.hpp"
+#include "id/dictionary.hpp"
+#include "id/fare.hpp"
+#include "id/line.hpp"
+#include "id/route.hpp"
+#include "id/sequence.hpp"
+#include "id/service.hpp"
+#include "id/shape.hpp"
+#include "id/stop.hpp"
+#include "id/trip.hpp"
+#include "id/zone.hpp"
 
 #endif // TRANSIT_ID_CONVENIENCE_HPP_

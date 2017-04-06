@@ -2,6 +2,7 @@
 #define TRANSIT_TIMETABLE_HPP_
 
 #include "id/stop.hpp"
+#include "id/line.hpp"
 #include "timetable/line_table.hpp"
 #include "timetable/station_table.hpp"
 #include "timetable/transfer_table.hpp"
@@ -26,6 +27,7 @@ class TimeTable
   public:
     // get a line by its id
     LineTable const &line(LineID const &line) const;
+    std::vector<LineTable> const &lines() const;
 
     // get all proposed transfers at a stop
     TransferTable::iterator_range transfers(StopID const stop) const;

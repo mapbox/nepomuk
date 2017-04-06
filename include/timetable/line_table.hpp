@@ -6,7 +6,6 @@
 #include "timetable/duration_table.hpp"
 #include "timetable/stop_table.hpp"
 
-#include "tool/types_and_traits/strong_typedef.hpp"
 #include <boost/optional.hpp>
 #include <vector>
 
@@ -19,8 +18,6 @@ class StopToLineFactory;
 
 namespace timetable
 {
-
-STRONG_ID_TYPE(std::uint64_t, LineID)
 
 class LineTableFactory;
 

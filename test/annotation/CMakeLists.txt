@@ -3,6 +3,7 @@ set(annotationLIBS
         transitannotate
         transitgtfs
         transitadaptor
+        transittimetable
         transittool)
 
 set(annotationINCLUDES

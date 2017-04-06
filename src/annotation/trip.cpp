@@ -21,7 +21,7 @@ std::string Trip::operator()(navigation::Trip const &trip) const
     // Write out information about a trip
     for (auto const &leg : trip.list())
     {
-        oss << "[Leg]\n";
+        oss << "[Leg] Line: " << leg.line() << "\n";
         for (auto const &hold : leg.list())
         {
             auto const info = stop_info.get_info(hold.stop_id);

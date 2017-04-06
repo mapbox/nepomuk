@@ -184,7 +184,7 @@ void Dataset::ensure_ordered()
         std::stable_sort(shapes->begin(), shapes->end(), by_id);
 }
 
-tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_index_vector()
+tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_indexed_vector()
 {
     // why are you calling me without checking anyhow! ;)
     if (!shapes)

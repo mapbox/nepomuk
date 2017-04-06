@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "id/stop.hpp"
+#include "id/shape.hpp"
 
 #include <boost/range/iterator_range.hpp>
 

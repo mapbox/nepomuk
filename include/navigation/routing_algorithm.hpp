@@ -3,6 +3,7 @@
 
 #include "gtfs/time.hpp"
 #include "id/stop.hpp"
+#include "id/line.hpp"
 #include "navigation/leg.hpp"
 #include "navigation/trip.hpp"
 
@@ -24,6 +25,7 @@ class RoutingAlgorithm
     void add_leg(Trip &trip, Leg leg) const;
     void add_stop(Leg &leg, Leg::stop_type stop) const;
     void set_departure(Leg &leg, gtfs::Time time) const;
+    void set_line(Leg &leg, LineID line) const;
 };
 
 } // namespace navigation

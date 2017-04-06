@@ -19,8 +19,7 @@ StopToLine StopToLineFactory::produce(std::size_t const num_stops,
         // get stops of the line
         auto const &stop_table = timetable.line_tables[line_id].stop_table;
         auto const add_to_lookup = [&look_up, line_id](auto const stop_id) {
-            look_up.trip_table[static_cast<std::uint64_t>(stop_id)].push_back(
-                timetable::LineID{line_id});
+            look_up.trip_table[stop_id.base()].push_back(LineID{line_id});
         };
         std::for_each(stop_table.stops.begin(), stop_table.stops.end(), add_to_lookup);
     }
