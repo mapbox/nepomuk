@@ -1,6 +1,7 @@
 #include "gtfs/time.hpp"
 
 #include <boost/assert.hpp>
+#include <limits>
 #include <tuple>
 
 namespace transit
@@ -69,6 +70,12 @@ Time operator+(std::uint32_t seconds, Time rhs)
     rhs.seconds_since_midnight += seconds;
     return rhs;
 }
+Time operator-(Time lhs, std::uint32_t seconds)
+{
+    BOOST_ASSERT(seconds <= lhs.seconds_since_midnight);
+    lhs.seconds_since_midnight -= seconds;
+    return lhs;
+}
 
 std::ostream &operator<<(std::ostream &os, Time const &time)
 {
@@ -79,6 +86,13 @@ std::ostream &operator<<(std::ostream &os, Time const &time)
     os << hours << ":" << (minutes < 10 ? "0" : "") << minutes << ":" << (seconds < 10 ? "0" : "")
        << seconds;
     return os;
+}
+
+Time Time::infinity()
+{
+    Time time;
+    time.seconds_since_midnight = std::numeric_limits<std::uint32_t>::max();
+    return time;
 }
 
 } // namespace gtfs

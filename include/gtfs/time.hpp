@@ -29,8 +29,11 @@ class Time
     // shift time by seconds
     friend Time operator+(Time lhs, std::uint32_t seconds);
     friend Time operator+(std::uint32_t seconds, Time lhs);
+    friend Time operator-(Time lhs, std::uint32_t seconds);
 
     friend std::ostream &operator<<(std::ostream &os, Time const &time);
+
+    static Time infinity();
 };
 
 std::uint32_t operator-(Time const &lhs, Time const &rhs);

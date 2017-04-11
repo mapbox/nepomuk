@@ -78,12 +78,13 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
         while (processed_until != range.second)
         {
             std::set<StopID> distinct_stops;
-            auto const check_and_add = [&distinct_stops](auto const &stop_time) {
+            auto const add_stops_until_not_distinct = [&distinct_stops](auto const &stop_time) {
                 auto non_distinct = distinct_stops.count(stop_time.stop_id) > 0;
                 distinct_stops.insert(stop_time.stop_id);
                 return non_distinct;
             };
-            auto distinct_end = std::find_if(processed_until, range.second, check_and_add);
+            auto distinct_end =
+                std::find_if(processed_until, range.second, add_stops_until_not_distinct);
             auto stop_table = StopTableFactory::produce(processed_until, distinct_end);
 
             if (distinct_end != range.second)
@@ -108,6 +109,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                     // remember the trips shape id for later
                     shape_by_line.push_back(trips[range.first->trip_id.base()].shape_id);
                     line_tables.back().stop_table = stop_table;
+                    line_tables.back().time_deltas.resize(stop_table.list().size(), 0);
                     return line_tables.size() - 1;
                 }
                 else
@@ -136,6 +138,13 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
             line_tables[line_index].departures.departures.push_back(
                 {processed_until->departure, processed_until->departure, 0, duration_index});
 
+            // remember the maximum times for a segment
+            for (std::size_t time_index = 0; time_index < line_tables[line_index].time_deltas.size();
+                 ++time_index)
+                line_tables[line_index].time_deltas[time_index] =
+                    std::max(line_tables[line_index].time_deltas[time_index],
+                             duration_table.duration(time_index));
+
             processed_until = distinct_end;
         }
     };
@@ -144,9 +153,21 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
 
     // sort departures
     for (auto &line_table : line_tables)
+    {
         std::sort(line_table.departures.departures.begin(),
                   line_table.departures.departures.end(),
                   [](auto const &lhs, auto const &rhs) { return lhs.begin < rhs.begin; });
+        // turn maximum values into prefix sum
+        auto const to_prefix_sum = [sum = std::size_t{0}](auto const delta) mutable
+        {
+            sum += delta;
+            return sum;
+        };
+        std::transform(line_table.time_deltas.begin(),
+                       line_table.time_deltas.end(),
+                       line_table.time_deltas.begin(),
+                       to_prefix_sum);
+    }
 
     return line_tables;
 }

@@ -5,6 +5,16 @@ namespace transit
 namespace timetable
 {
 
+std::uint32_t DurationTable::prefix_time(std::size_t const offset) const
+{
+    return arrival_prefix[offset];
+}
+
+std::uint32_t DurationTable::duration(std::size_t const offset) const
+{
+    return arrival_delta[offset];
+}
+
 // list stations along the line, and their departure
 DurationTable::const_iterator_range DurationTable::list(std::size_t const offset) const
 {

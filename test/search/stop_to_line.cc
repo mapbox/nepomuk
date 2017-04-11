@@ -23,15 +23,10 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto trips = trip_look_up(transit::StopID{1});
     for (auto tid : trips)
     {
-        auto route = timetable.line(tid).get(transit::gtfs::Time("00:00:00"));
+        auto route = timetable.line(tid).get(transit::StopID{1}, transit::gtfs::Time("00:00:00"));
         BOOST_CHECK(route != boost::none);
 
-        auto stops = route->stop_table.list();
-        BOOST_CHECK(stops.end() != std::find_if(stops.begin(), stops.end(), [tid](auto const stop) {
-                        return stop == transit::StopID{1};
-                    }));
-
-        auto stops_from_searches = route->stop_table.list(transit::StopID{1});
-        BOOST_CHECK_EQUAL(*stops_from_searches.begin(), transit::StopID{1});
+        BOOST_CHECK(route->stop_range.size() > 0);
+        BOOST_CHECK_EQUAL(route->stop_range.front(),transit::StopID{1});
     }
 }

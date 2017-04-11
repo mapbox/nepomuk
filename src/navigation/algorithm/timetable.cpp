@@ -102,18 +102,16 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
             // get all lines at the given stop
             auto trip_range = stop_to_line(state.stop_id);
             auto const relax_line = [&](auto const line_id) {
-                auto const trip_optional = time_table.line(line_id).get(state.arrival);
+                auto const trip_optional =
+                    time_table.line(line_id).get(state.stop_id, state.arrival);
                 if (!trip_optional)
                     return;
 
                 auto const &trip = *trip_optional;
                 auto time = trip.departure;
-                auto const stop_range = trip.stop_table.list(state.stop_id);
-                auto const duration_range = trip.duration_table.list(
-                    std::distance(trip.stop_table.list().begin(), stop_range.begin()));
 
-                auto duration_itr = duration_range.begin();
-                for (auto stop_itr = stop_range.begin(); stop_itr != stop_range.end();
+                auto duration_itr = trip.duration_range.begin();
+                for (auto stop_itr = trip.stop_range.begin(); stop_itr != trip.stop_range.end();
                      ++stop_itr, ++duration_itr)
                 {
                     auto const stop_id = *stop_itr;
@@ -173,7 +171,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         path[0].line_id = path[1].line_id;
 
     auto current_line = path[0].line_id;
-    set_line(leg,current_line);
+    set_line(leg, current_line);
     for (auto itr = path.begin(); itr != path.end(); ++itr)
     {
         if (itr->line_id != current_line)

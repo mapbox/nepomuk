@@ -39,12 +39,15 @@ DurationTable DurationTableFactory::produce(std::vector<gtfs::StopTime>::iterato
 
     DurationTable result;
     result.arrival_delta.reserve(std::distance(begin, end));
+    result.arrival_prefix.reserve(std::distance(begin, end));
 
     // every stop is reached after X seconds, where X is
     // the different between the arrival at the
     // stop and the departure from the very first stop.
-    const auto to_delta = [base_time = begin->departure](auto const &stop_time) mutable
+    const auto to_delta = [ base_time = begin->departure, route_start = begin->departure, &result ](
+        auto const &stop_time) mutable
     {
+        result.arrival_prefix.push_back(stop_time.arrival - route_start);
         auto result = stop_time.arrival - base_time;
         base_time = stop_time.arrival;
         return result;
