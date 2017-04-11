@@ -23,23 +23,21 @@ class LineTableFactory;
 
 // A line table describes a line within the public transit network. It consists of a single entry of
 // stops serviced along the line. The line allows a series of departures and a list of arrivals that
-// can be computed via delta times relative to the departure at the very first station.
+// can be computed via delta times relative to the departure at the very first station. Within a
+// line, there cannot be any overtaking. A vehicle departing at time T will always arrive at the
+// last stop of the line before any vehicle departing at T + x
 class LineTable
 {
   public:
     struct Trip
     {
-        StopTable const &stop_table;
-        DurationTable const &duration_table;
+        StopTable::const_iterator_range const stop_range;
+        DurationTable::const_iterator_range const duration_range;
         gtfs::Time const departure;
-
-        Trip(StopTable const &stop_table,
-             DurationTable const &duration_table,
-             gtfs::Time const time);
     };
 
     // give access to the next departure of the given line
-    boost::optional<Trip> get(gtfs::Time const departure) const;
+    boost::optional<Trip> get(StopID const stop, gtfs::Time const departure) const;
 
     using stop_iterator = StopTable::const_iterator;
     using stop_iterator_range = StopTable::const_iterator_range;
@@ -50,6 +48,9 @@ class LineTable
     // the list of arrivals of a line
     StopTable stop_table;
     std::vector<DurationTable> duration_tables;
+    // the time delta required to reach stop_x (maximum), to get a good impression on what the
+    // desired base departure should be like for a time T (T-td -> departure table)
+    std::vector<std::uint32_t> time_deltas;
 
     // the list of departure times available
     DepartureTable departures;

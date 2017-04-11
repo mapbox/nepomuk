@@ -74,17 +74,12 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
 
     auto const run_trip = [&](auto const from_stop_id, auto const from_line_id, auto const &trip) {
         auto time = trip.departure;
-        auto const stop_range = trip.stop_table.list(from_stop_id);
-
-        if (std::distance(stop_range.begin(), stop_range.end()) == 0)
+        if (std::distance(trip.stop_range.begin(), trip.stop_range.end()) == 0)
             return;
 
-        auto const duration_range = trip.duration_table.list(
-            std::distance(trip.stop_table.list().begin(), stop_range.begin()));
-
         // iterator over all trips
-        auto duration_itr = duration_range.begin();
-        for (auto stop_itr = stop_range.begin(); stop_itr != stop_range.end();
+        auto duration_itr = trip.duration_range.begin();
+        for (auto stop_itr = trip.stop_range.begin(); stop_itr != trip.stop_range.end();
              ++stop_itr, ++duration_itr)
         {
             auto const stop_id = *stop_itr;
@@ -108,7 +103,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
     };
 
     auto const traverse_line = [&](auto const line_id, auto const stop_id, auto const time) {
-        auto const trip = time_table.line(line_id).get(time);
+        auto const trip = time_table.line(line_id).get(stop_id, time);
         if (trip)
             run_trip(stop_id, line_id, *trip);
     };

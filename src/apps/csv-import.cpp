@@ -34,10 +34,10 @@ int main(int argc, char **argv) try
     {
         auto coordinate_lookup = data_service.coordinate_to_stop();
 
-        navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
-                                                                  data_service.stop_to_line());
-        // navigation::algorithm::TimeTable timetable_router(data_service.timetable(),
-        // data_service.stop_to_line());
+        // navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
+        //                                                          data_service.stop_to_line());
+        navigation::algorithm::TimeTable timetable_router(data_service.timetable(),
+                                                          data_service.stop_to_line());
         auto stop_info = data_service.stop_info_annotation();
 
         auto to_coordinate = [](std::string const &line) {
