@@ -26,14 +26,16 @@ enum VectorTileValueType
 {
     BOOL,
     INT,
+    UINT,
     DOUBLE,
+    FLOAT,
     STRING
 };
 
 struct VectorTileValue
 {
     VectorTileValueType type;
-    boost::variant<bool, int, double, std::string> value;
+    boost::variant<bool, std::int64_t, std::uint64_t, double, float, std::string> value;
 
     // comparison so we can use a map
     bool operator==(VectorTileValue const &other) const;

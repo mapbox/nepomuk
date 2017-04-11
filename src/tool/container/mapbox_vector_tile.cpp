@@ -42,6 +42,7 @@ const constexpr std::uint32_t FEATURE_GEOMETRIES_TAG = 4;
 const constexpr std::uint32_t GEOMETRY_TYPE_POINT = 1;
 const constexpr std::uint32_t GEOMETRY_TYPE_LINE = 2;
 
+//https://github.com/mapbox/vector-tile-spec/blob/ab55f2bd7b8c0af5d9a845e4bb0b133811ce3ccf/2.1/vector_tile.proto#L17-L28
 const constexpr std::uint32_t VARIANT_TYPE_STRING = 1;
 const constexpr std::uint32_t VARIANT_TYPE_FLOAT = 2;
 const constexpr std::uint32_t VARIANT_TYPE_DOUBLE = 3;
@@ -51,10 +52,9 @@ const constexpr std::uint32_t VARIANT_TYPE_SINT64 = 6;
 const constexpr std::uint32_t VARIANT_TYPE_BOOL = 7;
 
 // Vector tiles are 4096 virtual pixels on each side
-const constexpr double EXTENT = 4096.0;
-// half the size of a vector tile (pixels != size)
 const constexpr double BUFFER = 128.0;
-const constexpr double TILE_SIZE = 2 * 128.0;
+const constexpr double TILE_SIZE = 2 * BUFFER;
+const constexpr double EXTENT = 16 * TILE_SIZE;
 
 const constexpr int MOVETO_COMMAND = 9;
 } // namespace vector_tile
@@ -113,9 +113,13 @@ bool VectorTileValue::operator==(VectorTileValue const &other) const
         case VectorTileValueType::BOOL:
             return boost::get<bool>(value) == boost::get<bool>(other.value);
         case VectorTileValueType::INT:
-            return boost::get<int>(value) == boost::get<int>(other.value);
+            return boost::get<std::int64_t>(value) == boost::get<std::int64_t>(other.value);
+        case VectorTileValueType::UINT:
+            return boost::get<std::uint64_t>(value) == boost::get<std::uint64_t>(other.value);
         case VectorTileValueType::DOUBLE:
             return boost::get<double>(value) == boost::get<double>(other.value);
+        case VectorTileValueType::FLOAT:
+            return boost::get<float>(value) == boost::get<float>(other.value);
         default:
             BOOST_ASSERT(type == VectorTileValueType::STRING);
             return boost::get<std::string>(value) == boost::get<std::string>(other.value);
@@ -134,9 +138,13 @@ bool VectorTileValue::operator<(VectorTileValue const &other) const
         case VectorTileValueType::BOOL:
             return boost::get<bool>(value) < boost::get<bool>(other.value);
         case VectorTileValueType::INT:
-            return boost::get<int>(value) < boost::get<int>(other.value);
+            return boost::get<std::int64_t>(value) < boost::get<std::int64_t>(other.value);
+        case VectorTileValueType::UINT:
+            return boost::get<std::uint64_t>(value) < boost::get<std::uint64_t>(other.value);
         case VectorTileValueType::DOUBLE:
             return boost::get<double>(value) < boost::get<double>(other.value);
+        case VectorTileValueType::FLOAT:
+            return boost::get<float>(value) < boost::get<float>(other.value);
         default:
             BOOST_ASSERT(type == VectorTileValueType::STRING);
             return boost::get<std::string>(value) < boost::get<std::string>(other.value);
@@ -158,10 +166,16 @@ void VectorTileValue::write(protozero::pbf_writer &pbf_writer) const
         values_writer.add_bool(vector_tile::VARIANT_TYPE_BOOL, boost::get<bool>(value));
         break;
     case VectorTileValueType::INT:
-        values_writer.add_int64(vector_tile::VARIANT_TYPE_SINT64, boost::get<int>(value));
+        values_writer.add_int64(vector_tile::VARIANT_TYPE_SINT64, boost::get<std::int64_t>(value));
+        break;
+    case VectorTileValueType::UINT:
+        values_writer.add_int64(vector_tile::VARIANT_TYPE_UINT64, boost::get<std::uint64_t>(value));
         break;
     case VectorTileValueType::DOUBLE:
         values_writer.add_double(vector_tile::VARIANT_TYPE_DOUBLE, boost::get<double>(value));
+        break;
+    case VectorTileValueType::FLOAT:
+        values_writer.add_float(vector_tile::VARIANT_TYPE_FLOAT, boost::get<float>(value));
         break;
     default:
         BOOST_ASSERT(type == VectorTileValueType::STRING);
