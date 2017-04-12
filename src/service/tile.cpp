@@ -23,7 +23,7 @@ Tile::Tile(service::Master &master_service)
 
 ServiceStatus Tile::operator()(ServiceParameters &parameters) const
 {
-    auto &tile_parameters = boost::get<TileParameters>(parameters);
+    auto &tile_parameters = boost::get<TileParameters>(parameters.parameters);
 
     if (!tile_parameters.valid())
         return ServiceStatus::ERROR;

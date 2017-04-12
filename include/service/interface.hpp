@@ -1,6 +1,7 @@
 #ifndef TRANSIT_SERVICE_INTERFACE_HPP_
 #define TRANSIT_SERVICE_INTERFACE_HPP_
 
+#include "service/earliest_arrival_parameters.hpp"
 #include "service/interface.hpp"
 #include "service/tile_parameters.hpp"
 
@@ -17,11 +18,21 @@ enum class ServiceStatus
     ERROR
 };
 
+enum class PluginType
+{
+    TILE,
+    EAP
+};
+
 // since every service requires it's own version of parameters, we pass down parameters as a
 // variant. As a general guideline, we should try and limit the size of the parameters to be passed
 // down so that we don't waste a lot of memory on the stack here.
 // Every parameterset also needs to contain a reference to where we want to store the output.
-using ServiceParameters = boost::variant<TileParameters>;
+struct ServiceParameters
+{
+    PluginType type;
+    boost::variant<TileParameters, EarliestArrivalParameters> parameters;
+};
 
 class Interface
 {

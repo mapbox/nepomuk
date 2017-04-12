@@ -5,6 +5,7 @@
 #include "id/stop.hpp"
 #include "navigation/algorithm/timetable.hpp"
 #include "service/master.hpp"
+#include "test/toolkit.hpp"
 
 #include <iostream>
 #include <vector>
@@ -14,16 +15,6 @@ using namespace transit;
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-
-namespace
-{
-geometric::WGS84Coordinate make_coordinate(double lon, double lat)
-{
-    return geometric::WGS84Coordinate{
-        geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
-        geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)};
-}
-}
 
 BOOST_AUTO_TEST_CASE(annotate_osrm_trip)
 {
@@ -38,23 +29,7 @@ BOOST_AUTO_TEST_CASE(annotate_osrm_trip)
 
     auto annotated_trip = osrm_annotation(*trip);
 
-    // this fixture is currently missing geometry for the polylines, needs to be fixed in the
-    // fixture itself. The same is true for the line names. When these features land, the fixture
-    // needs to be updated.
-    auto const fixture =
-        "{\"code\": \"Ok\",\"routes\": [{\"distance\": 4,\"duration\": 1200,\"weight\": "
-        "1200,\"weight_name\": \"duration\",\"geometry\": \"\",\"legs\":[{\"distance\": "
-        "4,\"duration\": 1200,\"weight\": 1200,\"summary\": "
-        "\"LINE_NAME_HERE\",\"steps\":[{\"geometry\": \"\",\"mode\": \"transit\",\"name\": \"Stop "
-        "A Platform 2\",\"distance\": 1,\"maneuver\":{\"location\": [0.005,0.0049],\"type\": "
-        "\"board\"}},{\"geometry\": \"\",\"mode\": \"transit\",\"name\": \"Stop B\",\"distance\": "
-        "1,\"maneuver\":{\"location\": [0.0052,0.005],\"type\": \"stay in "
-        "vehicle\"}},{\"geometry\": \"\",\"mode\": \"transit\",\"name\": \"Stop C\",\"distance\": "
-        "1,\"maneuver\":{\"location\": [0.0053,0.005],\"type\": \"stay in vehicle\"}},{\"mode\": "
-        "\"transit\",\"name\": \"Stop D\",\"distance\": 1,\"maneuver\":{\"location\": "
-        "[0.0054,0.005],\"type\": \"deboard\"}}]}]}]}";
-
     BOOST_CHECK(static_cast<bool>(trip));
 
-    BOOST_CHECK_EQUAL(fixture, annotated_trip);
+    BOOST_CHECK_EQUAL(OSRM_ANNOTATED_QUERY_1_4, annotated_trip);
 }

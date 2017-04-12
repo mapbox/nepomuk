@@ -1,10 +1,11 @@
+#include "date/time.hpp"
 #include "fixtures.h"
 #include "geometric/coordinate.hpp"
-#include "date/time.hpp"
 #include "id/line.hpp"
 #include "id/stop.hpp"
 #include "navigation/algorithm/timetable.hpp"
 #include "service/master.hpp"
+#include "test/toolkit.hpp"
 
 #include <iostream>
 #include <vector>
@@ -14,16 +15,6 @@ using namespace transit;
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
-
-namespace
-{
-geometric::WGS84Coordinate make_coordinate(double lon, double lat)
-{
-    return geometric::WGS84Coordinate{
-        geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
-        geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat)};
-}
-}
 
 BOOST_AUTO_TEST_CASE(annotate_osrm_trip)
 {
