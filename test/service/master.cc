@@ -18,9 +18,12 @@ BOOST_AUTO_TEST_CASE(render_tiles)
 
     auto tileservice = std::make_shared<service::Tile>(master_service);
 
-    service::ServiceParameters parameters = service::TileParameters(16384, 16383, 15);
-    service::ServiceParameters invalid_parameters = service::TileParameters(1 << 10, 1 << 10, 11);
-    service::ServiceParameters empty_parameters = service::TileParameters(0, 0, 12);
+    service::ServiceParameters parameters = {service::PluginType::TILE,
+                                             service::TileParameters(16384, 16383, 15)};
+    service::ServiceParameters invalid_parameters = {service::PluginType::TILE,
+                                                     service::TileParameters(1 << 10, 1 << 10, 11)};
+    service::ServiceParameters empty_parameters = {service::PluginType::TILE,
+                                                   service::TileParameters(0, 0, 12)};
 
     master_service.register_plugin("tile", tileservice);
     // replace by itself
@@ -41,9 +44,9 @@ BOOST_AUTO_TEST_CASE(render_tiles)
                 auto status = (*tileservice)(empty_parameters);
                 BOOST_CHECK(status == service::ServiceStatus::SUCCESS);
                 auto valid_one = static_cast<std::string>(
-                    boost::get<service::TileParameters>(parameters).result());
+                    boost::get<service::TileParameters>(parameters.parameters).result());
                 auto empty_one = static_cast<std::string>(
-                    boost::get<service::TileParameters>(empty_parameters).result());
+                    boost::get<service::TileParameters>(empty_parameters.parameters).result());
                 BOOST_CHECK(valid_one.length() > empty_one.length());
             }
         }

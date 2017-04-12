@@ -95,6 +95,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Global include directory
 include_directories("${PROJECT_SOURCE_DIR}/include")
+include_directories("${PROJECT_SOURCE_DIR}")
 
 # pull in mason dependencies
 mason_use(libzmq VERSION 4.2.2)

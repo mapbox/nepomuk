@@ -53,13 +53,13 @@ int main(int argc, char **argv) try
             int x, y, z;
             std::cin >> x >> y >> z;
 
-            transit::service::ServiceParameters parameters =
-                transit::service::TileParameters(x, y, z);
+            transit::service::ServiceParameters parameters = {
+                transit::service::PluginType::TILE, transit::service::TileParameters(x, y, z)};
             tile_service(parameters);
 
             std::cout << "[Tile]"
                       << (std::string)(
-                             boost::get<transit::service::TileParameters>(parameters).result())
+                             boost::get<transit::service::TileParameters>(parameters.parameters).result())
                       << std::endl;
         }
     }

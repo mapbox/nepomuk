@@ -12,3 +12,6 @@
   - implemented some GTFS clean-up routines
     - implemented filtering unused stops to avoid look-up pollution
     - connect close stops that share a name into stations
+  - services added: tile / eap
+    - tile: request debug tiles in mapbox vector tile format 2.0
+    - eap: request routes between coordinates in earliest arrival format
