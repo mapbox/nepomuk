@@ -1,7 +1,6 @@
 #include "timetable/graph_adaptor.hpp"
 #include "tool/container/forward_star_graph_factory.hpp"
 
-#include "gtfs/time.hpp"
 #include "id/stop.hpp"
 
 #include "tool/status/progress.hpp"

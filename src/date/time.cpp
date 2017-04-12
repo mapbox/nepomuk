@@ -1,4 +1,4 @@
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 
 #include <boost/assert.hpp>
 #include <limits>
@@ -6,7 +6,7 @@
 
 namespace transit
 {
-namespace gtfs
+namespace date
 {
 
 Time::Time() : seconds_since_midnight(0), interpolated(false) {}
@@ -95,5 +95,5 @@ Time Time::infinity()
     return time;
 }
 
-} // namespace gtfs
+} // namespace date
 } // namespace transit

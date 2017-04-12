@@ -6,7 +6,7 @@
 
 #include <boost/range/iterator_range.hpp>
 
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/line.hpp"
 #include "id/stop.hpp"
 #include "timetable/stop_table.hpp"
@@ -29,12 +29,12 @@ class Leg
     struct stop_type
     {
         StopID stop_id;
-        gtfs::Time arrival;
+        date::Time arrival;
     };
     using iterator = std::vector<stop_type>::const_iterator;
 
     boost::iterator_range<iterator> list() const;
-    gtfs::Time departure() const;
+    date::Time departure() const;
     LineID line() const;
 
     std::uint32_t size() const;
@@ -42,7 +42,7 @@ class Leg
 
   private:
     LineID _line;
-    gtfs::Time _departure;
+    date::Time _departure;
     // the stops along the leg
     std::vector<stop_type> stops;
 

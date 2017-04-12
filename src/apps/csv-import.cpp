@@ -2,7 +2,7 @@
 #include "gtfs/read_csv.hpp"
 
 #include "geometric/coordinate.hpp"
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/stop.hpp"
 
 #include "annotation/osrm.hpp"
@@ -69,7 +69,7 @@ int main(int argc, char **argv) try
             auto target = coordinate_lookup.nearest(to_coordinate(line));
             std::cout << "Enter Departure..." << std::flush;
             std::getline(std::cin, line);
-            gtfs::Time time(line);
+            date::Time time(line);
 
             tool::status::Timer query_timer;
             query_timer.start();

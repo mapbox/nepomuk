@@ -2,7 +2,6 @@
 
 #include "geometric/coordinate.hpp"
 #include "gtfs/read_csv.hpp"
-#include "gtfs/time.hpp"
 #include "id/stop.hpp"
 
 #include "adaptor/dictionary.hpp"

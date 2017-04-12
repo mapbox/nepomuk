@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/trip.hpp"
 
 namespace transit
@@ -25,8 +25,8 @@ enum class FrequencyType
 struct Frequency
 {
     TripID trip_id;
-    Time begin;
-    Time end;
+    date::Time begin;
+    date::Time end;
     std::uint64_t headway; // in seconds
 
     boost::optional<FrequencyType> type;

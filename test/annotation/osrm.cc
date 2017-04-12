@@ -1,6 +1,6 @@
 #include "fixtures.h"
 #include "geometric/coordinate.hpp"
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/line.hpp"
 #include "id/stop.hpp"
 #include "navigation/algorithm/timetable.hpp"
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(annotate_osrm_trip)
     auto const &osrm_annotation = data_service.osrm_annotation();
     BOOST_CHECK_EQUAL(&osrm_annotation, &data_service.osrm_annotation());
 
-    auto trip = timetable_router(gtfs::Time("1:00:00"), StopID{1}, StopID{4});
+    auto trip = timetable_router(date::Time("1:00:00"), StopID{1}, StopID{4});
 
     auto annotated_trip = osrm_annotation(*trip);
 

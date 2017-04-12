@@ -14,7 +14,7 @@ bool DepartureTable::Departure::operator<(DepartureTable::Departure const &other
     return end < other.end;
 }
 
-gtfs::Time DepartureTable::Departure::get_next_departure(gtfs::Time const starting_at) const
+date::Time DepartureTable::Departure::get_next_departure(date::Time const starting_at) const
 {
     // the next departue for a given starting time is defined by T = begin + x * headway with T >=
     // starting_at and x minimal among all x that fulfill T >= starting_at
@@ -32,7 +32,7 @@ gtfs::Time DepartureTable::Departure::get_next_departure(gtfs::Time const starti
     return begin + x * headway;
 }
 
-DepartureTable::const_iterator_range DepartureTable::list(gtfs::Time starting_at) const
+DepartureTable::const_iterator_range DepartureTable::list(date::Time starting_at) const
 {
     return {std::lower_bound(departures.begin(),
                              departures.end(),

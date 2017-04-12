@@ -1,7 +1,7 @@
 #ifndef TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
 #define TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
 
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/line.hpp"
 #include "id/stop.hpp"
 #include "navigation/leg.hpp"
@@ -24,7 +24,7 @@ class RoutingAlgorithm
     RoutingAlgorithm(std::vector<timetable::LineTable> const &line_tables);
 
     virtual boost::optional<Trip>
-    operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const = 0;
+    operator()(date::Time const departure, StopID const origin, StopID const destination) const = 0;
 
   protected:
     std::vector<timetable::LineTable> const &line_tables;
@@ -34,8 +34,8 @@ class RoutingAlgorithm
     {
         StopID stop;
         LineID line;
-        gtfs::Time arrival;
-        gtfs::Time departure;
+        date::Time arrival;
+        date::Time departure;
     };
 
     // since many lines can validly depart a stop but only one stop can be the best parent of a
@@ -55,7 +55,7 @@ class RoutingAlgorithm
     // information.
     void add_leg(Trip &trip, Leg leg) const;
     void add_stop(Leg &leg, Leg::stop_type stop) const;
-    void set_departure(Leg &leg, gtfs::Time time) const;
+    void set_departure(Leg &leg, date::Time time) const;
     void set_line(Leg &leg, LineID line) const;
 };
 
