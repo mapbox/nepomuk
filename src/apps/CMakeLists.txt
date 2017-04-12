@@ -6,6 +6,7 @@ set(EXEC_LIBS
     transitannotate
     transitproto
     transittool
+    transitdate
     transitgtfs
     transitgeometric
     transitnavigation

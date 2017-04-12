@@ -1,7 +1,6 @@
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/leg.hpp"
 
-#include "gtfs/time.hpp"
 #include "id/line.hpp"
 #include "id/stop.hpp"
 #include "id/trip.hpp"
@@ -25,19 +24,19 @@ TimeTable::TimeTable(timetable::TimeTable const &time_table, search::StopToLine 
 }
 
 boost::optional<Trip> TimeTable::
-operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const
+operator()(date::Time const departure, StopID const origin, StopID const destination) const
 {
     struct State
     {
         StopID stop_id;
-        gtfs::Time arrival;
+        date::Time arrival;
     };
 
     struct ReachedState
     {
-        gtfs::Time arrival;
+        date::Time arrival;
         StopID parent;
-        gtfs::Time parent_departure;
+        date::Time parent_departure;
         LineID line_id;
     };
 
@@ -53,7 +52,7 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
         earliest_arrival[start] = {departure, start, departure, WALKING_TRANSFER};
     }
 
-    gtfs::Time upper_bound;
+    date::Time upper_bound;
     StopID reached_destination = destination;
     upper_bound = upper_bound + std::numeric_limits<std::uint32_t>::max();
     // relax by lines, in order of hops
@@ -75,10 +74,10 @@ operator()(gtfs::Time const departure, StopID const origin, StopID const destina
 
         auto const destination_station = time_table.station(destination);
         auto const add_if_improved = [&](StopID const stop,
-                                         gtfs::Time const time,
+                                         date::Time const time,
                                          StopID const parent,
                                          LineID const line,
-                                         gtfs::Time const departure) {
+                                         date::Time const departure) {
             if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
             {
                 if (time_table.station(stop) == destination_station && time < upper_bound)

@@ -95,8 +95,8 @@ StopTime makeStopTime(std::map<std::string, std::size_t> const &header,
         timepoint_str ? boost::optional<TimepointType>(to_point(*timepoint_str)) : boost::none;
 
     return {construct<TripID>("trip_id", stringToID<TripID>, header, values),
-            construct<Time>("arrival_time", constructFromString<Time>, header, values),
-            construct<Time>("departure_time", constructFromString<Time>, header, values),
+            construct<date::Time>("arrival_time", constructFromString<date::Time>, header, values),
+            construct<date::Time>("departure_time", constructFromString<date::Time>, header, values),
             construct<StopID>("stop_id", stringToID<StopID>, header, values),
             construct<SequenceID>("stop_sequence", stringToIDDirect<SequenceID>, header, values),
             construct_as_optional<std::string, false>("stop_headsign", forward, header, values),

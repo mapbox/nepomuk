@@ -32,8 +32,8 @@ Frequency makeFrequency(std::map<std::string, std::size_t> const &header,
     auto exact_times = construct<std::string>("exact_times", forward, header, values);
 
     return {construct<TripID>("trip_id", stringToID<TripID>, header, values),
-            construct<Time>("start_time", constructFromString<Time>, header, values),
-            construct<Time>("end_time", constructFromString<Time>, header, values),
+            construct<date::Time>("start_time", constructFromString<date::Time>, header, values),
+            construct<date::Time>("end_time", constructFromString<date::Time>, header, values),
             construct<std::uint64_t>("headway_secs", toInt, header, values),
             exact_times.empty() ? boost::none
                                 : boost::optional<FrequencyType>(to_frequency_type(exact_times))};

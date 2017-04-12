@@ -20,6 +20,7 @@ target_link_libraries(${PROJECT_NAME}
     transitadaptor
     transitalgorithm
     transitannotate
+    transitdate
     transitgtfs
     transittimetable
     transitproto

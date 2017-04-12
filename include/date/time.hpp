@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_TIME_HPP_
-#define TRANSIT_GTFS_TIME_HPP_
+#ifndef TRANSIT_DATE_TIME_HPP_
+#define TRANSIT_DATE_TIME_HPP_
 
 #include <cstdint>
 #include <iostream>
@@ -7,7 +7,7 @@
 
 namespace transit
 {
-namespace gtfs
+namespace date
 {
 
 class Time
@@ -46,7 +46,7 @@ Time operator+(std::uint32_t seconds, Time lhs);
 
 std::ostream &operator<<(std::ostream &os, Time const &time);
 
-} // namespace gtfs
+} // namespace date
 } // namespace transit
 
-#endif // TRANSIT_GTFS_TIME_HPP_
+#endif // TRANSIT_DATE_TIME_HPP_

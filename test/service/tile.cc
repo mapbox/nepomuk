@@ -3,20 +3,9 @@
 #include "fixtures.h"
 #include <boost/test/unit_test.hpp>
 
-#include "gtfs/dataset.hpp"
-#include "gtfs/read_csv.hpp"
-#include "gtfs/time.hpp"
-
-#include "search/coordinate_to_stop.hpp"
-#include "search/stop_to_line_factory.hpp"
 #include "service/master.hpp"
 #include "service/tile.hpp"
 #include "service/tile_parameters.hpp"
-#include "timetable/timetable_factory.hpp"
-#include "tool/status/progress.hpp"
-
-#include <fstream>
-#include <iterator>
 
 using namespace transit;
 

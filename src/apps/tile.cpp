@@ -1,5 +1,4 @@
 #include "geometric/coordinate.hpp"
-#include "gtfs/time.hpp"
 #include "id/stop.hpp"
 
 #include "navigation/algorithm/timetable.hpp"

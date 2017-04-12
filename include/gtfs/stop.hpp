@@ -10,7 +10,7 @@
 
 #include "geometric/coordinate.hpp"
 #include "gtfs/accessibility.hpp"
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/dictionary.hpp"
 #include "id/sequence.hpp"
 #include "id/stop.hpp"
@@ -69,8 +69,8 @@ enum class TimepointType
 struct StopTime
 {
     TripID trip_id;
-    Time arrival;
-    Time departure;
+    date::Time arrival;
+    date::Time departure;
     StopID stop_id;
     SequenceID sequence_id;
 

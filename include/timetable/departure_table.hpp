@@ -3,11 +3,11 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <vector>
 
 #include <boost/range/iterator_range.hpp>
 
-#include "gtfs/time.hpp"
-#include "gtfs/trip.hpp"
+#include "date/time.hpp"
 
 namespace transit
 {
@@ -27,14 +27,14 @@ class DepartureTable
   public:
     struct Departure
     {
-        gtfs::Time begin;
-        gtfs::Time end;
+        date::Time begin;
+        date::Time end;
         std::uint32_t headway;
         std::size_t duration_table_index;
 
         bool operator<(Departure const &other) const;
 
-        gtfs::Time get_next_departure(gtfs::Time const starting_at) const;
+        date::Time get_next_departure(date::Time const starting_at) const;
     };
 
     // iterator types
@@ -46,7 +46,7 @@ class DepartureTable
     friend class LineTableFactory;
 
     // list all valid departures from a given time
-    const_iterator_range list(gtfs::Time starting_at) const;
+    const_iterator_range list(date::Time starting_at) const;
 
   private:
     std::vector<Departure> departures;

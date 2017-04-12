@@ -9,7 +9,7 @@ namespace timetable
 {
 
 boost::optional<LineTable::Trip> LineTable::get(StopID const stop,
-                                                gtfs::Time const desired_departure) const
+                                                date::Time const desired_departure) const
 {
     auto const stop_range = stop_table.list(stop);
     // how far are we into the stop table
@@ -28,7 +28,7 @@ boost::optional<LineTable::Trip> LineTable::get(StopID const stop,
         auto line_depart_time =
             desired_departure - std::min(desired_departure.seconds_since_midnight, time_delta);
         if (departure.end < line_depart_time)
-            return gtfs::Time::infinity();
+            return date::Time::infinity();
         return departure.get_next_departure(line_depart_time);
     };
 

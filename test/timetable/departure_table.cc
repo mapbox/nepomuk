@@ -4,7 +4,7 @@
 
 #include "gtfs/frequency.hpp"
 #include "gtfs/stop.hpp"
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "id/sequence.hpp"
 #include "id/stop.hpp"
 #include "id/trip.hpp"
@@ -16,6 +16,7 @@
 using namespace transit::timetable;
 using namespace transit;
 using namespace transit::gtfs;
+using namespace transit::date;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

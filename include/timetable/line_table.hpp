@@ -1,7 +1,7 @@
 #ifndef TRANSIT_TIMETABLE_LINETABLE_HPP_
 #define TRANSIT_TIMETABLE_LINETABLE_HPP_
 
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 #include "timetable/departure_table.hpp"
 #include "timetable/duration_table.hpp"
 #include "timetable/stop_table.hpp"
@@ -33,11 +33,11 @@ class LineTable
     {
         StopTable::const_iterator_range const stop_range;
         DurationTable::const_iterator_range const duration_range;
-        gtfs::Time const departure;
+        date::Time const departure;
     };
 
     // give access to the next departure of the given line
-    boost::optional<Trip> get(StopID const stop, gtfs::Time const departure) const;
+    boost::optional<Trip> get(StopID const stop, date::Time const departure) const;
 
     using stop_iterator = StopTable::const_iterator;
     using stop_iterator_range = StopTable::const_iterator_range;

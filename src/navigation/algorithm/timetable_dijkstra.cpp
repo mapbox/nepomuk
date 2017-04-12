@@ -3,7 +3,6 @@
 
 #include "tool/container/kary_heap.hpp"
 
-#include "gtfs/time.hpp"
 #include "id/stop.hpp"
 
 #include <utility>
@@ -22,25 +21,25 @@ TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
 }
 
 boost::optional<Trip> TimeTableDijkstra::
-operator()(gtfs::Time const departure, StopID const origin, StopID const destination) const
+operator()(date::Time const departure, StopID const origin, StopID const destination) const
 {
     struct ReachedVia
     {
         StopID parent_stop;
         LineID on_line;
-        gtfs::Time parent_departure;
+        date::Time parent_departure;
     };
-    using FourHeap = tool::container::KAryHeap<StopID, gtfs::Time, 4, ReachedVia>;
+    using FourHeap = tool::container::KAryHeap<StopID, date::Time, 4, ReachedVia>;
     FourHeap heap;
 
     auto const destination_station = time_table.station(destination);
 
     auto const reach = [&](StopID const stop,
-                           gtfs::Time const time,
+                           date::Time const time,
                            StopID from_stop,
                            LineID on_line,
                            bool use_in_heap,
-                           gtfs::Time const parent_departure) {
+                           date::Time const parent_departure) {
 
         if (use_in_heap)
         {

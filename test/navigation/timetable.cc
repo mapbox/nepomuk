@@ -5,7 +5,7 @@
 
 #include "id/shape.hpp"
 
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 
 #include "navigation/algorithm/timetable.hpp"
 #include "service/master.hpp"
@@ -29,23 +29,23 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     transit::navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
 
     auto route =
-        timetable_router(transit::gtfs::Time("00:00:00"), transit::StopID{0}, transit::StopID{7});
+        timetable_router(transit::date::Time("00:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(route->list().begin()->list().begin()->stop_id, transit::StopID{0});
     BOOST_CHECK_EQUAL(route->list().begin()->line(), transit::LineID{0});
     route =
-        timetable_router(transit::gtfs::Time("12:00:00"), transit::StopID{0}, transit::StopID{7});
+        timetable_router(transit::date::Time("12:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(route->list().begin()->list().begin()->stop_id, transit::StopID{1});
 
     auto leg_range = route->list();
     BOOST_CHECK(std::distance(leg_range.begin(), leg_range.end()) == 2);
     auto route2 =
-        timetable_router(transit::gtfs::Time("00:00:00"), transit::StopID{0}, transit::StopID{9});
+        timetable_router(transit::date::Time("00:00:00"), transit::StopID{0}, transit::StopID{9});
     BOOST_CHECK((bool)route2);
 
     // when cyclic times routes are implemented, this will return a route again
     auto route3 =
-        timetable_router(transit::gtfs::Time("36:00:00"), transit::StopID{0}, transit::StopID{7});
+        timetable_router(transit::date::Time("36:00:00"), transit::StopID{0}, transit::StopID{7});
     BOOST_CHECK((bool)!route3);
 }

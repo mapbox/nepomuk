@@ -9,7 +9,6 @@ set(gtfs_SOURCES
     date.cpp
     feed_info.cpp
     frequency.cpp
-    time.cpp
     route.cpp
     shape.cpp
     schedule.cpp
@@ -27,6 +26,7 @@ target_link_libraries(transitgtfs
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES}
     transittool
+    transitdate
     transitgeometric)
 
 # define additional include directories

@@ -3,9 +3,7 @@
 #include "fixtures.h"
 #include <boost/test/unit_test.hpp>
 
-#include "gtfs/dataset.hpp"
-#include "gtfs/read_csv.hpp"
-#include "gtfs/time.hpp"
+#include "date/time.hpp"
 
 #include "search/stop_to_line_factory.hpp"
 #include "service/master.hpp"
@@ -23,7 +21,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto trips = trip_look_up(transit::StopID{1});
     for (auto tid : trips)
     {
-        auto route = timetable.line(tid).get(transit::StopID{1}, transit::gtfs::Time("00:00:00"));
+        auto route = timetable.line(tid).get(transit::StopID{1}, transit::date::Time("00:00:00"));
         BOOST_CHECK(route != boost::none);
 
         BOOST_CHECK(route->stop_range.size() > 0);
