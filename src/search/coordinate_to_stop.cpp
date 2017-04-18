@@ -8,34 +8,50 @@ namespace transit
 namespace search
 {
 
-CoordinateToStop::CoordinateToStop(
-    std::vector<std::pair<geometric::WGS84Coordinate, StopID>> coordinates)
-    : coordinates(std::move(coordinates))
+namespace
 {
+
+CoordinateToStop::PointT as_point(geometric::WGS84Coordinate location)
+{
+    return {geometric::doubleFromLatLon(location.longitude),
+            geometric::doubleFromLatLon(location.latitude)};
+}
+
+boost::geometry::model::box<CoordinateToStop::PointT>
+as_bbox(geometric::WGS84BoundingBox const &bounding_box)
+{
+    return {as_point(bounding_box.lower_left), as_point(bounding_box.upper_right)};
+}
+
+} // namespace
+
+CoordinateToStop::CoordinateToStop(
+    std::vector<std::pair<geometric::WGS84Coordinate, StopID>> const &coordinates)
+{
+    auto const add_to_rtree = [this](auto const &coordinate_and_stop) {
+        tree.insert(
+            std::make_pair(as_point(coordinate_and_stop.first), coordinate_and_stop.second));
+    };
+    std::for_each(coordinates.begin(), coordinates.end(), add_to_rtree);
 }
 
 StopID CoordinateToStop::nearest(geometric::WGS84Coordinate const &location) const
 {
-    // find the closes element to location
-    auto itr = std::min_element(
-        coordinates.begin(), coordinates.end(), [location](auto const &lhs, auto const &rhs) {
-            return geometric::distance(lhs.first, location) <
-                   geometric::distance(rhs.first, location);
-        });
-
-    return itr->second;
+    std::vector<RTreeEntry> result;
+    tree.query(boost::geometry::index::nearest(as_point(location), 1), std::back_inserter(result));
+    return result.front().second;
 }
 
 std::vector<StopID> CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
 {
-    std::vector<StopID> results;
-    std::for_each(coordinates.begin(),
-                  coordinates.end(),
-                  [&results, bounding_box](auto const &coordinate_stop) {
-                      if (bounding_box.contains(coordinate_stop.first))
-                          results.push_back(coordinate_stop.second);
-                  });
-    return results;
+    std::vector<RTreeEntry> result;
+    tree.query(boost::geometry::index::intersects(as_bbox(bounding_box)),
+               std::back_inserter(result));
+    std::vector<StopID> only_stops(result.size());
+    std::transform(result.begin(), result.end(), only_stops.begin(), [](auto const &pair) {
+        return pair.second;
+    });
+    return only_stops;
 }
 
 } // namespace search
