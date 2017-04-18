@@ -1,0 +1,43 @@
+{
+  "name": "directions-transit-frontend",
+  "version": "0.4.0",
+  "description": "frontend interface for transit directions",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "eslint src/*js i18n/*.js",
+    "build": "browserify -d src/index.js -s osrm > bundle.js && cp node_modules/leaflet/dist/leaflet.css css/leaflet.css",
+    "start-index": "budo src/index.js --serve=bundle.js --live -d | bistre",
+    "start": "npm run build && npm run start-index",
+    "prepub": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "directions-transit"
+  },
+  "keywords": [
+    "osrm",
+    "lrm",
+    "directions",
+    "routing",
+    "api"
+  ],
+  "author": "amy lee walton",
+  "license": "ISC",
+  "devDependencies": {
+    "bistre": "^1.0.1",
+    "browserify": "^13.3.0",
+    "budo": "^9.4.0",
+    "uglify-js": "^2.8.0"
+  },
+  "dependencies": {
+    "jsonp": "^0.2.0",
+    "leaflet": "^0.7.7",
+    "leaflet-control-geocoder": "^1.2.1",
+    "leaflet-routing-machine": "~3.1.0",
+    "leaflet.locatecontrol": "^0.44.0",
+    "local-storage": "^1.4.2",
+    "lrm-directions-transit": "file:///Users/mokob/git/directions-transit/frontends/lrm-plugin",
+    "osrm-text-instructions": "0.2.1",
+    "qs": "^6.1.0"
+  }
+}
