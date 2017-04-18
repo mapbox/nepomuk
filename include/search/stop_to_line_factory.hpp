@@ -2,7 +2,7 @@
 #define TRANSIT_SEARCH_STOP_TO_LINE_FACTORY_HPP_
 
 #include "search/stop_to_line.hpp"
-#include "timetable/timetable.hpp"
+#include "timetable/line_table.hpp"
 
 #include <cstddef>
 #include <vector>
@@ -16,7 +16,7 @@ class StopToLineFactory
 {
   public:
     // build a look-up from stop-id to trip-id
-    static StopToLine produce(std::size_t const num_stops, timetable::TimeTable const &timetable);
+    static StopToLine produce(std::size_t const num_stops, std::vector<timetable::LineTable> const &line_tables);
 };
 
 } // namespace search
