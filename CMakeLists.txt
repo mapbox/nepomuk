@@ -53,6 +53,10 @@ add_compile_options(${CMAKE_CXX_FLAGS} -Wstrict-overflow=2)
 add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE)
 add_compile_options(${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2)
 
+if(directions_transit_os MATCHES "unix")
+    add_compile_options(${CMAKE_CXX_FLAGS} -fext-numeric-literals)
+endif()
+
 # do not allow deprecrated calls
 add_definitions(-DPROTOZERO_STRICT_API)
 
