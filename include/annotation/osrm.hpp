@@ -25,12 +25,16 @@ class OSRM
     std::string operator()(navigation::Trip const &trip) const;
 
   private:
+    // to make osrm annotation happy
+    void write_intersections(std::ostringstream &oss, StopID const stop) const;
     void write_maneuver(std::ostringstream &oss, StopID const stop, std::string const &type) const;
     void write_leg(std::ostringstream &oss, navigation::Leg const &leg) const;
     void write_legs(std::ostringstream &oss, navigation::Trip const &trip) const;
     void write_trip(std::ostringstream &oss, navigation::Trip const &leg) const;
     void write_coordinates(std::ostringstream &oss, navigation::Trip const &leg) const;
     void write_steps(std::ostringstream &oss, navigation::Leg const &leg) const;
+    void write_waypoint(std::ostringstream &oss, StopID const stop) const;
+    void write_waypoints(std::ostringstream &oss, navigation::Trip const& trip) const;
 
     StopInfoTable const &stop_info;
     transit::tool::container::StringTable const &dictionary;

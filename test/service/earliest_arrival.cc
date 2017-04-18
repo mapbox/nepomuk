@@ -59,7 +59,6 @@ BOOST_AUTO_TEST_CASE(request_route)
     BOOST_CHECK(service::ServiceStatus::SUCCESS == eap(query));
 
     // compare test navigation
-    auto const fixture = OSRM_ANNOTATED_QUERY_1_4;
-    BOOST_CHECK_EQUAL(fixture,
+    BOOST_CHECK_EQUAL(OSRM_ANNOTATED_QUERY_1_4,
                       boost::get<service::EarliestArrivalParameters>(query.parameters).result());
 }

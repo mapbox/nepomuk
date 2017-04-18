@@ -22,7 +22,7 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
 
     auto const get_locations = [this](auto const from, double radius) {
         auto result = coordinate_to_stop.all(from, radius);
-        while( result.empty() && radius < 1000)
+        while( result.empty() && radius <= 1000)
         {
             radius *= 2;
             result = coordinate_to_stop.all(from, radius);

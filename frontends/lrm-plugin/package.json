@@ -1,0 +1,36 @@
+{
+  "name": "lrm-directions-transit",
+  "version": "0.0.1",
+  "description": "Support for DirectionsTransit in Leaflet Routing Machine",
+  "main": "src/L.Routing.DirectionsTransit.js",
+  "scripts": {
+    "dist": "./scripts/dist.sh",
+    "publish": "./scripts/publish.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "leaflet",
+    "routing",
+    "transit"
+  ],
+  "author": "Moritz Kobitzsch <moritz@mapbox.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/directions-transit"
+  },
+  "homepage": "https://github.com/mapbox/directions-transit",
+  "bugs": "https://github.com/mapbox/directions-transit/issues",
+  "dependencies": {
+    "corslite": "0.0.6",
+    "polyline": "0.0.3"
+  },
+  "browserify-shim": {
+    "leaflet": "global:L"
+  },
+  "devDependencies": {
+    "browserify": "^8.1.3",
+    "browserify-shim": "^3.8.2",
+    "uglify-js": "^2.4.16"
+  }
+}

@@ -20,7 +20,18 @@ void OSRM::write_maneuver(std::ostringstream &oss, StopID const stop, std::strin
     auto const location = geometry.get(stop);
     oss << std::setprecision(12) << doubleFromLatLon(location.longitude) << ","
         << doubleFromLatLon(location.latitude);
-    oss << "],\"type\": \"" << type << "\"}";
+    oss << "],\"type\": \"" << type << "\",\"modifier\": \"straight\"}";
+}
+
+void OSRM::write_intersections(std::ostringstream &oss, StopID const stop) const
+{
+    oss << "\"intersections\": [";
+    oss << "{\"location\": [";
+    auto const location = geometry.get(stop);
+    oss << std::setprecision(12) << doubleFromLatLon(location.longitude) << ","
+        << doubleFromLatLon(location.latitude);
+    oss << "]}";
+    oss << "],";
 }
 
 void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) const
@@ -38,8 +49,11 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         oss << "\"geometry\": \"";
         auto crange = geometry.get(leg.line(), range.front().stop_id, (range.begin() + 1)->stop_id);
         std::vector<geometric::WGS84Coordinate> coordinates(crange.begin(), crange.end());
+        if (coordinates.empty())
+            coordinates.push_back(geometry.get(range.front().stop_id));
         oss << geometric::Polyline::encode(POLYLINE_PRECISION, coordinates);
         oss << "\",";
+        write_intersections(oss, range.front().stop_id);
         oss << "\"mode\": \"transit\",";
         oss << "\"name\": \""
             << dictionary.get_string(stop_info.get_info(range.front().stop_id).name_id) << "\",";
@@ -48,7 +62,8 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         oss << "\"duration\": " << leg.duration() << ",";
         oss << "\"weight\": " << leg.duration();
         */
-        write_maneuver(oss, range.front().stop_id, "board");
+        //write_maneuver(oss, range.front().stop_id, "board");
+        write_maneuver(oss, range.front().stop_id, "depart");
         oss << "}";
     }
 
@@ -64,6 +79,7 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
             std::vector<geometric::WGS84Coordinate> coordinates(crange.begin(), crange.end());
             oss << geometric::Polyline::encode(POLYLINE_PRECISION, coordinates);
             oss << "\",";
+            write_intersections(oss, range.front().stop_id);
             oss << "\"mode\": \"transit\",";
             oss << "\"name\": \"" << dictionary.get_string(stop_info.get_info(itr->stop_id).name_id)
                 << "\",";
@@ -78,8 +94,13 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
     }
     {
         // only print at intermediate parts
-        oss << ",";
-        oss << "{";
+        oss << ",{";
+        oss << "\"geometry\": \"";
+        std::vector<geometric::WGS84Coordinate> coordinates;
+        coordinates.push_back(geometry.get(leg.list().back().stop_id));
+        oss << geometric::Polyline::encode(POLYLINE_PRECISION, coordinates);
+        oss << "\",";
+        write_intersections(oss, leg.list().back().stop_id);
         oss << "\"mode\": \"transit\",";
         oss << "\"name\": \""
             << dictionary.get_string(stop_info.get_info(range.back().stop_id).name_id) << "\",";
@@ -88,7 +109,8 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         oss << "\"duration\": " << leg.duration() << ",";
         oss << "\"weight\": " << leg.duration();
         */
-        write_maneuver(oss, range.back().stop_id, "deboard");
+        //write_maneuver(oss, range.back().stop_id, "deboard");
+        write_maneuver(oss, range.back().stop_id, "arrive");
         oss << "}";
     }
 }
@@ -135,6 +157,27 @@ void OSRM::write_coordinates(std::ostringstream &oss, navigation::Trip const &tr
     oss << geometric::Polyline::encode(100000, coordinates);
 }
 
+void OSRM::write_waypoint(std::ostringstream &oss, StopID const stop) const
+{
+    oss << "{\"distance\": 0, \"name\": \"";
+    oss << dictionary.get_string(stop_info.get_info(stop).name_id);
+    oss << "\", \"location\" : [";
+    auto const location = geometry.get(stop);
+    oss << std::setprecision(12) << doubleFromLatLon(location.longitude) << ","
+        << doubleFromLatLon(location.latitude);
+    oss << "]}";
+}
+
+void OSRM::write_waypoints(std::ostringstream &oss, navigation::Trip const &trip) const
+{
+    oss << "\"waypoints\":[";
+    auto const legs = trip.list();
+    write_waypoint(oss, legs.front().list().front().stop_id);
+    oss << ",";
+    write_waypoint(oss, legs.back().list().back().stop_id);
+    oss << "]";
+}
+
 void OSRM::write_trip(std::ostringstream &oss, navigation::Trip const &trip) const
 {
     auto trip_range = trip.list();
@@ -173,7 +216,9 @@ std::string OSRM::operator()(navigation::Trip const &trip) const
     std::ostringstream oss;
     oss << "{\"code\": \"Ok\",\"routes\": [";
     write_trip(oss, trip);
-    oss << "]}";
+    oss << "],";
+    write_waypoints(oss, trip);
+    oss << "}";
     return oss.str();
 }
 

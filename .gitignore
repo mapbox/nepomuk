@@ -7,3 +7,4 @@ include/fixtures.h
 *node_modules
 *bundle.js
 NodeJS.cmake
+*bundle.js
