@@ -6,11 +6,11 @@
 #include "id/stop.hpp"
 
 #include <boost/geometry.hpp>
-#include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point.hpp>
 
 #include <boost/geometry/index/rtree.hpp>
 
+#include <cstdint>
 #include <utility>
 #include <vector>
 
@@ -26,7 +26,9 @@ class CoordinateToStop
 
     // find the nearest stop to a location
     StopID nearest(geometric::WGS84Coordinate const &location) const;
+    std::vector<StopID> nearest(geometric::WGS84Coordinate const &location, std::uint32_t count) const;
     std::vector<StopID> all(geometric::WGS84BoundingBox const &bounding_box) const;
+    std::vector<StopID> all(geometric::WGS84Coordinate const &location, double const radius) const;
 
     using PointT = boost::geometry::model::point<double, 2, boost::geometry::cs::cartesian>;
   private:

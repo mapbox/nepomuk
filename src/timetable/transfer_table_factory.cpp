@@ -75,7 +75,9 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
 TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterator begin,
                                             std::vector<gtfs::Transfer>::iterator end,
                                             std::size_t const num_stops,
-                                            std::vector<LineTable> const &line_tables)
+                                            std::vector<LineTable> const &line_tables,
+                                            std::vector<gtfs::Stop> const &stops,
+                                            search::CoordinateToStop const &stop_lookup)
 {
     auto by_from = [](auto const &lhs, auto const &rhs) { return lhs.from < rhs.from; };
 
@@ -104,7 +106,22 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
         for (auto stop : stop_range)
         {
             if (gains_line(stop, last_stop))
-                new_transfers.push_back({stop, stop, gtfs::TransferType::LONG, 0});
+                new_transfers.push_back({stop, stop, gtfs::TransferType::LONG, 30});
+
+            // get all stops within a 30 meter radius
+            auto const close_stops = stop_lookup.all(stops[stop.base()].location, 30);
+            // add transfers for all stops that are reachable within 30 meters aerial distance
+            std::for_each(close_stops.begin() + 1,
+                          close_stops.end(),
+                          [&new_transfers, stop, stops](auto const neighbor) {
+                              new_transfers.push_back(
+                                  {stop,
+                                   neighbor,
+                                   gtfs::TransferType::LONG,
+                                   geometric::distance(stops[stop.base()].location,
+                                                       stops[neighbor.base()].location) +
+                                       30});
+                          });
         }
     }
 

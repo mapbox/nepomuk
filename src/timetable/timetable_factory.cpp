@@ -9,8 +9,12 @@
 #include "id/stop.hpp"
 #include "id/trip.hpp"
 
+#include "geometric/coordinate.hpp"
+#include "search/coordinate_to_stop.hpp"
+
 #include "algorithm/ranges.hpp"
 
+#include <iterator>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
@@ -144,11 +148,19 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
 
     if (dataset.transfers)
     {
+        std::vector<std::pair<geometric::WGS84Coordinate, StopID>> locations;
+        locations.reserve(dataset.stops.size());
+        std::transform(dataset.stops.begin(),dataset.stops.end(),std::back_inserter(locations),[](auto const& stop){
+            return std::make_pair(stop.location, stop.id);
+        });
+        auto const stop_lookup = search::CoordinateToStop(locations);
         // sorts internally
         result.transfer_table = TransferTableFactory::produce(dataset.transfers->begin(),
                                                               dataset.transfers->end(),
                                                               dataset.stops.size(),
-                                                              result.line_tables);
+                                                              result.line_tables,
+                                                              dataset.stops,
+                                                              stop_lookup);
     }
 
     return result;
