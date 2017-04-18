@@ -83,7 +83,7 @@ search::StopToLine const &Master::stop_to_line()
     {
         tool::status::FunctionTimingGuard guard("Stop To Line Lookup-creation");
         _stop_to_line = std::make_unique<search::StopToLine>(
-            search::StopToLineFactory::produce(base_data.stops.size(), timetable()));
+            search::StopToLineFactory::produce(base_data.stops.size(), timetable().lines()));
     }
 
     return *_stop_to_line;
