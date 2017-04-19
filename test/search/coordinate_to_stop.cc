@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0.00511));
 
     auto closest_stop = coordinate_lookup.nearest(coordinate);
-    BOOST_CHECK_EQUAL(closest_stop, StopID{0});
+    BOOST_CHECK_EQUAL(closest_stop.first, StopID{0});
 
     geometric::WGS84Coordinate coordinate2(
         geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0.004),
@@ -46,5 +46,5 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 
     auto all = coordinate_lookup.all(bbox);
     BOOST_CHECK(all.size() == 1);
-    BOOST_CHECK_EQUAL(all.front(), StopID{0});
+    BOOST_CHECK_EQUAL(all.front().first, StopID{0});
 }

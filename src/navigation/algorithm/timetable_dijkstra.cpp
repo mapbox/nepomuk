@@ -5,6 +5,8 @@
 
 #include "id/stop.hpp"
 
+#include <iterator>
+#include <set>
 #include <utility>
 
 namespace transit
@@ -23,55 +25,171 @@ TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
 boost::optional<Trip> TimeTableDijkstra::
 operator()(date::Time const departure, StopID const origin, StopID const destination) const
 {
-    struct ReachedVia
-    {
-        StopID parent_stop;
-        LineID on_line;
-        date::Time parent_departure;
-    };
-    using FourHeap = tool::container::KAryHeap<StopID, date::Time, 4, ReachedVia>;
     FourHeap heap;
 
+    auto const origin_station = time_table.station(origin);
     auto const destination_station = time_table.station(destination);
 
+    StopID reached_destination = destination;
+
+    // add all stops of the starting station to the heap
+    for (auto start : time_table.stops(time_table.station(origin)))
+    {
+        //std::cout << "[start] " << start << " " << departure << std::endl;
+        heap.insert(start, departure, {start, WALKING_TRANSFER, departure});
+    }
+
+    auto const skippable = [this, destination_station, origin_station](StopID const stop) {
+        if (time_table.station(stop) == destination_station)
+            return false;
+
+        if (time_table.station(stop) == origin_station)
+            return false;
+
+        auto transfers = time_table.transfers(stop);
+        auto const is_transfer_station =
+            std::find_if(transfers.begin(), transfers.end(), [stop](auto const &transfer) {
+                return transfer.stop_id == stop;
+            }) != transfers.end();
+        return !is_transfer_station;
+    };
+
+    // relax by lines, in order of hops
+    while (!heap.empty())
+    {
+        // found destination
+        auto const stop = heap.min();
+        //std::cout << "[at] " << stop << " " << heap.min_key() << std::endl;
+
+        if (time_table.station(stop) == destination_station)
+            reached_destination = stop;
+
+        if (skippable(stop))
+        {
+            //std::cout << "[skipping] " << stop << " (" << heap.min_key() << ")" << std::endl;
+            heap.delete_min();
+            continue;
+        }
+
+        relax_one(heap);
+    }
+
+    if (!heap.reached(destination))
+        return boost::none;
+
+    return make_trip(extract_path(reached_destination, heap));
+}
+
+boost::optional<Trip> TimeTableDijkstra::operator()(date::Time const departure,
+                                                    std::vector<ADLeg> const &origins,
+                                                    std::vector<ADLeg> const &destinations) const
+{
+    if (origins.empty() || destinations.empty())
+        return boost::none;
+
+    FourHeap heap;
+    StopID destination = destinations.front().stop;
+
+    auto const add_stops = [&](auto const stop, auto const offset) {
+        // add all stops of the starting station to the heap
+        auto const start_at_station = departure + offset;
+        for (auto start : time_table.stops(time_table.station(stop)))
+        {
+            //std::cout << "[start] " << start << " " << start_at_station << std::endl;
+            if (!heap.reached(start))
+                heap.insert(start, start_at_station, {start, WALKING_TRANSFER, departure});
+            else if ((departure + offset) < heap.key(start))
+                heap.decrease_key(start, start_at_station, {start, WALKING_TRANSFER, departure});
+        }
+    };
+
+    for (auto const &origin : origins)
+        add_stops(origin.stop, origin.seconds);
+
+    date::Time best = date::Time::infinity();
+
+    auto const check_and_update_best = [&](StopID const stop, date::Time const arrival) {
+        auto const is_destination = [stop](auto const &leg) { return leg.stop == stop; };
+        auto const itr = std::find_if(destinations.begin(), destinations.end(), is_destination);
+        if (itr != destinations.end() && itr->seconds + arrival < best)
+        {
+            best = itr->seconds + arrival;
+            destination = itr->stop;
+        }
+    };
+
+    std::set<StopID> destination_stations;
+    std::transform(origins.begin(),
+                   origins.end(),
+                   std::inserter(destination_stations, destination_stations.end()),
+                   [&](auto const &leg) { return time_table.station(leg.stop); });
+    std::transform(destinations.begin(),
+                   destinations.end(),
+                   std::inserter(destination_stations, destination_stations.end()),
+                   [&](auto const &leg) { return time_table.station(leg.stop); });
+
+    auto const skippable = [this, destination_stations](StopID const stop) {
+        if (destination_stations.count(time_table.station(stop)))
+            return false;
+
+        auto transfers = time_table.transfers(stop);
+        auto const is_transfer_station =
+            std::find_if(transfers.begin(), transfers.end(), [stop](auto const &transfer) {
+                return transfer.stop_id == stop;
+            }) != transfers.end();
+        return !is_transfer_station;
+    };
+
+    while (!heap.empty())
+    {
+        // found destination
+        auto const stop = heap.min();
+        auto const arrival = heap.min_key();
+        //std::cout << "[at] " << stop << " " << arrival << std::endl;
+
+        check_and_update_best(stop, arrival);
+
+        // reached the final destination
+        if (best < arrival)
+            break;
+
+        if (skippable(stop))
+        {
+            //std::cout << "[skipping] " << stop << " (" << arrival << ")" << std::endl;
+            heap.delete_min();
+            continue;
+        }
+
+        relax_one(heap);
+    }
+
+    if (!heap.reached(destination))
+        return boost::none;
+
+    return make_trip(extract_path(destination, heap));
+}
+
+void TimeTableDijkstra::relax_one(FourHeap &heap) const
+{
     auto const reach = [&](StopID const stop,
                            date::Time const time,
                            StopID from_stop,
                            LineID on_line,
-                           bool use_in_heap,
                            date::Time const parent_departure) {
-
-        if (use_in_heap)
+        //std::cout << "  [reached] " << stop << " " << time << " Parent: " << from_stop << " "
+        //          << parent_departure << " Line: " << on_line << std::endl;
+        if (!heap.reached(stop))
         {
-            if (!heap.reached(stop))
-            {
-                heap.insert(stop, time, {from_stop, on_line, parent_departure});
-                return true;
-            }
-            else if (time < heap.key(stop))
-            {
-                if (heap.contains(stop))
-                    heap.decrease_key(stop, time, {from_stop, on_line, parent_departure});
-                else
-                    heap.insert(stop, time, {from_stop, on_line, parent_departure});
-
-                return true;
-            }
-            else
-                return false;
+            heap.insert(stop, time, {from_stop, on_line, parent_departure});
+            return true;
+        }
+        else if (time < heap.key(stop))
+        {
+            heap.decrease_key(stop, time, {from_stop, on_line, parent_departure});
+            return true;
         }
         else
-        {
-            if (!heap.reached(stop) || time < heap.key(stop))
-            {
-                heap.reach_non_inserting(stop, time, {from_stop, on_line, parent_departure});
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+            return false;
     };
 
     auto const run_trip = [&](auto const from_stop_id, auto const from_line_id, auto const &trip) {
@@ -86,24 +204,15 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
         {
             auto const stop_id = *stop_itr;
             auto transfers = time_table.transfers(stop_id);
-            auto const is_transfer_station =
-                std::find_if(transfers.begin(), transfers.end(), [stop_id](auto const &transfer) {
-                    return transfer.stop_id == stop_id;
-                }) != transfers.end();
 
-            if (reach(stop_id,
-                      time,
-                      from_stop_id,
-                      from_line_id,
-                      is_transfer_station || (destination_station == time_table.station(stop_id)),
-                      trip.departure))
+            if (reach(stop_id, time, from_stop_id, from_line_id, trip.departure))
             {
                 // add all transfers
                 for (auto transfer : transfers)
                 {
                     auto transfer_time = time + transfer.duration;
                     // if (transfer.stop_id != stop_id)
-                    reach(transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, true, time);
+                    reach(transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, time);
                 }
             }
             time = time + *duration_itr;
@@ -116,42 +225,23 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
             run_trip(stop_id, line_id, *trip);
     };
 
-    // add all stops of the starting station to the heap
-    for (auto start : time_table.stops(time_table.station(origin)))
+    // found destination
+    auto const stop = heap.min();
+    auto const arrival = heap.min_key();
+    heap.delete_min();
+
+    auto const lines = stop_to_line(stop);
+    for (auto line_id : lines)
     {
-        heap.insert(start, departure, {start, WALKING_TRANSFER, departure});
+        traverse_line(line_id, stop, arrival);
     }
+}
 
-    StopID reached_destination = destination;
-
-    // relax by lines, in order of hops
-    while (!heap.empty())
-    {
-        // found destination
-        auto const stop = heap.min();
-        // reached the station
-        if (time_table.station(stop) == destination_station)
-        {
-            reached_destination = stop;
-            break;
-        }
-
-        auto const arrival = heap.min_key();
-        heap.delete_min();
-
-        auto const lines = stop_to_line(stop);
-        for (auto line_id : lines)
-        {
-            traverse_line(line_id, stop, arrival);
-        }
-    }
-
-    if (!heap.reached(destination))
-        return boost::none;
-
+std::vector<TimeTableDijkstra::Base::PathEntry>
+TimeTableDijkstra::extract_path(StopID current_stop, FourHeap const &heap) const
+{
     std::vector<Base::PathEntry> path;
-    auto current_stop = destination;
-    path.push_back({destination,
+    path.push_back({current_stop,
                     heap.data(current_stop).on_line,
                     heap.key(current_stop),
                     heap.data(current_stop).parent_departure});
@@ -165,8 +255,7 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
     } while (heap.data(current_stop).parent_stop != current_stop);
 
     std::reverse(path.begin(), path.end());
-
-    return make_trip(path);
+    return path;
 }
 
 } // namespace algorithm

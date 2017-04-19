@@ -25,7 +25,7 @@ void RoutingAlgorithm::update_departures_and_arrivals(std::vector<PathEntry> &pa
     path.back().departure = path.back().arrival;
 }
 
-Trip RoutingAlgorithm::make_trip(std::vector<PathEntry> &path) const
+Trip RoutingAlgorithm::make_trip(std::vector<PathEntry> path) const
 {
     Trip result;
     Leg leg;

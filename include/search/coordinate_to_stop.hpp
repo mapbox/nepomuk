@@ -24,11 +24,13 @@ class CoordinateToStop
   public:
     CoordinateToStop(std::vector<std::pair<geometric::WGS84Coordinate, StopID>> const&);
 
+    using value_type = std::pair<StopID,geometric::WGS84Coordinate>;
+
     // find the nearest stop to a location
-    StopID nearest(geometric::WGS84Coordinate const &location) const;
-    std::vector<StopID> nearest(geometric::WGS84Coordinate const &location, std::uint32_t count) const;
-    std::vector<StopID> all(geometric::WGS84BoundingBox const &bounding_box) const;
-    std::vector<StopID> all(geometric::WGS84Coordinate const &location, double const radius) const;
+    value_type nearest(geometric::WGS84Coordinate const &location) const;
+    std::vector<value_type> nearest(geometric::WGS84Coordinate const &location, std::uint32_t count) const;
+    std::vector<value_type> all(geometric::WGS84BoundingBox const &bounding_box) const;
+    std::vector<value_type> all(geometric::WGS84Coordinate const &location, double const radius) const;
 
     using PointT = boost::geometry::model::point<double, 2, boost::geometry::cs::cartesian>;
   private:

@@ -109,17 +109,17 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
                 new_transfers.push_back({stop, stop, gtfs::TransferType::LONG, 30});
 
             // get all stops within a 30 meter radius
-            auto const close_stops = stop_lookup.all(stops[stop.base()].location, 30);
+            auto const close_stops = stop_lookup.all(stops[stop.base()].location, 50);
             // add transfers for all stops that are reachable within 30 meters aerial distance
             std::for_each(close_stops.begin() + 1,
                           close_stops.end(),
                           [&new_transfers, stop, stops](auto const neighbor) {
                               new_transfers.push_back(
                                   {stop,
-                                   neighbor,
+                                   neighbor.first,
                                    gtfs::TransferType::LONG,
                                    geometric::distance(stops[stop.base()].location,
-                                                       stops[neighbor.base()].location) +
+                                                       stops[neighbor.first.base()].location) +
                                        30});
                           });
         }

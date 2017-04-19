@@ -1,8 +1,8 @@
 #include "gtfs/dataset.hpp"
 #include "gtfs/read_csv.hpp"
 
-#include "geometric/coordinate.hpp"
 #include "date/time.hpp"
+#include "geometric/coordinate.hpp"
 #include "id/stop.hpp"
 
 #include "annotation/osrm.hpp"
@@ -35,7 +35,7 @@ int main(int argc, char **argv) try
     {
         auto coordinate_lookup = data_service.coordinate_to_stop();
 
-#if 1
+#if 0
         navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
                                                                   data_service.stop_to_line());
 #else
@@ -47,7 +47,7 @@ int main(int argc, char **argv) try
         auto to_coordinate = [](std::string const &line) {
             std::istringstream iss(line);
             double lat, lon;
-            iss >> lat >> lon;
+            iss >> lon >> lat;
             return geometric::WGS84Coordinate(
                 geometric::makeLatLonFromDouble<geometric::FixedLongitude>(lon),
                 geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
@@ -62,18 +62,41 @@ int main(int argc, char **argv) try
             std::string line;
             std::getline(std::cin, line);
             // auto source = StopID{static_cast<std::uint64_t>(std::stoi(line))};
-            auto source = coordinate_lookup.nearest(to_coordinate(line));
+            auto const source = to_coordinate(line);
+            auto from = coordinate_lookup.all(source, 150);
             std::cout << "Enter Target..." << std::flush;
             std::getline(std::cin, line);
             // auto target = StopID{static_cast<std::uint64_t>(std::stoi(line))};
-            auto target = coordinate_lookup.nearest(to_coordinate(line));
+            auto const target = to_coordinate(line);
+            auto to = coordinate_lookup.all(target, 150);
             std::cout << "Enter Departure..." << std::flush;
             std::getline(std::cin, line);
             date::Time time(line);
 
             tool::status::Timer query_timer;
             query_timer.start();
-            auto trip = timetable_router(time, source, target);
+            using input_type = navigation::RoutingAlgorithm::ADLeg;
+            std::vector<input_type> origin;
+            std::vector<input_type> destination;
+
+            auto const make_converter = [](auto const base_coordinate) {
+                return [base_coordinate](auto const &pair) -> input_type {
+                    auto const distance = geometric::distance(base_coordinate, pair.second);
+                    return {pair.first,
+                            static_cast<std::uint32_t>(std::llround(2 * distance)),
+                            distance};
+                };
+            };
+
+            std::transform(from.begin(),
+                           from.end(),
+                           std::back_inserter(origin),
+                           make_converter(source));
+            std::transform(to.begin(),
+                           to.end(),
+                           std::back_inserter(destination),
+                           make_converter(target));
+            auto trip = timetable_router(time, origin, destination);
             query_timer.stop();
 
             tool::status::Timer annotation_timer;

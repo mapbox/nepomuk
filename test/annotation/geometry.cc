@@ -25,11 +25,11 @@ BOOST_AUTO_TEST_CASE(annotate_stops)
 
     BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{0}), make_coordinate(0.005, 0.0051));
     BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{1}), make_coordinate(0.005, 0.0049));
-    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{2}), make_coordinate(0.0052, 0.005));
-    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{3}), make_coordinate(0.0053, 0.005));
-    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{4}), make_coordinate(0.0054, 0.005));
-    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{5}), make_coordinate(0.0055, 0.005));
-    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{6}), make_coordinate(0.0053, 0.004));
+    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{2}), make_coordinate(0.0152, 0.005));
+    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{3}), make_coordinate(0.0253, 0.005));
+    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{4}), make_coordinate(0.0354, 0.005));
+    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{5}), make_coordinate(0.0455, 0.005));
+    BOOST_CHECK_EQUAL(geometry_annotation.get(StopID{6}), make_coordinate(0.0253, -0.104));
 }
 
 BOOST_AUTO_TEST_CASE(annotate_lines)
