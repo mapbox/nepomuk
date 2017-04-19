@@ -10,6 +10,7 @@
 #include "timetable/line_table.hpp"
 
 #include <boost/optional.hpp>
+#include <cstdint>
 #include <vector>
 
 namespace transit
@@ -21,10 +22,22 @@ namespace navigation
 class RoutingAlgorithm
 {
   public:
+    // Arrival/Departure leg that provides information about origin stops/destination stops
+    struct ADLeg
+    {
+        StopID stop;
+        std::uint32_t seconds;
+        double meters;
+    };
+
     RoutingAlgorithm(std::vector<timetable::LineTable> const &line_tables);
 
     virtual boost::optional<Trip>
     operator()(date::Time const departure, StopID const origin, StopID const destination) const = 0;
+
+    virtual boost::optional<Trip> operator()(date::Time const departure,
+                                     std::vector<ADLeg> const &origins,
+                                     std::vector<ADLeg> const &destinations) const = 0;
 
   protected:
     std::vector<timetable::LineTable> const &line_tables;
@@ -43,7 +56,7 @@ class RoutingAlgorithm
     // actual departure of the trip that reaches a station/stop. To report our results, we now need
     // to update the departures by shifting them one to the front.
     void update_departures_and_arrivals(std::vector<PathEntry> &path) const;
-    Trip make_trip(std::vector<PathEntry> &path) const;
+    Trip make_trip(std::vector<PathEntry> path) const;
 
     // routing algorithms (to avoid problems with intermediate stops changing after traversing a
     // line) only return a packed path that contains no intermediate stops. Using this method, we

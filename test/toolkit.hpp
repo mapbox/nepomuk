@@ -19,10 +19,16 @@ constexpr char const *const OSRM_ANNOTATED_QUERY_1_4 =
     "\"LINE_NAME_HERE\",\"steps\":[{\"geometry\": \"\",\"mode\": \"transit\",\"name\": \"Stop "
     "A Platform 2\",\"distance\": 1,\"maneuver\":{\"location\": [0.005,0.0049],\"type\": "
     "\"board\"}},{\"geometry\": \"\",\"mode\": \"transit\",\"name\": \"Stop B\",\"distance\": "
-    "1,\"maneuver\":{\"location\": [0.0052,0.005],\"type\": \"stay in "
+    "1,\"maneuver\":{\"location\": [0.0152,0.005],\"type\": \"stay in "
     "vehicle\"}},{\"geometry\": \"\",\"mode\": \"transit\",\"name\": \"Stop C\",\"distance\": "
-    "1,\"maneuver\":{\"location\": [0.0053,0.005],\"type\": \"stay in vehicle\"}},{\"mode\": "
+    "1,\"maneuver\":{\"location\": [0.0253,0.005],\"type\": \"stay in vehicle\"}},{\"mode\": "
     "\"transit\",\"name\": \"Stop D\",\"distance\": 1,\"maneuver\":{\"location\": "
-    "[0.0054,0.005],\"type\": \"deboard\"}}]}]}]}";
+    "[0.0354,0.005],\"type\": \"deboard\"}}]}]}]}";
 
+constexpr char const *const TRIP_ANNOTATED_QUERY_1_4 =
+    "[Leg] Line: 1\n"
+    "    1:00:00 at stop: 1 name: Stop A Platform 2 located at: 0.005 0.0049\n"
+    "    0:00:00 at stop: 2 name: Stop B located at: 0.0152 0.005\n"
+    "    0:00:00 at stop: 3 name: Stop C located at: 0.0253 0.005\n"
+    "    1:30:00 at stop: 4 name: Stop D located at: 0.0354 0.005\n";
 #endif // TRANSIT_TEST_TOOLKIT_HPP_

@@ -26,28 +26,28 @@ BOOST_AUTO_TEST_CASE(request_route)
     date::Time invalid_time("24:00:00");
     date::Time early("01:00:00");
 
-    auto const a1 = make_coordinate(0.005, 0.0049);
-    auto const e = make_coordinate(0.0054, 0.005);
+    auto const stop_a1 = make_coordinate(0.005, 0.0049);
+    auto const stop_d = make_coordinate(0.0353, 0.005);
     auto const out_of_bounds = make_coordinate(-180.1, 90);
 
     service::ServiceParameters out_of_bounds1 = {
         service::PluginType::EAP,
-        service::EarliestArrivalParameters(out_of_bounds, e, date, valid_time)};
+        service::EarliestArrivalParameters(out_of_bounds, stop_d, date, valid_time)};
     BOOST_CHECK(!boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).valid());
     service::ServiceParameters out_of_bounds2 = {
         service::PluginType::EAP,
-        service::EarliestArrivalParameters(e, out_of_bounds, date, valid_time)};
+        service::EarliestArrivalParameters(stop_d, out_of_bounds, date, valid_time)};
     BOOST_CHECK(!boost::get<service::EarliestArrivalParameters>(out_of_bounds2.parameters).valid());
     service::ServiceParameters params_invalid_time = {
         service::PluginType::EAP,
-        service::EarliestArrivalParameters(e, out_of_bounds, date, invalid_time)};
+        service::EarliestArrivalParameters(stop_d, out_of_bounds, date, invalid_time)};
     BOOST_CHECK(
         !boost::get<service::EarliestArrivalParameters>(params_invalid_time.parameters).valid());
     service::ServiceParameters valid_late = {
-        service::PluginType::EAP, service::EarliestArrivalParameters(a1, e, date, valid_time)};
+        service::PluginType::EAP, service::EarliestArrivalParameters(stop_a1, stop_d, date, valid_time)};
     BOOST_CHECK(boost::get<service::EarliestArrivalParameters>(valid_late.parameters).valid());
     service::ServiceParameters query = {service::PluginType::EAP,
-                                        service::EarliestArrivalParameters(a1, e, date, early)};
+                                        service::EarliestArrivalParameters(stop_a1, stop_d, date, early)};
     BOOST_CHECK(boost::get<service::EarliestArrivalParameters>(query.parameters).valid());
 
     BOOST_CHECK(service::ServiceStatus::ERROR == eap(out_of_bounds1));

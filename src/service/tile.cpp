@@ -41,10 +41,11 @@ ServiceStatus Tile::operator()(ServiceParameters &parameters) const
     return ServiceStatus::SUCCESS;
 }
 
-tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal,
-                                                  std::uint32_t const vertical,
-                                                  std::uint32_t const zoom_level,
-                                                  std::vector<StopID> const &stops) const
+tool::container::MapboxVectorTile
+Tile::make_tile(std::uint32_t const horizontal,
+                std::uint32_t const vertical,
+                std::uint32_t const zoom_level,
+                StopsFromLookup const &stops) const
 {
     // compute a vector tile from a set of stops
     tool::container::MapboxVectorTile vector_tile(horizontal, vertical, zoom_level);
@@ -58,15 +59,16 @@ tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal
 }
 
 void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
-                     std::vector<StopID> const &stops) const
+                     StopsFromLookup const &stops) const
 {
 
     auto connection_layer = vector_tile.new_layer("lines");
 
     std::set<std::tuple<StopID, StopID, LineID>> added_shapes;
 
-    for (auto const stop : stops)
+    for (auto const pair : stops)
     {
+        auto const stop = pair.first;
         auto const lines = stop_to_line(stop);
         for (auto const line_id : lines)
         {
@@ -107,7 +109,7 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
 }
 
 void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
-                     std::vector<StopID> const &stops) const
+                     StopsFromLookup const &stops) const
 {
     auto station_layer = vector_tile.new_layer("stations");
 
@@ -116,7 +118,7 @@ void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
     std::transform(stops.begin(),
                    stops.end(),
                    std::back_inserter(stations),
-                   [this](auto const stop) { return timetable.station(stop); });
+                   [this](auto const stop) { return timetable.station(stop.first); });
     std::sort(stations.begin(), stations.end());
     stations.erase(std::unique(stations.begin(), stations.end()), stations.end());
 
@@ -133,18 +135,18 @@ void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
 }
 
 void Tile::add_transfers(tool::container::MapboxVectorTile &vector_tile,
-                         std::vector<StopID> const &stops) const
+                         StopsFromLookup const &stops) const
 {
     auto transfer_layer = vector_tile.new_layer("transfers");
     for (auto const stop : stops)
     {
-        auto const transfers = timetable.transfers(stop);
+        auto const transfers = timetable.transfers(stop.first);
         for (auto transfer : transfers)
         {
-            if (transfer.stop_id != stop)
+            if (transfer.stop_id != stop.first)
             {
                 std::vector<geometric::WGS84Coordinate> line;
-                line.push_back(geometry.get(stop));
+                line.push_back(geometry.get(stop.first));
                 line.push_back(geometry.get(transfer.stop_id));
                 transfer_layer.add_line(line, {});
             }
@@ -153,15 +155,16 @@ void Tile::add_transfers(tool::container::MapboxVectorTile &vector_tile,
 }
 
 void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
-                          std::vector<StopID> const &stops) const
+                          StopsFromLookup const &stops) const
 {
     auto component_layer = vector_tile.new_layer("components");
     tool::container::MapboxVectorTile::FeatureList from_features;
     tool::container::MapboxVectorTile::FeatureList to_features;
     from_features.push_back({"origin", {tool::container::VectorTileValueType::BOOL, true}});
     to_features.push_back({"destinantion", {tool::container::VectorTileValueType::BOOL, true}});
-    for (auto const stop : stops)
+    for (auto const pair : stops)
     {
+        auto const stop = pair.first;
         auto const lines = stop_to_line(stop);
         for (auto const line_id : lines)
         {

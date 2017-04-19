@@ -33,11 +33,12 @@ class Tile : public Interface
     ServiceStatus operator()(ServiceParameters &parameters) const final override;
 
   private:
+    using StopsFromLookup = std::vector<search::CoordinateToStop::value_type>;
     // create a tile from all stops that are within a bounding box
     tool::container::MapboxVectorTile make_tile(std::uint32_t const horizontal,
                                                 std::uint32_t const vertical,
                                                 std::uint32_t const zoom_level,
-                                                std::vector<StopID> const &stops) const;
+                                                StopsFromLookup const &stops) const;
 
     // the general network / it's connections
     timetable::TimeTable const &timetable;
@@ -54,13 +55,13 @@ class Tile : public Interface
     algorithm::StronglyConnectedComponent const components;
 
     void add_lines(tool::container::MapboxVectorTile &vector_tile,
-                   std::vector<StopID> const &stops) const;
+                   StopsFromLookup const &stops) const;
     void add_stops(tool::container::MapboxVectorTile &vector_tile,
-                   std::vector<StopID> const &stops) const;
+                   StopsFromLookup const &stops) const;
     void add_transfers(tool::container::MapboxVectorTile &vector_tile,
-                       std::vector<StopID> const &stops) const;
+                       StopsFromLookup const &stops) const;
     void add_components(tool::container::MapboxVectorTile &vector_tile,
-                        std::vector<StopID> const &stops) const;
+                        StopsFromLookup const &stops) const;
 };
 
 } // namespace service

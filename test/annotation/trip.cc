@@ -29,16 +29,6 @@ BOOST_AUTO_TEST_CASE(annotate_osrm_trip)
 
     auto annotated_trip = trip_annotation(*trip);
 
-    // this fixture is currently missing geometry for the polylines, needs to be fixed in the
-    // fixture itself. The same is true for the line names. When these features land, the fixture
-    // needs to be updated.
-    auto const fixture =
-        "[Leg] Line: 1\n"
-        "	1:00:00 at stop: 1 name: Stop A Platform 2 located at: 0.005 0.0049\n"
-        "	0:00:00 at stop: 2 name: Stop B located at: 0.0052 0.005\n"
-        "	0:00:00 at stop: 3 name: Stop C located at: 0.0053 0.005\n"
-        "	1:30:00 at stop: 4 name: Stop D located at: 0.0054 0.005\n";
     BOOST_CHECK(static_cast<bool>(trip));
-
-    BOOST_CHECK_EQUAL(fixture, annotated_trip);
+    BOOST_CHECK_EQUAL(TRIP_ANNOTATED_QUERY_1_4, annotated_trip);
 }

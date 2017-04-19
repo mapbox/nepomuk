@@ -71,28 +71,30 @@ CoordinateToStop::CoordinateToStop(
     std::for_each(coordinates.begin(), coordinates.end(), add_to_rtree);
 }
 
-StopID CoordinateToStop::nearest(geometric::WGS84Coordinate const &location) const
+CoordinateToStop::value_type
+CoordinateToStop::nearest(geometric::WGS84Coordinate const &location) const
 {
     std::vector<RTreeEntry> result;
     tree.query(boost::geometry::index::nearest(as_point(location), 1), std::back_inserter(result));
-    return result.front().second;
+    return {result.front().second, as_coordinate(result.front().first)};
 }
 
-std::vector<StopID> CoordinateToStop::nearest(geometric::WGS84Coordinate const &location,
-                                              std::uint32_t count) const
+std::vector<CoordinateToStop::value_type>
+CoordinateToStop::nearest(geometric::WGS84Coordinate const &location, std::uint32_t count) const
 {
     std::vector<RTreeEntry> result;
     tree.query(boost::geometry::index::nearest(as_point(location), count),
                std::back_inserter(result));
-    std::vector<StopID> only_stops(result.size());
-    std::transform(result.begin(), result.end(), only_stops.begin(), [](auto const &pair) {
-        return pair.second;
-    });
-    return only_stops;
+    std::vector<value_type> as_value_type(result.size());
+    std::transform(
+        result.begin(), result.end(), as_value_type.begin(), [](auto const &pair) -> value_type {
+            return {pair.second, as_coordinate(pair.first)};
+        });
+    return as_value_type;
 }
 
-std::vector<StopID> CoordinateToStop::all(geometric::WGS84Coordinate const &location,
-                                          double const radius) const
+std::vector<CoordinateToStop::value_type>
+CoordinateToStop::all(geometric::WGS84Coordinate const &location, double const radius) const
 {
     std::vector<RTreeEntry> result;
     tree.query(boost::geometry::index::intersects(box_around_circle(location, 1.1 * radius)),
@@ -112,23 +114,26 @@ std::vector<StopID> CoordinateToStop::all(geometric::WGS84Coordinate const &loca
                               }),
                  result.end());
 
-    std::vector<StopID> only_stops(result.size());
-    std::transform(result.begin(), result.end(), only_stops.begin(), [](auto const &pair) {
-        return pair.second;
-    });
-    return only_stops;
+    std::vector<value_type> as_value_type(result.size());
+    std::transform(
+        result.begin(), result.end(), as_value_type.begin(), [](auto const &pair) -> value_type {
+            return {pair.second, as_coordinate(pair.first)};
+        });
+    return as_value_type;
 }
 
-std::vector<StopID> CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
+std::vector<CoordinateToStop::value_type>
+CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
 {
     std::vector<RTreeEntry> result;
     tree.query(boost::geometry::index::intersects(as_bbox(bounding_box)),
                std::back_inserter(result));
-    std::vector<StopID> only_stops(result.size());
-    std::transform(result.begin(), result.end(), only_stops.begin(), [](auto const &pair) {
-        return pair.second;
-    });
-    return only_stops;
+    std::vector<value_type> as_value_type(result.size());
+    std::transform(
+        result.begin(), result.end(), as_value_type.begin(), [](auto const &pair) -> value_type {
+            return {pair.second, as_coordinate(pair.first)};
+        });
+    return as_value_type;
 }
 
 } // namespace search

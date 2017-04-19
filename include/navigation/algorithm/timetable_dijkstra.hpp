@@ -7,6 +7,7 @@
 
 #include "date/time.hpp"
 #include "id/stop.hpp"
+#include "tool/container/kary_heap.hpp"
 
 #include <boost/optional.hpp>
 
@@ -29,12 +30,29 @@ class TimeTableDijkstra : public RoutingAlgorithm
                                      StopID const origin,
                                      StopID const destination) const override final;
 
+    boost::optional<Trip> operator()(date::Time const departure,
+                                     std::vector<ADLeg> const &origins,
+                                     std::vector<ADLeg> const &destinations) const override final;
+
   private:
+    struct ReachedVia
+    {
+        StopID parent_stop;
+        LineID on_line;
+        date::Time parent_departure;
+    };
+    using FourHeap = tool::container::KAryHeap<StopID, date::Time, 4, ReachedVia>;
+
     // the unmodified timetable data to route on
     timetable::TimeTable const &time_table;
 
     // the look-up for lines from a given stop
     search::StopToLine const &stop_to_line;
+
+    void relax_one(FourHeap &heap) const;
+
+    std::vector<Base::PathEntry> extract_path(StopID current_stop, FourHeap const &heap) const;
+
 };
 
 } // namespace algorithm
