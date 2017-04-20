@@ -27,6 +27,7 @@ BOOST_AUTO_TEST_CASE(request_route)
     date::Time early("01:00:00");
 
     auto const stop_a1 = make_coordinate(0.005, 0.0049);
+    auto const stop_a12 = make_coordinate(0.027, 0.0049);
     auto const stop_d = make_coordinate(0.0353, 0.005);
     auto const out_of_bounds = make_coordinate(-180.1, 90);
 
@@ -44,7 +45,7 @@ BOOST_AUTO_TEST_CASE(request_route)
     BOOST_CHECK(
         !boost::get<service::EarliestArrivalParameters>(params_invalid_time.parameters).valid());
     service::ServiceParameters valid_late = {
-        service::PluginType::EAP, service::EarliestArrivalParameters(stop_a1, stop_d, date, valid_time)};
+        service::PluginType::EAP, service::EarliestArrivalParameters(stop_a12, stop_d, date, valid_time)};
     BOOST_CHECK(boost::get<service::EarliestArrivalParameters>(valid_late.parameters).valid());
     service::ServiceParameters query = {service::PluginType::EAP,
                                         service::EarliestArrivalParameters(stop_a1, stop_d, date, early)};

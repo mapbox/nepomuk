@@ -47,14 +47,14 @@ box_around_circle(geometric::WGS84Coordinate const location, double const radius
 
     geometric::WGS84Coordinate lower_left = {
         geometric::makeLatLonFromDouble<geometric::FixedLongitude>(
-            geometric::doubleFromLatLon(location.longitude) - 0.5 * radius * scale_x),
+            geometric::doubleFromLatLon(location.longitude) - radius * scale_x),
         geometric::makeLatLonFromDouble<geometric::FixedLatitude>(
-            geometric::doubleFromLatLon(location.latitude) - 0.5 * radius * scale_y)};
+            geometric::doubleFromLatLon(location.latitude) - radius * scale_y)};
     geometric::WGS84Coordinate upper_right = {
         geometric::makeLatLonFromDouble<geometric::FixedLongitude>(
-            geometric::doubleFromLatLon(location.longitude) + 0.5 * radius * scale_x),
+            geometric::doubleFromLatLon(location.longitude) + radius * scale_x),
         geometric::makeLatLonFromDouble<geometric::FixedLatitude>(
-            geometric::doubleFromLatLon(location.latitude) + 0.5 * radius * scale_y)};
+            geometric::doubleFromLatLon(location.latitude) + radius * scale_y)};
 
     return {as_point(lower_left), as_point(upper_right)};
 }
