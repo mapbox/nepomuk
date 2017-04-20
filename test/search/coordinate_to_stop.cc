@@ -11,6 +11,8 @@
 #include "geometric/coordinate.hpp"
 #include "search/coordinate_to_stop.hpp"
 
+#include <iostream>
+
 using namespace transit;
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
@@ -41,6 +43,15 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     geometric::WGS84Coordinate coordinate2(
         geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0.004),
         geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0.005));
+
+    auto distance = geometric::distance(closest_stop.second, coordinate);
+
+    auto const coords_in_circle = coordinate_lookup.all(coordinate, distance * 1.1);
+    BOOST_CHECK(coords_in_circle.size() == 1 && coords_in_circle.front().first == StopID{0});
+
+    auto const count_nearest = coordinate_lookup.nearest(coordinate, 1);
+    BOOST_CHECK_EQUAL(count_nearest.front().first, StopID{0});
+
 
     geometric::WGS84BoundingBox bbox(coordinate2, coordinate);
 

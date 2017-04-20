@@ -30,8 +30,8 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
         return result;
     };
 
-    auto from = get_locations(earliest_arrival_parameters.origin(), 150);
-    auto to = get_locations(earliest_arrival_parameters.destination(), 150);
+    auto const from = get_locations(earliest_arrival_parameters.origin(), 150);
+    auto const to = get_locations(earliest_arrival_parameters.destination(), 150);
 
     using input_type = navigation::RoutingAlgorithm::ADLeg;
     std::vector<input_type> origin;
