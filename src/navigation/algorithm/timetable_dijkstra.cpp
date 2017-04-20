@@ -27,7 +27,6 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
 {
     FourHeap heap;
 
-    auto const origin_station = time_table.station(origin);
     auto const destination_station = time_table.station(destination);
 
     StopID reached_destination = destination;
@@ -39,21 +38,6 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
         heap.insert(start, departure, {start, WALKING_TRANSFER, departure});
     }
 
-    auto const skippable = [this, destination_station, origin_station](StopID const stop) {
-        if (time_table.station(stop) == destination_station)
-            return false;
-
-        if (time_table.station(stop) == origin_station)
-            return false;
-
-        auto transfers = time_table.transfers(stop);
-        auto const is_transfer_station =
-            std::find_if(transfers.begin(), transfers.end(), [stop](auto const &transfer) {
-                return transfer.stop_id == stop;
-            }) != transfers.end();
-        return !is_transfer_station;
-    };
-
     // relax by lines, in order of hops
     while (!heap.empty())
     {
@@ -63,13 +47,6 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
 
         if (time_table.station(stop) == destination_station)
             reached_destination = stop;
-
-        if (skippable(stop))
-        {
-            //std::cout << "[skipping] " << stop << " (" << heap.min_key() << ")" << std::endl;
-            heap.delete_min();
-            continue;
-        }
 
         relax_one(heap);
     }
@@ -95,7 +72,7 @@ boost::optional<Trip> TimeTableDijkstra::operator()(date::Time const departure,
         auto const start_at_station = departure + offset;
         for (auto start : time_table.stops(time_table.station(stop)))
         {
-            //std::cout << "[start] " << start << " " << start_at_station << std::endl;
+            // std::cout << "[start] " << start << " " << start_at_station << std::endl;
             if (!heap.reached(start))
                 heap.insert(start, start_at_station, {start, WALKING_TRANSFER, departure});
             else if ((departure + offset) < heap.key(start))
@@ -128,37 +105,18 @@ boost::optional<Trip> TimeTableDijkstra::operator()(date::Time const departure,
                    std::inserter(destination_stations, destination_stations.end()),
                    [&](auto const &leg) { return time_table.station(leg.stop); });
 
-    auto const skippable = [this, destination_stations](StopID const stop) {
-        if (destination_stations.count(time_table.station(stop)))
-            return false;
-
-        auto transfers = time_table.transfers(stop);
-        auto const is_transfer_station =
-            std::find_if(transfers.begin(), transfers.end(), [stop](auto const &transfer) {
-                return transfer.stop_id == stop;
-            }) != transfers.end();
-        return !is_transfer_station;
-    };
-
     while (!heap.empty())
     {
         // found destination
         auto const stop = heap.min();
         auto const arrival = heap.min_key();
-        //std::cout << "[at] " << stop << " " << arrival << std::endl;
+        // std::cout << "[at] " << stop << " " << arrival << std::endl;
 
         check_and_update_best(stop, arrival);
 
         // reached the final destination
         if (best < arrival)
             break;
-
-        if (skippable(stop))
-        {
-            //std::cout << "[skipping] " << stop << " (" << arrival << ")" << std::endl;
-            heap.delete_min();
-            continue;
-        }
 
         relax_one(heap);
     }
@@ -211,8 +169,19 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
                 for (auto transfer : transfers)
                 {
                     auto transfer_time = time + transfer.duration;
-                    // if (transfer.stop_id != stop_id)
+                    //std::cout << "  [transfer]";
                     reach(transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, time);
+                }
+
+                // reach all stops at the same station
+                auto station_time = time + 120;
+                for (auto neighbor : time_table.stops(time_table.station(stop_id)))
+                {
+                    if (neighbor != stop_id)
+                    {
+                        //std::cout << " [station]";
+                        reach(neighbor, station_time, stop_id, WALKING_TRANSFER, time);
+                    }
                 }
             }
             time = time + *duration_itr;
