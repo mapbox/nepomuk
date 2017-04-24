@@ -9,6 +9,10 @@
 #include <cstdint>
 #include <functional>
 #include <stdexcept>
+#include <string>
+
+#include <boost/optional.hpp>
+#include <boost/optional/optional_io.hpp>
 
 namespace transit
 {
@@ -17,7 +21,59 @@ namespace binding
 
 namespace
 {
-service::TileParameters adaptTileParameters(v8::Local<v8::Value> const &object)
+
+template <typename target_type>
+boost::optional<target_type> extract_optional(v8::Local<v8::Value> const &value)
+{
+    return boost::none;
+}
+
+template <> boost::optional<bool> extract_optional(v8::Local<v8::Value> const &value)
+{
+    if (!value->IsBoolean())
+        throw std::runtime_error("Expecting boolean value.");
+    return {value->BooleanValue()};
+}
+
+template <> boost::optional<double> extract_optional(v8::Local<v8::Value> const &value)
+{
+    if (!value->IsNumber())
+        throw std::runtime_error("Expecting number.");
+    return {value->NumberValue()};
+}
+
+template <> boost::optional<std::uint32_t> extract_optional(v8::Local<v8::Value> const &value)
+{
+    if (!value->IsUint32())
+        throw std::runtime_error("Expecting number.");
+    std::cout << "Have uint32" << std::endl;
+    return {static_cast<std::uint32_t>(Nan::To<std::uint32_t>(value).FromJust())};
+}
+
+template <typename target_type>
+boost::optional<target_type> get_optional(std::string const &option_name,
+                                          v8::Local<v8::Object> const &object)
+{
+    auto const nan_option_name = Nan::New(option_name.c_str()).ToLocalChecked();
+    if (!object->Has(nan_option_name))
+        return boost::none;
+    else
+    {
+        try
+        {
+            auto const as_local = Nan::Get(object, nan_option_name).ToLocalChecked();
+            if (as_local->IsUndefined())
+                return boost::none;
+            return extract_optional<target_type>(as_local);
+        }
+        catch (std::runtime_error error)
+        {
+            throw std::runtime_error(option_name + ": " + error.what());
+        }
+    }
+};
+
+service::TileParameters adaptTileParameters(v8::Local<v8::Object> const &object)
 {
     if (!object->IsArray())
         throw std::runtime_error("Parameter must be an array [z, x, y]");
@@ -96,7 +152,7 @@ std::vector<geometric::WGS84Coordinate> parse_coordinates(v8::Local<v8::Array> c
     return result;
 }
 
-service::EarliestArrivalParameters adaptEAPParameters(v8::Local<v8::Value> const &value)
+service::EarliestArrivalParameters adaptEAPParameters(v8::Local<v8::Object> const &value)
 {
     // needs to be an object
     if (!value->IsObject())
@@ -111,38 +167,37 @@ service::EarliestArrivalParameters adaptEAPParameters(v8::Local<v8::Value> const
     if (coordinates.size() != 2)
         throw std::runtime_error("Earliest Arrival Queries need to specify exactly two locations");
 
-    v8::Local<v8::Value> v8_date = object->Get(Nan::New("date").ToLocalChecked());
+    auto const optional_radius = get_optional<double>("walking_radius", object);
+    auto const optional_speed = get_optional<double>("walking_speed", object);
+    auto const optional_departure = get_optional<std::uint32_t>("departure", object);
+    auto const optional_arrival = get_optional<std::uint32_t>("arrival", object);
+    auto const optional_transfer_scale = get_optional<std::uint32_t>("transfer_scale", object);
 
-    if (!v8_date->IsString())
-        throw std::runtime_error("Date needs to be a string in the format of \"YYYYMMDD\")");
+    if (optional_arrival && optional_departure)
+        throw std::runtime_error("Cannot specify both departure and arrival time.");
 
-    std::string date = *v8::String::Utf8Value(Nan::To<v8::String>(v8_date).ToLocalChecked());
-    if (date.size() != 8 || !std::isdigit(date[0]) || !std::isdigit(date[1]) ||
-        !std::isdigit(date[2]) || !std::isdigit(date[3]) || !std::isdigit(date[4]) ||
-        !std::isdigit(date[5]) || !std::isdigit(date[6]) || !std::isdigit(date[7]))
-        throw std::runtime_error("Date needs to be a string in the format of \"YYYYMMDD\")");
+    if (!optional_departure && !optional_arrival)
+        throw std::runtime_error("Missing one of departure/arrival");
 
-    v8::Local<v8::Value> v8_departure = object->Get(Nan::New("departure").ToLocalChecked());
+    auto const walking_radius = optional_radius ? *optional_radius : 1000.0;
+    auto const walking_speed = optional_speed ? *optional_speed : 1.0;
+    auto const transfer_scale = optional_transfer_scale ? *optional_transfer_scale : 1.0;
+    boost::optional<date::UTCTimestamp> arrival =
+        optional_arrival ? boost::optional<date::UTCTimestamp>{*optional_arrival} : boost::none;
+    boost::optional<date::UTCTimestamp> departure =
+        optional_departure ? boost::optional<date::UTCTimestamp>{*optional_departure} : boost::none;
 
-    if (!v8_departure->IsString())
-        throw std::runtime_error("Departure needs to be a string HH:MM:SS, 00:00:00 - 23:59:59");
-
-    std::string departure =
-        *v8::String::Utf8Value(Nan::To<v8::String>(v8_departure).ToLocalChecked());
-    if (departure.size() != 8 || departure[2] != ':' || departure[5] != ':' ||
-        !std::isdigit(departure[0]) || !std::isdigit(departure[1]) || !std::isdigit(departure[3]) ||
-        !std::isdigit(departure[4]) || !std::isdigit(departure[6]) || !std::isdigit(departure[7]))
-        throw std::runtime_error("Departure needs to be a string HH:MM:SS, 00:00:00 - 23:59:59");
-
-    date::Time departure_time(departure);
-    if (date::Time("23:59:59") < departure_time)
-        throw std::runtime_error("Departure needs to be a string HH:MM:SS, 00:00:00 - 23:59:59");
-
-    return service::EarliestArrivalParameters(coordinates[0], coordinates[1], date, departure_time);
+    return service::EarliestArrivalParameters(coordinates[0],
+                                              coordinates[1],
+                                              departure,
+                                              arrival,
+                                              walking_radius,
+                                              walking_speed,
+                                              transfer_scale);
 }
 
 service::ServiceParameters get_parameters(std::string const &plugin_identifier,
-                                          v8::Local<v8::Value> const &object)
+                                          v8::Local<v8::Object> const &object)
 {
     if (plugin_identifier == "tile")
         return {service::PluginType::TILE, adaptTileParameters(object)};
@@ -174,7 +229,7 @@ void Worker::Execute()
     }
 }
 
-void Worker::HandleOKCallback()
+void Worker::HandleOKCallback() try
 {
     Nan::HandleScope scope;
 
@@ -210,6 +265,11 @@ void Worker::HandleOKCallback()
     v8::Local<v8::Value> argv[argc] = {Nan::Null(), std::move(result)};
 
     callback->Call(argc, argv);
+}
+catch (const std::exception &e)
+{
+    std::cout << "[error] failed request due to: " << e.what() << std::endl;
+    return Nan::ThrowError(e.what());
 }
 
 Engine::Engine(std::string const &path) : master_service(std::make_shared<service::Master>(path)) {}
@@ -263,6 +323,7 @@ NAN_METHOD(Engine::create) try
 }
 catch (const std::exception &e)
 {
+    std::cout << "[error] failed request due to: " << e.what() << std::endl;
     return Nan::ThrowError(e.what());
 }
 
@@ -296,6 +357,7 @@ NAN_METHOD(Engine::plug) try
 }
 catch (const std::exception &e)
 {
+    std::cout << "[error] failed request due to: " << e.what() << std::endl;
     return Nan::ThrowError(e.what());
 }
 
@@ -309,9 +371,7 @@ NAN_METHOD(Engine::request) try
     if (!info[0]->IsString())
         throw std::runtime_error("First parameter needs to be the plugin name.");
 
-    v8::Local<v8::Object> plugin_name_object = Nan::To<v8::Object>(info[0]).ToLocalChecked();
-    auto const plugin_name =
-        *v8::String::Utf8Value(Nan::To<v8::String>(plugin_name_object).ToLocalChecked());
+    auto const plugin_name = *v8::String::Utf8Value(Nan::To<v8::String>(info[0]).ToLocalChecked());
 
     auto *const self = Nan::ObjectWrap::Unwrap<Engine>(info.Holder());
     auto service = self->master_service->get(plugin_name);
@@ -325,12 +385,13 @@ NAN_METHOD(Engine::request) try
 
     auto *worker = new Worker{self->master_service,
                               std::move(service),
-                              get_parameters(plugin_name, info[1]),
+                              get_parameters(plugin_name, info[1].As<v8::Object>()),
                               new Nan::Callback{info[2].As<v8::Function>()}};
     Nan::AsyncQueueWorker(worker);
 }
 catch (const std::exception &e)
 {
+    std::cout << "[error] failed request due to: " << e.what() << std::endl;
     return Nan::ThrowError(e.what());
 }
 

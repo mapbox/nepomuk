@@ -22,7 +22,7 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
 
     auto const get_locations = [this](auto const from, double radius) {
         auto result = coordinate_to_stop.all(from, radius);
-        while( result.empty() && radius <= 1000)
+        while (result.empty() && radius <= 1000)
         {
             radius *= 2;
             result = coordinate_to_stop.all(from, radius);
@@ -53,7 +53,16 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
                    std::back_inserter(destination),
                    make_converter(earliest_arrival_parameters.destination()));
 
-    auto trip = navigator(earliest_arrival_parameters.departure(), origin, destination);
+    auto const trip = [&]() -> boost::optional<navigation::Trip> {
+        if (earliest_arrival_parameters.departure())
+        {
+            return navigator(earliest_arrival_parameters.departure()->seconds_since_midnight(),
+                             origin,
+                             destination);
+        }
+        else
+            return boost::none;
+    }();
 
     if (trip)
         earliest_arrival_parameters._result = annotation(*trip);

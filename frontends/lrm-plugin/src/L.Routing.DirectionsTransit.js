@@ -10,9 +10,12 @@
 
 	L.Routing.DirectionsTransit = L.Class.extend({
 		options: {
-			serviceUrl: 'http://0.0.0.0:5000/directions/v5/pumba/transit/eap/20171101/12:00:00/',
+			serviceUrl: 'http://0.0.0.0:5000/directions/v5/pumba/transit/eap/',
 			timeout: 30 * 1000,
-			urlParameters: {}
+			urlParameters: {walking_radius: 1500,
+                            walking_speed: 2,
+                            departure: 1491048000,
+                            transfer_scale: 1.0}
 		},
 
 		initialize: function(apiKey, options) {

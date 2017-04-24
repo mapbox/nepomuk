@@ -35,7 +35,7 @@ int main(int argc, char **argv) try
     {
         auto coordinate_lookup = data_service.coordinate_to_stop();
 
-#if 0
+#if 1
         navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
                                                                   data_service.stop_to_line());
 #else

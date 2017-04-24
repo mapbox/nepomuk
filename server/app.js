@@ -9,8 +9,8 @@ var corsOptions = {maxAge : 3600e3, origin : '*'};
 module.exports =
     function() {
   var app = express();
-  var engine = new transit.Engine("../data/berlin-gtfs");
-  //var engine = new transit.Engine("../data/sf");
+  //var engine = new transit.Engine("../data/berlin-gtfs");
+  var engine = new transit.Engine("../data/sf");
   engine.plug("tile");
   engine.plug("eap");
   // allow same origin and so on
@@ -21,7 +21,7 @@ module.exports =
 
   app.get('/directions/v5/:account/:profile/tiles/:z/:x/:y.mvt',
           tile_handler(engine));
-  app.get('/directions/v5/:account/:profile/eap/:date/:departure/:waypoints/',
+  app.get('/directions/v5/:account/:profile/eap/:waypoints/',
           eap_handler(engine));
 
   return app;
@@ -43,11 +43,10 @@ function tile_handler(engine) {
 
 function eap_handler(engine) {
   return (req, res) => {
-    var date = String(req.params.date);
     var departure = String(req.params.departure);
     var waypoints = (req.params.waypoints || '').split(';');
     if (waypoints.length < 2)
-      return next(new ErrorHTTP('Not enough waypoints', 400));
+      return res.status(400).send('Not enough waypoints');
 
     var matchLonLat = /(-?\d+(?:.\d+)?),(-?\d+(?:.\d+)?)/;
 	var coordinates = [];
@@ -60,7 +59,7 @@ function eap_handler(engine) {
             lonLat[2] >= -90 && lonLat[2] <= 90) {
             coordinates.push([lonLat[1], lonLat[2]].map(parseFloat));
         } else {
-            error = new ErrorHTTP('Waypoint is invalid', 400);
+            error = res.status(400).send('Waypoint is invalid');
         }
     });
 
@@ -68,13 +67,21 @@ function eap_handler(engine) {
         return error;
 
     var plugin = String("eap");
-    var parameters = new Object();
-    parameters.date = date;
-    parameters.departure = departure;
-    parameters.coordinates = coordinates;
+    var parameters =
+    {
+        coordinates: coordinates,
+        departure: (req.query.departure !== undefined) ? parseInt(req.query.departure) : undefined,
+        arrival: (req.query.arrival !== undefined) ? parseInt(req.query.arrival) : undefined,
+        walking_radius: parseFloat(req.query.walking_radius),
+        walking_speed: parseFloat(req.query.walking_speed),
+        transfer_scale: parseFloat(req.query.transfer_scale)
+    }
+
     engine.request(plugin, parameters, (err, result) => {
       if (err)
-        return res.sendStatus(400);
+      {
+        return res.status(400).send('Bad Request: ' + err);
+      }
       res.status(200).type('application/json').send(result);
     });
   };
