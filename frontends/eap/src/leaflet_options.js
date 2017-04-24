@@ -23,7 +23,7 @@ module.exports = {
   },
   services: [{
     label: 'Transit (earliest arrival)',
-    path: 'http://0.0.0.0:5000/directions/v5/ignored/transit/eap/20171101/12:00:00/'
+    path: 'http://0.0.0.0:5000/directions/v5/ignored/transit/eap/'
   }],
   layer: [{
     'Mapbox Streets': streets,

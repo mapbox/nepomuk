@@ -1,6 +1,8 @@
 #include "date/time.hpp"
 
 #include <boost/assert.hpp>
+#include <ctime>
+#include <iomanip>
 #include <limits>
 #include <tuple>
 
@@ -10,6 +12,9 @@ namespace date
 {
 
 Time::Time() : seconds_since_midnight(0), interpolated(false) {}
+
+Time::Time(std::uint32_t seconds_since_midnight) : seconds_since_midnight(seconds_since_midnight) {}
+
 Time::Time(std::uint8_t hour, std::uint8_t minute, std::uint8_t second) : interpolated(false)
 {
     seconds_since_midnight = hour;
@@ -93,6 +98,80 @@ Time Time::infinity()
     Time time;
     time.seconds_since_midnight = std::numeric_limits<std::uint32_t>::max();
     return time;
+}
+
+//////////////////
+
+UTCTimestamp::UTCTimestamp() : seconds_since_epoch(0), interpolated(false) {}
+UTCTimestamp::UTCTimestamp(value_type seconds_since_epoch)
+    : seconds_since_epoch(seconds_since_epoch)
+{
+}
+
+UTCTimestamp::value_type operator-(UTCTimestamp const &lhs, UTCTimestamp const &rhs)
+{
+    return lhs.seconds_since_epoch - rhs.seconds_since_epoch;
+}
+
+bool operator<(UTCTimestamp const &lhs, UTCTimestamp const &rhs)
+{
+    return lhs.seconds_since_epoch < rhs.seconds_since_epoch;
+}
+
+bool operator<=(UTCTimestamp const &lhs, UTCTimestamp const &rhs)
+{
+    return lhs.seconds_since_epoch <= rhs.seconds_since_epoch;
+}
+
+bool operator==(UTCTimestamp const &lhs, UTCTimestamp const &rhs)
+{
+    return lhs.seconds_since_epoch == rhs.seconds_since_epoch;
+}
+
+UTCTimestamp operator+(UTCTimestamp lhs, UTCTimestamp::value_type const seconds)
+{
+    lhs.seconds_since_epoch += seconds;
+    return lhs;
+}
+UTCTimestamp operator+(UTCTimestamp::value_type const seconds, UTCTimestamp rhs)
+{
+    rhs.seconds_since_epoch += seconds;
+    return rhs;
+}
+UTCTimestamp operator-(UTCTimestamp lhs, UTCTimestamp::value_type const seconds)
+{
+    BOOST_ASSERT(seconds <= lhs.seconds_since_epoch);
+    lhs.seconds_since_epoch -= seconds;
+    return lhs;
+}
+
+std::ostream &operator<<(std::ostream &os, UTCTimestamp const &time)
+{
+    std::time_t when = time.seconds_since_epoch;
+    auto const gm_time = std::gmtime(&when);
+    os << std::put_time(gm_time, "%c %Z");
+    return os;
+}
+
+UTCTimestamp UTCTimestamp::infinity()
+{
+    UTCTimestamp time;
+    time.seconds_since_epoch = std::numeric_limits<value_type>::max();
+    return time;
+}
+
+UTCTimestamp::value_type UTCTimestamp::seconds_since_midnight_local() const
+{
+    std::time_t when = seconds_since_epoch;
+    auto const local_time = std::localtime(&when);
+    return 24 * 60 * local_time->tm_hour + 60 * local_time->tm_min + local_time->tm_sec;
+}
+
+UTCTimestamp::value_type UTCTimestamp::seconds_since_midnight() const
+{
+    std::time_t when = seconds_since_epoch;
+    auto const local_time = std::gmtime(&when);
+    return 60 * 60 * local_time->tm_hour + 60 * local_time->tm_min + local_time->tm_sec;
 }
 
 } // namespace date
