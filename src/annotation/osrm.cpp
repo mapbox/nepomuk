@@ -8,11 +8,33 @@
 // TODO remove
 #include <iomanip>
 #include <iostream>
+#include <cctype>
 
 namespace transit
 {
 namespace annotation
 {
+
+namespace
+{
+void write_escaped(std::ostringstream &oss, std::string const &value)
+{
+    auto const requires_escape = [](char const letter)
+    {
+        auto const is_quote = letter == '\"';
+        auto const is_slash = letter == '\\';
+        auto const is_backslash = letter == '/';
+        return is_quote || is_slash || is_backslash;
+    };
+    auto const write_escaped_char = [&](char const letter) {
+        if( iscntrl(letter) || requires_escape(letter) )
+            oss << "\\" << letter;
+        else
+            oss << letter;
+    };
+    std::for_each(value.begin(), value.end(), write_escaped_char);
+}
+} // namespace
 
 void OSRM::write_maneuver(std::ostringstream &oss, StopID const stop, std::string const &type) const
 {
@@ -51,7 +73,7 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         std::vector<geometric::WGS84Coordinate> coordinates(crange.begin(), crange.end());
         if (coordinates.empty())
             coordinates.push_back(geometry.get(range.front().stop_id));
-        oss << geometric::Polyline::encode(POLYLINE_PRECISION, coordinates);
+        write_escaped(oss, geometric::Polyline::encode(POLYLINE_PRECISION, coordinates));
         oss << "\",";
         write_intersections(oss, range.front().stop_id);
         oss << "\"mode\": \"transit\",";
@@ -62,7 +84,7 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         oss << "\"duration\": " << leg.duration() << ",";
         oss << "\"weight\": " << leg.duration();
         */
-        //write_maneuver(oss, range.front().stop_id, "board");
+        // write_maneuver(oss, range.front().stop_id, "board");
         write_maneuver(oss, range.front().stop_id, "depart");
         oss << "}";
     }
@@ -77,7 +99,7 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
             oss << "\"geometry\": \"";
             auto crange = geometry.get(leg.line(), itr->stop_id, (itr + 1)->stop_id);
             std::vector<geometric::WGS84Coordinate> coordinates(crange.begin(), crange.end());
-            oss << geometric::Polyline::encode(POLYLINE_PRECISION, coordinates);
+            write_escaped(oss, geometric::Polyline::encode(POLYLINE_PRECISION, coordinates));
             oss << "\",";
             write_intersections(oss, range.front().stop_id);
             oss << "\"mode\": \"transit\",";
@@ -98,7 +120,7 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         oss << "\"geometry\": \"";
         std::vector<geometric::WGS84Coordinate> coordinates;
         coordinates.push_back(geometry.get(leg.list().back().stop_id));
-        oss << geometric::Polyline::encode(POLYLINE_PRECISION, coordinates);
+        write_escaped(oss, geometric::Polyline::encode(POLYLINE_PRECISION, coordinates));
         oss << "\",";
         write_intersections(oss, leg.list().back().stop_id);
         oss << "\"mode\": \"transit\",";
@@ -109,7 +131,7 @@ void OSRM::write_steps(std::ostringstream &oss, navigation::Leg const &leg) cons
         oss << "\"duration\": " << leg.duration() << ",";
         oss << "\"weight\": " << leg.duration();
         */
-        //write_maneuver(oss, range.back().stop_id, "deboard");
+        // write_maneuver(oss, range.back().stop_id, "deboard");
         write_maneuver(oss, range.back().stop_id, "arrive");
         oss << "}";
     }
@@ -154,7 +176,7 @@ void OSRM::write_coordinates(std::ostringstream &oss, navigation::Trip const &tr
         coordinates.insert(coordinates.end(), crange.begin(), crange.end());
     }
 
-    oss << geometric::Polyline::encode(100000, coordinates);
+    write_escaped(oss, geometric::Polyline::encode(100000, coordinates));
 }
 
 void OSRM::write_waypoint(std::ostringstream &oss, StopID const stop) const
