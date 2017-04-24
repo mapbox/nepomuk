@@ -200,8 +200,11 @@ void Worker::HandleOKCallback()
         }
     }();
 
+    auto result = Nan::New(std::cref(service_result_as_string)).ToLocalChecked();
+    /*
     auto result = Nan::CopyBuffer(service_result_as_string.data(), service_result_as_string.size())
                       .ToLocalChecked();
+    */
 
     const auto argc = 2u;
     v8::Local<v8::Value> argv[argc] = {Nan::Null(), std::move(result)};
