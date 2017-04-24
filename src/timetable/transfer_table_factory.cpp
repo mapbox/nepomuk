@@ -4,6 +4,7 @@
 #include "timetable/line_table.hpp"
 #include "timetable/transfer_table.hpp"
 #include "timetable/transfer_table_factory.hpp"
+#include "tool/status/progress.hpp"
 
 #include <algorithm>
 #include <cstddef>
@@ -107,22 +108,32 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
         {
             if (gains_line(stop, last_stop))
                 new_transfers.push_back({stop, stop, gtfs::TransferType::LONG, 30});
-
-            // get all stops within a 30 meter radius
-            auto const close_stops = stop_lookup.all(stops[stop.base()].location, 50);
-            // add transfers for all stops that are reachable within 30 meters aerial distance
-            std::for_each(close_stops.begin() + 1,
-                          close_stops.end(),
-                          [&new_transfers, stop, stops](auto const neighbor) {
-                              new_transfers.push_back(
-                                  {stop,
-                                   neighbor.first,
-                                   gtfs::TransferType::LONG,
-                                   geometric::distance(stops[stop.base()].location,
-                                                       stops[neighbor.first.base()].location) +
-                                       30});
-                          });
         }
+    }
+
+    {// to not clutter the rest of the scope
+        std::cout << "\n[generating neighbor transfers] ";
+        std::size_t current = 0;
+        tool::status::ProgressBarGuard guard(stops.size());
+
+        auto const add_close_stops_as_transfers = [&](auto const &stop) {
+            // add transfers for all stops that are reachable within 50 meters aerial distance
+            auto const close_stops = stop_lookup.all(stop.location, 50);
+            std::for_each(
+                close_stops.begin() + 1,
+                close_stops.end(),
+                [&new_transfers, stop, &stops](auto const neighbor) {
+                    new_transfers.push_back(
+                        {stop.id,
+                         neighbor.first,
+                         gtfs::TransferType::LONG,
+                         geometric::distance(stop.location, stops[neighbor.first.base()].location) +
+                             30});
+                });
+            guard.print(++current);
+        };
+
+        std::for_each(stops.begin(), stops.end(), add_close_stops_as_transfers);
     }
 
     // use stable sort to prefer original transfers
