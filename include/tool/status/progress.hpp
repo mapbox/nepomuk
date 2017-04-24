@@ -2,6 +2,7 @@
 #define TRANSIT_TOOL_STATUS_PROGRESS_HPP_
 
 #include "tool/status/timing.hpp"
+#include <cstdint>
 #include <string>
 
 namespace transit
@@ -18,6 +19,18 @@ struct FunctionTimingGuard
 
     std::string identifier;
     Timer timer;
+};
+
+class ProgressBarGuard
+{
+  public:
+    ProgressBarGuard(std::uint32_t hundred_percent);
+    ~ProgressBarGuard();
+
+    void print(std::uint32_t current);
+  private:
+    std::uint32_t hundred_percent;
+    std::uint8_t last;
 };
 
 } // namespace statue

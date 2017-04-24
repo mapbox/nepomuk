@@ -9,8 +9,8 @@ var corsOptions = {maxAge : 3600e3, origin : '*'};
 module.exports =
     function() {
   var app = express();
-  // var engine = new transit.Engine("../data/berlin-gtfs");
-  var engine = new transit.Engine("../data/sf");
+  var engine = new transit.Engine("../data/berlin-gtfs");
+  //var engine = new transit.Engine("../data/sf");
   engine.plug("tile");
   engine.plug("eap");
   // allow same origin and so on
