@@ -6,7 +6,9 @@
   "dependencies": {
     "async": "^2.2.0",
     "cors": "^2.8.2",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "morgan": "^1.8.1",
+    "transit": "file:../node-transit"
   },
   "license": "ISC",
   "main": "server.js"

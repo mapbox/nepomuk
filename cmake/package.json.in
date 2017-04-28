@@ -1,0 +1,42 @@
+{
+  "name": "transit",
+  "version": "@TRANSIT_VERSION_MAJOR@.@TRANSIT_VERSION_MINOR@.@TRANSIT_VERSION_PATCH@",
+  "description": "Native module transit direction on gtfs feeds",
+  "url": "https://github.com/mapbox/directions-transit",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mapbox/directions-transit.git"
+  },
+  "keywords": [
+    "addon",
+    "native",
+    "module",
+	"gtfs",
+	"transit"
+  ],
+  "author": "Moritz Kobitzsch",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "scripts": {
+    "prepublish": "npm ls",
+    "install": "node-pre-gyp install --fallback-to-build=false || make -C @PROJECT_SOURCE_DIR@/build/@CMAKE_BUILD_TYPE@",
+    "clean": "node-pre-gyp clean",
+    "test": "tap -Rspec test/*.js"
+  },
+  "dependencies": {
+    "nan": "^2.6",
+    "node-pre-gyp": "^0.6.34"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.42.0",
+    "tap": "^10.3"
+  },
+  "bundledDependencies": ["node-pre-gyp"],
+  "binary": {
+    "module_name": "transit",
+    "module_path": "./binding/",
+    "host": "https://mapbox-node-binary.s3.amazonaws.com",
+    "remote_path": "./{name}/v{version}/{configuration}/",
+    "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
+  }
+}

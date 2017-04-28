@@ -5,7 +5,10 @@ message(STATUS "NodeCMAKE: ${CMAKE_SOURCE_DIR}/node_modules/node-cmake/")
 
 set(NodeJS_DOWNLOAD ON CACHE INTERNAL "Download node.js sources" FORCE)
 set(NodeJS_USE_CLANG_STDLIB OFF CACHE BOOL "Don't use libc++ by default" FORCE)
+
 include(${CMAKE_SOURCE_DIR}/NodeJS.cmake)
+
+set(binding_directory ${CMAKE_SOURCE_DIR}/node/node-transit/binding)
 
 # Note: although we set the global property, we need this for CMake to specify -std=c++14
 nodejs_init()
@@ -28,3 +31,11 @@ target_link_libraries(${PROJECT_NAME}
     transittool)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 14)
+
+file(MAKE_DIRECTORY ${binding_directory})
+
+add_custom_command(OUTPUT ${binding_directory}/${PROJECT_NAME}.node
+                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> ${binding_directory}
+                   DEPENDS ${PROJECT_NAME} ${binding_directory})
+
+add_custom_target(copy_bindings ALL DEPENDS "${binding_directory}/${PROJECT_NAME}.node")

@@ -1,5 +1,5 @@
 const express = require('express');
-var transit = require('..');
+var transit = require('transit');
 var cors = require('cors');
 var morgan = require('morgan');
 const async = require('async');
@@ -7,18 +7,22 @@ const async = require('async');
 var corsOptions = {maxAge : 3600e3, origin : '*'};
 
 module.exports =
-    function() {
+  function() {
   var app = express();
   //var engine = new transit.Engine("../data/berlin-gtfs");
-  var engine = new transit.Engine("../data/sf");
+  var engine = new transit.Engine("../../data/sf");
+
+  // register plugins
   engine.plug("tile");
   engine.plug("eap");
+
   // allow same origin and so on
   app.use(cors(corsOptions));
   app.use(morgan(
       '[:date] [info] [http] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" ":req[x-amz-cf-id]" :response-time ms'));
   app.use((req, res, next) => { next(); });
 
+  // register different urls to their services
   app.get('/directions/v5/:account/:profile/tiles/:z/:x/:y.mvt',
           tile_handler(engine));
   app.get('/directions/v5/:account/:profile/eap/:waypoints/',
@@ -28,6 +32,7 @@ module.exports =
 }
 
 function tile_handler(engine) {
+  // handle a tile request
   return (req, res) => {
     var coordinates = [
       parseInt(req.params.z), parseInt(req.params.x), parseInt(req.params.y)
@@ -35,13 +40,14 @@ function tile_handler(engine) {
     var plugin = String("tile");
     engine.request(plugin, coordinates, (err, result) => {
       if (err)
-        return res.sendStatus(400);
+          return res.status(400).send('Bad Request: ' + err);
       res.status(200).type('application/x-protobuf').send(result);
     });
   };
 }
 
 function eap_handler(engine) {
+  // handle a route request
   return (req, res) => {
     var departure = String(req.params.departure);
     var waypoints = (req.params.waypoints || '').split(';');

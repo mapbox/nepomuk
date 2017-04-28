@@ -28,8 +28,8 @@ Stop makeStop(std::map<std::string, std::size_t> const &header,
         }
     };
 
-    const double lat = std::stof(construct<std::string>("stop_lat", forward, header, values));
-    const double lon = std::stof(construct<std::string>("stop_lon", forward, header, values));
+    const double lat = std::stod(construct<std::string>("stop_lat", forward, header, values));
+    const double lon = std::stod(construct<std::string>("stop_lon", forward, header, values));
 
     return {
         construct<StopID>("stop_id", stringToID<StopID>, header, values),
@@ -89,7 +89,8 @@ StopTime makeStopTime(std::map<std::string, std::size_t> const &header,
         construct_as_optional<std::string, true>("timepoint", forward, header, values);
 
     boost::optional<double> dist_travelled =
-        dist_travelled_str ? boost::optional<double>(std::stof(*dist_travelled_str)) : boost::none;
+        dist_travelled_str ? boost::make_optional(std::stod(*dist_travelled_str))
+                           : boost::none;
     boost::optional<TimepointType> timepoint =
         timepoint_str ? boost::optional<TimepointType>(to_point(*timepoint_str)) : boost::none;
 

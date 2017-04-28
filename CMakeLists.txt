@@ -91,6 +91,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.h.in
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fixtures.h.in
                ${CMAKE_CURRENT_SOURCE_DIR}/include/fixtures.h)
+
+if(${NODEBINDINGS})
+    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package.json.in
+                   ${CMAKE_CURRENT_SOURCE_DIR}/node/node-transit/package.json)
+endif()
 include(mason)
 
 option(USE_LTO "Use link-time optimization if compiler support can be detected" OFF)
@@ -162,6 +167,7 @@ add_subdirectory(src/service)
 add_subdirectory(src/timetable)
 
 if(${NODEBINDINGS})
+    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/configure-bindings.sh ${CMAKE_CURRENT_SOURCE_DIR})
     add_subdirectory(src/bindings)
 endif()
 

@@ -50,16 +50,20 @@ class Engine final : public Nan::ObjectWrap
 
   public:
     // basic set-up of the engine
-    static NAN_MODULE_INIT(init);
+    // static NAN_MODULE_INIT(init);
+    static void init(v8::Local<v8::Object>, v8::Local<v8::Object> module);
 
     // plugin a new engine element
-    static NAN_METHOD(plug);
+    // static NAN_METHOD(plug);
+    static void plug(const Nan::FunctionCallbackInfo<v8::Value> &);
 
     // the registered services
-    static NAN_METHOD(request);
+    // static NAN_METHOD(request);
+    static void request(const Nan::FunctionCallbackInfo<v8::Value> &);
 
   private:
-    static NAN_METHOD(create);
+    // static NAN_METHOD(create);
+    static void create(const Nan::FunctionCallbackInfo<v8::Value> &);
 
     Engine(std::string const &path);
     Engine(Engine &&) = delete;
