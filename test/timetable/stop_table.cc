@@ -1,6 +1,6 @@
 #include "timetable/stop_table.hpp"
-#include "id/trip.hpp"
 #include "date/time.hpp"
+#include "id/trip.hpp"
 #include "timetable/duration_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 #include "timetable/stop_table_factory.hpp"

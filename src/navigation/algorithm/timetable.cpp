@@ -24,7 +24,7 @@ TimeTable::TimeTable(timetable::TimeTable const &time_table, search::StopToLine 
 {
 }
 
-boost::optional<Trip> TimeTable::
+boost::optional<Route> TimeTable::
 operator()(date::Time const departure, StopID const origin, StopID const destination) const
 {
     ReachedStateContainer earliest_arrival;
@@ -72,14 +72,14 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
     if (!earliest_arrival.count(reached_destination))
         return boost::none;
 
-    return make_trip(extract_path(reached_destination, earliest_arrival));
+    return make_route(extract_path(reached_destination, earliest_arrival));
 }
 
-boost::optional<Trip> TimeTable::operator()(date::Time const departure,
-                                            std::vector<ADLeg> const &origins,
-                                            std::vector<ADLeg> const &destinations) const
+boost::optional<Route> TimeTable::operator()(date::Time const departure,
+                                             std::vector<ADLeg> const &origins,
+                                             std::vector<ADLeg> const &destinations) const
 {
-    if( origins.empty() || destinations.empty() )
+    if (origins.empty() || destinations.empty())
         return boost::none;
 
     ReachedStateContainer earliest_arrival;
@@ -137,7 +137,7 @@ boost::optional<Trip> TimeTable::operator()(date::Time const departure,
     if (!earliest_arrival.count(reached_destination))
         return boost::none;
 
-    return make_trip(extract_path(reached_destination, earliest_arrival));
+    return make_route(extract_path(reached_destination, earliest_arrival));
 }
 
 void TimeTable::add_origin(StopID const origin,

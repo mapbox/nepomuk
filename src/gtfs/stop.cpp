@@ -94,16 +94,17 @@ StopTime makeStopTime(std::map<std::string, std::size_t> const &header,
     boost::optional<TimepointType> timepoint =
         timepoint_str ? boost::optional<TimepointType>(to_point(*timepoint_str)) : boost::none;
 
-    return {construct<TripID>("trip_id", stringToID<TripID>, header, values),
-            construct<date::Time>("arrival_time", constructFromString<date::Time>, header, values),
-            construct<date::Time>("departure_time", constructFromString<date::Time>, header, values),
-            construct<StopID>("stop_id", stringToID<StopID>, header, values),
-            construct<SequenceID>("stop_sequence", stringToIDDirect<SequenceID>, header, values),
-            construct_as_optional<std::string, false>("stop_headsign", forward, header, values),
-            construct_as_optional<StopType, true>("pickup_type", to_type, header, values),
-            construct_as_optional<StopType, true>("drop_off_type", to_type, header, values),
-            dist_travelled,
-            construct_as_optional<TimepointType, true>("timepoint", to_point, header, values)};
+    return {
+        construct<TripID>("trip_id", stringToID<TripID>, header, values),
+        construct<date::Time>("arrival_time", constructFromString<date::Time>, header, values),
+        construct<date::Time>("departure_time", constructFromString<date::Time>, header, values),
+        construct<StopID>("stop_id", stringToID<StopID>, header, values),
+        construct<SequenceID>("stop_sequence", stringToIDDirect<SequenceID>, header, values),
+        construct_as_optional<std::string, false>("stop_headsign", forward, header, values),
+        construct_as_optional<StopType, true>("pickup_type", to_type, header, values),
+        construct_as_optional<StopType, true>("drop_off_type", to_type, header, values),
+        dist_travelled,
+        construct_as_optional<TimepointType, true>("timepoint", to_point, header, values)};
 }
 
 } // namespace gtfs

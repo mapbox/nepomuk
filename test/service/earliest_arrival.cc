@@ -33,10 +33,17 @@ BOOST_AUTO_TEST_CASE(request_route)
         service::PluginType::EAP,
         service::EarliestArrivalParameters(
             out_of_bounds, stop_d, april_thirteenth_midnight, boost::none, 150.0, 1.0, 1.0)};
-    BOOST_CHECK_EQUAL(boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).walking_radius(),150.0);
-    BOOST_CHECK_EQUAL(boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).walking_speed(),1.0);
-    BOOST_CHECK_EQUAL(boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).transfer_scale(),1.0);
-    BOOST_CHECK(!boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).arrival());
+    BOOST_CHECK_EQUAL(
+        boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).walking_radius(),
+        150.0);
+    BOOST_CHECK_EQUAL(
+        boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).walking_speed(),
+        1.0);
+    BOOST_CHECK_EQUAL(
+        boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).transfer_scale(),
+        1.0);
+    BOOST_CHECK(
+        !boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).arrival());
     BOOST_CHECK(!boost::get<service::EarliestArrivalParameters>(out_of_bounds1.parameters).valid());
     service::ServiceParameters out_of_bounds2 = {
         service::PluginType::EAP,
@@ -93,11 +100,12 @@ BOOST_AUTO_TEST_CASE(request_latest_departure)
         service::EarliestArrivalParameters(
             stop_a1, stop_d, boost::none, april_thirteenth_midnight, 150.0, 1.0, 1.0)};
 
-    BOOST_CHECK(boost::get<service::EarliestArrivalParameters>(latest_departure.parameters).valid());
+    BOOST_CHECK(
+        boost::get<service::EarliestArrivalParameters>(latest_departure.parameters).valid());
 
     BOOST_CHECK(service::ServiceStatus::SUCCESS == eap(latest_departure));
     // compare test navigation
-    BOOST_CHECK_EQUAL("{\"code\": \"NoRoute\"}",
-                      boost::get<service::EarliestArrivalParameters>(latest_departure.parameters).result());
-
+    BOOST_CHECK_EQUAL(
+        "{\"code\": \"NoRoute\"}",
+        boost::get<service::EarliestArrivalParameters>(latest_departure.parameters).result());
 }

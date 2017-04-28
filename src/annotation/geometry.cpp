@@ -47,10 +47,5 @@ Geometry::get(LineID const line, StopID const from, StopID const to) const
     }
 }
 
-timetable::SegmentTable::const_iterator_range Geometry::get(navigation::Leg const &leg) const
-{
-    return get(leg.line(), leg.list().front().stop_id, leg.list().back().stop_id);
-}
-
 } // namespace annotation
 } // namespace transit

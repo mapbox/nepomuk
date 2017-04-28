@@ -41,11 +41,10 @@ ServiceStatus Tile::operator()(ServiceParameters &parameters) const
     return ServiceStatus::SUCCESS;
 }
 
-tool::container::MapboxVectorTile
-Tile::make_tile(std::uint32_t const horizontal,
-                std::uint32_t const vertical,
-                std::uint32_t const zoom_level,
-                StopsFromLookup const &stops) const
+tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal,
+                                                  std::uint32_t const vertical,
+                                                  std::uint32_t const zoom_level,
+                                                  StopsFromLookup const &stops) const
 {
     // compute a vector tile from a set of stops
     tool::container::MapboxVectorTile vector_tile(horizontal, vertical, zoom_level);

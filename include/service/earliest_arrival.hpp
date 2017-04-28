@@ -23,9 +23,9 @@ class EarliestArrival : public Interface
 
   private:
     annotation::OSRM const &annotation;
-    search::CoordinateToStop const& coordinate_to_stop;
+    search::CoordinateToStop const &coordinate_to_stop;
     navigation::algorithm::TimeTableDijkstra navigator;
-    //navigation::algorithm::TimeTable navigator;
+    // navigation::algorithm::TimeTable navigator;
 };
 
 } // namespace service

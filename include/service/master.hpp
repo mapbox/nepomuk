@@ -26,7 +26,6 @@
 #include "annotation/geometry.hpp"
 #include "annotation/osrm.hpp"
 #include "annotation/stop_info.hpp"
-#include "annotation/trip.hpp"
 
 // graph measures
 #include "algorithm/scc.hpp"
@@ -69,7 +68,6 @@ class Master
 
     // annotation
     annotation::Geometry const &geometry_annotation();
-    annotation::Trip const &trip_annotation();
     annotation::StopInfoTable const &stop_info_annotation();
     annotation::OSRM const &osrm_annotation();
 
@@ -93,7 +91,6 @@ class Master
 
     // annotation
     std::unique_ptr<annotation::Geometry> _geometry_annotation;
-    std::unique_ptr<annotation::Trip> _trip_annotation;
     std::unique_ptr<annotation::StopInfoTable> _stop_info_annotation;
     std::unique_ptr<annotation::OSRM> _osrm_annotation;
 

@@ -78,7 +78,7 @@ class UTCTimestamp
 };
 
 std::uint32_t operator-(UTCTimestamp const &lhs, UTCTimestamp const &rhs);
-bool operator<(UTCTimestamp const &lhs, UTCTimestamp const &rhs); 
+bool operator<(UTCTimestamp const &lhs, UTCTimestamp const &rhs);
 bool operator<=(UTCTimestamp const &lhs, UTCTimestamp const &rhs);
 bool operator==(UTCTimestamp const &lhs, UTCTimestamp const &rhs);
 

@@ -8,9 +8,9 @@
 #include <string>
 #include <vector>
 
+#include "date/time.hpp"
 #include "geometric/coordinate.hpp"
 #include "gtfs/accessibility.hpp"
-#include "date/time.hpp"
 #include "id/dictionary.hpp"
 #include "id/sequence.hpp"
 #include "id/stop.hpp"

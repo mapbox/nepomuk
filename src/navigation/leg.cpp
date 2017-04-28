@@ -1,22 +1,27 @@
 #include "navigation/leg.hpp"
 
+#include <boost/assert.hpp>
+
 namespace transit
 {
 namespace navigation
 {
 
-boost::iterator_range<Leg::iterator> Leg::list() const
+date::UTCTimestamp Leg::departure() const
 {
-    return boost::make_iterator_range(stops.begin(), stops.end());
+    BOOST_ASSERT(!_segments.empty());
+    return _segments.front().departure();
 }
 
-date::Time Leg::departure() const { return _departure; }
+date::UTCTimestamp Leg::arrival() const
+{
+    BOOST_ASSERT(!_segments.empty());
+    return _segments.back().arrival();
+}
 
-LineID Leg::line() const { return _line; }
-
-std::uint32_t Leg::size() const { return stops.size(); }
-
-std::uint32_t Leg::duration() const { return stops.back().arrival - _departure; }
+std::uint32_t Leg::duration() const {
+    return arrival() - departure();
+}
 
 } // namespace navigation
 } // namespace transit

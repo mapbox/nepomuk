@@ -1,10 +1,10 @@
 # define a set of sources to compile
 set(annotate_SOURCES
+    api.cpp
     geometry.cpp
     geometry_factory.cpp
     osrm.cpp
-    stop_info.cpp
-    trip.cpp)
+    stop_info.cpp)
 
 
 # export source files as library

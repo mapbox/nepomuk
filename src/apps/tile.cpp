@@ -57,10 +57,11 @@ int main(int argc, char **argv) try
                 transit::service::PluginType::TILE, transit::service::TileParameters(x, y, z)};
             tile_service(parameters);
 
-            std::cout << "[Tile]"
-                      << (std::string)(
-                             boost::get<transit::service::TileParameters>(parameters.parameters).result())
-                      << std::endl;
+            std::cout
+                << "[Tile]"
+                << (std::string)(
+                       boost::get<transit::service::TileParameters>(parameters.parameters).result())
+                << std::endl;
         }
     }
     return EXIT_SUCCESS;

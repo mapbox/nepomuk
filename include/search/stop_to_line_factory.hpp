@@ -16,7 +16,8 @@ class StopToLineFactory
 {
   public:
     // build a look-up from stop-id to trip-id
-    static StopToLine produce(std::size_t const num_stops, std::vector<timetable::LineTable> const &line_tables);
+    static StopToLine produce(std::size_t const num_stops,
+                              std::vector<timetable::LineTable> const &line_tables);
 };
 
 } // namespace search

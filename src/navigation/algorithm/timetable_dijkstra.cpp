@@ -22,7 +22,7 @@ TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
 {
 }
 
-boost::optional<Trip> TimeTableDijkstra::
+boost::optional<Route> TimeTableDijkstra::
 operator()(date::Time const departure, StopID const origin, StopID const destination) const
 {
     FourHeap heap;
@@ -34,7 +34,7 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
     // add all stops of the starting station to the heap
     for (auto start : time_table.stops(time_table.station(origin)))
     {
-        //std::cout << "[start] " << start << " " << departure << std::endl;
+        // std::cout << "[start] " << start << " " << departure << std::endl;
         heap.insert(start, departure, {start, WALKING_TRANSFER, departure});
     }
 
@@ -43,7 +43,7 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
     {
         // found destination
         auto const stop = heap.min();
-        //std::cout << "[at] " << stop << " " << heap.min_key() << std::endl;
+        // std::cout << "[at] " << stop << " " << heap.min_key() << std::endl;
 
         if (time_table.station(stop) == destination_station)
             reached_destination = stop;
@@ -54,12 +54,12 @@ operator()(date::Time const departure, StopID const origin, StopID const destina
     if (!heap.reached(destination))
         return boost::none;
 
-    return make_trip(extract_path(reached_destination, heap));
+    return make_route(extract_path(reached_destination, heap));
 }
 
-boost::optional<Trip> TimeTableDijkstra::operator()(date::Time const departure,
-                                                    std::vector<ADLeg> const &origins,
-                                                    std::vector<ADLeg> const &destinations) const
+boost::optional<Route> TimeTableDijkstra::operator()(date::Time const departure,
+                                                     std::vector<ADLeg> const &origins,
+                                                     std::vector<ADLeg> const &destinations) const
 {
     if (origins.empty() || destinations.empty())
         return boost::none;
@@ -124,7 +124,7 @@ boost::optional<Trip> TimeTableDijkstra::operator()(date::Time const departure,
     if (!heap.reached(destination))
         return boost::none;
 
-    return make_trip(extract_path(destination, heap));
+    return make_route(extract_path(destination, heap));
 }
 
 void TimeTableDijkstra::relax_one(FourHeap &heap) const
@@ -134,7 +134,7 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
                            StopID from_stop,
                            LineID on_line,
                            date::Time const parent_departure) {
-        //std::cout << "  [reached] " << stop << " " << time << " Parent: " << from_stop << " "
+        // std::cout << "  [reached] " << stop << " " << time << " Parent: " << from_stop << " "
         //          << parent_departure << " Line: " << on_line << std::endl;
         if (!heap.reached(stop))
         {
@@ -169,7 +169,7 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
                 for (auto transfer : transfers)
                 {
                     auto transfer_time = time + transfer.duration;
-                    //std::cout << "  [transfer]";
+                    // std::cout << "  [transfer]";
                     reach(transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, time);
                 }
 
@@ -179,7 +179,7 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
                 {
                     if (neighbor != stop_id)
                     {
-                        //std::cout << " [station]";
+                        // std::cout << " [station]";
                         reach(neighbor, station_time, stop_id, WALKING_TRANSFER, time);
                     }
                 }

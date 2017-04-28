@@ -2,9 +2,9 @@
 #include "timetable/departure_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 
+#include "date/time.hpp"
 #include "gtfs/frequency.hpp"
 #include "gtfs/stop.hpp"
-#include "date/time.hpp"
 #include "id/sequence.hpp"
 #include "id/stop.hpp"
 #include "id/trip.hpp"

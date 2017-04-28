@@ -1,9 +1,9 @@
 #ifndef TRANSIT_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
 #define TRANSIT_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
 
+#include <boost/optional.hpp>
 #include <cstdint>
 #include <string>
-#include <boost/optional.hpp>
 
 #include "date/time.hpp"
 #include "geometric/coordinate.hpp"

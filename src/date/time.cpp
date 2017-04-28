@@ -149,7 +149,7 @@ std::ostream &operator<<(std::ostream &os, UTCTimestamp const &time)
 {
     std::time_t when = time.seconds_since_epoch;
     auto const gm_time = std::gmtime(&when);
-    os << std::put_time(gm_time, "%c %Z");
+    os << std::put_time(gm_time, "%c");
     return os;
 }
 

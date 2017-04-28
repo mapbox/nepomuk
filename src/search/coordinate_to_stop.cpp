@@ -1,8 +1,8 @@
 #include "search/coordinate_to_stop.hpp"
 
+#include "tool/status/progress.hpp"
 #include <algorithm>
 #include <boost/geometry/geometries/box.hpp>
-#include "tool/status/progress.hpp"
 
 namespace transit
 {
@@ -114,7 +114,6 @@ CoordinateToStop::all(geometric::WGS84Coordinate const &location, double const r
                                          radius;
                               }),
                  result.end());
-
 
     std::vector<value_type> as_value_type(result.size());
     std::transform(
