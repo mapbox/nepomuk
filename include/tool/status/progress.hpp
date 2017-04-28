@@ -28,6 +28,7 @@ class ProgressBarGuard
     ~ProgressBarGuard();
 
     void print(std::uint32_t current);
+
   private:
     std::uint32_t hundred_percent;
     std::uint8_t last;

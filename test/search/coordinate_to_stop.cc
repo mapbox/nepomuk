@@ -52,7 +52,6 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto const count_nearest = coordinate_lookup.nearest(coordinate, 1);
     BOOST_CHECK_EQUAL(count_nearest.front().first, StopID{0});
 
-
     geometric::WGS84BoundingBox bbox(coordinate2, coordinate);
 
     auto all = coordinate_lookup.all(bbox);

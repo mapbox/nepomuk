@@ -150,9 +150,10 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
     {
         std::vector<std::pair<geometric::WGS84Coordinate, StopID>> locations;
         locations.reserve(dataset.stops.size());
-        std::transform(dataset.stops.begin(),dataset.stops.end(),std::back_inserter(locations),[](auto const& stop){
-            return std::make_pair(stop.location, stop.id);
-        });
+        std::transform(dataset.stops.begin(),
+                       dataset.stops.end(),
+                       std::back_inserter(locations),
+                       [](auto const &stop) { return std::make_pair(stop.location, stop.id); });
         auto const stop_lookup = search::CoordinateToStop(locations);
         // sorts internally
         result.transfer_table = TransferTableFactory::produce(dataset.transfers->begin(),

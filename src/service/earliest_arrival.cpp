@@ -53,7 +53,7 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
                    std::back_inserter(destination),
                    make_converter(earliest_arrival_parameters.destination()));
 
-    auto const trip = [&]() -> boost::optional<navigation::Trip> {
+    auto const route = [&]() -> boost::optional<navigation::Route> {
         if (earliest_arrival_parameters.departure())
         {
             return navigator(earliest_arrival_parameters.departure()->seconds_since_midnight(),
@@ -64,8 +64,8 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
             return boost::none;
     }();
 
-    if (trip)
-        earliest_arrival_parameters._result = annotation(*trip);
+    if (route)
+        earliest_arrival_parameters._result = annotation(*route);
     else
     {
         const constexpr auto NO_ROUTE = "{\"code\": \"NoRoute\"}";

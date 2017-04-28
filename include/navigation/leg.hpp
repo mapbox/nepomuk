@@ -1,55 +1,33 @@
 #ifndef TRANSIT_NAVIGATION_LEG_HPP_
 #define TRANSIT_NAVIGATION_LEG_HPP_
 
-#include <cstdint>
-#include <vector>
+#include "date/time.hpp"
+#include "navigation/segment.hpp"
 
 #include <boost/range/iterator_range.hpp>
-
-#include "date/time.hpp"
-#include "id/line.hpp"
-#include "id/stop.hpp"
-#include "timetable/stop_table.hpp"
+#include <cstdint>
 
 namespace transit
 {
 namespace navigation
 {
-
 // forward declaration for friend access
 class RoutingAlgorithm;
 
-// within a trip, a leg describes a single segment between two distinct transfers. A leg can be a
-// single connection (e.g. take the 100 from A to B), or a series of possible connections.
-// We can immagine taking any of a series of busses, depending on which one we manage to catch in
-// case of close connections. In that case we would offer take any of 100/101/231 from A to B
 class Leg
 {
+  private:
+    std::vector<Segment> _segments;
+
+    friend class RoutingAlgorithm;
+
   public:
-    struct stop_type
-    {
-        StopID stop_id;
-        date::Time arrival;
-    };
-    using iterator = std::vector<stop_type>::const_iterator;
-
-    boost::iterator_range<iterator> list() const;
-    date::Time departure() const;
-    LineID line() const;
-
-    std::uint32_t size() const;
+    date::UTCTimestamp departure() const;
+    date::UTCTimestamp arrival() const;
     std::uint32_t duration() const;
 
-  private:
-    LineID _line;
-    date::Time _departure;
-    // the stops along the leg
-    std::vector<stop_type> stops;
-
-    // make sure routing algorithms are allowed to construct legs
-    friend class RoutingAlgorithm;
+    auto segments() const { return boost::make_iterator_range(_segments.begin(), _segments.end()); }
 };
-
 } // namespace navigation
 } // namespace transit
 

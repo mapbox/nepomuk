@@ -40,7 +40,10 @@ bool EarliestArrivalParameters::valid() const
 
 geometric::WGS84Coordinate EarliestArrivalParameters::origin() const { return _origin; }
 geometric::WGS84Coordinate EarliestArrivalParameters::destination() const { return _destination; }
-boost::optional<date::UTCTimestamp> EarliestArrivalParameters::departure() const { return _departure; }
+boost::optional<date::UTCTimestamp> EarliestArrivalParameters::departure() const
+{
+    return _departure;
+}
 boost::optional<date::UTCTimestamp> EarliestArrivalParameters::arrival() const { return _arrival; }
 
 double EarliestArrivalParameters::walking_radius() const { return _walking_radius; }

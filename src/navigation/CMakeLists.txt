@@ -1,7 +1,10 @@
 # define a set of sources to compile
 SET(navigation_SOURCES
+    stop.cpp
+    connection.cpp
+    segment.cpp
     leg.cpp
-    trip.cpp
+    route.cpp
     routing_algorithm.cpp
     algorithm/timetable.cpp
     algorithm/timetable_dijkstra.cpp)

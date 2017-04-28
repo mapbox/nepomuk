@@ -25,10 +25,24 @@ void RoutingAlgorithm::update_departures_and_arrivals(std::vector<PathEntry> &pa
     path.back().departure = path.back().arrival;
 }
 
-Trip RoutingAlgorithm::make_trip(std::vector<PathEntry> path) const
+Route RoutingAlgorithm::make_route(std::vector<PathEntry> path) const
 {
-    Trip result;
+    // currently we only support a single leg
+    Route result;
     Leg leg;
+    Connection connection;
+
+    auto const make_segment = [](auto type, auto container) {
+        Segment segment;
+        segment._type = std::move(type);
+        segment.container = std::move(container);
+        return segment;
+    };
+
+    // really hacked version, we are not travelling in 1970
+    auto const to_utc = [](auto date) { return date::UTCTimestamp(date.seconds_since_midnight); };
+
+    Segment segment = make_segment(SegmentType::WALK, segment::Walk());
     // we only know the first line, after starting. We always reach the first station via walking
     // transfer. To avoid an additional leg here, we set the line to the line of the second station
     update_departures_and_arrivals(path);
@@ -39,30 +53,61 @@ Trip RoutingAlgorithm::make_trip(std::vector<PathEntry> path) const
 
     path = unpack_path(std::move(path));
 
-    set_departure(leg, path[0].departure);
-    set_line(leg, path[0].line);
+    set_departure(segment.as_walk(), to_utc(path[0].departure));
+    set_arrival(segment.as_walk(), to_utc(path[0].departure));
+
+    add_segment(leg, std::move(segment));
+
+    segment = make_segment(SegmentType::TRANSIT, segment::Transit());
+    set_line(connection, path[0].line);
+    set_departure(connection, to_utc(path[0].departure));
 
     auto current_line = path[0].line;
     for (auto itr = path.begin(); itr != path.end(); ++itr)
     {
         if (itr->line != current_line)
         {
-            add_leg(result, std::move(leg));
-            leg = Leg();
-            current_line = itr->line;
-            if (current_line == WALKING_TRANSFER && itr + 1 != path.end())
-                current_line = (itr + 1)->line;
+            add_connection(segment.as_transit(), std::move(connection));
+            connection = Connection();
+            add_segment(leg, std::move(segment));
 
-            set_departure(leg, (itr - 1)->departure);
-            set_line(leg, current_line);
+            if (itr->line == WALKING_TRANSFER && itr + 1 != path.end())
+            {
+                segment = make_segment(SegmentType::TRANSFER, segment::Transfer());
+                set_departure(segment.as_transfer(), to_utc(itr->arrival));
+                set_arrival(segment.as_transfer(), to_utc((itr + 1)->departure));
+                current_line = (itr + 1)->line;
+                add_segment(leg, std::move(segment));
+            }
+            else
+            {
+                current_line = itr->line;
+            }
+            set_line(connection, current_line);
+            set_departure(connection, to_utc((itr - 1)->departure));
+
+            segment = make_segment(SegmentType::TRANSIT, segment::Transit());
 
             // only repeat last stop, if it wasn't a walking transfer
             if (itr->line != WALKING_TRANSFER)
-                add_stop(leg, Leg::stop_type{(itr - 1)->stop, (itr - 1)->arrival});
+            {
+                Stop previous;
+                previous._id = (itr - 1)->stop;
+                previous._departure = to_utc((itr - 1)->departure);
+                previous._arrival = to_utc((itr - 1)->departure);
+                add_stop(segment.as_transit(), previous);
+            }
         }
-        add_stop(leg, Leg::stop_type{itr->stop, itr->arrival});
+        Stop stop;
+        set_arrival(stop, to_utc(itr->arrival));
+        set_departure(stop, to_utc(itr->departure));
+        stop._id = itr->stop;
+        add_stop(segment.as_transit(), stop);
+        set_arrival(connection, to_utc(itr->arrival));
     }
     // add the final leg
+    add_connection(segment.as_transit(), std::move(connection));
+    add_segment(leg, std::move(segment));
     add_leg(result, std::move(leg));
     return result;
 }
@@ -87,7 +132,7 @@ RoutingAlgorithm::unpack_path(std::vector<PathEntry> packed_path) const
                     auto const s = *itr;
                     if (s == to.stop)
                         break;
-                    unpacked_path.push_back({s, to.line, {}, {}});
+                    unpacked_path.push_back({s, to.line, from.departure, from.departure});
                 }
             }
         }
@@ -101,16 +146,64 @@ RoutingAlgorithm::unpack_path(std::vector<PathEntry> packed_path) const
     return unpacked_path;
 }
 
-void RoutingAlgorithm::add_leg(Trip &trip, Leg leg) const { trip.legs.push_back(std::move(leg)); }
-
-void RoutingAlgorithm::add_stop(Leg &leg, Leg::stop_type stop) const
+void RoutingAlgorithm::add_leg(Route &route, Leg leg) const
 {
-    leg.stops.push_back(std::move(stop));
+    route._legs.push_back(std::move(leg));
 }
 
-void RoutingAlgorithm::set_departure(Leg &leg, date::Time time) const { leg._departure = time; }
+void RoutingAlgorithm::add_stop(segment::Transit &segment, Stop stop) const
+{
+    segment._stops.push_back(std::move(stop));
+}
 
-void RoutingAlgorithm::set_line(Leg &leg, LineID line) const { leg._line = line; }
+void RoutingAlgorithm::add_connection(segment::Transit &segment, Connection connection) const
+{
+    segment._connections.push_back(std::move(connection));
+}
+
+void RoutingAlgorithm::add_segment(Leg &leg, Segment segment) const
+{
+    leg._segments.push_back(std::move(segment));
+}
+
+void RoutingAlgorithm::set_departure(Stop &stop, date::UTCTimestamp time) const
+{
+    stop._departure = time;
+}
+void RoutingAlgorithm::set_arrival(Stop &stop, date::UTCTimestamp time) const
+{
+    stop._arrival = time;
+}
+void RoutingAlgorithm::set_departure(Connection &connection, date::UTCTimestamp time) const
+{
+    connection._departure = time;
+}
+void RoutingAlgorithm::set_arrival(Connection &connection, date::UTCTimestamp time) const
+{
+    connection._arrival = time;
+}
+
+void RoutingAlgorithm::set_departure(segment::Transfer &segment, date::UTCTimestamp time) const
+{
+    segment._departure = time;
+}
+void RoutingAlgorithm::set_arrival(segment::Transfer &segment, date::UTCTimestamp time) const
+{
+    segment._arrival = time;
+}
+void RoutingAlgorithm::set_departure(segment::Walk &segment, date::UTCTimestamp time) const
+{
+    segment._departure = time;
+}
+void RoutingAlgorithm::set_arrival(segment::Walk &segment, date::UTCTimestamp time) const
+{
+    segment._arrival = time;
+}
+
+void RoutingAlgorithm::set_line(Connection &connection, LineID line) const
+{
+    connection._line = line;
+}
 
 } // namespace navigation
 } // namespace transit

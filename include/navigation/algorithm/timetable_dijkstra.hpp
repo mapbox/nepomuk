@@ -26,13 +26,13 @@ class TimeTableDijkstra : public RoutingAlgorithm
                       search::StopToLine const &stop_to_line);
 
     // query a route between two stops
-    boost::optional<Trip> operator()(date::Time const departure,
-                                     StopID const origin,
-                                     StopID const destination) const override final;
+    boost::optional<Route> operator()(date::Time const departure,
+                                      StopID const origin,
+                                      StopID const destination) const override final;
 
-    boost::optional<Trip> operator()(date::Time const departure,
-                                     std::vector<ADLeg> const &origins,
-                                     std::vector<ADLeg> const &destinations) const override final;
+    boost::optional<Route> operator()(date::Time const departure,
+                                      std::vector<ADLeg> const &origins,
+                                      std::vector<ADLeg> const &destinations) const override final;
 
   private:
     struct ReachedVia
@@ -52,7 +52,6 @@ class TimeTableDijkstra : public RoutingAlgorithm
     void relax_one(FourHeap &heap) const;
 
     std::vector<Base::PathEntry> extract_path(StopID current_stop, FourHeap const &heap) const;
-
 };
 
 } // namespace algorithm

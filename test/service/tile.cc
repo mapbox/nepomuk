@@ -41,5 +41,6 @@ BOOST_AUTO_TEST_CASE(render_tiles)
             boost::get<service::TileParameters>(service_parameters.parameters).result());
     };
 
-    BOOST_CHECK(result_as_string(parameters).length() > result_as_string(empty_parameters).length());
+    BOOST_CHECK(result_as_string(parameters).length() >
+                result_as_string(empty_parameters).length());
 }

@@ -25,13 +25,13 @@ class TimeTable : public RoutingAlgorithm
     TimeTable(timetable::TimeTable const &time_table, search::StopToLine const &stop_to_line);
 
     // query a route between two stops
-    boost::optional<Trip> operator()(date::Time const departure,
-                                     StopID const origin,
-                                     StopID const destination) const override final;
+    boost::optional<Route> operator()(date::Time const departure,
+                                      StopID const origin,
+                                      StopID const destination) const override final;
 
-    boost::optional<Trip> operator()(date::Time const departure,
-                                     std::vector<ADLeg> const &origins,
-                                     std::vector<ADLeg> const &destinations) const override final;
+    boost::optional<Route> operator()(date::Time const departure,
+                                      std::vector<ADLeg> const &origins,
+                                      std::vector<ADLeg> const &destinations) const override final;
 
   private:
     // the unmodified timetable data to route on

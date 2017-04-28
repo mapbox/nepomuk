@@ -115,24 +115,24 @@ BOOST_AUTO_TEST_CASE(UTCDifference)
 
 BOOST_AUTO_TEST_CASE(UTCseconds_since_midnight)
 {
-    UTCTimestamp test(1493282472); //8:41:12am
-    BOOST_CHECK_EQUAL(test.seconds_since_midnight(), 8*60*60+41*60+12);
+    UTCTimestamp test(1493282472); // 8:41:12am
+    BOOST_CHECK_EQUAL(test.seconds_since_midnight(), 8 * 60 * 60 + 41 * 60 + 12);
 }
 
 BOOST_AUTO_TEST_CASE(UTCseconds_since_midnight_local)
 {
-    UTCTimestamp test(1493282472); //8:41:12am
-    UTCTimestamp test2(1493282600); //8:41:12am
-    BOOST_CHECK_EQUAL(test2-test,test2.seconds_since_midnight_local() - test.seconds_since_midnight_local());
+    UTCTimestamp test(1493282472);  // 8:41:12am
+    UTCTimestamp test2(1493282600); // 8:41:12am
+    BOOST_CHECK_EQUAL(test2 - test,
+                      test2.seconds_since_midnight_local() - test.seconds_since_midnight_local());
 }
 
 BOOST_AUTO_TEST_CASE(UTCOut)
 {
     std::ostringstream oss;
-    UTCTimestamp test(1493282472); //8:41am
+    UTCTimestamp test(1493282472); // 8:41am
     // they are the same, so sadly time can report both :(
     oss << test;
-    auto utc = "Thu Apr 27 08:41:12 2017 UTC";
-    auto gmt = "Thu Apr 27 08:41:12 2017 GMT";
-    BOOST_CHECK((oss.str() == utc) || (oss.str() == gmt));
+    auto utc = "Thu Apr 27 08:41:12 2017";
+    BOOST_CHECK((oss.str() == utc));
 }

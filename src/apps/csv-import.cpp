@@ -7,7 +7,6 @@
 
 #include "annotation/osrm.hpp"
 #include "annotation/stop_info.hpp"
-#include "annotation/trip.hpp"
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "service/master.hpp"
@@ -53,7 +52,6 @@ int main(int argc, char **argv) try
                 geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
         };
 
-        auto annotator = data_service.trip_annotation();
         transit::annotation::OSRM const &osrm_annotator = data_service.osrm_annotation();
 
         while (true)
@@ -88,23 +86,18 @@ int main(int argc, char **argv) try
                 };
             };
 
-            std::transform(from.begin(),
-                           from.end(),
-                           std::back_inserter(origin),
-                           make_converter(source));
-            std::transform(to.begin(),
-                           to.end(),
-                           std::back_inserter(destination),
-                           make_converter(target));
-            auto trip = timetable_router(time, origin, destination);
+            std::transform(
+                from.begin(), from.end(), std::back_inserter(origin), make_converter(source));
+            std::transform(
+                to.begin(), to.end(), std::back_inserter(destination), make_converter(target));
+            auto route = timetable_router(time, origin, destination);
             query_timer.stop();
 
             tool::status::Timer annotation_timer;
             annotation_timer.start();
-            if (trip)
+            if (route)
             {
-                std::cout << annotator(*trip) << std::endl;
-                std::cout << osrm_annotator(*trip) << std::endl;
+                std::cout << osrm_annotator(*route) << std::endl;
             }
             annotation_timer.stop();
 

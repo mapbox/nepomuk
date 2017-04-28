@@ -7,7 +7,6 @@
 #include "adaptor/dictionary.hpp"
 #include "annotation/geometry_factory.hpp"
 #include "annotation/stop_info.hpp"
-#include "annotation/trip.hpp"
 #include "search/stop_to_line_factory.hpp"
 #include "timetable/graph_adaptor.hpp"
 #include "timetable/timetable_factory.hpp"
@@ -163,18 +162,6 @@ annotation::Geometry const &Master::geometry_annotation()
                                                  segment_table()));
     }
     return *_geometry_annotation;
-}
-
-annotation::Trip const &Master::trip_annotation()
-{
-    if (!_trip_annotation)
-    {
-        tool::status::FunctionTimingGuard guard("Trip Annotation - creation");
-        _trip_annotation = std::make_unique<annotation::Trip>(
-            stop_info_annotation(), geometry_annotation(), dictionary());
-    }
-
-    return *_trip_annotation;
 }
 
 annotation::OSRM const &Master::osrm_annotation()

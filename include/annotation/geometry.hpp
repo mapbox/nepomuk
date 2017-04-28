@@ -8,7 +8,7 @@
 #include "geometric/coordinate.hpp"
 #include "id/line.hpp"
 #include "id/shape.hpp"
-#include "navigation/leg.hpp"
+#include "navigation/segment.hpp"
 #include "timetable/segment_table.hpp"
 #include "tool/container/indexed_vector.hpp"
 
@@ -30,7 +30,6 @@ class Geometry
     };
 
     geometric::WGS84Coordinate get(StopID const stop) const;
-    timetable::SegmentTable::const_iterator_range get(navigation::Leg const &leg) const;
 
     timetable::SegmentTable::const_iterator_range
     get(LineID const line, StopID const from, StopID const to) const;

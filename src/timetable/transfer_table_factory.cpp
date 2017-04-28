@@ -111,7 +111,7 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
         }
     }
 
-    {// to not clutter the rest of the scope
+    { // to not clutter the rest of the scope
         std::cout << "\n[generating neighbor transfers] ";
         std::size_t current = 0;
         tool::status::ProgressBarGuard guard(stops.size());
