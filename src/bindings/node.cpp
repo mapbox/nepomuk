@@ -279,7 +279,7 @@ Nan::Persistent<v8::Function> &Engine::construct()
     return init;
 }
 
-NAN_MODULE_INIT(Engine::init)
+void Engine::init(v8::Local<v8::Object> target, v8::Local<v8::Object>)
 {
     auto const whoami = Nan::New("Engine").ToLocalChecked();
 
@@ -294,12 +294,12 @@ NAN_MODULE_INIT(Engine::init)
 
     construct().Reset(fn);
 
-    // target stems from the node_module_init
     Nan::Set(target, whoami, fn);
 }
 
 // initialise the internal data structures
-NAN_METHOD(Engine::create) try
+// NAN_METHOD(Engine::create)
+void Engine::create(const Nan::FunctionCallbackInfo<v8::Value> &info) try
 {
     // Handle `new T()` as well as `T()`
     if (!info.IsConstructCall())
@@ -326,7 +326,8 @@ catch (const std::exception &e)
     return Nan::ThrowError(e.what());
 }
 
-NAN_METHOD(Engine::plug) try
+// NAN_METHOD(Engine::plug)
+void Engine::plug(const Nan::FunctionCallbackInfo<v8::Value> &info) try
 {
     if (info.Length() != 1)
         throw std::runtime_error("Create requires a single parameter (to gtfs dataset)");
@@ -361,7 +362,8 @@ catch (const std::exception &e)
 }
 
 // do an asynchronous request against the master service with a set of parameters
-NAN_METHOD(Engine::request) try
+// NAN_METHOD(Engine::request)
+void Engine::request(const Nan::FunctionCallbackInfo<v8::Value> &info) try
 {
     if (info.Length() < 3)
         throw std::runtime_error("Parameter missmatch: Requiring plugin name, plugin "

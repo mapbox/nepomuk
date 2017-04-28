@@ -25,8 +25,10 @@ For example:
 
 ```
 mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release ..
+mkdir build/release
+
+cd build/release
+cmake -DCMAKE_BUILD_TYPE=Release ../..
 make
 ```
 
@@ -37,11 +39,12 @@ To build the node bindings, we require nvm / npm and node in version >= 4.
 ```
 nvm install 4
 nvm use 4
-npm install
-node_modules/node-cmake/lib/ncmake.js update
+```
 
 mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DNODEBINDINGS=On ..
+mkdir build/release
+
+cd build/release
+cmake -DCMAKE_BUILD_TYPE=Release -DNODEBINDINGS=On ../..
 make
 ```

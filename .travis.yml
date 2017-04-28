@@ -72,8 +72,7 @@ before_install:
   - if [[ "${NODEBINDINGS}" == "On" ]]; then
         nvm install ${NODE_VERSION};
         nvm use ${NODE_VERSION};
-        npm install --unsafe-perm;
-        ./node_modules/node-cmake/lib/ncmake.js update;
+        ./scripts/configure-bindings.sh;
     fi
   - CMAKE_URL="https://mason-binaries.s3.amazonaws.com/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}.tar.gz"
   - CMAKE_DIR="mason_packages/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}"
@@ -82,12 +81,19 @@ before_install:
 
 install:
   - mkdir -p build
-  - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
+  - mkdir -p build/${BUILD_TYPE}
+  - cd build/${BUILD_TYPE}
+  - cmake ../.. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
   - make -j 2
 
 script:
   - ctest --verbose #run unit test framework
+  - if [[ "${NODEBINDINGS}" == "On" ]]; then
+        cd ../../node/node-transit/;
+        npm install;
+        npm test;
+        cd ../../build/${BUILD_TYPE};
+    fi
 
 after_success:
   - cd ..

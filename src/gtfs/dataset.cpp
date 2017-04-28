@@ -13,7 +13,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
-#include <boost/range/iterator_range.hpp>
 
 namespace transit
 {
@@ -129,17 +128,17 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
         stops_by_id.insert(std::make_pair(stop.name, pos++));
     });
 
-    auto const group_close_points = [&](auto bucket) {
-        if (static_cast<std::size_t>(std::distance(bucket.begin(), bucket.end())) > 1)
+    auto const group_close_points = [&](auto const bucket_begin, auto const bucket_end) {
+        if (static_cast<std::size_t>(std::distance(bucket_begin, bucket_end)) > 1)
         {
             auto const has_parent_station = [&](auto const &pair_name_offset) -> bool {
                 return stops[pair_name_offset.second].parent_station != boost::none;
             };
-            if (std::any_of(bucket.begin(), bucket.end(), has_parent_station))
+            if (std::any_of(bucket_begin, bucket_end, has_parent_station))
                 return;
 
             auto reference_index =
-                std::min_element(bucket.begin(), bucket.end(), [](auto const lhs, auto const rhs) {
+                std::min_element(bucket_begin, bucket_end, [](auto const lhs, auto const rhs) {
                     return lhs.second < rhs.second;
                 })->second;
 
@@ -149,7 +148,7 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
                                            stops[pair_name_offset.second].location) <=
                        proximity_requirement;
             };
-            if (std::all_of(bucket.begin(), bucket.end(), are_close))
+            if (std::all_of(bucket_begin, bucket_end, are_close))
             {
                 // all elements are within the proximity distance to the first stop, make it a
                 // station. This is kind of dirty, we should calculate the center of the
@@ -159,14 +158,13 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
                     if (stops[pair_name_offset.second].id != reference)
                         stops[pair_name_offset.second].parent_station = reference;
                 };
-                std::for_each(bucket.begin(), bucket.end(), assign_parent);
+                std::for_each(bucket_begin, bucket_end, assign_parent);
             }
         }
     };
 
     for (std::size_t bucket_id = 0; bucket_id < stops_by_id.bucket_count(); ++bucket_id)
-        group_close_points(
-            boost::make_iterator_range(stops_by_id.begin(bucket_id), stops_by_id.end(bucket_id)));
+        group_close_points(stops_by_id.begin(bucket_id), stops_by_id.end(bucket_id));
 }
 
 // make sure all basic gtfs features are sorted by id, since we want to access stuff by its id

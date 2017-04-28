@@ -1,9 +1,9 @@
 #ifndef TRANSIT_NAVIGATION_SEGMENT_HPP_
 #define TRANSIT_NAVIGATION_SEGMENT_HPP_
 
+#include <boost/assert.hpp>
 #include <boost/range/iterator_range_core.hpp>
 #include <boost/variant/variant.hpp>
-#include <boost/assert.hpp>
 
 #include <cstdint>
 #include <vector>
