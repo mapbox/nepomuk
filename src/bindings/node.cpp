@@ -46,7 +46,6 @@ template <> boost::optional<std::uint32_t> extract_optional(v8::Local<v8::Value>
 {
     if (!value->IsUint32())
         throw std::runtime_error("Expecting number.");
-    std::cout << "Have uint32" << std::endl;
     return {static_cast<std::uint32_t>(Nan::To<std::uint32_t>(value).FromJust())};
 }
 

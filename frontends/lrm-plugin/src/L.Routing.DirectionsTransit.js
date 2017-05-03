@@ -142,49 +142,37 @@
                     coordinates: [],
                     instructions: [],
                     summary: {
-                        totalDistance: responseRoute.distance,
+                        totalDistance: 0,
                         totalTime: responseRoute.duration
                     }
                 },
                 legNames = [],
                 index = 0,
                 legCount = responseRoute.legs.length,
-                hasSteps = responseRoute.legs[0].steps.length > 0,
                 i,
                 j,
                 leg,
-                step,
+                segment,
                 geometry,
-                type,
                 modifier;
 
             for (i = 0; i < legCount; i++) {
                 leg = responseRoute.legs[i];
-                legNames.push(leg.summary && leg.summary.charAt(0).toUpperCase() + leg.summary.substring(1));
-                for (j = 0; j < leg.steps.length; j++) {
-                    step = leg.steps[j];
-                    geometry = this._decodePolyline(step.geometry);
+                for (j = 0; j < leg.segments.length; j++) {
+                    segment = leg.segments[j];
+                    geometry = this._decodePolyline(segment.geometry);
                     result.coordinates.push.apply(result.coordinates, geometry);
-                    type = step.maneuver;
 
-                    if (type) {
-                        result.instructions.push({
-                            type: type,
-                            modifier: "straight",
-                            distance: step.distance,
-                            time: step.duration,
-                            road: step.name,
-                            index: index,
-                            mode: step.mode,
-                        });
-                    }
+                    result.instructions.push({
+                        type: segment.mode,
+                        distance: segment.distance != undefined ? segment.distance : 0,
+                        time: segment.duration,
+                        index: index,
+                        headsign: segment.mode == "transit" ? segment.connections[0].headsign : undefined,
+                        name: segment.mode == "transit" ? segment.connections[0].name : "Do something for walk/transfer"
+                    });
 					index += geometry.length;
                 }
-            }
-
-            result.name = legNames.join(', ');
-            if (!hasSteps) {
-                result.coordinates = this._decodePolyline(responseRoute.geometry);
             }
 
             return result;
@@ -226,38 +214,27 @@
 					type: 'json',
 					key: this._apiKey
 				}, this.options.urlParameters), baseUrl);
-		},
+		}
+	});
 
-		_mapWaypointIndices: function(waypoints, instructions, coordinates) {
-			var wps = [],
-				wpIndices = [],
-			    i,
-			    idx;
-
-			wpIndices.push(0);
-			wps.push(new L.Routing.Waypoint(coordinates[0], waypoints[0].name));
-
-			for (i = 0; instructions && i < instructions.length; i++) {
-				if (instructions[i].sign === 5) { // VIA_REACHED
-					idx = instructions[i].interval[0];
-					wpIndices.push(idx);
-					wps.push({
-						latLng: coordinates[idx],
-						name: waypoints[wps.length + 1].name
-					});
-				}
-			}
-
-			wpIndices.push(coordinates.length - 1);
-			wps.push({
-				latLng: coordinates[coordinates.length - 1],
-				name: waypoints[waypoints.length - 1].name
-			});
-
-			return {
-				waypointIndices: wpIndices,
-				waypoints: wps
-			};
+	L.Routing.Formatter = L.Routing.Formatter.extend({
+		
+        _getInstructionTemplate: function(instr, i) {
+            if( instr.type == "transit" )
+            {
+                return String("Take " + instr.name + " towards " + instr.headsign);
+            }
+            else if( instr.type == "transfer")
+            {
+                return String("Transfer at " + instr.stopname);
+            }
+            else
+            {
+                if( i == 0 )
+                    return String("Walk towards station");
+                else
+                    return String("Walk towards destination");
+            }
 		}
 	});
 

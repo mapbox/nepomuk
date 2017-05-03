@@ -5,8 +5,11 @@
 #include "navigation/segment.hpp"
 #include "navigation/stop.hpp"
 
+#include "geometric/polyline.hpp"
+
 #include <boost/assert.hpp>
 #include <iomanip>
+#include <iterator>
 #include <sstream>
 
 namespace transit
@@ -57,6 +60,7 @@ std::string API::operator()(std::vector<navigation::Route> const &routes) const
 void API::jsonify_waypoints(std::ostream &os, navigation::Route const &route) const
 {
     auto const legs = route.legs();
+    BOOST_ASSERT(!legs.empty());
     std::vector<geometric::WGS84Coordinate> waypoints(legs.size() + 1);
 
     auto as_coordinate_pair = [&](auto const &segment) {
@@ -82,7 +86,7 @@ void API::jsonify_waypoints(std::ostream &os, navigation::Route const &route) co
 
     waypoints.back() = as_coordinate_pair(legs.back().segments().back()).second;
 
-    chain_jsonify(os,waypoints.begin(),waypoints.end());
+    chain_jsonify(os, waypoints.begin(), waypoints.end());
 }
 
 void API::jsonify(std::ostream &os, navigation::Route const &route) const
@@ -147,7 +151,18 @@ void API::jsonify(std::ostream &os, navigation::segment::Transit const &transit)
     tag(os, "duration");
     os << transit.duration() << ",";
     tag(os, "geometry");
-    quote(os, "POLYLINE HERE");
+    auto const range = geometry.get(transit.connections().front().line(),
+                                    transit.stops().front().id(),
+                                    transit.stops().back().id());
+    std::vector<geometric::WGS84Coordinate> coordinates(range.begin(), range.end());
+    if (range.empty())
+    {
+        std::transform(transit.stops().begin(),
+                       transit.stops().end(),
+                       std::back_inserter(coordinates),
+                       [&](auto const &stop) { return geometry.get(stop.id()); });
+    }
+    jsonify(os, coordinates);
     os << ",";
     tag(os, "stops");
     auto const stops = transit.stops();
@@ -164,17 +179,25 @@ void API::jsonify(std::ostream &os, navigation::segment::Transfer const &transfe
     tag(os, "mode");
     quote(os, "transfer");
     os << ",";
+
     tag(os, "depart");
     os << transfer.departure().seconds_since_epoch << ",";
+
     tag(os, "arrive");
     os << transfer.arrival().seconds_since_epoch << ",";
-    tag(os, "duration");
-    os << transfer.duration() << ",";
-    tag(os, "origin");
-    jsonify(os, transfer.origin());
+
+    tag(os, "stopname");
+    quote(os,"Stopname will be here, believe me.");
     os << ",";
-    tag(os, "destination");
-    jsonify(os, transfer.destination());
+
+    tag(os, "geometry");
+    std::vector<geometric::WGS84Coordinate> coordinates = {geometry.get(transfer.origin()),
+                                                           geometry.get(transfer.destination())};
+    jsonify(os, coordinates);
+    os << ",";
+
+    tag(os, "duration");
+    os << transfer.duration();
 }
 
 void API::jsonify(std::ostream &os, navigation::segment::Walk const &walk) const
@@ -196,22 +219,9 @@ void API::jsonify(std::ostream &os, navigation::segment::Walk const &walk) const
     tag(os, "distance");
     os << walk.distance() << ",";
 
-    tag(os, "origin");
-    jsonify(os, walk.origin());
-    os << ",";
-    tag(os, "destination");
-    jsonify(os, walk.destination());
-}
-
-void API::jsonify(std::ostream &os, StopID const stop) const
-{
-    BraceGuard brace_guard(os);
-    tag(os, "name");
-    quote(os, "NAME HERE");
-    os << ",";
-
-    tag(os, "location");
-    jsonify(os, geometric::WGS84Coordinate());
+    tag(os, "geometry");
+    std::vector<geometric::WGS84Coordinate> coordinates = {walk.origin(), walk.destination()};
+    jsonify(os, coordinates);
 }
 
 void API::jsonify(std::ostream &os, navigation::Stop const &stop) const
@@ -257,6 +267,12 @@ void API::jsonify(std::ostream &os, geometric::WGS84Coordinate const coordinate)
 {
     os << "[" << std::setprecision(12) << doubleFromLatLon(coordinate.longitude) << ","
        << doubleFromLatLon(coordinate.latitude) << "]";
+}
+
+void API::jsonify(std::ostream &os,
+                  std::vector<geometric::WGS84Coordinate> const &coordinates) const
+{
+    quote(os, geometric::Polyline::encode(100000, coordinates));
 }
 
 } // namespace annotation

@@ -13,14 +13,9 @@ var state = require('./state');
 var localization = require('./localization');
 require('./polyfill');
 
-
-
 var parsedOptions = links.parse(window.location.search.slice(1));
 var mergedOptions = L.extend(leafletOptions.defaultState, parsedOptions);
 var local = localization.get(mergedOptions.language);
-
-// load only after language was chosen
-var itineraryBuilder = require('./itinerary_builder')(mergedOptions.language);
 
 var mapLayer = leafletOptions.layer;
 var overlay = leafletOptions.overlay;
@@ -131,8 +126,6 @@ var plan = new ReversablePlan([], {
   }
 });
 
-L.extend(L.Routing, itineraryBuilder);
-
 // add marker labels
 var controlOptions = {
   plan: plan,
@@ -152,25 +145,7 @@ var controlOptions = {
   collapsible: options.lrm.collapsible
 };
 var router = (new L.Routing.DirectionsTransit("put_key_here", controlOptions));
-router._convertRouteOriginal = router._convertRoute;
-router._convertRoute = function(responseRoute) {
-  // monkey-patch L.Routing.DirectionsTransit until it's easier to overwrite with a hook
-  var resp = this._convertRouteOriginal(responseRoute);
 
-  if (resp.instructions && resp.instructions.length) {
-    var i = 0;
-    responseRoute.legs.forEach(function(leg) {
-      leg.steps.forEach(function(step) {
-        // abusing the text property to save the original osrm step
-        // for later use in the itnerary builder
-        resp.instructions[i].text = step;
-        i++;
-      });
-    });
-  };
-
-  return resp;
-};
 var lrmControl = L.Routing.control(Object.assign(controlOptions, {
   router: router
 })).addTo(map);

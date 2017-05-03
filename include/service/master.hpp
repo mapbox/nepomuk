@@ -23,8 +23,8 @@
 #include "tool/container/string_table.hpp"
 
 // annotation
+#include "annotation/api.hpp"
 #include "annotation/geometry.hpp"
-#include "annotation/osrm.hpp"
 #include "annotation/stop_info.hpp"
 
 // graph measures
@@ -69,7 +69,7 @@ class Master
     // annotation
     annotation::Geometry const &geometry_annotation();
     annotation::StopInfoTable const &stop_info_annotation();
-    annotation::OSRM const &osrm_annotation();
+    annotation::API const &api_annotation();
 
     // graph measurements
     algorithm::StronglyConnectedComponent const &components();
@@ -92,7 +92,7 @@ class Master
     // annotation
     std::unique_ptr<annotation::Geometry> _geometry_annotation;
     std::unique_ptr<annotation::StopInfoTable> _stop_info_annotation;
-    std::unique_ptr<annotation::OSRM> _osrm_annotation;
+    std::unique_ptr<annotation::API> _api_annotation;
 
     // graph measures
     std::unique_ptr<algorithm::StronglyConnectedComponent> _components;

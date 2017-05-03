@@ -164,16 +164,15 @@ annotation::Geometry const &Master::geometry_annotation()
     return *_geometry_annotation;
 }
 
-annotation::OSRM const &Master::osrm_annotation()
+annotation::API const &Master::api_annotation()
 {
-    if (!_osrm_annotation)
+    if (!_api_annotation)
     {
-        tool::status::FunctionTimingGuard guard("OSRM Annotation - creation");
-        _osrm_annotation = std::make_unique<annotation::OSRM>(
-            stop_info_annotation(), dictionary(), geometry_annotation());
+        tool::status::FunctionTimingGuard guard("API Annotation - creation");
+        _api_annotation = std::make_unique<annotation::API>(geometry_annotation());
     }
 
-    return *_osrm_annotation;
+    return *_api_annotation;
 }
 
 algorithm::StronglyConnectedComponent const &Master::components()

@@ -77,11 +77,24 @@ class RoutingAlgorithm
     void set_arrival(Stop &stop, date::UTCTimestamp time) const;
     void set_departure(Connection &connection, date::UTCTimestamp time) const;
     void set_arrival(Connection &connection, date::UTCTimestamp time) const;
+    void set_origin(segment::Transfer &transfer, StopID stop) const;
+    void set_destination(segment::Transfer &transfer, StopID stop) const;
     void set_departure(segment::Transfer &segment, date::UTCTimestamp time) const;
     void set_arrival(segment::Transfer &segment, date::UTCTimestamp time) const;
     void set_departure(segment::Walk &segment, date::UTCTimestamp time) const;
     void set_arrival(segment::Walk &segment, date::UTCTimestamp time) const;
     void set_line(Connection &connection, LineID line) const;
+
+    Segment make_segment(segment::Transfer transfer) const;
+    Segment make_segment(segment::Transit transit) const;
+    Segment make_segment(segment::Walk walk) const;
+
+    Stop make_stop(StopID const id,
+                   date::UTCTimestamp const arrival,
+                   date::UTCTimestamp const departure) const;
+    Connection make_connection(LineID const id,
+                               date::UTCTimestamp const departure,
+                               date::UTCTimestamp const arrival) const;
 };
 
 } // namespace navigation
