@@ -1,8 +1,8 @@
 #ifndef TRANSIT_SERVICE_EARLIEST_ARRIVAL_HPP_
 #define TRANSIT_SERVICE_EARLIEST_ARRIVAL_HPP_
 
-#include "annotation/osrm.hpp"
 //#include "navigation/algorithm/timetable.hpp"
+#include "annotation/api.hpp"
 #include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "search/coordinate_to_stop.hpp"
 #include "service/interface.hpp"
@@ -22,7 +22,7 @@ class EarliestArrival : public Interface
     ServiceStatus operator()(ServiceParameters &parameters) const final override;
 
   private:
-    annotation::OSRM const &annotation;
+    annotation::API const &annotation;
     search::CoordinateToStop const &coordinate_to_stop;
     navigation::algorithm::TimeTableDijkstra navigator;
     // navigation::algorithm::TimeTable navigator;

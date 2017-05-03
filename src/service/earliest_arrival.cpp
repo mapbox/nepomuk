@@ -6,7 +6,7 @@ namespace service
 {
 
 EarliestArrival::EarliestArrival(service::Master &master_service)
-    : annotation(master_service.osrm_annotation()),
+    : annotation(master_service.api_annotation()),
       coordinate_to_stop(master_service.coordinate_to_stop()),
       navigator(master_service.timetable(), master_service.stop_to_line())
 {
@@ -65,7 +65,11 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
     }();
 
     if (route)
-        earliest_arrival_parameters._result = annotation(*route);
+    {
+        std::vector<navigation::Route> routes;
+        routes.push_back(*route);
+        earliest_arrival_parameters._result = annotation(routes);
+    }
     else
     {
         const constexpr auto NO_ROUTE = "{\"code\": \"NoRoute\"}";

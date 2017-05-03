@@ -31,23 +31,21 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     auto route = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK(route->legs().front().segments().size() > 1);
-    BOOST_CHECK((route->legs().begin()->segments().begin() + 1)->is_transit());
+    BOOST_CHECK((route->legs().begin()->segments().begin())->is_transit());
     BOOST_CHECK_EQUAL(
-        (route->legs().begin()->segments().begin() + 1)->as_transit().stops().begin()->id(),
-        StopID{0});
+        (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(), StopID{0});
     BOOST_CHECK_EQUAL(
-        (route->legs().begin()->segments().begin() + 1)->as_transit().connections().begin()->line(),
+        (route->legs().begin()->segments().begin())->as_transit().connections().begin()->line(),
         LineID{0});
     route = timetable_router(date::Time("12:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK(route->legs().front().segments().size() > 1);
-    BOOST_CHECK((route->legs().begin()->segments().begin() + 1)->is_transit());
+    BOOST_CHECK((route->legs().begin()->segments().begin())->is_transit());
     BOOST_CHECK_EQUAL(
-        (route->legs().begin()->segments().begin() + 1)->as_transit().stops().begin()->id(),
-        StopID{1});
+        (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(), StopID{1});
 
     auto leg_range = route->legs().begin()->segments();
-    BOOST_CHECK_EQUAL(std::distance(leg_range.begin(), leg_range.end()), 3);
+    BOOST_CHECK_EQUAL(std::distance(leg_range.begin(), leg_range.end()), 2);
     auto route2 = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{9});
     BOOST_CHECK((bool)route2);
 

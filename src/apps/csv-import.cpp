@@ -5,7 +5,7 @@
 #include "geometric/coordinate.hpp"
 #include "id/stop.hpp"
 
-#include "annotation/osrm.hpp"
+#include "annotation/api.hpp"
 #include "annotation/stop_info.hpp"
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/algorithm/timetable_dijkstra.hpp"
@@ -52,7 +52,7 @@ int main(int argc, char **argv) try
                 geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
         };
 
-        transit::annotation::OSRM const &osrm_annotator = data_service.osrm_annotation();
+        transit::annotation::API const &api_annotator = data_service.api_annotation();
 
         while (true)
         {
@@ -97,7 +97,9 @@ int main(int argc, char **argv) try
             annotation_timer.start();
             if (route)
             {
-                std::cout << osrm_annotator(*route) << std::endl;
+                std::vector<navigation::Route> routes;
+                routes.push_back(*route);
+                std::cout << api_annotator(routes) << std::endl;
             }
             annotation_timer.stop();
 

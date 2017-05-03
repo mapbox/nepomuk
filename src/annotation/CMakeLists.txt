@@ -3,7 +3,6 @@ set(annotate_SOURCES
     api.cpp
     geometry.cpp
     geometry_factory.cpp
-    osrm.cpp
     stop_info.cpp)
 
 

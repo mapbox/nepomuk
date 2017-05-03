@@ -2,9 +2,8 @@
 #define TRANSIT_ANNOTATION_API_HPP_
 
 #include "annotation/geometry.hpp"
-#include "navigation/route.hpp"
-#include "id/stop.hpp"
 #include "geometric/coordinate.hpp"
+#include "navigation/route.hpp"
 #include <iostream>
 #include <string>
 
@@ -32,7 +31,7 @@ namespace annotation
 class API
 {
   public:
-    API(Geometry const& geometry);
+    API(Geometry const &geometry);
     std::string operator()(std::vector<navigation::Route> const &route) const;
 
   private:
@@ -44,15 +43,16 @@ class API
     void jsonify(std::ostream &os, navigation::segment::Transfer const &transfer) const;
     void jsonify(std::ostream &os, navigation::segment::Walk const &walk) const;
     void jsonify(std::ostream &os, navigation::Stop const &stop) const;
-    void jsonify(std::ostream &os, StopID const stop) const;
     void jsonify(std::ostream &os, geometric::WGS84Coordinate const coordinate) const;
+    void jsonify(std::ostream &os,
+                 std::vector<geometric::WGS84Coordinate> const &coordinates) const;
     void jsonify(std::ostream &os, navigation::Connection const &connection) const;
 
     // write an array of elements for which a jsonify function exists
     template <typename object_type_itr>
     void chain_jsonify(std::ostream &os, object_type_itr begin, object_type_itr const end) const;
 
-    Geometry const& geometry;
+    Geometry const &geometry;
 };
 
 template <typename object_type_itr>
@@ -60,7 +60,7 @@ void API::chain_jsonify(std::ostream &os, object_type_itr begin, object_type_itr
 {
     BOOST_ASSERT(begin != end);
     os << "[";
-    jsonify(os,*begin++);
+    jsonify(os, *begin++);
     for (; begin != end; ++begin)
         os << ",", jsonify(os, *begin);
     os << "]";

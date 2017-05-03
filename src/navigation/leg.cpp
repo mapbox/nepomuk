@@ -19,9 +19,7 @@ date::UTCTimestamp Leg::arrival() const
     return _segments.back().arrival();
 }
 
-std::uint32_t Leg::duration() const {
-    return arrival() - departure();
-}
+std::uint32_t Leg::duration() const { return arrival() - departure(); }
 
 } // namespace navigation
 } // namespace transit

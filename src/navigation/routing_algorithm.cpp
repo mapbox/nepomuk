@@ -42,7 +42,6 @@ Route RoutingAlgorithm::make_route(std::vector<PathEntry> path) const
     // really hacked version, we are not travelling in 1970
     auto const to_utc = [](auto date) { return date::UTCTimestamp(date.seconds_since_midnight); };
 
-    Segment segment = make_segment(SegmentType::WALK, segment::Walk());
     // we only know the first line, after starting. We always reach the first station via walking
     // transfer. To avoid an additional leg here, we set the line to the line of the second station
     update_departures_and_arrivals(path);
@@ -53,12 +52,7 @@ Route RoutingAlgorithm::make_route(std::vector<PathEntry> path) const
 
     path = unpack_path(std::move(path));
 
-    set_departure(segment.as_walk(), to_utc(path[0].departure));
-    set_arrival(segment.as_walk(), to_utc(path[0].departure));
-
-    add_segment(leg, std::move(segment));
-
-    segment = make_segment(SegmentType::TRANSIT, segment::Transit());
+    auto segment = make_segment(SegmentType::TRANSIT, segment::Transit());
     set_line(connection, path[0].line);
     set_departure(connection, to_utc(path[0].departure));
 
@@ -74,8 +68,11 @@ Route RoutingAlgorithm::make_route(std::vector<PathEntry> path) const
             if (itr->line == WALKING_TRANSFER && itr + 1 != path.end())
             {
                 segment = make_segment(SegmentType::TRANSFER, segment::Transfer());
-                set_departure(segment.as_transfer(), to_utc(itr->arrival));
-                set_arrival(segment.as_transfer(), to_utc((itr + 1)->departure));
+                auto &transfer = segment.as_transfer();
+                set_departure(transfer, to_utc(itr->arrival));
+                set_arrival(transfer, to_utc(itr->departure));
+                transfer._origin = itr->stop;
+                transfer._destination = itr->stop;
                 current_line = (itr + 1)->line;
                 add_segment(leg, std::move(segment));
             }
@@ -191,6 +188,14 @@ void RoutingAlgorithm::set_arrival(segment::Transfer &segment, date::UTCTimestam
 {
     segment._arrival = time;
 }
+void RoutingAlgorithm::set_origin(segment::Transfer &transfer, StopID stop) const
+{
+    transfer._origin = std::move(stop);
+}
+void RoutingAlgorithm::set_destination(segment::Transfer &transfer, StopID stop) const
+{
+    transfer._destination = std::move(stop);
+}
 void RoutingAlgorithm::set_departure(segment::Walk &segment, date::UTCTimestamp time) const
 {
     segment._departure = time;
@@ -203,6 +208,52 @@ void RoutingAlgorithm::set_arrival(segment::Walk &segment, date::UTCTimestamp ti
 void RoutingAlgorithm::set_line(Connection &connection, LineID line) const
 {
     connection._line = line;
+}
+
+Segment RoutingAlgorithm::make_segment(segment::Transfer transfer) const
+{
+    Segment segment;
+    segment._type = SegmentType::TRANSFER;
+    segment.container = transfer;
+    return segment;
+}
+
+Segment RoutingAlgorithm::make_segment(segment::Transit transit) const
+{
+    Segment segment;
+    segment._type = SegmentType::TRANSIT;
+    segment.container = transit;
+    return segment;
+}
+
+Segment RoutingAlgorithm::make_segment(segment::Walk walk) const
+{
+    Segment segment;
+    segment._type = SegmentType::WALK;
+    segment.container = walk;
+    return segment;
+}
+
+Stop RoutingAlgorithm::make_stop(StopID const id,
+                                 date::UTCTimestamp const arrival,
+                                 date::UTCTimestamp const departure) const
+{
+    Stop stop;
+    stop._id = id;
+    stop._arrival = arrival;
+    stop._departure = departure;
+    return stop;
+}
+
+Connection RoutingAlgorithm::make_connection(LineID const id,
+                                             date::UTCTimestamp const departure,
+                                             date::UTCTimestamp const arrival) const
+{
+    Connection connection;
+    connection._line = id;
+    connection._departure = departure;
+    connection._arrival = arrival;
+    return connection;
 }
 
 } // namespace navigation

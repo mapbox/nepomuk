@@ -14,5 +14,4 @@ set(annotationINCLUDES
 
 add_unit_test(stop_info stop_info.cc "${annotationLIBS}" "${annotationINCLUDES}")
 add_unit_test(geometry geometry.cc "${annotationLIBS}" "${annotationINCLUDES}")
-add_unit_test(osrm osrm.cc "${annotationLIBS}" "${annotationINCLUDES}")
 add_unit_test(api api.cc "${annotationLIBS}" "${annotationINCLUDES}")
