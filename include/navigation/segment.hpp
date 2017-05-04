@@ -163,7 +163,7 @@ template <typename visitor_type> visitor_type Segment::visit(visitor_type visito
         visitor(as_walk());
         return visitor;
     }
-};
+}
 
 } // namespace navigation
 } // namespace transit
