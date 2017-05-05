@@ -1,22 +1,27 @@
 #ifndef TRANSIT_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
 #define TRANSIT_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
 
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <boost/variant.hpp>
+#include <boost/variant/variant.hpp>
 #include <protozero/pbf_writer.hpp>
 
 #include "geometric/bounding_box.hpp"
-#include "geometric/coordinate.hpp"
 
 // implementation of https://www.mapbox.com/vector-tiles/specification/
 
 namespace transit
 {
+namespace geometric
+{
+class WGS84Coordinate;
+}
+
 namespace tool
 {
 namespace container
@@ -43,8 +48,6 @@ struct VectorTileValue
 
     void write(protozero::pbf_writer &pbf_writer) const;
 };
-
-class MapboxVectorTile;
 
 // make sure that the layer goes out of scope to flush the result
 class MapboxVectorTileLayer

@@ -4,7 +4,7 @@
 #include "gtfs/date.hpp"
 #include "id/service.hpp"
 
-#include <cstdint>
+#include <cstddef>
 #include <map>
 #include <string>
 #include <vector>

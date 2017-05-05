@@ -2,7 +2,7 @@
 
 #include "gtfs/stop.hpp"
 
-#include "id/shape.hpp"
+#include <vector>
 
 namespace transit
 {

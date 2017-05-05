@@ -1,6 +1,8 @@
 #include "tool/io/std_line_stream.hpp"
 #include "tool/io/stream_errors.hpp"
 
+#include <string>
+
 namespace transit
 {
 namespace tool

@@ -8,7 +8,10 @@
 #include <boost/assert.hpp>
 #include <boost/filesystem.hpp>
 
+#include <cstddef>
 #include <iostream>
+#include <string>
+#include <vector> // for vector
 
 namespace
 {

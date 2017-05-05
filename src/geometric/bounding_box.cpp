@@ -1,6 +1,9 @@
 #include "geometric/bounding_box.hpp"
 
 #include <algorithm>
+#include <cmath>       // for atan, exp
+#include <type_traits> // for move, swap
+
 #include <boost/math/constants/constants.hpp>
 
 namespace transit

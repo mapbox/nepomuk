@@ -1,11 +1,8 @@
 #include "annotation/stop_info.hpp"
 
 #include <algorithm>
-#include <boost/assert.hpp>
-#include <cstdint>
-#include <iterator>
 
-#include <boost/assert.hpp>
+#include "gtfs/stop.hpp"
 
 namespace transit
 {

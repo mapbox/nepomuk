@@ -2,8 +2,6 @@
 #define TRANSIT_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
 
 #include <boost/optional.hpp>
-#include <cstdint>
-#include <string>
 
 #include "date/time.hpp"
 #include "geometric/coordinate.hpp"
@@ -12,8 +10,6 @@ namespace transit
 {
 namespace service
 {
-
-class EarliestArrival;
 
 class EarliestArrivalParameters final
 {

@@ -1,5 +1,7 @@
 #include "timetable/timetable.hpp"
 
+#include "id/line.hpp" // for LineID
+
 namespace transit
 {
 namespace timetable

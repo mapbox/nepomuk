@@ -1,14 +1,13 @@
 #ifndef TRANSIT_ANNOTATION_LEG_GEOMETRY_HPP_
 #define TRANSIT_ANNOTATION_LEG_GEOMETRY_HPP_
 
-#include <boost/optional.hpp>
 #include <cstddef>
 #include <vector>
 
 #include "geometric/coordinate.hpp"
 #include "id/line.hpp"
 #include "id/shape.hpp"
-#include "navigation/segment.hpp"
+#include "id/stop.hpp"
 #include "timetable/segment_table.hpp"
 #include "tool/container/indexed_vector.hpp"
 
@@ -16,7 +15,7 @@ namespace transit
 {
 namespace annotation
 {
-class GeometryFactory;
+
 class Geometry
 {
   public:

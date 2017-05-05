@@ -2,7 +2,7 @@
 #define TRANSIT_ALGORITHM_GROUP_BY_HPP_
 
 #include <algorithm>
-#include <functional>
+#include <utility>
 
 #include <boost/assert.hpp>
 

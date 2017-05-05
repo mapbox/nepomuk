@@ -2,20 +2,29 @@
 #define TRANSIT_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_
 
 #include "navigation/routing_algorithm.hpp"
-#include "search/stop_to_line.hpp"
-#include "timetable/timetable.hpp"
 
 #include "date/time.hpp"
+#include "id/line.hpp"
 #include "id/stop.hpp"
 
 #include <boost/optional.hpp>
-#include <queue>
+#include <cstddef>
 #include <unordered_map>
+#include <vector>
 
 namespace transit
 {
+namespace search
+{
+class StopToLine;
+}
+namespace timetable
+{
+class TimeTable;
+}
 namespace navigation
 {
+class Route;
 namespace algorithm
 {
 

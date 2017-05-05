@@ -3,6 +3,7 @@
 
 #include <boost/optional.hpp>
 
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -11,10 +12,18 @@
 #include "id/agency.hpp"
 #include "id/dictionary.hpp"
 #include "id/route.hpp"
-#include "tool/container/dictionary.hpp"
 
 namespace transit
 {
+
+namespace tool
+{
+namespace container
+{
+class Dictionary;
+}
+}
+
 namespace gtfs
 {
 

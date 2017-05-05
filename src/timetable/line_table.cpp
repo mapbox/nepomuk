@@ -1,7 +1,8 @@
 #include "timetable/line_table.hpp"
 
 #include <algorithm>
-#include <set>
+#include <cstdint>
+#include <iterator>
 
 namespace transit
 {

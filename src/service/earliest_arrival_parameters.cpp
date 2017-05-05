@@ -1,6 +1,5 @@
 #include "service/earliest_arrival_parameters.hpp"
 
-#include <cmath>
 #include <utility>
 
 namespace transit

@@ -1,7 +1,10 @@
 #include "timetable/duration_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 
-#include "algorithm/ranges.hpp"
+#include "date/time.hpp" // for Time, operator-
+#include <algorithm>     // for transform, any_of
+#include <cstdint>       // for uint32_t
+#include <iterator>      // for back_insert_iter...
 
 namespace transit
 {

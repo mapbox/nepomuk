@@ -1,7 +1,17 @@
 #include "annotation/geometry_factory.hpp"
 
-#include "boost/assert.hpp"
+#include "gtfs/stop.hpp"
+#include "id/line.hpp"
+#include "id/shape.hpp"
+#include "id/stop.hpp"
+#include "timetable/line_table.hpp"
 #include "tool/status/progress.hpp"
+
+#include <algorithm>
+#include <boost/assert.hpp>
+#include <cstddef>
+#include <cstdint>
+#include <iterator>
 
 namespace transit
 {

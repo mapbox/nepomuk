@@ -2,22 +2,27 @@
 #define TRANSIT_TIMETABLE_LINE_TABLE_FACTORY_HPP_
 
 // The line table factory groups all routes in the graph into lines. These lines only require a
-// single
-// stop table, which allows space efficient storage/better look-up of departures.
-
-#include "timetable/line_table.hpp"
+// single stop table, which allows space efficient storage/better look-up of departures.
 
 #include "gtfs/stop.hpp"
-#include "gtfs/transfer.hpp"
-#include "gtfs/trip.hpp"
+#include "id/shape.hpp"
 
 #include <boost/optional.hpp>
 #include <vector>
 
 namespace transit
 {
+
+namespace gtfs
+{
+struct Transfer;
+struct Trip;
+}
+
 namespace timetable
 {
+
+class LineTable;
 
 class LineTableFactory
 {

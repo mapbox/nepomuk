@@ -1,10 +1,6 @@
 #include "timetable/stop_table_factory.hpp"
 #include "timetable/exceptions.hpp"
 
-#include "algorithm/ranges.hpp"
-
-#include <boost/assert.hpp>
-
 #include <algorithm>
 #include <iterator>
 

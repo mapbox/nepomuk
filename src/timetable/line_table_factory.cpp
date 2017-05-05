@@ -1,14 +1,25 @@
 #include "timetable/line_table_factory.hpp"
+#include "algorithm/ranges.hpp"
+#include "date/time.hpp"     // for operator-, Time
+#include "gtfs/transfer.hpp" // for Transfer, Transf...
+#include "gtfs/trip.hpp"     // for Trip
+#include "id/shape.hpp"      // for ShapeID
+#include "id/stop.hpp"       // for StopID
+#include "id/trip.hpp"       // for TripID
 #include "timetable/departure_table.hpp"
+#include "timetable/duration_table.hpp" // for DurationTable
 #include "timetable/duration_table_factory.hpp"
+#include "timetable/line_table.hpp" // for LineTable
+#include "timetable/stop_table.hpp" // for StopTable, StopT...
 #include "timetable/stop_table_factory.hpp"
 
-#include "algorithm/ranges.hpp"
-
-#include "boost/assert.hpp"
-
 #include <algorithm>
+#include <boost/assert.hpp>
+#include <cstddef>  // for size_t
+#include <cstdint>  // for uint32_t
+#include <iterator> // for distance
 #include <set>
+#include <utility> // for pair
 
 namespace transit
 {

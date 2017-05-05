@@ -1,15 +1,23 @@
 #include "gtfs/transfer.hpp"
 #include "algorithm/ranges.hpp"
+#include "geometric/coordinate.hpp" // for distance
+#include "gtfs/stop.hpp"            // for Stop
+#include "id/stop.hpp"              // for StopID
 #include "timetable/exceptions.hpp"
 #include "timetable/line_table.hpp"
+#include "timetable/stop_table.hpp" // for StopTable
 #include "timetable/transfer_table.hpp"
 #include "timetable/transfer_table_factory.hpp"
 #include "tool/status/progress.hpp"
 
 #include <algorithm>
 #include <cstddef>
+#include <cstdint>
+#include <iostream> // for operator<<, basi...
 #include <iterator>
 #include <set>
+#include <type_traits> // for enable_if<>::type
+#include <utility>     // for make_pair
 
 namespace transit
 {

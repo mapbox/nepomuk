@@ -1,7 +1,9 @@
 #include "navigation/segment.hpp"
 
 #include <boost/assert.hpp>
+#include <boost/variant/get.hpp>
 #include <cmath>
+#include <utility>
 
 namespace transit
 {

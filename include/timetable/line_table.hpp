@@ -2,6 +2,7 @@
 #define TRANSIT_TIMETABLE_LINETABLE_HPP_
 
 #include "date/time.hpp"
+#include "id/stop.hpp"
 #include "timetable/departure_table.hpp"
 #include "timetable/duration_table.hpp"
 #include "timetable/stop_table.hpp"
@@ -18,8 +19,6 @@ class StopToLineFactory;
 
 namespace timetable
 {
-
-class LineTableFactory;
 
 // A line table describes a line within the public transit network. It consists of a single entry of
 // stops serviced along the line. The line allows a series of departures and a list of arrivals that

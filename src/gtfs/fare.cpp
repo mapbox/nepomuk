@@ -1,9 +1,7 @@
 #include "gtfs/fare.hpp"
 #include "gtfs/constructor.hpp"
 
-#include <algorithm>
-
-#include <boost/optional.hpp>
+#include <boost/assert.hpp>
 
 namespace transit
 {

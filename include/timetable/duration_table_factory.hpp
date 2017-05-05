@@ -4,6 +4,8 @@
 #include "gtfs/stop.hpp"
 #include "timetable/duration_table.hpp"
 
+#include <vector>
+
 namespace transit
 {
 namespace timetable

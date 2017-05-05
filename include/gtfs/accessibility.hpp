@@ -1,7 +1,6 @@
 #ifndef TRANSIT_GTFS_ACCESSIBILITY_HPP_
 #define TRANSIT_GTFS_ACCESSIBILITY_HPP_
 
-#include <cstdint>
 #include <string>
 
 namespace transit

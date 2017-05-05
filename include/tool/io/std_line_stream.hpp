@@ -1,9 +1,7 @@
 #ifndef TRANSIT_TOOL_IO_STREAM_CONCEPTS_LINE_STREAM_HPP_
 #define TRANSIT_TOOL_IO_STREAM_CONCEPTS_LINE_STREAM_HPP_
 
-#include <cstdint>
 #include <iostream>
-#include <string>
 
 namespace transit
 {

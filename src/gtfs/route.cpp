@@ -1,8 +1,6 @@
 #include "gtfs/route.hpp"
 #include "gtfs/constructor.hpp"
 
-#include <algorithm>
-
 #include <boost/optional.hpp>
 
 namespace transit

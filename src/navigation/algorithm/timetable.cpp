@@ -1,16 +1,20 @@
 #include "navigation/algorithm/timetable.hpp"
-#include "navigation/leg.hpp"
+#include "navigation/route.hpp"
+#include "search/stop_to_line.hpp"
+#include "timetable/timetable.hpp"
 
 #include "id/line.hpp"
 #include "id/stop.hpp"
-#include "id/trip.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <iterator>
 #include <limits>
-#include <queue>
 #include <unordered_map>
+#include <utility>
 #include <vector>
+
+#include <boost/assert.hpp>
 
 namespace transit
 {

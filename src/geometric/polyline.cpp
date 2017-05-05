@@ -1,4 +1,5 @@
 #include "geometric/polyline.hpp"
+#include "geometric/coordinate.hpp"
 
 #include <algorithm>
 #include <climits>

@@ -4,11 +4,17 @@
 #include <boost/optional.hpp>
 #include <vector>
 
-#include "gtfs/dataset.hpp"
 #include "timetable/timetable.hpp"
 
 namespace transit
 {
+
+struct ShapeID;
+namespace gtfs
+{
+struct Dataset;
+}
+
 namespace timetable
 {
 

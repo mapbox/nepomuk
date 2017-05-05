@@ -2,7 +2,6 @@
 #include "gtfs/constructor.hpp"
 
 #include <boost/assert.hpp>
-#include <boost/optional.hpp>
 
 namespace transit
 {

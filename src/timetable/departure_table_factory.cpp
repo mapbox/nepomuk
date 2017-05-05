@@ -2,6 +2,7 @@
 #include "timetable/exceptions.hpp"
 
 #include <algorithm>
+#include <iterator> // for back_insert_iter...
 
 #include <boost/numeric/conversion/cast.hpp>
 

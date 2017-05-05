@@ -4,15 +4,10 @@
 #include "date/time.hpp"
 #include "id/line.hpp"
 
-#include <cstdint>
-
 namespace transit
 {
 namespace navigation
 {
-
-// forward declaration for friend access
-class RoutingAlgorithm;
 
 class Connection
 {

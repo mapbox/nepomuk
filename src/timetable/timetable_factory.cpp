@@ -1,19 +1,23 @@
 #include "timetable/timetable.hpp"
+#include "algorithm/ranges.hpp"
+#include "gtfs/dataset.hpp"
+#include "gtfs/stop.hpp"
+#include "gtfs/transfer.hpp" // for Transfer
+#include "gtfs/trip.hpp"     // for Trip
+#include "id/route.hpp"
+#include "id/trip.hpp"
+#include "search/coordinate_to_stop.hpp"
+#include "timetable/line_table.hpp" // for LineTable
 #include "timetable/line_table_factory.hpp"
+#include "timetable/station_table.hpp" // for StationTable
 #include "timetable/station_table_factory.hpp"
 #include "timetable/timetable_factory.hpp"
+#include "timetable/transfer_table.hpp" // for TransferTable
 #include "timetable/transfer_table_factory.hpp"
 
-#include "gtfs/stop.hpp"
-#include "id/route.hpp"
-#include "id/stop.hpp"
-#include "id/trip.hpp"
-
-#include "geometric/coordinate.hpp"
-#include "search/coordinate_to_stop.hpp"
-
-#include "algorithm/ranges.hpp"
-
+#include <algorithm>          // for stable_sort, for...
+#include <boost/assert.hpp>   // for BOOST_ASSERT
+#include <boost/optional.hpp> // for optional
 #include <iterator>
 #include <tuple>
 #include <unordered_map>
@@ -21,6 +25,29 @@
 
 namespace transit
 {
+namespace geometric
+{
+class WGS84Coordinate;
+}
+}
+namespace transit
+{
+struct ShapeID;
+}
+namespace transit
+{
+struct StopID;
+}
+
+namespace transit
+{
+struct ShapeID;
+struct StopID;
+namespace geometric
+{
+class WGS84Coordinate;
+}
+
 namespace timetable
 {
 

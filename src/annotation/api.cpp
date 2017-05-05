@@ -1,16 +1,26 @@
 #include "annotation/api.hpp"
+#include "annotation/geometry.hpp"
 
 #include "navigation/connection.hpp"
 #include "navigation/leg.hpp"
+#include "navigation/route.hpp"
 #include "navigation/segment.hpp"
 #include "navigation/stop.hpp"
 
+#include "geometric/coordinate.hpp"
 #include "geometric/polyline.hpp"
 
+#include "date/time.hpp" // for UTCTimestamp
+
+#include <algorithm> // for transform
 #include <boost/assert.hpp>
+#include <boost/range/iterator_range_core.hpp> // for iterator_range
 #include <iomanip>
 #include <iterator>
 #include <sstream>
+#include <string>      // for allocator, char_traits
+#include <type_traits> // for enable_if<>::type
+#include <utility>     // for make_pair, pair
 
 namespace transit
 {
@@ -187,7 +197,7 @@ void API::jsonify(std::ostream &os, navigation::segment::Transfer const &transfe
     os << transfer.arrival().seconds_since_epoch << ",";
 
     tag(os, "stopname");
-    quote(os,"Stopname will be here, believe me.");
+    quote(os, "Stopname will be here, believe me.");
     os << ",";
 
     tag(os, "geometry");

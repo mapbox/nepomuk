@@ -1,11 +1,6 @@
 #include "gtfs/agency.hpp"
 #include "gtfs/constructor.hpp"
 
-#include <algorithm>
-#include <utility>
-
-#include <boost/optional.hpp>
-
 namespace transit
 {
 namespace gtfs

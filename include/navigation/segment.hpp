@@ -1,11 +1,10 @@
 #ifndef TRANSIT_NAVIGATION_SEGMENT_HPP_
 #define TRANSIT_NAVIGATION_SEGMENT_HPP_
 
-#include <boost/range/iterator_range.hpp>
-#include <boost/variant.hpp>
+#include <boost/range/iterator_range_core.hpp>
+#include <boost/variant/variant.hpp>
 
 #include <cstdint>
-#include <type_traits>
 #include <vector>
 
 #include "date/time.hpp"
@@ -20,7 +19,6 @@ namespace transit
 namespace navigation
 {
 
-// forward declaration for friend access
 class RoutingAlgorithm;
 
 namespace segment

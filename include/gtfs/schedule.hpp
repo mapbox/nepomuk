@@ -2,6 +2,7 @@
 #define TRANSIT_GTFS_SCHEDULE_HPP_
 
 #include <bitset>
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>

@@ -2,6 +2,7 @@
 #define TRANSIT_GTFS_TRIP_HPP_
 
 #include <boost/optional.hpp>
+#include <cstddef>
 #include <map>
 #include <string>
 #include <vector>
@@ -13,10 +14,18 @@
 #include "id/service.hpp"
 #include "id/shape.hpp"
 #include "id/trip.hpp"
-#include "tool/container/dictionary.hpp"
 
 namespace transit
 {
+
+namespace tool
+{
+namespace container
+{
+class Dictionary;
+}
+}
+
 namespace gtfs
 {
 

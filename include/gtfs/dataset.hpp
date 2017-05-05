@@ -1,14 +1,12 @@
 #ifndef TRANSIT_GTFS_DATASET_HPP_
 #define TRANSIT_GTFS_DATASET_HPP_
 
-#include <bitset>
 #include <cstdint>
 #include <string>
 #include <vector>
 
 #include <boost/optional.hpp>
 
-#include "geometric/coordinate.hpp"
 #include "gtfs/agency.hpp"
 #include "gtfs/calendar.hpp"
 #include "gtfs/fare.hpp"
@@ -20,17 +18,21 @@
 #include "gtfs/stop.hpp"
 #include "gtfs/transfer.hpp"
 #include "gtfs/trip.hpp"
-#include "id/service.hpp"
 
 #include "tool/container/dictionary.hpp"
 #include "tool/container/indexed_vector.hpp"
 #include "tool/io/serialisation.hpp"
-#include "tool/io/stream_errors.hpp"
 
 // definitions according to https://developers.google.com/transit/gtfs/reference
 
 namespace transit
 {
+
+namespace geometric
+{
+class WGS84Coordinate;
+}
+
 namespace gtfs
 {
 

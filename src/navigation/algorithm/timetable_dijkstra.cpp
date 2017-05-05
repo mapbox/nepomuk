@@ -1,10 +1,13 @@
 #include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "navigation/leg.hpp"
-
+#include "navigation/route.hpp"
+#include "search/stop_to_line.hpp"
+#include "timetable/timetable.hpp"
 #include "tool/container/kary_heap.hpp"
 
 #include "id/stop.hpp"
 
+#include <algorithm>
 #include <iterator>
 #include <set>
 #include <utility>

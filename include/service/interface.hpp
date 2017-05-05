@@ -2,7 +2,6 @@
 #define TRANSIT_SERVICE_INTERFACE_HPP_
 
 #include "service/earliest_arrival_parameters.hpp"
-#include "service/interface.hpp"
 #include "service/tile_parameters.hpp"
 
 #include <boost/variant.hpp>

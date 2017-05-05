@@ -14,8 +14,11 @@
 #include <boost/geometry/multi/geometries/multi_linestring.hpp>
 #pragma GCC diagnostic pop
 
+#include <algorithm>
 #include <cmath>
-#include <functional>
+#include <type_traits>
+
+#include "geometric/coordinate.hpp"
 
 namespace transit
 {

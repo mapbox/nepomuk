@@ -12,8 +12,6 @@ namespace transit
 namespace search
 {
 
-class StopToLineFactory;
-
 // When performing look-ups for names / locations, we end up with a list of stop ids. The look-up
 // here allows to find all lines that service a given stop to best find the next departure of a
 // given line.

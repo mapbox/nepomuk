@@ -3,6 +3,7 @@
 
 #include <boost/optional.hpp>
 
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>

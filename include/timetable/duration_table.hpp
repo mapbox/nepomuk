@@ -1,6 +1,7 @@
 #ifndef TRANSIT_TIMETABLE_DURATION_TABLE_HPP_
 #define TRANSIT_TIMETABLE_DURATION_TABLE_HPP_
 
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 
@@ -10,8 +11,6 @@ namespace transit
 {
 namespace timetable
 {
-
-class DurationTableFactory;
 
 class DurationTable
 {

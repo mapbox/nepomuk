@@ -2,13 +2,18 @@
 #define TRANSIT_SEARCH_STOP_TO_LINE_FACTORY_HPP_
 
 #include "search/stop_to_line.hpp"
-#include "timetable/line_table.hpp"
 
 #include <cstddef>
 #include <vector>
 
 namespace transit
 {
+
+namespace timetable
+{
+class LineTable;
+}
+
 namespace search
 {
 

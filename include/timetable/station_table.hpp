@@ -1,6 +1,8 @@
 #ifndef TRANSIT_TIMETABLE_STATION_TABLE_HPP_
 #define TRANSIT_TIMETABLE_STATION_TABLE_HPP_
 
+#include <cstddef>
+
 #include "id/stop.hpp"
 #include "tool/container/surjective_mapping.hpp"
 

@@ -1,10 +1,9 @@
 #include "gtfs/frequency.hpp"
 #include "gtfs/constructor.hpp"
 
-#include <algorithm>
+#include <cstddef>
 
 #include <boost/assert.hpp>
-#include <boost/numeric/conversion/cast.hpp>
 
 namespace transit
 {

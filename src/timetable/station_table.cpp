@@ -1,5 +1,7 @@
 #include "timetable/station_table.hpp"
 
+#include <utility>
+
 namespace transit
 {
 namespace timetable

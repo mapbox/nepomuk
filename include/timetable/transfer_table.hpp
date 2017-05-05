@@ -3,7 +3,6 @@
 
 #include "id/stop.hpp"
 #include <cstddef>
-#include <cstdint>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -14,8 +13,6 @@ namespace transit
 {
 namespace timetable
 {
-
-class TransferTableFactory;
 
 class TransferTable
 {

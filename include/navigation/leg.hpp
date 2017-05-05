@@ -4,15 +4,14 @@
 #include "date/time.hpp"
 #include "navigation/segment.hpp"
 
-#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator_range_core.hpp>
 #include <cstdint>
+#include <vector>
 
 namespace transit
 {
 namespace navigation
 {
-// forward declaration for friend access
-class RoutingAlgorithm;
 
 class Leg
 {
@@ -28,6 +27,7 @@ class Leg
 
     auto segments() const { return boost::make_iterator_range(_segments.begin(), _segments.end()); }
 };
+
 } // namespace navigation
 } // namespace transit
 

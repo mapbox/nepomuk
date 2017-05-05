@@ -1,8 +1,9 @@
 #include "annotation/geometry.hpp"
 #include "id/line.hpp"
-#include "tool/status/progress.hpp"
 
-#include <boost/range/iterator_range.hpp>
+#include <algorithm>                           // for find_if
+#include <boost/assert.hpp>                    // for BOOST_ASSERT
+#include <boost/range/iterator_range_core.hpp> // for iterator_range
 
 namespace transit
 {

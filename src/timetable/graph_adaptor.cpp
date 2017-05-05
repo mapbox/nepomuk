@@ -1,11 +1,14 @@
 #include "timetable/graph_adaptor.hpp"
-#include "tool/container/forward_star_graph_factory.hpp"
-
 #include "id/stop.hpp"
-
+#include "search/stop_to_line.hpp"  // for StopToLine
+#include "timetable/line_table.hpp" // for LineTable
+#include "timetable/stop_table.hpp" // for StopTable
+#include "timetable/timetable.hpp"  // for TimeTable
+#include "tool/container/forward_star_graph_factory.hpp"
 #include "tool/status/progress.hpp"
 
 #include <boost/assert.hpp>
+#include <cstddef>
 #include <iterator>
 #include <set>
 

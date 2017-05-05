@@ -1,15 +1,22 @@
 #ifndef TRANSIT_ADAPTOR_DICTIONARY_HPP
 #define TRANSIT_ADAPTOR_DICTIONARY_HPP
 
-#include <google/protobuf/stubs/common.h>
-
 #include "dictionary.pb.h"
-
-#include "tool/container/dictionary.hpp"
-#include "tool/container/string_table.hpp"
 
 namespace transit
 {
+
+// Forward declarations
+
+namespace tool
+{
+namespace container
+{
+class Dictionary;
+class StringTable;
+} // namespace container
+} // namespace tool
+
 namespace adaptor
 {
 

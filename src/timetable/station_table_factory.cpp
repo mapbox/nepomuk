@@ -1,5 +1,7 @@
 #include "timetable/station_table_factory.hpp"
 #include "timetable/exceptions.hpp"
+
+#include <algorithm>
 #include <cstdint>
 #include <iterator>
 #include <utility>
