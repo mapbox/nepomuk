@@ -1,6 +1,7 @@
 #ifndef TRANSIT_TOOL_IO_CSV_DECODER_HPP_
 #define TRANSIT_TOOL_IO_CSV_DECODER_HPP_
 
+#include "tool/io/stream_errors.hpp"
 #include "tool/io/stream_traits.hpp"
 #include <cstdint>
 #include <iostream>

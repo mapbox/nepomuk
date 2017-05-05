@@ -1,14 +1,16 @@
 #ifndef TRANSIT_GEOMETRIC_POLYLINE_HPP_
 #define TRANSIT_GEOMETRIC_POLYLINE_HPP_
 
-#include "geometric/coordinate.hpp"
 #include <cstdint>
+#include <string>
 #include <vector>
 
 namespace transit
 {
 namespace geometric
 {
+
+class WGS84Coordinate;
 
 // Polyline encoding (See:
 // https://developers.google.com/maps/documentation/utilities/polylinealgorithm)

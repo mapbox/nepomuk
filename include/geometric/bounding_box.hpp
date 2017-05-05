@@ -2,6 +2,7 @@
 #define TRANSIT_GEOMETRIC_BOUNDING_BOX_HPP_
 
 #include "geometric/coordinate.hpp"
+#include <cstdint>
 
 namespace transit
 {

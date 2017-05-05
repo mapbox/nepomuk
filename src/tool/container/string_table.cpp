@@ -1,4 +1,5 @@
 #include "tool/container/string_table.hpp"
+#include <cstdint>
 
 namespace transit
 {

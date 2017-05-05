@@ -6,6 +6,8 @@
 
 #include "timetable/departure_table.hpp"
 
+#include <vector>
+
 namespace transit
 {
 namespace timetable

@@ -1,7 +1,6 @@
 #ifndef TRANSIT_ANNOTATION_STOP_INFO_HPP_
 #define TRANSIT_ANNOTATION_STOP_INFO_HPP_
 
-#include "gtfs/stop.hpp"
 #include "id/dictionary.hpp"
 #include "id/stop.hpp"
 
@@ -9,6 +8,12 @@
 
 namespace transit
 {
+
+namespace gtfs
+{
+class Stop;
+};
+
 namespace annotation
 {
 

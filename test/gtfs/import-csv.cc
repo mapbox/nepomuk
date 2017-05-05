@@ -7,6 +7,7 @@
 #include "gtfs/trip.hpp"
 
 #include "tool/container/dictionary.hpp"
+#include "tool/io/stream_errors.hpp"
 
 #include <iostream>
 #include <string>

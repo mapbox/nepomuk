@@ -2,6 +2,7 @@
 #include "tool/io/stream_errors.hpp"
 
 #include <boost/assert.hpp>
+#include <string>
 
 namespace transit
 {

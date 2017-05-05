@@ -1,7 +1,11 @@
 #include "navigation/routing_algorithm.hpp"
+#include "navigation/leg.hpp"
+#include "navigation/route.hpp"
+#include "timetable/timetable.hpp"
 
 #include <algorithm>
 #include <boost/assert.hpp>
+#include <utility>
 
 namespace transit
 {

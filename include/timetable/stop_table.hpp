@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "id/shape.hpp"
 #include "id/stop.hpp"
 
 #include <boost/range/iterator_range.hpp>
@@ -19,8 +18,6 @@ class StopToLineFactory;
 
 namespace timetable
 {
-
-class StopTableFactory;
 
 // For any given line, the stop table defines the list of stops that can be reached along the line
 // and the time from a given departure that is required to do so. It groups all entries that follow

@@ -1,12 +1,14 @@
 #ifndef TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_
 #define TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_
 
+#include <cstdint>
+#include <iosfwd>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
 #include "id/dictionary.hpp"
-#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator_range_core.hpp>
 
 namespace transit
 {

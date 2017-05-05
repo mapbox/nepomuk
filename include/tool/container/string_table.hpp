@@ -1,10 +1,10 @@
 #ifndef TRANSIT_TOOL_CONTAINER_STRING_TABLE_HPP_
 #define TRANSIT_TOOL_CONTAINER_STRING_TABLE_HPP_
 
-#include <string>
+#include <iosfwd>
 #include <vector>
 
-#include "tool/container/dictionary.hpp"
+#include "id/dictionary.hpp"
 
 namespace transit
 {

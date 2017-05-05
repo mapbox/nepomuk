@@ -1,17 +1,18 @@
 #ifndef TRANSIT_TIMETABLE_HPP_
 #define TRANSIT_TIMETABLE_HPP_
 
-#include "id/line.hpp"
 #include "id/stop.hpp"
 #include "timetable/line_table.hpp"
 #include "timetable/station_table.hpp"
 #include "timetable/transfer_table.hpp"
 
-#include <boost/assert.hpp>
 #include <vector>
 
 namespace transit
 {
+
+struct LineID;
+
 namespace search
 {
 class StopToLineFactory;

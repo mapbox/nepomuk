@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <boost/assert.hpp>
+#include <utility>
 
 namespace transit
 {

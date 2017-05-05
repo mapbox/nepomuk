@@ -3,8 +3,6 @@
 #include <utility>
 #include <vector>
 
-#include <iostream>
-
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>

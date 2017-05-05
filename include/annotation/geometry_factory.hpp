@@ -4,15 +4,35 @@
 #include <boost/optional.hpp>
 #include <vector>
 
+namespace transit
+{
+namespace gtfs
+{
+struct Stop;
+}
+}
+namespace transit
+{
+namespace timetable
+{
+class LineTable;
+}
+}
+namespace transit
+{
+struct ShapeID;
+}
+
 #include "annotation/geometry.hpp"
-#include "gtfs/stop.hpp"
-#include "id/shape.hpp"
-#include "search/stop_to_line.hpp"
-#include "timetable/line_table.hpp"
 #include "timetable/segment_table.hpp"
 
 namespace transit
 {
+namespace search
+{
+class StopToLine;
+} // namespace search
+
 namespace annotation
 {
 

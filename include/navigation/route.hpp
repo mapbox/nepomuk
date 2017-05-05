@@ -4,16 +4,14 @@
 #include "date/time.hpp"
 #include "navigation/leg.hpp"
 
-#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator_range_core.hpp>
 #include <cstdint>
+#include <vector>
 
 namespace transit
 {
 namespace navigation
 {
-
-// forward declaration for friend access
-class RoutingAlgorithm;
 
 // A route is the result of a navigation query. It describes a number of stops / transits along a
 // route. The route is the result of a earliest arrival query

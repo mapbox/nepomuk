@@ -14,9 +14,6 @@ namespace transit
 namespace timetable
 {
 
-class DepartureTableFactory;
-class LineTableFactory;
-
 // Public transit routing consists of timetable routing. The departuretables define when connections
 // leave certain stops. In general these occurr in certain periodic settings. For any time at any
 // stop we need to be able to access the next connections that are possible. The departuretable

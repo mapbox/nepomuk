@@ -1,7 +1,6 @@
 #include "gtfs/stop.hpp"
 #include "gtfs/constructor.hpp"
 
-#include <algorithm>
 #include <boost/assert.hpp>
 
 namespace transit

@@ -3,6 +3,7 @@
 
 #include <boost/optional.hpp>
 
+#include <cstddef>
 #include <cstdint>
 #include <map>
 #include <string>
@@ -16,10 +17,18 @@
 #include "id/stop.hpp"
 #include "id/trip.hpp"
 #include "id/zone.hpp"
-#include "tool/container/dictionary.hpp"
 
 namespace transit
 {
+
+namespace tool
+{
+namespace container
+{
+class Dictionary;
+}
+}
+
 namespace gtfs
 {
 

@@ -1,14 +1,20 @@
 #ifndef TRANSIT_TIMETABLE_GRAPH_ADAPTOR_HPP_
 #define TRANSIT_TIMETABLE_GRAPH_ADAPTOR_HPP_
 
-#include "search/stop_to_line.hpp"
-#include "timetable/timetable.hpp"
 #include "tool/container/forward_star_graph.hpp"
 
 namespace transit
 {
+
+namespace search
+{
+class StopToLine;
+}
+
 namespace timetable
 {
+
+class TimeTable;
 
 class TimetableToGraphAdaptor
 {

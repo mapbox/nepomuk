@@ -2,7 +2,6 @@
 #define TRANSIT_SERVICE_TILE_PARAMETERS_HPP_
 
 #include <cstdint>
-#include <string>
 
 #include "tool/container/mapbox_vector_tile.hpp"
 
@@ -10,8 +9,6 @@ namespace transit
 {
 namespace service
 {
-
-class Tile;
 
 class TileParameters final
 {

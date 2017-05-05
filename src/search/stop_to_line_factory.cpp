@@ -1,6 +1,10 @@
 #include "search/stop_to_line_factory.hpp"
 #include "timetable/line_table.hpp"
 
+#include "id/line.hpp"              // for LineID
+#include "id/stop.hpp"              // for StopID
+#include "timetable/stop_table.hpp" // for StopTable
+
 #include <algorithm>
 
 namespace transit

@@ -2,10 +2,9 @@
 #define TRANSIT_NAVIGATION_ALGORITHMS_TIMETABLE_DIJKSTRA_HPP_
 
 #include "navigation/routing_algorithm.hpp"
-#include "search/stop_to_line.hpp"
-#include "timetable/timetable.hpp"
 
 #include "date/time.hpp"
+#include "id/line.hpp"
 #include "id/stop.hpp"
 #include "tool/container/kary_heap.hpp"
 
@@ -13,8 +12,21 @@
 
 namespace transit
 {
+
+namespace search
+{
+class StopToLine;
+}
+namespace timetable
+{
+class TimeTable;
+}
+
 namespace navigation
 {
+
+class Route;
+
 namespace algorithm
 {
 

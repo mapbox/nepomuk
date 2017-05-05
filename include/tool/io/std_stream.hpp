@@ -1,7 +1,6 @@
 #ifndef TRANSIT_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
 #define TRANSIT_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
 
-#include <cstdint>
 #include <iostream>
 
 namespace transit

@@ -5,12 +5,9 @@
 #include "id/line.hpp"
 #include "id/stop.hpp"
 #include "navigation/connection.hpp"
-#include "navigation/leg.hpp"
 #include "navigation/route.hpp"
 #include "navigation/segment.hpp"
 #include "navigation/stop.hpp"
-
-#include "timetable/line_table.hpp"
 
 #include <boost/optional.hpp>
 #include <cstdint>
@@ -18,8 +15,16 @@
 
 namespace transit
 {
+
+namespace timetable
+{
+class LineTable;
+} // namespace timetable
+
 namespace navigation
 {
+
+class Leg;
 
 // interface for all routing algorithms to implement
 class RoutingAlgorithm

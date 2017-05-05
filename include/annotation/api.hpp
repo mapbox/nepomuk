@@ -1,18 +1,22 @@
 #ifndef TRANSIT_ANNOTATION_API_HPP_
 #define TRANSIT_ANNOTATION_API_HPP_
 
-#include "annotation/geometry.hpp"
-#include "geometric/coordinate.hpp"
-#include "navigation/route.hpp"
+#include <boost/assert.hpp> // for BOOST_ASSERT
 #include <iostream>
-#include <string>
+#include <vector> // for vector
 
 namespace transit
 {
 
 // forward declaration
+namespace geometric
+{
+class WGS84Coordinate;
+} // namespace geometric;
+
 namespace navigation
 {
+class Route;
 class Leg;
 class Segment;
 class Connection;
@@ -28,6 +32,9 @@ class Walk;
 
 namespace annotation
 {
+
+class Geometry;
+
 class API
 {
   public:

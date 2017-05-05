@@ -1,7 +1,6 @@
 #ifndef TRANSIT_SEARCH_COORDINATE_TO_STOP_HPP_
 #define TRANSIT_SEARCH_COORDINATE_TO_STOP_HPP_
 
-#include "geometric/bounding_box.hpp"
 #include "geometric/coordinate.hpp"
 #include "id/stop.hpp"
 
@@ -10,12 +9,17 @@
 
 #include <boost/geometry/index/rtree.hpp>
 
-#include <cstdint>
 #include <utility>
 #include <vector>
 
 namespace transit
 {
+
+namespace geometric
+{
+class WGS84BoundingBox;
+}
+
 namespace search
 {
 

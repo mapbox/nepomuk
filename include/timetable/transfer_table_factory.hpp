@@ -1,16 +1,25 @@
 #ifndef TRANSIT_TIMETABLE_TRANSFER_TABLE_FACTORY_HPP_
 #define TRANSIT_TIMETABLE_TRANSFER_TABLE_FACTORY_HPP_
 
-#include "gtfs/stop.hpp"
 #include "gtfs/transfer.hpp"
 #include "search/coordinate_to_stop.hpp"
-#include "timetable/line_table.hpp"
 #include "timetable/transfer_table.hpp"
+
+#include <cstddef>
+#include <vector>
 
 namespace transit
 {
+
+namespace gtfs
+{
+struct Stop;
+}
+
 namespace timetable
 {
+
+class LineTable;
 
 class TransferTableFactory
 {

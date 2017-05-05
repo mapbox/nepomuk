@@ -1,5 +1,7 @@
 #include "tool/status/progress.hpp"
 #include <iostream>
+#include <string>      // for allocator, char_traits
+#include <type_traits> // for move
 
 namespace transit
 {

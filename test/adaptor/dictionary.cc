@@ -1,5 +1,3 @@
-#include <string>
-
 #include "adaptor/dictionary.hpp"
 #include "id/dictionary.hpp"
 #include "tool/container/dictionary.hpp"

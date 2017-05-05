@@ -1,13 +1,15 @@
 #include "gtfs/dataset.hpp"
-#include "algorithm/ranges.hpp"
+#include "geometric/coordinate.hpp"
 #include "tool/status/progress.hpp"
 
 #include <algorithm>
+#include <cstddef>
 #include <iostream>
 #include <iterator>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
@@ -15,6 +17,7 @@
 
 namespace transit
 {
+
 namespace gtfs
 {
 

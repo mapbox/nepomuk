@@ -1,9 +1,6 @@
 #include "gtfs/feed_info.hpp"
 #include "gtfs/constructor.hpp"
 
-#include <algorithm>
-#include <boost/optional.hpp>
-
 namespace transit
 {
 namespace gtfs

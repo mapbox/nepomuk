@@ -1,8 +1,9 @@
 #include "search/coordinate_to_stop.hpp"
 
-#include "tool/status/progress.hpp"
+#include "geometric/bounding_box.hpp" // for WGS84Boundin...
 #include <algorithm>
 #include <boost/geometry/geometries/box.hpp>
+#include <iterator> // for back_insert_...
 
 namespace transit
 {
