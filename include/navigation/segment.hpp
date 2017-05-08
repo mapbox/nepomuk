@@ -3,6 +3,7 @@
 
 #include <boost/range/iterator_range_core.hpp>
 #include <boost/variant/variant.hpp>
+#include <boost/assert.hpp>
 
 #include <cstdint>
 #include <vector>
@@ -157,7 +158,8 @@ template <typename visitor_type> visitor_type Segment::visit(visitor_type visito
     case SegmentType::TRANSFER:
         visitor(as_transfer());
         return visitor;
-    case SegmentType::WALK:
+    default:
+        BOOST_ASSERT(type() == SegmentType::WALK);
         visitor(as_walk());
         return visitor;
     }
