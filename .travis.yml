@@ -70,9 +70,9 @@ before_install:
   - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
   - if [[ "${NODEBINDINGS}" == "On" ]]; then
-        nvm install ${NODE_VERSION};
-        nvm use ${NODE_VERSION};
-        ./scripts/configure-bindings.sh;
+       nvm install ${NODE_VERSION};
+       nvm use ${NODE_VERSION};
+       ./scripts/configure-bindings.sh;
     fi
   - CMAKE_URL="https://mason-binaries.s3.amazonaws.com/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}.tar.gz"
   - CMAKE_DIR="mason_packages/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}"
