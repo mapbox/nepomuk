@@ -7,6 +7,7 @@
 	var polyline = require('polyline');
 
 	L.Routing = L.Routing || {};
+    L.routing = L.routing || {}
 
 	L.Routing.DirectionsTransit = L.Class.extend({
 		options: {
@@ -104,7 +105,6 @@
 				route;
 
 			context = context || callback;
-			context = context || callback;
             if (response.code !== 'Ok') {
                 callback.call(context, {
                     status: response.code
@@ -194,10 +194,7 @@
 
 		buildRouteUrl: function(waypoints, options) {
 			var computeInstructions =
-				/* Instructions are always needed, 
-				   since we do not have waypoint indices otherwise */
 				true,
-				//!(options && options.geometryOnly),
 				locs = [],
 				i,
 				baseUrl;
@@ -217,30 +214,11 @@
 		}
 	});
 
-	L.Routing.Formatter = L.Routing.Formatter.extend({
-		
-        _getInstructionTemplate: function(instr, i) {
-            if( instr.type == "transit" )
-            {
-                return String("Take " + instr.name + " towards " + instr.headsign);
-            }
-            else if( instr.type == "transfer")
-            {
-                return String("Transfer at " + instr.stopname);
-            }
-            else
-            {
-                if( i == 0 )
-                    return String("Walk towards station");
-                else
-                    return String("Walk towards destination");
-            }
-		}
-	});
-
 	L.Routing.directionsTransit = function(apiKey, options) {
 		return new L.Routing.DirectionsTransit(apiKey, options);
 	};
+
+    L.routing.directionsTransit = L.Routing.directionsTransit;
 
 	module.exports = L.Routing.DirectionsTransit;
 })();

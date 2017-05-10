@@ -13,18 +13,6 @@ var streets = L.tileLayer('https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}@
   })
 
 module.exports = {
-  defaultState: {
-    center: L.latLng(37.7825,-122.4119),
-    zoom: 13,
-    waypoints: [],
-    language: 'en',
-    alternative: 0,
-    layer: streets
-  },
-  services: [{
-    label: 'Transit (earliest arrival)',
-    path: 'http://0.0.0.0:5000/directions/v5/ignored/transit/eap/'
-  }],
   layer: [{
     'Mapbox Streets': streets,
     'Mapbox Outdoors': outdoors,

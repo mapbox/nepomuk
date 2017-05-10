@@ -1,0 +1,37 @@
+{
+  "name": "directions-transit-frontend",
+  "version": "0.0.1",
+  "description": "frontend interface for transit directions",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "eslint src/*js i18n/*.js",
+    "build": "browserify -d src/index.js -s directions-transit > bundle.js && cp node_modules/leaflet/dist/leaflet.css css/leaflet.css",
+    "start-index": "budo src/index.js --serve=bundle.js --live -d | bistre",
+    "start": "npm run build && npm run start-index",
+    "prepub": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapbox/directions-transit"
+  },
+  "keywords": [
+    "lrm",
+    "directions",
+    "transit",
+    "routing",
+    "api"
+  ],
+  "author": "Moritz Kobitzsch",
+  "license": "MIT",
+  "devDependencies": {
+    "bistre": "^1.0.1",
+    "browserify": "^13.3.0",
+    "budo": "^9.4.0"
+  },
+  "dependencies": {
+    "leaflet": "^1.0.3",
+    "leaflet-routing-machine": "^3.2.5",
+    "leaflet.locatecontrol": "^0.60.0",
+    "lrm-directions-transit": "file:///Users/mokob/git/directions-transit/frontends/lrm-plugin"
+  }
+}
