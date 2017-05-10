@@ -37,6 +37,25 @@ struct BraceGuard
     std::ostream &os;
 };
 
+void write_escaped(std::ostream &os, std::string const &value)
+{
+    auto const requires_escape = [](char const letter) {
+        auto const is_quote = letter == '\"';
+        auto const is_slash = letter == '\\';
+        auto const is_backslash = letter == '/';
+        return is_quote || is_slash || is_backslash;
+    };
+    auto const write_escaped_char = [&](char const letter) {
+        if (iscntrl(letter) || requires_escape(letter))
+            os << "\\" << letter;
+        else
+            os << letter;
+    };
+    os << "\"";
+    std::for_each(value.begin(), value.end(), write_escaped_char);
+    os << "\"";
+}
+
 void quote(std::ostream &os, std::string const &value) { os << "\"" << value << "\""; }
 void tag(std::ostream &os, std::string const &value)
 {
@@ -282,7 +301,7 @@ void API::jsonify(std::ostream &os, geometric::WGS84Coordinate const coordinate)
 void API::jsonify(std::ostream &os,
                   std::vector<geometric::WGS84Coordinate> const &coordinates) const
 {
-    quote(os, geometric::Polyline::encode(100000, coordinates));
+    write_escaped(os, geometric::Polyline::encode(100000, coordinates));
 }
 
 } // namespace annotation
