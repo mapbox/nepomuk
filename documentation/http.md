@@ -1,8 +1,10 @@
-# Directions Transit API
+# Nepomuk API
+
+Disclaimer: Note that this API is not stable yet and subject to change until we do our first official release.
 
 ## Route Descriptions
 
-Many parameters can make up a route. The directions transit API provides you with a large set of possible values.
+Many parameters can make up a route. The nepomuk API provides you with a large set of possible values.
 We provide the following information about journeys, as far as it is available:
 
 | identifier        | type          | description |
