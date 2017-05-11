@@ -1,12 +1,12 @@
-#ifndef TRANSIT_SEARCH_STOP_TO_LINE_FACTORY_HPP_
-#define TRANSIT_SEARCH_STOP_TO_LINE_FACTORY_HPP_
+#ifndef NEPOMUK_SEARCH_STOP_TO_LINE_FACTORY_HPP_
+#define NEPOMUK_SEARCH_STOP_TO_LINE_FACTORY_HPP_
 
 #include "search/stop_to_line.hpp"
 
 #include <cstddef>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace timetable
@@ -26,6 +26,6 @@ class StopToLineFactory
 };
 
 } // namespace search
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SEARCH_STOP_TO_LINE_FACTORY_HPP_
+#endif // NEPOMUK_SEARCH_STOP_TO_LINE_FACTORY_HPP_

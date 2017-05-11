@@ -1,12 +1,12 @@
-#ifndef TRANSIT_TEST_TOOLKIT_HPP_
-#define TRANSIT_TEST_TOOLKIT_HPP_
+#ifndef NEPOMUK_TEST_TOOLKIT_HPP_
+#define NEPOMUK_TEST_TOOLKIT_HPP_
 
 #include "geometric/coordinate.hpp"
 
-transit::geometric::WGS84Coordinate make_coordinate(double lon, double lat)
+nepomuk::geometric::WGS84Coordinate make_coordinate(double lon, double lat)
 {
-    return {transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLongitude>(lon),
-            transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLatitude>(lat)};
+    return {nepomuk::geometric::makeLatLonFromDouble<nepomuk::geometric::FixedLongitude>(lon),
+            nepomuk::geometric::makeLatLonFromDouble<nepomuk::geometric::FixedLatitude>(lat)};
 };
 
 constexpr char const *const API_ANNOTATED_QUERY_1_4 =
@@ -42,4 +42,4 @@ constexpr char const *const API_ANNOTATED_QUERY_A_J =
     "5400,\"arrive\":18050,\"duration\":12650,\"name\":\"CONNECTION NAME "
     "HERE\",\"headsign\":\"HEADSIGN HERE\"}]}]}]}]}";
 
-#endif // TRANSIT_TEST_TOOLKIT_HPP_
+#endif // NEPOMUK_TEST_TOOLKIT_HPP_

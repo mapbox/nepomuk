@@ -1,11 +1,11 @@
-#ifndef TRANSIT_GEOMETRIC_POLYLINE_HPP_
-#define TRANSIT_GEOMETRIC_POLYLINE_HPP_
+#ifndef NEPOMUK_GEOMETRIC_POLYLINE_HPP_
+#define NEPOMUK_GEOMETRIC_POLYLINE_HPP_
 
 #include <cstdint>
 #include <string>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -24,6 +24,6 @@ class Polyline
 };
 
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GEOMETRIC_POLYLINE_HPP_
+#endif // NEPOMUK_GEOMETRIC_POLYLINE_HPP_

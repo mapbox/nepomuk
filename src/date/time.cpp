@@ -6,7 +6,7 @@
 #include <limits>
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace date
 {
@@ -175,4 +175,4 @@ UTCTimestamp::value_type UTCTimestamp::seconds_since_midnight() const
 }
 
 } // namespace date
-} // namespace transit
+} // namespace nepomuk

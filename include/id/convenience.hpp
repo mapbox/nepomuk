@@ -1,5 +1,5 @@
-#ifndef TRANSIT_ID_CONVENIENCE_HPP_
-#define TRANSIT_ID_CONVENIENCE_HPP_
+#ifndef NEPOMUK_ID_CONVENIENCE_HPP_
+#define NEPOMUK_ID_CONVENIENCE_HPP_
 
 #include "id/agency.hpp"
 #include "id/block.hpp"
@@ -14,4 +14,4 @@
 #include "id/trip.hpp"
 #include "id/zone.hpp"
 
-#endif // TRANSIT_ID_CONVENIENCE_HPP_
+#endif // NEPOMUK_ID_CONVENIENCE_HPP_

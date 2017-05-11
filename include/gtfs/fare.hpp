@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_FARE_HPP_
-#define TRANSIT_GTFS_FARE_HPP_
+#ifndef NEPOMUK_GTFS_FARE_HPP_
+#define NEPOMUK_GTFS_FARE_HPP_
 
 #include <cstddef>
 #include <cstdint>
@@ -13,7 +13,7 @@
 #include "id/route.hpp"
 #include "id/zone.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -65,6 +65,6 @@ FareRule makeFareRule(std::map<std::string, std::size_t> const &header,
                       std::vector<std::string> &values);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_FARE_HPP_
+#endif // NEPOMUK_GTFS_FARE_HPP_

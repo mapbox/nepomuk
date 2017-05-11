@@ -1,5 +1,5 @@
-#ifndef TRANSIT_NAVIGATION_LEG_HPP_
-#define TRANSIT_NAVIGATION_LEG_HPP_
+#ifndef NEPOMUK_NAVIGATION_LEG_HPP_
+#define NEPOMUK_NAVIGATION_LEG_HPP_
 
 #include "date/time.hpp"
 #include "navigation/segment.hpp"
@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -29,6 +29,6 @@ class Leg
 };
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_NAVIGATION_LEG_HPP_
+#endif // NEPOMUK_NAVIGATION_LEG_HPP_

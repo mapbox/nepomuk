@@ -1,10 +1,10 @@
-#ifndef TRANSIT_TOOL_TIMING_HPP_
-#define TRANSIT_TOOL_TIMING_HPP_
+#ifndef NEPOMUK_TOOL_TIMING_HPP_
+#define NEPOMUK_TOOL_TIMING_HPP_
 
 #include <chrono>
 #include <cstdint>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -46,6 +46,6 @@ class Timer
 
 } // namespace status
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_TIMING_HPP_
+#endif // NEPOMUK_TOOL_TIMING_HPP_

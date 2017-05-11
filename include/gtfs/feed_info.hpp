@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_FEED_INFO_HPP_
-#define TRANSIT_GTFS_FEED_INFO_HPP_
+#ifndef NEPOMUK_GTFS_FEED_INFO_HPP_
+#define NEPOMUK_GTFS_FEED_INFO_HPP_
 
 #include <map>
 #include <string>
@@ -7,7 +7,7 @@
 
 #include <boost/optional.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -28,6 +28,6 @@ FeedInfo makeFeedInfo(std::map<std::string, std::size_t> const &header,
                       std::vector<std::string> &values);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_FEED_INFO_HPP_
+#endif // NEPOMUK_GTFS_FEED_INFO_HPP_

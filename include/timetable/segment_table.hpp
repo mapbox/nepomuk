@@ -1,10 +1,10 @@
-#ifndef TRANSIT_TIMETABLE_SEGMENT_TABLE_HPP_
-#define TRANSIT_TIMETABLE_SEGMENT_TABLE_HPP_
+#ifndef NEPOMUK_TIMETABLE_SEGMENT_TABLE_HPP_
+#define NEPOMUK_TIMETABLE_SEGMENT_TABLE_HPP_
 
 #include "geometric/coordinate.hpp"
 #include "tool/container/indexed_vector.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -14,6 +14,6 @@ namespace timetable
 using SegmentTable = tool::container::IndexedVector<geometric::WGS84Coordinate>;
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_SEGMENT_TABLE_HPP_
+#endif // NEPOMUK_TIMETABLE_SEGMENT_TABLE_HPP_

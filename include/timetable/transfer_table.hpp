@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TIMETABLE_TRANSFER_TABLE_HPP_
-#define TRANSIT_TIMETABLE_TRANSFER_TABLE_HPP_
+#ifndef NEPOMUK_TIMETABLE_TRANSFER_TABLE_HPP_
+#define NEPOMUK_TIMETABLE_TRANSFER_TABLE_HPP_
 
 #include "id/stop.hpp"
 #include <cstddef>
@@ -9,7 +9,7 @@
 
 #include <boost/range/iterator_range.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -36,6 +36,6 @@ class TransferTable
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_TRANSFER_TABLE_HPP_
+#endif // NEPOMUK_TIMETABLE_TRANSFER_TABLE_HPP_

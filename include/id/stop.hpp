@@ -1,14 +1,14 @@
-#ifndef TRANSIT_ID_STOP_HPP_
-#define TRANSIT_ID_STOP_HPP_
+#ifndef NEPOMUK_ID_STOP_HPP_
+#define NEPOMUK_ID_STOP_HPP_
 
 #include "tool/types_and_traits/strong_typedef.hpp"
 
-namespace transit
+namespace nepomuk
 {
 STRONG_ID_TYPE(std::uint64_t, StopID)
-} // namespace transit
+} // namespace nepomuk
 
-// needs to be outside of transit namespace to ingest into std namespace
-STRONG_ID_TYPE_HASH(std::uint64_t, transit::StopID)
+// needs to be outside of nepomuk namespace to ingest into std namespace
+STRONG_ID_TYPE_HASH(std::uint64_t, nepomuk::StopID)
 
-#endif // TRANSIT_ID_STOP_HPP_
+#endif // NEPOMUK_ID_STOP_HPP_

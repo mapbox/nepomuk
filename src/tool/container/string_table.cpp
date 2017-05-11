@@ -1,7 +1,7 @@
 #include "tool/container/string_table.hpp"
 #include <cstdint>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -15,4 +15,4 @@ std::string StringTable::get_string(DictionaryID const id) const
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk

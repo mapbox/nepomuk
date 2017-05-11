@@ -1,10 +1,10 @@
-#ifndef TRANSIT_DATE_TIME_HPP_
-#define TRANSIT_DATE_TIME_HPP_
+#ifndef NEPOMUK_DATE_TIME_HPP_
+#define NEPOMUK_DATE_TIME_HPP_
 
 #include <cstdint>
 #include <iostream>
 
-namespace transit
+namespace nepomuk
 {
 namespace date
 {
@@ -88,6 +88,6 @@ UTCTimestamp operator-(UTCTimestamp lhs, UTCTimestamp::value_type const seconds)
 std::ostream &operator<<(std::ostream &os, UTCTimestamp const &UTCTimestamp);
 
 } // namespace date
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_DATE_TIME_HPP_
+#endif // NEPOMUK_DATE_TIME_HPP_

@@ -17,7 +17,7 @@
 #include <sstream>
 #include <string>
 
-using namespace transit;
+using namespace nepomuk;
 
 int main(int argc, char **argv) try
 {
@@ -29,7 +29,7 @@ int main(int argc, char **argv) try
     if (path.back() == '/')
         path.pop_back();
 
-    transit::service::Master data_service(path);
+    nepomuk::service::Master data_service(path);
 
     {
         auto coordinate_lookup = data_service.coordinate_to_stop();
@@ -52,7 +52,7 @@ int main(int argc, char **argv) try
                 geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
         };
 
-        transit::annotation::API const &api_annotator = data_service.api_annotation();
+        nepomuk::annotation::API const &api_annotator = data_service.api_annotation();
 
         while (true)
         {

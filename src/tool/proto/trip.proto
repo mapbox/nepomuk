@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package transit.io.gtfs.proto;
+package nepomuk.io.gtfs.proto;
 
 import "accessibility.proto";
 

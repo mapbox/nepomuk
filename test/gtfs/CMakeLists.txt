@@ -1,10 +1,10 @@
 set(gtfsLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
-        transitdate
-        transitgeometric
-        transitgtfs
-        transittool)
+        NEPOMUKdate
+        NEPOMUKgeometric
+        NEPOMUKgtfs
+        NEPOMUKtool)
 
 
 set(gtfsINCLUDES

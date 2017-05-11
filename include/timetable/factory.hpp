@@ -1,10 +1,10 @@
-#ifndef TRANSIT_TIMETABLE_FACTORY_HPP_
-#define TRANSIT_TIMETABLE_FACTORY_HPP_
+#ifndef NEPOMUK_TIMETABLE_FACTORY_HPP_
+#define NEPOMUK_TIMETABLE_FACTORY_HPP_
 
 #include "gtfs/dataset.hpp"
 #include "timetable/timetable.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -16,6 +16,6 @@ class TimeTableFactory
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_FACTORY_HPP_
+#endif // NEPOMUK_TIMETABLE_FACTORY_HPP_

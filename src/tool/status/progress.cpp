@@ -3,7 +3,7 @@
 #include <string>      // for allocator, char_traits
 #include <type_traits> // for move
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -45,4 +45,4 @@ void ProgressBarGuard::print(std::uint32_t current)
 
 } // namespace statue
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk

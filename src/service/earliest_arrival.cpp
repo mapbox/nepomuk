@@ -1,6 +1,6 @@
 #include "service/earliest_arrival.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -80,4 +80,4 @@ ServiceStatus EarliestArrival::operator()(ServiceParameters &parameters) const
 }
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk

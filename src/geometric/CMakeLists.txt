@@ -5,13 +5,13 @@ set(geometric_SOURCES
     polyline.cpp)
 
 # export source files as library
-add_library(transitgeometric STATIC
+add_library(NEPOMUKgeometric STATIC
     ${geometric_SOURCES})
 
 # link all required items
-target_link_libraries(transitgeometric
+target_link_libraries(NEPOMUKgeometric
     ${Boost_LIBRARIES})
 
 # define additional include directories
-target_include_directories(transitgeometric SYSTEM PUBLIC
+target_include_directories(NEPOMUKgeometric SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS})

@@ -7,7 +7,7 @@
 #include <boost/assert.hpp>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -261,4 +261,4 @@ Connection RoutingAlgorithm::make_connection(LineID const id,
 }
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

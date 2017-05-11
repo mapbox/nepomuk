@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TIMETABLE_DEPARTURE_TABLE_FACTORY_HPP
-#define TRANSIT_TIMETABLE_DEPARTURE_TABLE_FACTORY_HPP
+#ifndef NEPOMUK_TIMETABLE_DEPARTURE_TABLE_FACTORY_HPP
+#define NEPOMUK_TIMETABLE_DEPARTURE_TABLE_FACTORY_HPP
 
 #include "gtfs/frequency.hpp"
 #include "gtfs/stop.hpp"
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -26,6 +26,6 @@ class DepartureTableFactory
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_DEPARTURE_TABLE_FACTORY_HPP
+#endif // NEPOMUK_TIMETABLE_DEPARTURE_TABLE_FACTORY_HPP

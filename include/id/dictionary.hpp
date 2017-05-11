@@ -1,14 +1,14 @@
-#ifndef TRANSIT_ID_DICTIONARY_HPP_
-#define TRANSIT_ID_DICTIONARY_HPP_
+#ifndef NEPOMUK_ID_DICTIONARY_HPP_
+#define NEPOMUK_ID_DICTIONARY_HPP_
 
 #include "tool/types_and_traits/strong_typedef.hpp"
 
-namespace transit
+namespace nepomuk
 {
 STRONG_ID_TYPE(std::uint64_t, DictionaryID)
-} // namespace transit
+} // namespace nepomuk
 
-// needs to be outside of transit namespace to ingest into std namespace
-STRONG_ID_TYPE_HASH(std::uint64_t, transit::DictionaryID)
+// needs to be outside of nepomuk namespace to ingest into std namespace
+STRONG_ID_TYPE_HASH(std::uint64_t, nepomuk::DictionaryID)
 
-#endif // TRANSIT_ID_DICTIONARY_HPP_
+#endif // NEPOMUK_ID_DICTIONARY_HPP_

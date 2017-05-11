@@ -16,15 +16,15 @@ namespace
 {
 
 template <typename on_transfers_functor, typename on_stops_functor, typename on_lines_functor>
-void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
-                       transit::search::StopToLine const &stop_to_line,
+void do_stuff_on_graph(nepomuk::timetable::TimeTable const &timetable,
+                       nepomuk::search::StopToLine const &stop_to_line,
                        on_transfers_functor on_transfers,
                        on_stops_functor on_stops,
                        on_lines_functor on_lines)
 {
     for (std::size_t stop = 0; stop < timetable.num_stops(); ++stop)
     {
-        auto const stop_id = transit::StopID{static_cast<std::uint64_t>(stop)};
+        auto const stop_id = nepomuk::StopID{static_cast<std::uint64_t>(stop)};
 
         auto const transfers = timetable.transfers(stop_id);
         on_transfers(transfers);
@@ -41,7 +41,7 @@ void do_stuff_on_graph(transit::timetable::TimeTable const &timetable,
 
 } // namespace
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -121,4 +121,4 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable, search::StopToLine co
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

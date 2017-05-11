@@ -12,8 +12,8 @@
 #include <iostream>
 #include <string>
 
-using namespace transit::gtfs;
-using namespace transit;
+using namespace nepomuk::gtfs;
+using namespace nepomuk;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -109,7 +109,7 @@ void makeStops(std::string const &name)
 }
 
 void checkStopFixture(std::vector<Stop> const &stops,
-                      transit::tool::container::Dictionary const &dictionary)
+                      tool::container::Dictionary const &dictionary)
 {
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);
@@ -195,7 +195,7 @@ void makeMinimalStops(std::string const &name)
            "Bahnhof\",\"3.00000\",\"3.00000\"\n";
 }
 void checkMinimalStopFixture(std::vector<Stop> const &stops,
-                             transit::tool::container::Dictionary const &dictionary)
+                             tool::container::Dictionary const &dictionary)
 {
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);
@@ -462,7 +462,7 @@ BOOST_AUTO_TEST_CASE(check_missing_required)
     std::string const name = "missing_required_files";
     prepareFixture(name);
     makeOptional(name);
-    BOOST_CHECK_THROW(CSVDiscSource source(name), transit::tool::io::FileNotFoundError);
+    BOOST_CHECK_THROW(CSVDiscSource source(name), tool::io::FileNotFoundError);
     cleanUp(name);
 }
 
@@ -482,7 +482,7 @@ BOOST_AUTO_TEST_CASE(invalid_header_throws)
     prepareFixture(name);
     makeInvalidRequired(name);
     CSVDiscSource source(name);
-    BOOST_CHECK_THROW(readCSV(source), transit::tool::io::InvalidFileError);
+    BOOST_CHECK_THROW(readCSV(source), tool::io::InvalidFileError);
     cleanUp(name);
 }
 
@@ -504,7 +504,7 @@ BOOST_AUTO_TEST_CASE(read_minimal_one_off)
     makeMinimalRequired(name);
     makeMinimalStopsInAgency(name);
     CSVDiscSource source(name);
-    BOOST_CHECK_THROW(readCSV(source), transit::tool::io::InvalidFileError);
+    BOOST_CHECK_THROW(readCSV(source), tool::io::InvalidFileError);
     cleanUp(name);
 }
 
@@ -515,7 +515,7 @@ BOOST_AUTO_TEST_CASE(check_switched_header)
     makeMinimalRequiredSwitched(name);
 
     CSVDiscSource source(name);
-    BOOST_CHECK_THROW(readCSV(source), transit::tool::io::InvalidFileError);
+    BOOST_CHECK_THROW(readCSV(source), tool::io::InvalidFileError);
 
     cleanUp(name);
 }

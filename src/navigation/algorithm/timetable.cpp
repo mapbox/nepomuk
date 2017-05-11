@@ -16,7 +16,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -255,4 +255,4 @@ TimeTable::extract_path(StopID current_stop, ReachedStateContainer const &earlie
 
 } // namespace algorithm
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

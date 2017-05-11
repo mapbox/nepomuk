@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_STOP_HPP_
-#define TRANSIT_GTFS_STOP_HPP_
+#ifndef NEPOMUK_GTFS_STOP_HPP_
+#define NEPOMUK_GTFS_STOP_HPP_
 
 #include <boost/optional.hpp>
 
@@ -18,7 +18,7 @@
 #include "id/trip.hpp"
 #include "id/zone.hpp"
 
-namespace transit
+namespace nepomuk
 {
 
 namespace tool
@@ -96,6 +96,6 @@ StopTime makeStopTime(std::map<std::string, std::size_t> const &header,
                       std::vector<std::string> &values);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_STOP_HPP_
+#endif // NEPOMUK_GTFS_STOP_HPP_

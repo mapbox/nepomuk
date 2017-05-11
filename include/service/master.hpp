@@ -1,5 +1,5 @@
-#ifndef TRANSIT_SERVICE_MASTER_HPP_
-#define TRANSIT_SERVICE_MASTER_HPP_
+#ifndef NEPOMUK_SERVICE_MASTER_HPP_
+#define NEPOMUK_SERVICE_MASTER_HPP_
 
 #include <map>
 #include <memory>
@@ -30,7 +30,7 @@
 // graph measures
 #include "algorithm/scc.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -102,6 +102,6 @@ class Master
 };
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SERVICE_MASTER_HPP_
+#endif // NEPOMUK_SERVICE_MASTER_HPP_

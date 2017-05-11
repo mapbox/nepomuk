@@ -1,14 +1,14 @@
 set(serviceLIBS
         ${Boost_LIBRARIES}
-        transitadaptor
-        transitannotate
-        transittimetable
-        transitnavigation
-        transitsearch
-        transitservice
-        transitproto
-        transittool
-        transitgtfs)
+        NEPOMUKadaptor
+        NEPOMUKannotate
+        NEPOMUKtimetable
+        NEPOMUKnavigation
+        NEPOMUKsearch
+        NEPOMUKservice
+        NEPOMUKproto
+        NEPOMUKtool
+        NEPOMUKgtfs)
 
 set(serviceINCLUDES
         ${Boost_INCLUDE_DIRS})

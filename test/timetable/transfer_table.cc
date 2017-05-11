@@ -4,9 +4,9 @@
 #include "timetable/exceptions.hpp"
 #include "timetable/transfer_table_factory.hpp"
 
-using namespace transit;
-using namespace transit::timetable;
-using namespace transit::gtfs;
+using namespace nepomuk;
+using namespace nepomuk::timetable;
+using namespace nepomuk::gtfs;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

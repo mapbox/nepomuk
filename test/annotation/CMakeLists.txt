@@ -1,12 +1,12 @@
 set(annotationLIBS
         ${Boost_LIBRARIES}
-        transitannotate
-        transitgtfs
-        transitadaptor
-        transittimetable
-        transittool
-        transitgtfs
-        transitservice)
+        NEPOMUKannotate
+        NEPOMUKgtfs
+        NEPOMUKadaptor
+        NEPOMUKtimetable
+        NEPOMUKtool
+        NEPOMUKgtfs
+        NEPOMUKservice)
 
 set(annotationINCLUDES
         ${Boost_INCLUDE_DIRS}

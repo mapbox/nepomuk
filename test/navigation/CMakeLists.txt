@@ -1,13 +1,13 @@
 set(navigationLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
-        transitannotate
-        transitnavigation
-        transittimetable
-        transitsearch
-        transitgtfs
-        transitservice
-        transittool)
+        NEPOMUKannotate
+        NEPOMUKnavigation
+        NEPOMUKtimetable
+        NEPOMUKsearch
+        NEPOMUKgtfs
+        NEPOMUKservice
+        NEPOMUKtool)
 
 set(navigationINCLUDES
         ${Boost_INCLUDE_DIRS}

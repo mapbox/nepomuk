@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_TRANSFER_HPP_
-#define TRANSIT_GTFS_TRANSFER_HPP_
+#ifndef NEPOMUK_GTFS_TRANSFER_HPP_
+#define NEPOMUK_GTFS_TRANSFER_HPP_
 
 #include <boost/optional.hpp>
 
@@ -11,7 +11,7 @@
 
 #include "id/stop.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -41,6 +41,6 @@ Transfer makeTransfer(std::map<std::string, std::size_t> const &header,
                       std::vector<std::string> &values);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_TRANSFER_HPP_
+#endif // NEPOMUK_GTFS_TRANSFER_HPP_

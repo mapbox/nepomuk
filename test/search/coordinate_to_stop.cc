@@ -13,14 +13,14 @@
 
 #include <iostream>
 
-using namespace transit;
+using namespace nepomuk;
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {
     // This needs to be replaced by a dedicated fixture (see
-    // https://github.com/mapbox/directions-transit/issues/37)
-    transit::gtfs::CSVDiscSource source(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
-    auto dataset = transit::gtfs::readCSV(source);
+    // https://github.com/mapbox/nepomuk/issues/37)
+    gtfs::CSVDiscSource source(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
+    auto dataset = gtfs::readCSV(source);
 
     auto make_coordinate_lookup = [&]() {
         std::vector<std::pair<geometric::WGS84Coordinate, StopID>> data;

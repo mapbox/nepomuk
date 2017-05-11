@@ -5,7 +5,7 @@
 #include <boost/assert.hpp>                    // for BOOST_ASSERT
 #include <boost/range/iterator_range_core.hpp> // for iterator_range
 
-namespace transit
+namespace nepomuk
 {
 namespace annotation
 {
@@ -37,7 +37,7 @@ Geometry::get(LineID const line, StopID const from, StopID const to) const
         return boost::make_iterator_range(segment_table.cend(), segment_table.cend());
     else
     {
-        // TODO remove after resolving https://github.com/mapbox/directions-transit/issues/88
+        // TODO remove after resolving https://github.com/mapbox/nepomuk/issues/88
         if (from_sol_itr->offset > to_sol_itr->offset)
             return boost::make_iterator_range(segment_table.cend(), segment_table.cend());
         BOOST_ASSERT(from_sol_itr->shape_id == to_sol_itr->shape_id);
@@ -49,4 +49,4 @@ Geometry::get(LineID const line, StopID const from, StopID const to) const
 }
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk

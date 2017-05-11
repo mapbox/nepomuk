@@ -1,9 +1,9 @@
-#ifndef TRANSIT_GTFS_PROVIDER_HPP_
-#define TRANSIT_GTFS_PROVIDER_HPP_
+#ifndef NEPOMUK_GTFS_PROVIDER_HPP_
+#define NEPOMUK_GTFS_PROVIDER_HPP_
 
 #include "tool/communication/zmq_publisher.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -20,6 +20,6 @@ class Provider final : public tool::communication::ZMQPublisher<Provider>
 };
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_PROVIDER_HPP_
+#endif // NEPOMUK_GTFS_PROVIDER_HPP_

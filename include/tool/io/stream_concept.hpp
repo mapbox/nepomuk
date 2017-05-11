@@ -1,11 +1,11 @@
-#ifndef TRANSIT_TOOL_IO_STREAM_CONCEPT_HPP_
-#define TRANSIT_TOOL_IO_STREAM_CONCEPT_HPP_
+#ifndef NEPOMUK_TOOL_IO_STREAM_CONCEPT_HPP_
+#define NEPOMUK_TOOL_IO_STREAM_CONCEPT_HPP_
 
 #include <cstdint>
 #include <iostream>
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -37,6 +37,6 @@ struct LineOutputStream
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_STREAM_CONCEPT_HPP_
+#endif // NEPOMUK_TOOL_IO_STREAM_CONCEPT_HPP_

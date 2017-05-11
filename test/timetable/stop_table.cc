@@ -5,10 +5,10 @@
 #include "timetable/exceptions.hpp"
 #include "timetable/stop_table_factory.hpp"
 
-using namespace transit::timetable;
-using namespace transit::gtfs;
-using namespace transit::date;
-using namespace transit;
+using namespace nepomuk::timetable;
+using namespace nepomuk::gtfs;
+using namespace nepomuk::date;
+using namespace nepomuk;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

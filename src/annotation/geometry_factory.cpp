@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <iterator>
 
-namespace transit
+namespace nepomuk
 {
 namespace annotation
 {
@@ -97,4 +97,4 @@ Geometry GeometryFactory::produce(std::vector<gtfs::Stop> const &stops,
 }
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk

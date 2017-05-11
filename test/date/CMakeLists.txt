@@ -1,7 +1,7 @@
 set(dateLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
-        transitdate)
+        NEPOMUKdate)
 
 set(dateINCLUDES
         ${Boost_INCLUDE_DIRS}

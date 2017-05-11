@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <sstream>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -131,4 +131,4 @@ std::vector<WGS84Coordinate> Polyline::decode(std::uint32_t precision, std::stri
 }
 
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk

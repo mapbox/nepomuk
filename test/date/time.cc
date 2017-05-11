@@ -5,7 +5,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
-using namespace transit::date;
+using namespace nepomuk::date;
 
 BOOST_AUTO_TEST_CASE(construct_time)
 {

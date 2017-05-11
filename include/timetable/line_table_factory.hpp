@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TIMETABLE_LINE_TABLE_FACTORY_HPP_
-#define TRANSIT_TIMETABLE_LINE_TABLE_FACTORY_HPP_
+#ifndef NEPOMUK_TIMETABLE_LINE_TABLE_FACTORY_HPP_
+#define NEPOMUK_TIMETABLE_LINE_TABLE_FACTORY_HPP_
 
 // The line table factory groups all routes in the graph into lines. These lines only require a
 // single stop table, which allows space efficient storage/better look-up of departures.
@@ -10,7 +10,7 @@
 #include <boost/optional.hpp>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace gtfs
@@ -44,6 +44,6 @@ class LineTableFactory
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_LINE_TABLE_FACTORY_HPP_
+#endif // NEPOMUK_TIMETABLE_LINE_TABLE_FACTORY_HPP_

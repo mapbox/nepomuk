@@ -15,18 +15,18 @@ PROTOBUF_GENERATE_CPP(proto_SOURCES local_proto_HEADERS
     proto/shape.proto
     proto/transfer.proto)
 
-add_library(transitproto
+add_library(NEPOMUKproto
     ${proto_SOURCES}
     ${local_proto_HEADERS})
 
-target_link_libraries(transitproto
+target_link_libraries(NEPOMUKproto
     ${PROTOBUF_LIBRARIES})
 
 # add protobuf include dir to parent scope
 set(PROTOBUF_INCLUDE_DIRS ${PROTOBUF_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
 #since protoc generates a lot of warnings, we disable diagnostics for protoc files
-target_compile_options(transitproto PUBLIC -w)
+target_compile_options(NEPOMUKproto PUBLIC -w)
 
 #pass on variables to parent scope
 set(proto_HEADERS ${local_proto_HEADERS} PARENT_SCOPE)
@@ -40,15 +40,15 @@ set(tool_SOURCES
     status/progress.cpp)
 
 # export source files as library
-add_library(transittool
+add_library(NEPOMUKtool
     ${tool_SOURCES})
 
 # link all required items
-target_link_libraries(transittool
+target_link_libraries(NEPOMUKtool
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories
-TARGET_INCLUDE_DIRECTORIES(transittool SYSTEM PUBLIC
+TARGET_INCLUDE_DIRECTORIES(NEPOMUKtool SYSTEM PUBLIC
     ${protozero_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS})

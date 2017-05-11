@@ -5,15 +5,15 @@ set(search_SOURCES
     stop_to_line_factory.cpp)
 
 # export source files as library
-add_library(transitsearch STATIC
+add_library(NEPOMUKsearch STATIC
     ${search_SOURCES})
 
 # link all required items
-target_link_libraries(transitsearch
-    transitgeometric
+target_link_libraries(NEPOMUKsearch
+    NEPOMUKgeometric
     ${Boost_LIBRARIES})
 
 # define additional include directories
-target_include_directories(transitsearch SYSTEM PUBLIC
+target_include_directories(NEPOMUKsearch SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS}
     ${PROTOBUF_INCLUDE_DIRS})

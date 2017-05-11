@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_DATASET_HPP_
-#define TRANSIT_GTFS_DATASET_HPP_
+#ifndef NEPOMUK_GTFS_DATASET_HPP_
+#define NEPOMUK_GTFS_DATASET_HPP_
 
 #include <cstdint>
 #include <string>
@@ -25,7 +25,7 @@
 
 // definitions according to https://developers.google.com/transit/gtfs/reference
 
-namespace transit
+namespace nepomuk
 {
 
 namespace geometric
@@ -113,6 +113,6 @@ std::vector<result_type> decodeDataFromCSV(converter_operator converter,
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_DATASET_HPP_
+#endif // NEPOMUK_GTFS_DATASET_HPP_

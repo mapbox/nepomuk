@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -18,4 +18,4 @@ std::size_t StationTable::num_stops() const { return stop_station_lookup.domain_
 std::size_t StationTable::num_stations() const { return stop_station_lookup.codomain_size(); }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TOOL_IO_SERIALISATION_HPP_
-#define TRANSIT_TOOL_IO_SERIALISATION_HPP_
+#ifndef NEPOMUK_TOOL_IO_SERIALISATION_HPP_
+#define NEPOMUK_TOOL_IO_SERIALISATION_HPP_
 
 #include "tool/io/protocol_traits.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -27,6 +27,6 @@ template <typename T, typename Protocol> void deserialize(T &value, Protocol &pr
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_SERIALISATION_HPP_
+#endif // NEPOMUK_TOOL_IO_SERIALISATION_HPP_

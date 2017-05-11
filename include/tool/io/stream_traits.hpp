@@ -1,10 +1,10 @@
-#ifndef TRANSIT_TOOL_IO_STREAM_TRAITS_HPP_
-#define TRANSIT_TOOL_IO_STREAM_TRAITS_HPP_
+#ifndef NEPOMUK_TOOL_IO_STREAM_TRAITS_HPP_
+#define NEPOMUK_TOOL_IO_STREAM_TRAITS_HPP_
 
 #include <string>
 #include <type_traits>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -65,6 +65,6 @@ struct IsInputOutputStream : std::integral_constant<bool, IsInputStream<T>() && 
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_STREAM_TRAITS_HPP_
+#endif // NEPOMUK_TOOL_IO_STREAM_TRAITS_HPP_

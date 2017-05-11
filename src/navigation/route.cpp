@@ -2,7 +2,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -22,4 +22,4 @@ date::UTCTimestamp Route::arrival() const
 std::uint32_t Route::duration() const { return arrival() - departure(); }
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

@@ -1,5 +1,5 @@
-#ifndef TRANSIT_CONTAINER_SEARCH_HEAP_HPP_
-#define TRANSIT_CONTAINER_SEARCH_HEAP_HPP_
+#ifndef NEPOMUK_CONTAINER_SEARCH_HEAP_HPP_
+#define NEPOMUK_CONTAINER_SEARCH_HEAP_HPP_
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -175,6 +175,6 @@ value_type_t KAryHeap<value_type_t, key_type_t, arity, value_meta_data>::delete_
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_CONTAINER_SEARCH_HEAP_HPP_
+#endif // NEPOMUK_CONTAINER_SEARCH_HEAP_HPP_

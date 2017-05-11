@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-namespace transit
+namespace nepomuk
 {
 namespace search
 {
@@ -32,4 +32,4 @@ StopToLine StopToLineFactory::produce(std::size_t const num_stops,
 }
 
 } // namespace search
-} // namespace transit
+} // namespace nepomuk

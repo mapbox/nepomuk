@@ -1,11 +1,11 @@
 {
-  "name": "transit",
-  "version": "@TRANSIT_VERSION_MAJOR@.@TRANSIT_VERSION_MINOR@.@TRANSIT_VERSION_PATCH@",
-  "description": "Native module transit direction on gtfs feeds",
-  "url": "https://github.com/mapbox/directions-transit",
+  "name": "nepomuk",
+  "version": "@NEPOMUK_VERSION_MAJOR@.@NEPOMUK_VERSION_MINOR@.@NEPOMUK_VERSION_PATCH@",
+  "description": "Native module for transit directions on gtfs feeds",
+  "url": "https://github.com/mapbox/nepomuk",
   "repository": {
     "type": "git",
-    "url": "git@github.com:mapbox/directions-transit.git"
+    "url": "git@github.com:mapbox/nepomuk.git"
   },
   "keywords": [
     "addon",
@@ -33,7 +33,7 @@
   },
   "bundledDependencies": ["node-pre-gyp"],
   "binary": {
-    "module_name": "transit",
+    "module_name": "nepomuk",
     "module_path": "./binding/",
     "host": "https://mapbox-node-binary.s3.amazonaws.com",
     "remote_path": "./{name}/v{version}/{configuration}/",

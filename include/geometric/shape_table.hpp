@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GEOMETRIC_SHAPE_TABLE_HPP_
-#define TRANSIT_GEOMETRIC_SHAPE_TABLE_HPP_
+#ifndef NEPOMUK_GEOMETRIC_SHAPE_TABLE_HPP_
+#define NEPOMUK_GEOMETRIC_SHAPE_TABLE_HPP_
 
 #include "geometric/coordinate.hpp"
 
@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -25,6 +25,6 @@ class ShapeTable
 };
 
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GEOMETRIC_SHAPE_TABLE_HPP_
+#endif // NEPOMUK_GEOMETRIC_SHAPE_TABLE_HPP_

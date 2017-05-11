@@ -9,6 +9,8 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
+using namespace nepomuk;
+
 template <typename type> void checkIDType()
 {
     type id_two{2}, id_three{3}, other_id_two{2};
@@ -33,17 +35,17 @@ template <typename type> void checkIDType()
 
 BOOST_AUTO_TEST_CASE(check_basic_id_functionality)
 {
-    checkIDType<transit::DictionaryID>();
+    checkIDType<DictionaryID>();
 
-    checkIDType<transit::AgencyID>();
-    checkIDType<transit::FareID>();
-    checkIDType<transit::LineID>();
-    checkIDType<transit::RouteID>();
-    checkIDType<transit::SequenceID>();
-    checkIDType<transit::ServiceID>();
-    checkIDType<transit::ShapeID>();
-    checkIDType<transit::StopID>();
-    checkIDType<transit::TripID>();
-    checkIDType<transit::BlockID>();
-    checkIDType<transit::ZoneID>();
+    checkIDType<AgencyID>();
+    checkIDType<FareID>();
+    checkIDType<LineID>();
+    checkIDType<RouteID>();
+    checkIDType<SequenceID>();
+    checkIDType<ServiceID>();
+    checkIDType<ShapeID>();
+    checkIDType<StopID>();
+    checkIDType<TripID>();
+    checkIDType<BlockID>();
+    checkIDType<ZoneID>();
 }

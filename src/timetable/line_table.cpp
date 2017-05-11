@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <iterator>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -54,4 +54,4 @@ boost::optional<LineTable::Trip> LineTable::get(StopID const stop,
 StopTable const &LineTable::stops() const { return stop_table; }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

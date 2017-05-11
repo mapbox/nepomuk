@@ -1,6 +1,6 @@
 #include "navigation/stop.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -10,4 +10,4 @@ date::UTCTimestamp Stop::departure() const { return _departure; }
 date::UTCTimestamp Stop::arrival() const { return _arrival; }
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

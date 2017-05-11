@@ -6,7 +6,7 @@
 #include <iterator>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -55,4 +55,4 @@ StationTable StationTableFactory::produce(std::vector<gtfs::Stop>::iterator cons
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

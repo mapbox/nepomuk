@@ -9,8 +9,9 @@
 
 #include "service/master.hpp"
 
-using namespace transit::timetable;
-using namespace transit::gtfs;
+using namespace nepomuk;
+using namespace nepomuk::timetable;
+using namespace nepomuk::gtfs;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -18,7 +19,7 @@ using namespace transit::gtfs;
 
 BOOST_AUTO_TEST_CASE(adapt_fixture)
 {
-    transit::service::Master master_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
+    service::Master master_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     auto const timetable = master_service.timetable();
 
     auto const trip_look_up = master_service.stop_to_line();

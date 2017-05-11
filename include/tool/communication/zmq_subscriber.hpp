@@ -1,10 +1,10 @@
-#ifndef DIRECTIONS_TRANSIT_ZMQ_SUBSCRIBER_HPP_
-#define DIRECTIONS_TRANSIT_ZMQ_SUBSCRIBER_HPP_
+#ifndef NEPOMUK_ZMQ_SUBSCRIBER_HPP_
+#define NEPOMUK_ZMQ_SUBSCRIBER_HPP_
 
 #include <cstdint>
 #include <zmq.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -36,6 +36,6 @@ ZMQSubscriber<BaseClass>::ZMQSubscriber(const std::uint32_t port)
 
 } // namespace communication
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // DIRECTIONS_TRANSIT_ZMQ_SUBSCRIBER_HPP_
+#endif // NEPOMUK_ZMQ_SUBSCRIBER_HPP_

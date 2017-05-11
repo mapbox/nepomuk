@@ -1,18 +1,18 @@
 {
-  "name": "directions-transit-frontend",
+  "name": "nepomuk-frontend",
   "version": "0.0.1",
   "description": "frontend interface for transit directions",
   "main": "src/index.js",
   "scripts": {
     "test": "eslint src/*js i18n/*.js",
-    "build": "browserify -d src/index.js -s directions-transit > bundle.js && cp node_modules/leaflet/dist/leaflet.css css/leaflet.css",
+    "build": "browserify -d src/index.js -s nepomuk > bundle.js && cp node_modules/leaflet/dist/leaflet.css css/leaflet.css",
     "start-index": "budo src/index.js --serve=bundle.js --live -d | bistre",
     "start": "npm run build && npm run start-index",
     "prepub": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mapbox/directions-transit"
+    "url": "https://github.com/mapbox/nepomuk"
   },
   "keywords": [
     "lrm",
@@ -32,6 +32,6 @@
     "leaflet": "^1.0.3",
     "leaflet-routing-machine": "^3.2.5",
     "leaflet.locatecontrol": "^0.60.0",
-    "lrm-directions-transit": "file:///Users/mokob/git/directions-transit/frontends/lrm-plugin"
+    "lrm-nepomuk": "file:///Users/mokob/git/nepomuk/frontends/lrm-plugin"
   }
 }

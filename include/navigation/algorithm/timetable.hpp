@@ -1,5 +1,5 @@
-#ifndef TRANSIT_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_
-#define TRANSIT_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_
+#ifndef NEPOMUK_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_
+#define NEPOMUK_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_
 
 #include "navigation/routing_algorithm.hpp"
 
@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace search
 {
@@ -84,6 +84,6 @@ class TimeTable : public RoutingAlgorithm
 
 } // namespace algorithm
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_
+#endif // NEPOMUK_NAVIGATION_ALGORITHMS_TIMETABLE_HPP_

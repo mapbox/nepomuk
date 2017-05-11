@@ -1,6 +1,6 @@
 #include "algorithm/scc.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace algorithm
 {
@@ -18,4 +18,4 @@ std::uint64_t StronglyConnectedComponent::component(std::size_t const offset) co
 }
 
 } // namespace algorithm
-} // namespace transit
+} // namespace nepomuk

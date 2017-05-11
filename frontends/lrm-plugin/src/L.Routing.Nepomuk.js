@@ -9,9 +9,9 @@
 	L.Routing = L.Routing || {};
     L.routing = L.routing || {}
 
-	L.Routing.DirectionsTransit = L.Class.extend({
+	L.Routing.Nepomuk = L.Class.extend({
 		options: {
-			serviceUrl: 'http://0.0.0.0:5000/directions/v5/pumba/transit/eap/',
+			serviceUrl: 'http://0.0.0.0:5000/directions/v5/nepomuk/transit/eap/',
 			timeout: 30 * 1000,
 			urlParameters: {walking_radius: 1500,
                             walking_speed: 2,
@@ -214,11 +214,11 @@
 		}
 	});
 
-	L.Routing.directionsTransit = function(apiKey, options) {
-		return new L.Routing.DirectionsTransit(apiKey, options);
+	L.Routing.nepomuk = function(apiKey, options) {
+		return new L.Routing.Nepomuk(apiKey, options);
 	};
 
-    L.routing.directionsTransit = L.Routing.directionsTransit;
+    L.routing.nepomuk = L.Routing.nepomuk;
 
-	module.exports = L.Routing.DirectionsTransit;
+	module.exports = L.Routing.Nepomuk;
 })();

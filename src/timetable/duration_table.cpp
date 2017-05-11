@@ -1,6 +1,6 @@
 #include "timetable/duration_table.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -28,4 +28,4 @@ bool operator==(DurationTable const &lhs, DurationTable const &rhs)
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

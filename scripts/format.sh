@@ -11,11 +11,11 @@ set -o nounset
 
 # Get CPU count
 OS=$(uname)
-NPROC=1
+CPUCOUNT=1
 if [[ $OS = "Linux" ]] ; then
-    NPROC=$(nproc)
+    CPUCOUNT=$(CPUCOUNT)
 elif [[ ${OS} = "Darwin" ]] ; then
-    NPROC=$(sysctl -n hw.physicalcpu)
+    CPUCOUNT=$(sysctl -n hw.physicalcpu)
 fi
 
 # Discover clang-format
@@ -24,25 +24,25 @@ if type clang-format-3.8 2> /dev/null ; then
 elif type clang-format 2> /dev/null ; then
     # Clang format found, but need to check version
     CLANG_FORMAT=clang-format
-    V=$(clang-format --version)
-    if [[ $V != *3.8* ]] ; then
-        echo "clang-format is not 3.8 (returned ${V})"
-        #exit 1
+    CLANG_VERSION=$(clang-format --version)
+    if [[ ${CLANG_VERSION} != *3.8* ]] ; then
+        echo "clang-format is not 3.8 (returned ${CLANG_VERSION})"
+        exit 1
     fi
 else
     echo "No appropriate clang-format found (expected clang-format-3.8, or clang-format)"
     exit 1
 fi
 
-find src include test -type f -name '*.hpp' -o -name '*.cpp' -o -name '*.cc'\
-  | xargs -I{} -P ${NPROC} ${CLANG_FORMAT} -i -style=file {}
+find src include test -type f -name '*.hpp' -o -name '*.cpp' -o -name '*.cc' -o -name '*.h'\
+  | xargs -I{} -P ${CPUCOUNT} ${CLANG_FORMAT} -i -style=file {}
 
 
-dirty=$(git ls-files --modified)
+unformatted=$(git ls-files --modified)
 
-if [[ $dirty ]]; then
+if [[ $unformatted ]]; then
     echo "The following files do not adhere to the .clang-format style file:"
-    echo $dirty
+    echo $unformatted
     exit 1
 else
     exit 0

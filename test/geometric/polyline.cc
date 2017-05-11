@@ -3,7 +3,7 @@
 #include "geometric/coordinate.hpp"
 #include "geometric/polyline.hpp"
 
-using namespace transit::geometric;
+using namespace nepomuk::geometric;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

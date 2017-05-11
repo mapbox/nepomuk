@@ -1,6 +1,6 @@
 #include "navigation/connection.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -11,4 +11,4 @@ date::UTCTimestamp Connection::arrival() const { return _arrival; }
 std::uint32_t Connection::duration() const { return _arrival - _departure; }
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

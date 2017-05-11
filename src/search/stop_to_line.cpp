@@ -1,6 +1,6 @@
 #include "search/stop_to_line.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace search
 {
@@ -12,4 +12,4 @@ StopToLine::iterator_range StopToLine::operator()(StopID const stop) const
 }
 
 } // namespace search
-} // namespace transit
+} // namespace nepomuk

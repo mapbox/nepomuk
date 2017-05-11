@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -28,4 +28,4 @@ bool StopTable::operator==(StopTable const &other) const
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

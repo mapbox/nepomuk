@@ -5,7 +5,7 @@
 #include <cmath>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -120,4 +120,4 @@ date::UTCTimestamp Segment::arrival() const
 }
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

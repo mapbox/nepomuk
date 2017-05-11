@@ -2,7 +2,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -24,4 +24,4 @@ Wheelchair makeWheelchair(std::string const &value)
 
 } // namespace accessibility
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

@@ -1,10 +1,10 @@
-#ifndef TRANSIT_NAVIGATION_STOP_HPP_
-#define TRANSIT_NAVIGATION_STOP_HPP_
+#ifndef NEPOMUK_NAVIGATION_STOP_HPP_
+#define NEPOMUK_NAVIGATION_STOP_HPP_
 
 #include "date/time.hpp"
 #include "id/stop.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -27,6 +27,6 @@ class Stop
     friend class RoutingAlgorithm;
 };
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_NAVIGATION_STOP_HPP_
+#endif // NEPOMUK_NAVIGATION_STOP_HPP_

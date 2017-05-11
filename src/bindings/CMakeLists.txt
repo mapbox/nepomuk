@@ -1,5 +1,5 @@
 # define a set of sources to compile
-project(transit VERSION ${TRANSIT_VERSION_MAJOR}.${TRANSIT_VERSION_MINOR}.${TRANSIT_VERSION_PATCH} LANGUAGES C CXX)
+project(nepomuk VERSION ${NEPOMUK_VERSION_MAJOR}.${NEPOMUK_VERSION_MINOR}.${NEPOMUK_VERSION_PATCH} LANGUAGES C CXX)
 
 message(STATUS "NodeCMAKE: ${CMAKE_SOURCE_DIR}/node_modules/node-cmake/")
 
@@ -8,7 +8,7 @@ set(NodeJS_USE_CLANG_STDLIB OFF CACHE BOOL "Don't use libc++ by default" FORCE)
 
 include(${CMAKE_SOURCE_DIR}/NodeJS.cmake)
 
-set(binding_directory ${CMAKE_SOURCE_DIR}/node/node-transit/binding)
+set(binding_directory ${CMAKE_SOURCE_DIR}/node/nepomuk/binding)
 
 # Note: although we set the global property, we need this for CMake to specify -std=c++14
 nodejs_init()
@@ -20,15 +20,15 @@ target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC "src"
     ${PROTOBUF_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
-    transitadaptor
-    transitalgorithm
-    transitannotate
-    transitdate
-    transitgtfs
-    transittimetable
-    transitproto
-    transitservice
-    transittool)
+    NEPOMUKadaptor
+    NEPOMUKalgorithm
+    NEPOMUKannotate
+    NEPOMUKdate
+    NEPOMUKgtfs
+    NEPOMUKtimetable
+    NEPOMUKproto
+    NEPOMUKservice
+    NEPOMUKtool)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 14)
 

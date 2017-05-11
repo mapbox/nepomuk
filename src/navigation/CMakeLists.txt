@@ -10,14 +10,14 @@ SET(navigation_SOURCES
     algorithm/timetable_dijkstra.cpp)
 
 # export source files as library
-ADD_LIBRARY(transitnavigation
+ADD_LIBRARY(NEPOMUKnavigation
     ${navigation_SOURCES})
 
 # link all required items
-TARGET_LINK_LIBRARIES(transitnavigation
+TARGET_LINK_LIBRARIES(NEPOMUKnavigation
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories
-TARGET_INCLUDE_DIRECTORIES(transitnavigation SYSTEM PUBLIC
+TARGET_INCLUDE_DIRECTORIES(NEPOMUKnavigation SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS})

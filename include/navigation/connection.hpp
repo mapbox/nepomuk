@@ -1,10 +1,10 @@
-#ifndef TRANSIT_NAVIGATION_CONNECTION_HPP_
-#define TRANSIT_NAVIGATION_CONNECTION_HPP_
+#ifndef NEPOMUK_NAVIGATION_CONNECTION_HPP_
+#define NEPOMUK_NAVIGATION_CONNECTION_HPP_
 
 #include "date/time.hpp"
 #include "id/line.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -26,6 +26,6 @@ class Connection
     friend class RoutingAlgorithm;
 };
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_NAVIGATION_CONNECTION_HPP_
+#endif // NEPOMUK_NAVIGATION_CONNECTION_HPP_

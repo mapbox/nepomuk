@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_ROUTE_HPP_
-#define TRANSIT_GTFS_ROUTE_HPP_
+#ifndef NEPOMUK_GTFS_ROUTE_HPP_
+#define NEPOMUK_GTFS_ROUTE_HPP_
 
 #include <boost/optional.hpp>
 
@@ -13,7 +13,7 @@
 #include "id/dictionary.hpp"
 #include "id/route.hpp"
 
-namespace transit
+namespace nepomuk
 {
 
 namespace tool
@@ -28,7 +28,7 @@ namespace gtfs
 {
 
 // Route types should probably support the extended GTFS format (see
-// https://github.com/mapbox/directions-transit/issues/16)
+// https://github.com/mapbox/nepomuk/issues/16)
 
 struct Route
 {
@@ -53,6 +53,6 @@ Route makeRoute(std::map<std::string, std::size_t> const &header,
                 tool::container::Dictionary &dictionary);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_ROUTE_HPP_
+#endif // NEPOMUK_GTFS_ROUTE_HPP_

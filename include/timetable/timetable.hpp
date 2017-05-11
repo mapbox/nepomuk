@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TIMETABLE_HPP_
-#define TRANSIT_TIMETABLE_HPP_
+#ifndef NEPOMUK_TIMETABLE_HPP_
+#define NEPOMUK_TIMETABLE_HPP_
 
 #include "id/stop.hpp"
 #include "timetable/line_table.hpp"
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 
 struct LineID;
@@ -45,10 +45,10 @@ class TimeTable
     StationTable station_table;
 
     friend class TimeTableFactory;
-    friend class transit::search::StopToLineFactory;
+    friend class nepomuk::search::StopToLineFactory;
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_HPP_
+#endif // NEPOMUK_TIMETABLE_HPP_

@@ -6,7 +6,7 @@
 #include <cstdint>       // for uint32_t
 #include <iterator>      // for back_insert_iter...
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -62,4 +62,4 @@ DurationTable DurationTableFactory::produce(std::vector<gtfs::StopTime>::iterato
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

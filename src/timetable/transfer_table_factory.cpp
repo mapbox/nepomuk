@@ -19,7 +19,7 @@
 #include <type_traits> // for enable_if<>::type
 #include <utility>     // for make_pair
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -154,4 +154,4 @@ TransferTable TransferTableFactory::produce(std::vector<gtfs::Transfer>::iterato
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

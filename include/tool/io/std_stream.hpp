@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
-#define TRANSIT_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
+#ifndef NEPOMUK_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
+#define NEPOMUK_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
 
 #include <iostream>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -36,6 +36,6 @@ class StdOutputStream
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_
+#endif // NEPOMUK_TOOL_IO_STREAM_CONCEPTS_BINARY_STREAM_HPP_

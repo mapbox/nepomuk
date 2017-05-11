@@ -2,7 +2,7 @@
 
 #include "id/line.hpp" // for LineID
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -16,4 +16,4 @@ TransferTable::iterator_range TimeTable::transfers(StopID const stop) const
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

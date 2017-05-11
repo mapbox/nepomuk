@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TOOL_IO_CSV_DECODER_HPP_
-#define TRANSIT_TOOL_IO_CSV_DECODER_HPP_
+#ifndef NEPOMUK_TOOL_IO_CSV_DECODER_HPP_
+#define NEPOMUK_TOOL_IO_CSV_DECODER_HPP_
 
 #include "tool/io/stream_errors.hpp"
 #include "tool/io/stream_traits.hpp"
@@ -12,7 +12,7 @@
 #include <boost/assert.hpp>
 #include <boost/tokenizer.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -82,6 +82,6 @@ template <typename InputStream> auto makeCSVDecoder(InputStream &is, const std::
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_BINARY_DECODER_HPP_
+#endif // NEPOMUK_TOOL_IO_BINARY_DECODER_HPP_

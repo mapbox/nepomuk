@@ -1,8 +1,8 @@
 {
-  "name": "lrm-directions-transit",
+  "name": "lrm-nepomuk",
   "version": "0.0.1",
-  "description": "Support for DirectionsTransit in Leaflet Routing Machine",
-  "main": "src/L.Routing.DirectionsTransit.js",
+  "description": "Support for Nepomuk in Leaflet Routing Machine",
+  "main": "src/L.Routing.Nepomuk.js",
   "scripts": {
     "dist": "./scripts/dist.sh",
     "publish": "./scripts/publish.sh",
@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mapbox/directions-transit"
+    "url": "https://github.com/mapbox/nepomuk"
   },
-  "homepage": "https://github.com/mapbox/directions-transit",
-  "bugs": "https://github.com/mapbox/directions-transit/issues",
+  "homepage": "https://github.com/mapbox/nepomuk",
+  "bugs": "https://github.com/mapbox/nepomuk/issues",
   "dependencies": {
     "corslite": "0.0.6",
     "polyline": "0.0.3"

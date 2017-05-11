@@ -1,12 +1,12 @@
-#ifndef TRANSIT_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
-#define TRANSIT_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
+#ifndef NEPOMUK_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
+#define NEPOMUK_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
 
 #include <boost/optional.hpp>
 
 #include "date/time.hpp"
 #include "geometric/coordinate.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -60,6 +60,6 @@ class EarliestArrivalParameters final
 };
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
+#endif // NEPOMUK_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_

@@ -6,7 +6,7 @@
 
 #include <boost/math/constants/constants.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -116,4 +116,4 @@ double MercatorBoundingBox::height() const
 }
 
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk

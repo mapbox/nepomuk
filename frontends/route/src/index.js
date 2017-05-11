@@ -2,7 +2,7 @@
 
 var L = require('leaflet');
 require('leaflet-routing-machine'); // inject .routing into L
-require('lrm-directions-transit'); // inject directions transit plugin into L.routing
+require('lrm-nepomuk'); // inject directions transit plugin into L.routing
 require('./nepomuk_formatter.js'); // inject own formatter into L.routing.formatter
 
 var NepomukControl = require('./nepomuk_control.js');
@@ -20,7 +20,7 @@ mapbox_layers.baselayer.one.addTo(map);
 
 var control_options = L.extend(leaflet_configuration.default_options,{
     routeWhileDragging: true,
-	router: L.routing.directionsTransit('access_token_here', {}),
+	router: L.routing.nepomuk('access_token_here', {}),
     formatter: L.routing.nepomukFormatter(),
 });
 

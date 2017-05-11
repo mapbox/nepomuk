@@ -1,6 +1,6 @@
 #include "gtfs/provider.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -8,4 +8,4 @@ namespace gtfs
 Provider::Provider() : Base(1024) {}
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

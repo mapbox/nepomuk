@@ -1,11 +1,11 @@
-#ifndef TRANSIT_TOOL_IO_BINARY_DECODER_HPP_
-#define TRANSIT_TOOL_IO_BINARY_DECODER_HPP_
+#ifndef NEPOMUK_TOOL_IO_BINARY_DECODER_HPP_
+#define NEPOMUK_TOOL_IO_BINARY_DECODER_HPP_
 
 #include "tool/io/stream_traits.hpp"
 #include <cstdint>
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -47,6 +47,6 @@ template <typename InputStream> auto makeBinaryDecoder(InputStream &is)
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_BINARY_DECODER_HPP_
+#endif // NEPOMUK_TOOL_IO_BINARY_DECODER_HPP_

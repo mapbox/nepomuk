@@ -4,7 +4,7 @@
 
 #include "gtfs/stop.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace annotation
 {
@@ -26,4 +26,4 @@ StopInfo const &StopInfoTable::get_info(StopID const stop_id) const
 }
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk

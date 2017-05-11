@@ -1,6 +1,6 @@
 #include "timetable/transfer_table.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -16,4 +16,4 @@ TransferTable::iterator_range TransferTable::get(StopID const stop_id) const
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
