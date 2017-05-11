@@ -53,11 +53,11 @@ nvm use 4
 ```
 
 ### Tests
-To test the node bindings, you can run `npm test` from within `node/node-transit/`.
+To test the node bindings, you can run `npm test` from within `node/nepomuk/`.
 Make sure to run `npm install` beforehand.
 
 ```
-cd node/node-transit/
+cd node/nepomuk/
 npm install
 npm test
 ```
