@@ -14,7 +14,7 @@
 #include <sstream>
 #include <string>
 
-using namespace transit;
+using namespace nepomuk;
 
 int main(int argc, char **argv) try
 {
@@ -26,8 +26,8 @@ int main(int argc, char **argv) try
     if (path.back() == '/')
         path.pop_back();
 
-    transit::service::Master data_service(path);
-    transit::service::Tile tile_service(data_service);
+    nepomuk::service::Master data_service(path);
+    nepomuk::service::Tile tile_service(data_service);
 
     {
         auto coordinate_lookup = data_service.coordinate_to_stop();
@@ -53,14 +53,14 @@ int main(int argc, char **argv) try
             int x, y, z;
             std::cin >> x >> y >> z;
 
-            transit::service::ServiceParameters parameters = {
-                transit::service::PluginType::TILE, transit::service::TileParameters(x, y, z)};
+            nepomuk::service::ServiceParameters parameters = {
+                nepomuk::service::PluginType::TILE, nepomuk::service::TileParameters(x, y, z)};
             tile_service(parameters);
 
             std::cout
                 << "[Tile]"
                 << (std::string)(
-                       boost::get<transit::service::TileParameters>(parameters.parameters).result())
+                       boost::get<nepomuk::service::TileParameters>(parameters.parameters).result())
                 << std::endl;
         }
     }

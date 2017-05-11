@@ -1,10 +1,10 @@
-#ifndef DIRECTIONS_TRANSIT_ZMQ_PUBLISHER_HPP_
-#define DIRECTIONS_TRANSIT_ZMQ_PUBLISHER_HPP_
+#ifndef NEPOMUK_ZMQ_PUBLISHER_HPP_
+#define NEPOMUK_ZMQ_PUBLISHER_HPP_
 
 #include <cstdint>
 #include <zmq.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -35,6 +35,6 @@ ZMQPublisher<BaseClass>::ZMQPublisher(const std::uint32_t port)
 
 } // namespace communication
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // DIRECTIONS_TRANSIT_ZMQ_PUBLISHER_HPP_
+#endif // NEPOMUK_ZMQ_PUBLISHER_HPP_

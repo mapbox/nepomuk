@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -51,4 +51,4 @@ double EarliestArrivalParameters::walking_speed() const { return _walking_speed;
 double EarliestArrivalParameters::transfer_scale() const { return _transfer_scale; }
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk

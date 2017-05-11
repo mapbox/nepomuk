@@ -8,7 +8,7 @@
 
 #include <vector>
 
-using namespace transit;
+using namespace nepomuk;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

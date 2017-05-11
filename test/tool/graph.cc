@@ -4,7 +4,7 @@
 #include "tool/container/forward_star_graph.hpp"
 #include "tool/container/forward_star_graph_factory.hpp"
 
-using namespace transit::tool::container;
+using namespace nepomuk::tool::container;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

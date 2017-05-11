@@ -1,12 +1,12 @@
-#ifndef TRANSIT_TIMETABLE_FACTORY_HPP_
-#define TRANSIT_TIMETABLE_FACTORY_HPP_
+#ifndef NEPOMUK_TIMETABLE_FACTORY_HPP_
+#define NEPOMUK_TIMETABLE_FACTORY_HPP_
 
 #include <boost/optional.hpp>
 #include <vector>
 
 #include "timetable/timetable.hpp"
 
-namespace transit
+namespace nepomuk
 {
 
 struct ShapeID;
@@ -26,6 +26,6 @@ class TimeTableFactory
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_FACTORY_HPP__
+#endif // NEPOMUK_TIMETABLE_FACTORY_HPP__

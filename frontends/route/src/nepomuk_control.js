@@ -20,7 +20,7 @@ class NepomukControl
 
         var control_options = L.extend(leaflet_options.default_options,{
             routeWhileDragging: true,
-            router: L.routing.directionsTransit('access_token_here', leaflet_options),
+            router: L.routing.nepomuk('access_token_here', leaflet_options),
             plan: plan,
             serviceURL: leaflet_options.services[0].path
         });

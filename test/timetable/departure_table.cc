@@ -13,10 +13,10 @@
 
 #include <boost/optional.hpp>
 
-using namespace transit::timetable;
-using namespace transit;
-using namespace transit::gtfs;
-using namespace transit::date;
+using namespace nepomuk::timetable;
+using namespace nepomuk;
+using namespace nepomuk::gtfs;
+using namespace nepomuk::date;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

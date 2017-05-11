@@ -1,9 +1,9 @@
-# directions-transit
+# Nepomuk
 
-This project offers a library/bindings for running a transit service on GTFS feeds.
+This project offers a library/bindings for running a transit service on GTFS feeds, implemented in modern C++.
 
-[![Build Status](https://travis-ci.com/mapbox/directions-transit.svg?token=bB1pwxscyosgCFnSzzds&branch=master)](https://travis-ci.com/mapbox/directions-transit)
-[![codecov](https://codecov.io/gh/mapbox/directions-transit/branch/master/graph/badge.svg?token=yDJlm8LLSU)](https://codecov.io/gh/mapbox/directions-transit)
+[![Build Status](https://travis-ci.com/mapbox/nepomuk.svg?token=bB1pwxscyosgCFnSzzds&branch=master)](https://travis-ci.com/mapbox/nepomuk)
+[![codecov](https://codecov.io/gh/mapbox/nepomuk/branch/master/graph/badge.svg?token=yDJlm8LLSU)](https://codecov.io/gh/mapbox/nepomuk)
 
 This project requires valid GTFS feeds to run. Use any of the many available GTFS validators to check if your GTFS dataset qualifies.
 

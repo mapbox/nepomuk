@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TIMETABLE_GRAPH_ADAPTOR_HPP_
-#define TRANSIT_TIMETABLE_GRAPH_ADAPTOR_HPP_
+#ifndef NEPOMUK_TIMETABLE_GRAPH_ADAPTOR_HPP_
+#define NEPOMUK_TIMETABLE_GRAPH_ADAPTOR_HPP_
 
 #include "tool/container/forward_star_graph.hpp"
 
-namespace transit
+namespace nepomuk
 {
 
 namespace search
@@ -25,6 +25,6 @@ class TimetableToGraphAdaptor
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_GRAPH_ADAPTOR_HPP_
+#endif // NEPOMUK_TIMETABLE_GRAPH_ADAPTOR_HPP_

@@ -11,9 +11,11 @@
 #include <boost/optional/optional_io.hpp>
 #include <boost/test/unit_test.hpp>
 
+using namespace nepomuk;
+
 BOOST_AUTO_TEST_CASE(convert_ints)
 {
-    BOOST_CHECK_EQUAL(transit::gtfs::toInt("123456789"), 123456789);
+    BOOST_CHECK_EQUAL(gtfs::toInt("123456789"), 123456789);
 }
 
 BOOST_AUTO_TEST_CASE(not_in_header)
@@ -31,24 +33,24 @@ BOOST_AUTO_TEST_CASE(not_in_header)
     data.push_back("");
 
     BOOST_CHECK_EQUAL(
-        "", transit::gtfs::construct<std::string>("fourth", transit::gtfs::forward, header, data));
-    auto const one = transit::gtfs::construct_as_optional<std::string, false>(
-        "empty", transit::gtfs::forward, header, data);
+        "", gtfs::construct<std::string>("fourth", gtfs::forward, header, data));
+    auto const one = gtfs::construct_as_optional<std::string, false>(
+        "empty", gtfs::forward, header, data);
     BOOST_CHECK_EQUAL(boost::none, one);
-    auto const two = transit::gtfs::construct_as_optional<std::string, true>(
-        "empty", transit::gtfs::forward, header, data);
+    auto const two = gtfs::construct_as_optional<std::string, true>(
+        "empty", gtfs::forward, header, data);
     auto comp = boost::optional<std::string>("");
     BOOST_CHECK_EQUAL(comp, two);
-    auto const three = transit::gtfs::construct_as_optional<std::uint64_t, false>(
-        "sixth", transit::gtfs::toInt, header, data);
+    auto const three = gtfs::construct_as_optional<std::uint64_t, false>(
+        "sixth", gtfs::toInt, header, data);
     BOOST_CHECK_EQUAL(boost::none, three);
-    auto const four = transit::gtfs::construct_as_optional<std::uint64_t, false>(
-        "seventh", transit::gtfs::toInt, header, data);
+    auto const four = gtfs::construct_as_optional<std::uint64_t, false>(
+        "seventh", gtfs::toInt, header, data);
     BOOST_CHECK_EQUAL(boost::none, four);
-    auto const five = transit::gtfs::construct_as_optional<std::uint64_t, false>(
-        "seventh", transit::gtfs::stringToID<std::uint64_t>, header, data);
+    auto const five = gtfs::construct_as_optional<std::uint64_t, false>(
+        "seventh", gtfs::stringToID<std::uint64_t>, header, data);
     BOOST_CHECK_EQUAL(boost::none, five);
-    auto const six = transit::gtfs::construct_as_optional<std::uint64_t, false>(
-        "seventh", transit::gtfs::stringToID<std::uint64_t>, header, data);
+    auto const six = gtfs::construct_as_optional<std::uint64_t, false>(
+        "seventh", gtfs::stringToID<std::uint64_t>, header, data);
     BOOST_CHECK_EQUAL(boost::none, six);
 }

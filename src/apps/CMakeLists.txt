@@ -2,17 +2,17 @@ set(EXEC_LIBS
 	${Boost_LIBRARIES}
     ${LIBZMQ_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES}
-    transitadaptor
-    transitannotate
-    transitproto
-    transittool
-    transitdate
-    transitgtfs
-    transitgeometric
-    transitnavigation
-    transitsearch
-    transitservice
-    transittimetable)
+    NEPOMUKadaptor
+    NEPOMUKannotate
+    NEPOMUKproto
+    NEPOMUKtool
+    NEPOMUKdate
+    NEPOMUKgtfs
+    NEPOMUKgeometric
+    NEPOMUKnavigation
+    NEPOMUKsearch
+    NEPOMUKservice
+    NEPOMUKtimetable)
 
 set(EXEC_INCLUDES
     ${Boost_INCLUDE_DIRS}

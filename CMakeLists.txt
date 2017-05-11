@@ -2,20 +2,20 @@ cmake_minimum_required(VERSION 3.1)
 cmake_policy(VERSION 3.1)
 cmake_policy(SET CMP0037 NEW)
 
-project(transit C CXX)
+project(nepomuk C CXX)
 
 message(STATUS "Compiler: ${CXX_COMPILER}")
 
 # Major for breaking ABI changes. Minor for features. Patch for bugfixes.
 # see http://semver.org/ for context
-set(TRANSIT_VERSION_MAJOR 0)
-set(TRANSIT_VERSION_MINOR 0)
-set(TRANSIT_VERSION_PATCH 0)
+set(NEPOMUK_VERSION_MAJOR 0)
+set(NEPOMUK_VERSION_MINOR 0)
+set(NEPOMUK_VERSION_PATCH 0)
 
 # fileformat versioning scheme
-set(TRANSIT_FILEFORMAT_VERSION_MAJOR 0)
-set(TRANSIT_FILEFORMAT_VERSION_MINOR 0)
-set(TRANSIT_FILEFORMAT_VERSION_PATCH 0)
+set(NEPOMUK_FILEFORMAT_VERSION_MAJOR 0)
+set(NEPOMUK_FILEFORMAT_VERSION_MINOR 0)
+set(NEPOMUK_FILEFORMAT_VERSION_PATCH 0)
 
 option(SANITIZE "Run adress sanitizer" OFF)
 option(COVERAGE "Generate test converage data" OFF)
@@ -25,16 +25,16 @@ option(NODEBINDINGS "Build node bindings" OFF)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(directions_transit_os unix)
+  set(nepomuk_os unix)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  set(directions_transit_os mac)
+  set(nepomuk_os mac)
   link_directories(/usr/local/lib)
   include_directories(/usr/local/include)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   message(FATAL_ERROR "Windows not yet supported")
-  set(directions_transit_os win)
+  set(nepomuk_os win)
 
 else()
   message(FATAL_ERROR "System not yet supported. Please open a ticket.")
@@ -55,7 +55,7 @@ add_compile_options(${CMAKE_CXX_FLAGS} -Wstrict-overflow=2)
 add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE)
 add_compile_options(${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2)
 
-if(directions_transit_os MATCHES "unix")
+if(nepomuk_os MATCHES "unix")
     add_compile_options(${CMAKE_CXX_FLAGS} -fext-numeric-literals)
 endif()
 
@@ -66,16 +66,16 @@ add_definitions(-DPROTOZERO_STRICT_API)
 if(SANITIZE)
     add_compile_options(${CMAKE_CXX_FLAGS} -fsanitize=address)
     link_libraries(${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address)
-    if(${directions_transit_os} MATCHES "unix")
+    if(${nepomuk_os} MATCHES "unix")
         link_libraries(${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold)
     endif()
 endif()
 
 if(COVERAGE)
     if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-        if(${directions_transit_os} MATCHES "unix")
+        if(${nepomuk_os} MATCHES "unix")
             set(MAYBE_COVERAGE_LIBRARIES "-lgcov")
-        elseif(${directions_transit_os} MATCHES "mac")
+        elseif(${nepomuk_os} MATCHES "mac")
             set(MAYBE_COVERAGE_LIBRARIES "-fprofile-arcs -ftest-coverage")
         endif()
         add_compile_options(${CMAKE_CXX_FLAGS} -ftest-coverage)
@@ -94,7 +94,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/fixtures.h.in
 
 if(${NODEBINDINGS})
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/package.json.in
-                   ${CMAKE_CURRENT_SOURCE_DIR}/node/node-transit/package.json)
+                   ${CMAKE_CURRENT_SOURCE_DIR}/node/nepomuk/package.json)
 endif()
 include(mason)
 
@@ -167,7 +167,9 @@ add_subdirectory(src/service)
 add_subdirectory(src/timetable)
 
 if(${NODEBINDINGS})
-    execute_process(COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/configure-bindings.sh ${CMAKE_CURRENT_SOURCE_DIR})
+    message(STATUS "running ${PROJECT_SOURCE_DIR}/scripts/configure-bindings.sh")
+    execute_process(COMMAND ${PROJECT_SOURCE_DIR}/scripts/configure-bindings.sh
+                    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
     add_subdirectory(src/bindings)
 endif()
 

@@ -1,12 +1,12 @@
-#ifndef TRANSIT_TIMETABLE_STATION_TABLE_FACTORY_HPP_
-#define TRANSIT_TIMETABLE_STATION_TABLE_FACTORY_HPP_
+#ifndef NEPOMUK_TIMETABLE_STATION_TABLE_FACTORY_HPP_
+#define NEPOMUK_TIMETABLE_STATION_TABLE_FACTORY_HPP_
 
 #include "gtfs/stop.hpp"
 #include "timetable/station_table.hpp"
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -17,6 +17,6 @@ class StationTableFactory
                                 std::vector<gtfs::Stop>::iterator const end);
 };
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_STATION_TABLE_FACTORY_HPP_
+#endif // NEPOMUK_TIMETABLE_STATION_TABLE_FACTORY_HPP_

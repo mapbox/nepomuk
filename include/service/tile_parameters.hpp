@@ -1,11 +1,11 @@
-#ifndef TRANSIT_SERVICE_TILE_PARAMETERS_HPP_
-#define TRANSIT_SERVICE_TILE_PARAMETERS_HPP_
+#ifndef NEPOMUK_SERVICE_TILE_PARAMETERS_HPP_
+#define NEPOMUK_SERVICE_TILE_PARAMETERS_HPP_
 
 #include <cstdint>
 
 #include "tool/container/mapbox_vector_tile.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -34,6 +34,6 @@ class TileParameters final
 };
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SERVICE_TILE_PARAMETERS_HPP_
+#endif // NEPOMUK_SERVICE_TILE_PARAMETERS_HPP_

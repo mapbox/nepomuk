@@ -10,7 +10,7 @@
 #include <boost/optional.hpp>
 #include <boost/test/unit_test.hpp>
 
-using namespace transit;
+using namespace nepomuk;
 
 auto coordinate(double lon, double lat)
 {

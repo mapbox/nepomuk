@@ -7,13 +7,14 @@
 
 #include <iostream>
 
+using namespace nepomuk;
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE(compute_scc)
 {
-    transit::tool::container::ForwardStarGraphFactory factory;
+    tool::container::ForwardStarGraphFactory factory;
     //
     // 0 - 1 -> 4 -> 6
     // |   |    |
@@ -48,7 +49,7 @@ BOOST_AUTO_TEST_CASE(compute_scc)
 
     BOOST_CHECK(factory.valid());
 
-    auto components = transit::algorithm::computeSCC(graph);
+    auto components = algorithm::computeSCC(graph);
     BOOST_CHECK(components.size() == 3);
     BOOST_CHECK_EQUAL(components.component(0), components.component(1));
     BOOST_CHECK_EQUAL(components.component(0), components.component(2));

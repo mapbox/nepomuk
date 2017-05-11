@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_
-#define TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_DICTIONARY_HPP_
+#define NEPOMUK_TOOL_CONTAINER_DICTIONARY_HPP_
 
 #include <cstdint>
 #include <iosfwd>
@@ -10,7 +10,7 @@
 #include "id/dictionary.hpp"
 #include <boost/range/iterator_range_core.hpp>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace adaptor
@@ -47,7 +47,7 @@ class Dictionary
 
     iterator_range get_lookup() const;
 
-    friend class transit::adaptor::Dictionary;
+    friend class nepomuk::adaptor::Dictionary;
 
   private:
     std::unordered_map<std::string, std::uint64_t> id_look_up;
@@ -60,6 +60,6 @@ class Dictionary
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_DICTIONARY_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_DICTIONARY_HPP_

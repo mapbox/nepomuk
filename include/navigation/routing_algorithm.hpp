@@ -1,5 +1,5 @@
-#ifndef TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
-#define TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
+#ifndef NEPOMUK_NAVIGATION_ROUTING_ALGORITHM_HPP
+#define NEPOMUK_NAVIGATION_ROUTING_ALGORITHM_HPP
 
 #include "date/time.hpp"
 #include "id/line.hpp"
@@ -13,7 +13,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace timetable
@@ -103,6 +103,6 @@ class RoutingAlgorithm
 };
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_NAVIGATION_ROUTING_ALGORITHM_HPP
+#endif // NEPOMUK_NAVIGATION_ROUTING_ALGORITHM_HPP

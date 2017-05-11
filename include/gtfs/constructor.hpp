@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_CONSTRUCTOR_HPP_
-#define TRANSIT_GTFS_CONSTRUCTOR_HPP_
+#ifndef NEPOMUK_GTFS_CONSTRUCTOR_HPP_
+#define NEPOMUK_GTFS_CONSTRUCTOR_HPP_
 
 #include <cstddef>
 #include <map>
@@ -14,7 +14,7 @@
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -31,7 +31,7 @@ template <typename string_constructable> string_constructable constructFromStrin
 template <typename IDType> IDType stringToID(std::string id)
 {
     BOOST_ASSERT(id != "");
-    return transit::tool::container::id_hash::get_id<IDType>(id, "default");
+    return nepomuk::tool::container::id_hash::get_id<IDType>(id, "default");
 }
 
 template <typename IDType> IDType stringToIDDirect(std::string id)
@@ -90,6 +90,6 @@ boost::optional<result_type> construct_as_optional(std::string const &key,
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_CONSTRUCTOR_HPP_
+#endif // NEPOMUK_GTFS_CONSTRUCTOR_HPP_

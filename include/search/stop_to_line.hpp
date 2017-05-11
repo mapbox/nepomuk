@@ -1,5 +1,5 @@
-#ifndef TRANSIT_SEARCH_STOP_TO_LINE_HPP_
-#define TRANSIT_SEARCH_STOP_TO_LINE_HPP_
+#ifndef NEPOMUK_SEARCH_STOP_TO_LINE_HPP_
+#define NEPOMUK_SEARCH_STOP_TO_LINE_HPP_
 
 #include <boost/range/iterator_range.hpp>
 #include <vector>
@@ -7,7 +7,7 @@
 #include "id/line.hpp"
 #include "id/stop.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace search
 {
@@ -33,6 +33,6 @@ class StopToLine
 };
 
 } // namespace search
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SEARCH_STOP_TO_LINE_HPP_
+#endif // NEPOMUK_SEARCH_STOP_TO_LINE_HPP_

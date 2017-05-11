@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_CALENDAR_HPP_
-#define TRANSIT_GTFS_CALENDAR_HPP_
+#ifndef NEPOMUK_GTFS_CALENDAR_HPP_
+#define NEPOMUK_GTFS_CALENDAR_HPP_
 
 #include "gtfs/date.hpp"
 #include "id/service.hpp"
@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -32,6 +32,6 @@ CalendarDate makeCalendarDate(std::map<std::string, std::size_t> const &header,
                               std::vector<std::string> &values);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_CALENDAR_HPP_
+#endif // NEPOMUK_GTFS_CALENDAR_HPP_

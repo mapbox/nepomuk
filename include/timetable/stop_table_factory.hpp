@@ -1,10 +1,13 @@
+#ifndef NEPOMUK_TIMETABLE_STOP_TABLE_FACTORY_HPP_
+#define NEPOMUK_TIMETABLE_STOP_TABLE_FACTORY_HPP_
+
 #include "timetable/stop_table.hpp"
 
 #include "gtfs/stop.hpp"
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -19,4 +22,6 @@ class StopTableFactory
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
+
+#endif // NEPOMUK_TIMETABLE_STOP_TABLE_FACTORY_HPP_

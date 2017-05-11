@@ -1,12 +1,12 @@
-#ifndef TRANSIT_ALGORITHM_GROUP_BY_HPP_
-#define TRANSIT_ALGORITHM_GROUP_BY_HPP_
+#ifndef NEPOMUK_ALGORITHM_GROUP_BY_HPP_
+#define NEPOMUK_ALGORITHM_GROUP_BY_HPP_
 
 #include <algorithm>
 #include <utility>
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace algorithm
 {
@@ -70,6 +70,6 @@ functor on_ranges(iterator_type begin, iterator_type end, predicate pred, functo
 }
 
 } // namespace algorithm
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ALGORITHM_GROUP_BY_HPP_
+#endif // NEPOMUK_ALGORITHM_GROUP_BY_HPP_

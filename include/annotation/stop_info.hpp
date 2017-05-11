@@ -1,12 +1,12 @@
-#ifndef TRANSIT_ANNOTATION_STOP_INFO_HPP_
-#define TRANSIT_ANNOTATION_STOP_INFO_HPP_
+#ifndef NEPOMUK_ANNOTATION_STOP_INFO_HPP_
+#define NEPOMUK_ANNOTATION_STOP_INFO_HPP_
 
 #include "id/dictionary.hpp"
 #include "id/stop.hpp"
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace gtfs
@@ -34,6 +34,6 @@ class StopInfoTable
 };
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ANNOTATION_STOP_INFO_HPP_
+#endif // NEPOMUK_ANNOTATION_STOP_INFO_HPP_

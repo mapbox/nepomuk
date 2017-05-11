@@ -5,7 +5,7 @@
 #include <boost/geometry/geometries/box.hpp>
 #include <iterator> // for back_insert_...
 
-namespace transit
+namespace nepomuk
 {
 namespace search
 {
@@ -139,4 +139,4 @@ CoordinateToStop::all(geometric::WGS84BoundingBox const &bounding_box) const
 }
 
 } // namespace search
-} // namespace transit
+} // namespace nepomuk

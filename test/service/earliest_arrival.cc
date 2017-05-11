@@ -14,7 +14,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-using namespace transit;
+using namespace nepomuk;
 
 BOOST_AUTO_TEST_CASE(request_route)
 {

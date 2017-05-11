@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_AGENCY_HPP_
-#define TRANSIT_GTFS_AGENCY_HPP_
+#ifndef NEPOMUK_GTFS_AGENCY_HPP_
+#define NEPOMUK_GTFS_AGENCY_HPP_
 
 #include "id/agency.hpp"
 
@@ -10,7 +10,7 @@
 
 #include <boost/optional.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -32,6 +32,6 @@ Agency makeAgency(std::map<std::string, std::size_t> const &header,
                   std::vector<std::string> &values);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_AGENCY_HPP_
+#endif // NEPOMUK_GTFS_AGENCY_HPP_

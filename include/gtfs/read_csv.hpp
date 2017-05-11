@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GTFS_READ_CSV_HPP_
-#define TRANSIT_GTFS_READ_CSV_HPP_
+#ifndef NEPOMUK_GTFS_READ_CSV_HPP_
+#define NEPOMUK_GTFS_READ_CSV_HPP_
 
 #include <boost/filesystem/path.hpp>
 #include <boost/optional.hpp>
@@ -7,7 +7,7 @@
 
 #include "gtfs/dataset.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -36,6 +36,6 @@ struct CSVDiscSource
 Dataset readCSV(CSVDiscSource const &source);
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_READ_CSV_HPP_
+#endif // NEPOMUK_GTFS_READ_CSV_HPP_

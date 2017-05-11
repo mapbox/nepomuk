@@ -1,11 +1,11 @@
-#ifndef TRANSIT_TOOL_CONTAINER_ID_HASHER_HPP_
-#define TRANSIT_TOOL_CONTAINER_ID_HASHER_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_ID_HASHER_HPP_
+#define NEPOMUK_TOOL_CONTAINER_ID_HASHER_HPP_
 
 #include <cstdint>
 #include <string>
 #include <unordered_map>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -39,6 +39,6 @@ ID_TYPE get_id(std::string const &id, std::string const &source)
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_ID_HASHER_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_ID_HASHER_HPP_

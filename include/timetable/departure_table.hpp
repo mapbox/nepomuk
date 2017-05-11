@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TIMETABLE_DEPARTURETABLE_HPP_
-#define TRANSIT_TIMETABLE_DEPARTURETABLE_HPP_
+#ifndef NEPOMUK_TIMETABLE_DEPARTURETABLE_HPP_
+#define NEPOMUK_TIMETABLE_DEPARTURETABLE_HPP_
 
 #include <cstddef>
 #include <cstdint>
@@ -9,7 +9,7 @@
 
 #include "date/time.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -50,6 +50,6 @@ class DepartureTable
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_DEPARTURETABLE_HPP_
+#endif // NEPOMUK_TIMETABLE_DEPARTURETABLE_HPP_

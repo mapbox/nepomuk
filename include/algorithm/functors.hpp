@@ -1,7 +1,7 @@
-#ifndef TRANSIT_ALGORITHM_FUNCTORS_HPP_
-#define TRANSIT_ALGORITHM_FUNCTORS_HPP_
+#ifndef NEPOMUK_ALGORITHM_FUNCTORS_HPP_
+#define NEPOMUK_ALGORITHM_FUNCTORS_HPP_
 
-namespace transit
+namespace nepomuk
 {
 namespace algorithm
 {
@@ -15,6 +15,6 @@ template <typename value_type, value_type by> value_type increase_by(value_type 
 }
 
 } // namespace algorithm
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ALGORITHM_FUNCTORS_HPP_
+#endif // NEPOMUK_ALGORITHM_FUNCTORS_HPP_

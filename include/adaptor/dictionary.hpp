@@ -1,9 +1,9 @@
-#ifndef TRANSIT_ADAPTOR_DICTIONARY_HPP
-#define TRANSIT_ADAPTOR_DICTIONARY_HPP
+#ifndef NEPOMUK_ADAPTOR_DICTIONARY_HPP
+#define NEPOMUK_ADAPTOR_DICTIONARY_HPP
 
 #include "dictionary.pb.h"
 
-namespace transit
+namespace nepomuk
 {
 
 // Forward declarations
@@ -35,6 +35,6 @@ class Dictionary
 };
 
 } // namespace adaptor
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ADAPTOR_DICTIONARY_HPP
+#endif // NEPOMUK_ADAPTOR_DICTIONARY_HPP

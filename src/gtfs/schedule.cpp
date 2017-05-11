@@ -5,7 +5,7 @@
 #include <boost/assert.hpp>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -38,4 +38,4 @@ WeeklySchedule makeWeeklySchedule(std::map<std::string, std::size_t> const &head
             construct<Date>("end_date", constructFromString<Date>, header, values)};
 }
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

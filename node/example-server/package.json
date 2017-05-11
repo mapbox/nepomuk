@@ -8,7 +8,7 @@
     "cors": "^2.8.2",
     "express": "^4.15.2",
     "morgan": "^1.8.1",
-    "transit": "file:../node-transit"
+    "transit": "file:../nepomuk"
   },
   "license": "ISC",
   "main": "server.js"

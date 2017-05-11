@@ -1,5 +1,5 @@
 const express = require('express');
-var transit = require('transit');
+var nepomuk = require('nepomuk');
 var cors = require('cors');
 var morgan = require('morgan');
 const async = require('async');
@@ -9,8 +9,8 @@ var corsOptions = {maxAge : 3600e3, origin : '*'};
 module.exports =
   function() {
   var app = express();
-  //var engine = new transit.Engine("../data/berlin-gtfs");
-  var engine = new transit.Engine("../../data/sf");
+  //var engine = new nepomuk.Engine("../data/berlin-gtfs");
+  var engine = new nepomuk.Engine("../../data/sf");
 
   // register plugins
   engine.plug("tile");

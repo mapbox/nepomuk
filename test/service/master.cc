@@ -10,7 +10,7 @@
 #include <fstream>
 #include <iterator>
 
-using namespace transit;
+using namespace nepomuk;
 
 BOOST_AUTO_TEST_CASE(render_tiles)
 {

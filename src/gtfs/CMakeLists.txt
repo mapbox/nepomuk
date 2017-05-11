@@ -18,18 +18,18 @@ set(gtfs_SOURCES
     provider.cpp)
 
 # export source files as library
-add_library(transitgtfs STATIC
+add_library(NEPOMUKgtfs STATIC
     ${gtfs_SOURCES})
 
 # link all required items
-target_link_libraries(transitgtfs
+target_link_libraries(NEPOMUKgtfs
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES}
-    transittool
-    transitdate
-    transitgeometric)
+    NEPOMUKtool
+    NEPOMUKdate
+    NEPOMUKgeometric)
 
 # define additional include directories
-target_include_directories(transitgtfs SYSTEM PUBLIC
+target_include_directories(NEPOMUKgtfs SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS}
     ${Zmq_INCLUDE_DIRS})

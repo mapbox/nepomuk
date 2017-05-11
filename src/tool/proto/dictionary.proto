@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package transit.io.container;
+package nepomuk.io.container;
 
 message DictionaryEntry {
   required string display = 1;     // the resultl on a query for ID

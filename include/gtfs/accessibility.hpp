@@ -1,9 +1,9 @@
-#ifndef TRANSIT_GTFS_ACCESSIBILITY_HPP_
-#define TRANSIT_GTFS_ACCESSIBILITY_HPP_
+#ifndef NEPOMUK_GTFS_ACCESSIBILITY_HPP_
+#define NEPOMUK_GTFS_ACCESSIBILITY_HPP_
 
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -21,6 +21,6 @@ Wheelchair makeWheelchair(std::string const &value);
 
 } // namespace accessibility
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_ACCESSIBILITY_HPP_
+#endif // NEPOMUK_GTFS_ACCESSIBILITY_HPP_

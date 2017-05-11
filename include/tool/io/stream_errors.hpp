@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TOOL_IO_STREAM_ERRORS_HPP_
-#define TRANSIT_TOOL_IO_STREAM_ERRORS_HPP_
+#ifndef NEPOMUK_TOOL_IO_STREAM_ERRORS_HPP_
+#define NEPOMUK_TOOL_IO_STREAM_ERRORS_HPP_
 
 #include <stdexcept>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -38,6 +38,6 @@ struct InvalidFileError : std::runtime_error
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_STREAM_ERRORS_HPP_
+#endif // NEPOMUK_TOOL_IO_STREAM_ERRORS_HPP_

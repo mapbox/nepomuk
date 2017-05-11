@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iterator>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -62,4 +62,4 @@ StopTable StopTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

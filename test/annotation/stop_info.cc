@@ -10,11 +10,11 @@
 #include "tool/container/dictionary.hpp"
 #include "tool/container/string_table.hpp"
 
-using namespace transit;
-using namespace transit::annotation;
-using namespace transit::gtfs;
-using namespace transit::tool::container;
-using namespace transit::geometric;
+using namespace nepomuk;
+using namespace nepomuk::annotation;
+using namespace nepomuk::gtfs;
+using namespace nepomuk::tool::container;
+using namespace nepomuk::geometric;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -22,7 +22,7 @@ using namespace transit::geometric;
 
 namespace
 {
-Stop make_stop(std::uint64_t i, DictionaryID s, transit::geometric::WGS84Coordinate c)
+Stop make_stop(std::uint64_t i, DictionaryID s, geometric::WGS84Coordinate c)
 {
     return {StopID{i},
             s,
@@ -57,8 +57,8 @@ BOOST_AUTO_TEST_CASE(annotate_stops)
     stops.push_back(make_stop(3, dictionary.add_string("fourth"), coordinate4));
 
     StringTable table;
-    transit::adaptor::Dictionary::decode_into(table,
-                                              transit::adaptor::Dictionary::encode(dictionary));
+    adaptor::Dictionary::decode_into(table,
+                                              adaptor::Dictionary::encode(dictionary));
 
     StopInfoTable stop_info(stops);
 

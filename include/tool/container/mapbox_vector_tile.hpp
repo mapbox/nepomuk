@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
-#define TRANSIT_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
+#define NEPOMUK_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
 
 #include <cstddef>
 #include <cstdint>
@@ -15,7 +15,7 @@
 
 // implementation of https://www.mapbox.com/vector-tiles/specification/
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -109,6 +109,6 @@ class MapboxVectorTile
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_MAPBOX_VECTOR_TILE_HPP_

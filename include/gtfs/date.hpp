@@ -1,10 +1,10 @@
-#ifndef TRANSIT_GTFS_DATE_HPP_
-#define TRANSIT_GTFS_DATE_HPP_
+#ifndef NEPOMUK_GTFS_DATE_HPP_
+#define NEPOMUK_GTFS_DATE_HPP_
 
 #include <cstdint>
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -21,6 +21,6 @@ struct Date
 };
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GTFS_DATE_HPP_
+#endif // NEPOMUK_GTFS_DATE_HPP_

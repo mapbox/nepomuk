@@ -14,7 +14,7 @@
 #include <boost/optional.hpp>
 #include <boost/optional/optional_io.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace binding
 {
@@ -397,4 +397,4 @@ catch (const std::exception &e)
 }
 
 } // namespace binding
-} // namespace transit
+} // namespace nepomuk

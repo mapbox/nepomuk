@@ -1,5 +1,5 @@
-#ifndef TRANSIT_SEARCH_COORDINATE_TO_STOP_HPP_
-#define TRANSIT_SEARCH_COORDINATE_TO_STOP_HPP_
+#ifndef NEPOMUK_SEARCH_COORDINATE_TO_STOP_HPP_
+#define NEPOMUK_SEARCH_COORDINATE_TO_STOP_HPP_
 
 #include "geometric/coordinate.hpp"
 #include "id/stop.hpp"
@@ -12,7 +12,7 @@
 #include <utility>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace geometric
@@ -48,6 +48,6 @@ class CoordinateToStop
 };
 
 } // namespace search
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SEARCH_COORDINATE_TO_STOP_HPP_
+#endif // NEPOMUK_SEARCH_COORDINATE_TO_STOP_HPP_

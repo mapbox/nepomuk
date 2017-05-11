@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -31,4 +31,4 @@ bool TileParameters::valid() const
 }
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk

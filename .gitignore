@@ -8,5 +8,5 @@ include/fixtures.h
 *bundle.js
 NodeJS.cmake
 *bundle.js
-node/node-transit/package.json
-node/node-transit/binding
+node/nepomuk/package.json
+node/nepomuk/binding

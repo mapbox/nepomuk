@@ -1,5 +1,5 @@
-#ifndef TRANSIT_ALGORITHM_SCC_HPP_
-#define TRANSIT_ALGORITHM_SCC_HPP_
+#ifndef NEPOMUK_ALGORITHM_SCC_HPP_
+#define NEPOMUK_ALGORITHM_SCC_HPP_
 
 #include <algorithm>
 #include <cstddef>
@@ -13,7 +13,7 @@
 
 #include "tool/status/progress.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace algorithm
 {
@@ -189,6 +189,6 @@ template <typename graph_type> StronglyConnectedComponent computeSCC(graph_type 
 }
 
 } // namespace algorithm
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ALGORITHM_SCC_HPP_
+#endif // NEPOMUK_ALGORITHM_SCC_HPP_

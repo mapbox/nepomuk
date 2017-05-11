@@ -1,12 +1,12 @@
-#ifndef TRANSIT_TOOL_CONTAINER_STRING_TABLE_HPP_
-#define TRANSIT_TOOL_CONTAINER_STRING_TABLE_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_STRING_TABLE_HPP_
+#define NEPOMUK_TOOL_CONTAINER_STRING_TABLE_HPP_
 
 #include <iosfwd>
 #include <vector>
 
 #include "id/dictionary.hpp"
 
-namespace transit
+namespace nepomuk
 {
 
 namespace adaptor
@@ -31,6 +31,6 @@ class StringTable : private std::vector<std::string>
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_STRING_TABLE_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_STRING_TABLE_HPP_

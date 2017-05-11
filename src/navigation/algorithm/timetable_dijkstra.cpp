@@ -12,7 +12,7 @@
 #include <set>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -232,4 +232,4 @@ TimeTableDijkstra::extract_path(StopID current_stop, FourHeap const &heap) const
 
 } // namespace algorithm
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk

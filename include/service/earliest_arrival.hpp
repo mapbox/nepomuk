@@ -1,5 +1,5 @@
-#ifndef TRANSIT_SERVICE_EARLIEST_ARRIVAL_HPP_
-#define TRANSIT_SERVICE_EARLIEST_ARRIVAL_HPP_
+#ifndef NEPOMUK_SERVICE_EARLIEST_ARRIVAL_HPP_
+#define NEPOMUK_SERVICE_EARLIEST_ARRIVAL_HPP_
 
 //#include "navigation/algorithm/timetable.hpp"
 #include "annotation/api.hpp"
@@ -8,7 +8,7 @@
 #include "service/interface.hpp"
 #include "service/master.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -29,6 +29,6 @@ class EarliestArrival : public Interface
 };
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SERVICE_EARLIEST_ARRIVAL_HPP_
+#endif // NEPOMUK_SERVICE_EARLIEST_ARRIVAL_HPP_

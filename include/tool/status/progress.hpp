@@ -1,11 +1,11 @@
-#ifndef TRANSIT_TOOL_STATUS_PROGRESS_HPP_
-#define TRANSIT_TOOL_STATUS_PROGRESS_HPP_
+#ifndef NEPOMUK_TOOL_STATUS_PROGRESS_HPP_
+#define NEPOMUK_TOOL_STATUS_PROGRESS_HPP_
 
 #include "tool/status/timing.hpp"
 #include <cstdint>
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -36,6 +36,6 @@ class ProgressBarGuard
 
 } // namespace statue
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_STATUS_PROGRESS_HPP_
+#endif // NEPOMUK_TOOL_STATUS_PROGRESS_HPP_

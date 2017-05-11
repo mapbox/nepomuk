@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TOOL_IO_PROTOCOL_HPP_
-#define TRANSIT_TOOL_IO_PROTOCOL_HPP_
+#ifndef NEPOMUK_TOOL_IO_PROTOCOL_HPP_
+#define NEPOMUK_TOOL_IO_PROTOCOL_HPP_
 
 #include <type_traits>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -43,6 +43,6 @@ struct IsEncodeableDecodeable
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_IO_PROTOCOL_HPP_
+#endif // NEPOMUK_TOOL_IO_PROTOCOL_HPP_

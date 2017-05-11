@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TOOL_CONTAINER_FORWARD_STAR_GRAPH_FACTORY_HPP_
-#define TRANSIT_TOOL_CONTAINER_FORWARD_STAR_GRAPH_FACTORY_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_FORWARD_STAR_GRAPH_FACTORY_HPP_
+#define NEPOMUK_TOOL_CONTAINER_FORWARD_STAR_GRAPH_FACTORY_HPP_
 
 #include "tool/container/errors.hpp"
 #include "tool/container/forward_star_graph.hpp"
@@ -8,7 +8,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -125,6 +125,6 @@ void ForwardStarGraphFactory::add_edge(ForwardStarGraph<external_node_type, edge
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_FORWARD_STAR_GRAPH_FACTORY_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_FORWARD_STAR_GRAPH_FACTORY_HPP_

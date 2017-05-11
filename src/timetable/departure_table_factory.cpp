@@ -6,7 +6,7 @@
 
 #include <boost/numeric/conversion/cast.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -65,4 +65,4 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::StopTime>::itera
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

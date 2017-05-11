@@ -3,7 +3,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -32,4 +32,4 @@ CalendarDate makeCalendarDate(std::map<std::string, std::size_t> const &header,
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

@@ -1,24 +1,24 @@
-#ifndef TRANSIT_ANNOTATION_GEOMETRY_FACTORY_HPP_
-#define TRANSIT_ANNOTATION_GEOMETRY_FACTORY_HPP_
+#ifndef NEPOMUK_ANNOTATION_GEOMETRY_FACTORY_HPP_
+#define NEPOMUK_ANNOTATION_GEOMETRY_FACTORY_HPP_
 
 #include <boost/optional.hpp>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
 struct Stop;
 }
 }
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
 class LineTable;
 }
 }
-namespace transit
+namespace nepomuk
 {
 struct ShapeID;
 }
@@ -26,7 +26,7 @@ struct ShapeID;
 #include "annotation/geometry.hpp"
 #include "timetable/segment_table.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace search
 {
@@ -47,6 +47,6 @@ class GeometryFactory
 };
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ANNOTATION_GEOMETRY_FACTORY_HPP_
+#endif // NEPOMUK_ANNOTATION_GEOMETRY_FACTORY_HPP_

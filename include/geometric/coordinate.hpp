@@ -1,5 +1,5 @@
-#ifndef TRANSIT_GEOMETRIC_COORDINATE_HPP_
-#define TRANSIT_GEOMETRIC_COORDINATE_HPP_
+#ifndef NEPOMUK_GEOMETRIC_COORDINATE_HPP_
+#define NEPOMUK_GEOMETRIC_COORDINATE_HPP_
 
 #include <tool/types_and_traits/strong_typedef.hpp>
 
@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <iostream>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -83,6 +83,6 @@ std::ostream &operator<<(std::ostream &os, MercatorCoordinate const &location);
 bool operator==(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs);
 bool operator!=(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs);
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GEOMETRIC_COORDINATE_HPP_
+#endif // NEPOMUK_GEOMETRIC_COORDINATE_HPP_

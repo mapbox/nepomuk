@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -128,4 +128,4 @@ bool operator!=(MercatorCoordinate const &lhs, MercatorCoordinate const &rhs)
 }
 
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk

@@ -9,9 +9,9 @@
 #include <boost/optional.hpp>
 #include <cstdint>
 
-using namespace transit;
-using namespace transit::timetable;
-using namespace transit::gtfs;
+using namespace nepomuk;
+using namespace nepomuk::timetable;
+using namespace nepomuk::gtfs;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -21,10 +21,10 @@ Stop makeStop(std::uint64_t station, std::uint64_t parent)
 {
     if (parent != station)
         return {StopID{station},
-                transit::DictionaryID{0},
-                transit::geometric::WGS84Coordinate(
-                    transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLongitude>(0),
-                    transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLatitude>(0)),
+                DictionaryID{0},
+                geometric::WGS84Coordinate(
+                    geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0),
+                    geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0)),
                 boost::none,
                 boost::none,
                 boost::none,
@@ -35,10 +35,10 @@ Stop makeStop(std::uint64_t station, std::uint64_t parent)
                 boost::none};
     else
         return {StopID{station},
-                transit::DictionaryID{0},
-                transit::geometric::WGS84Coordinate(
-                    transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLongitude>(0),
-                    transit::geometric::makeLatLonFromDouble<transit::geometric::FixedLatitude>(0)),
+                DictionaryID{0},
+                geometric::WGS84Coordinate(
+                    geometric::makeLatLonFromDouble<geometric::FixedLongitude>(0),
+                    geometric::makeLatLonFromDouble<geometric::FixedLatitude>(0)),
                 boost::none,
                 boost::none,
                 boost::none,

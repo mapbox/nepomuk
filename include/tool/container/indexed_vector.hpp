@@ -1,12 +1,12 @@
-#ifndef TRANSIT_TOOL_CONTAINER_INDEXED_VECTOR_HPP_
-#define TRANSIT_TOOL_CONTAINER_INDEXED_VECTOR_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_INDEXED_VECTOR_HPP_
+#define NEPOMUK_TOOL_CONTAINER_INDEXED_VECTOR_HPP_
 
 #include "algorithm/functors.hpp"
 #include <boost/range/iterator_range.hpp>
 #include <cstddef>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -223,6 +223,6 @@ typename IndexedVector<value_type>::const_iterator_range IndexedVector<value_typ
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_INDEXED_VECTOR_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_INDEXED_VECTOR_HPP_

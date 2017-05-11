@@ -14,12 +14,12 @@
 #include <iterator>
 #include <vector>
 
-using namespace transit;
+using namespace nepomuk;
 
 BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 {
     // This needs to be replaced by a dedicated fixture (see
-    // https://github.com/mapbox/directions-transit/issues/37)
+    // https://github.com/mapbox/nepomuk/issues/37)
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
 
     std::vector<boost::optional<ShapeID>> shapes_by_line;

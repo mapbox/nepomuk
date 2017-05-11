@@ -1,7 +1,7 @@
 #include "gtfs/shape.hpp"
 #include "gtfs/constructor.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -32,4 +32,4 @@ Shape makeShape(std::map<std::string, std::size_t> const &header, std::vector<st
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

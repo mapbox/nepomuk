@@ -20,7 +20,7 @@ bool checkFile(boost::filesystem::path const &path, bool const required = false)
     if (!boost::filesystem::exists(path))
     {
         if (required)
-            throw transit::tool::io::FileNotFoundError("Missing file: " + path.string());
+            throw nepomuk::tool::io::FileNotFoundError("Missing file: " + path.string());
         return false;
     }
     else
@@ -37,12 +37,12 @@ boost::optional<boost::filesystem::path> setIfExists(boost::filesystem::path con
 }
 
 template <class header_control>
-transit::tool::io::CSVDecoder<transit::tool::io::StdLineInputStream>
-makeDecoder(header_control control, transit::tool::io::StdLineInputStream &stream)
+nepomuk::tool::io::CSVDecoder<nepomuk::tool::io::StdLineInputStream>
+makeDecoder(header_control control, nepomuk::tool::io::StdLineInputStream &stream)
 {
-    auto decoder = transit::tool::io::makeCSVDecoder(stream, ",");
+    auto decoder = nepomuk::tool::io::makeCSVDecoder(stream, ",");
     if (!control(decoder.header))
-        throw transit::tool::io::InvalidFileError(
+        throw nepomuk::tool::io::InvalidFileError(
             "File header does not match expected header for stream: .\n");
     return decoder;
 }
@@ -54,8 +54,8 @@ void readData(boost::filesystem::path const &path,
               checker_type checker)
 {
     std::ifstream ifs(path.string());
-    transit::tool::io::StdLineInputStream checked_stream(ifs);
-    destination = transit::gtfs::decodeDataFromCSV<typename destination_container::value_type>(
+    nepomuk::tool::io::StdLineInputStream checked_stream(ifs);
+    destination = nepomuk::gtfs::decodeDataFromCSV<typename destination_container::value_type>(
         converter, makeDecoder(checker, checked_stream));
 }
 
@@ -64,17 +64,17 @@ void readData(boost::filesystem::path const &path,
               destination_container &destination,
               converter_type converter,
               checker_type checker,
-              transit::tool::container::Dictionary &dictionary)
+              nepomuk::tool::container::Dictionary &dictionary)
 {
     std::ifstream ifs(path.string());
-    transit::tool::io::StdLineInputStream checked_stream(ifs);
-    destination = transit::gtfs::decodeDataFromCSV<typename destination_container::value_type>(
+    nepomuk::tool::io::StdLineInputStream checked_stream(ifs);
+    destination = nepomuk::gtfs::decodeDataFromCSV<typename destination_container::value_type>(
         converter, makeDecoder(checker, checked_stream), dictionary);
 }
 
 } // namespace
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -195,4 +195,4 @@ Dataset readCSV(CSVDiscSource const &source)
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

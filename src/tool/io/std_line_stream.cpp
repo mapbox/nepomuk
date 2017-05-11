@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -48,4 +48,4 @@ void StdLineOutputStream::putline(const std::string &line)
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk

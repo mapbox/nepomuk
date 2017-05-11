@@ -1,5 +1,5 @@
-#ifndef TRANSIT_ANNOTATION_LEG_GEOMETRY_HPP_
-#define TRANSIT_ANNOTATION_LEG_GEOMETRY_HPP_
+#ifndef NEPOMUK_ANNOTATION_LEG_GEOMETRY_HPP_
+#define NEPOMUK_ANNOTATION_LEG_GEOMETRY_HPP_
 
 #include <cstddef>
 #include <vector>
@@ -11,7 +11,7 @@
 #include "timetable/segment_table.hpp"
 #include "tool/container/indexed_vector.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace annotation
 {
@@ -44,6 +44,6 @@ class Geometry
 };
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_ANNOTATION_LEG_GEOMETRY_HPP_
+#endif // NEPOMUK_ANNOTATION_LEG_GEOMETRY_HPP_

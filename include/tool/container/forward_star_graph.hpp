@@ -1,5 +1,5 @@
-#ifndef TOOL_CONTAINER_FORWARD_STAR_GRAPH_HPP_
-#define TOOL_CONTAINER_FORWARD_STAR_GRAPH_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_FORWARD_STAR_GRAPH_HPP_
+#define NEPOMUK_TOOL_CONTAINER_FORWARD_STAR_GRAPH_HPP_
 
 #include <cstddef>
 #include <iterator>
@@ -8,7 +8,7 @@
 #include <boost/assert.hpp>
 #include <boost/range/iterator_range.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -181,6 +181,6 @@ ForwardStarGraph<external_node_type, edge_data_class>::offset(node_type const &n
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TOOL_CONTAINER_FORWARD_STAR_GRAPH_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_FORWARD_STAR_GRAPH_HPP_

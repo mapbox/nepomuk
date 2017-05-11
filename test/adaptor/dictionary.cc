@@ -3,8 +3,8 @@
 #include "tool/container/dictionary.hpp"
 #include "tool/container/string_table.hpp"
 
-using namespace transit;
-using namespace transit::tool::container;
+using namespace nepomuk;
+using namespace nepomuk::tool::container;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN
@@ -19,13 +19,13 @@ BOOST_AUTO_TEST_CASE(dictionary_io)
     dictionary.add_string("string");
     dictionary.add_string("test");
 
-    auto const message = transit::adaptor::Dictionary::encode(dictionary);
+    auto const message = adaptor::Dictionary::encode(dictionary);
 
     Dictionary decoded;
-    transit::adaptor::Dictionary::decode_into(decoded, message);
+    adaptor::Dictionary::decode_into(decoded, message);
 
     StringTable table;
-    transit::adaptor::Dictionary::decode_into(table, message);
+    adaptor::Dictionary::decode_into(table, message);
 
     BOOST_CHECK_EQUAL(dictionary.get_string(DictionaryID{0}), decoded.get_string(DictionaryID{0}));
     BOOST_CHECK_EQUAL(dictionary.get_string(DictionaryID{1}), decoded.get_string(DictionaryID{1}));
@@ -52,13 +52,13 @@ BOOST_AUTO_TEST_CASE(dictionary_io_categorized)
     dictionary.add_string("default", "string");
     dictionary.add_string("default", "test");
 
-    auto const message = transit::adaptor::Dictionary::encode(dictionary);
+    auto const message = adaptor::Dictionary::encode(dictionary);
 
     Dictionary decoded;
-    transit::adaptor::Dictionary::decode_into(decoded, message);
+    adaptor::Dictionary::decode_into(decoded, message);
 
     StringTable table;
-    transit::adaptor::Dictionary::decode_into(table, message);
+    adaptor::Dictionary::decode_into(table, message);
 
     BOOST_CHECK_EQUAL(dictionary.get_string(DictionaryID{0}), decoded.get_string(DictionaryID{0}));
     BOOST_CHECK_EQUAL(dictionary.get_string(DictionaryID{1}), decoded.get_string(DictionaryID{1}));

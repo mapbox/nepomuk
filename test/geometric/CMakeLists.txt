@@ -1,6 +1,6 @@
 set(geometricLIBS
         ${Boost_LIBRARIES}
-        transitgeometric)
+        NEPOMUKgeometric)
 
 set(geometricINCLUDES
         ${Boost_INCLUDE_DIRS}

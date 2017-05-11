@@ -4,7 +4,7 @@
 #include <boost/assert.hpp>
 #include <string>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -48,4 +48,4 @@ void StdOutputStream::write_bytes(const void *from, std::int64_t size)
 
 } // namespace io
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk

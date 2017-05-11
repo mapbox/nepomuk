@@ -1,8 +1,8 @@
 set(toolLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
-        transittool
-        transitgeometric)
+        NEPOMUKtool
+        NEPOMUKgeometric)
 
 set(toolINCLUDES
         ${Boost_INCLUDE_DIRS}

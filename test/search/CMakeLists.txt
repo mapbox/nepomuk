@@ -1,10 +1,10 @@
 set(searchLIBS
         ${Boost_LIBRARIES}
         ${PROTOBUF_LITE_LIBRARIES}
-        transitsearch
-        transitservice
-        transittimetable
-        transitgtfs)
+        NEPOMUKsearch
+        NEPOMUKservice
+        NEPOMUKtimetable
+        NEPOMUKgtfs)
 
 set(searchINCLUDES
         ${Boost_INCLUDE_DIRS}

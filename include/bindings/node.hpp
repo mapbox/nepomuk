@@ -1,5 +1,5 @@
-#ifndef TRANSIT_BINDINGS_NODE_HPP_
-#define TRANSIT_BINDINGS_NODE_HPP_
+#ifndef NEPOMUK_BINDINGS_NODE_HPP_
+#define NEPOMUK_BINDINGS_NODE_HPP_
 
 #include <memory>
 #include <string>
@@ -13,7 +13,7 @@
 #include "service/interface.hpp"
 #include "service/master.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace binding
 {
@@ -79,9 +79,9 @@ class Engine final : public Nan::ObjectWrap
 };
 
 } // namespace binding
-} // namespace transit
+} // namespace nepomuk
 
 // export the module into the global node namespace
-NODE_MODULE(transit, transit::binding::Engine::init)
+NODE_MODULE(nepomuk, nepomuk::binding::Engine::init)
 
-#endif // TRANSIT_BINDINGS_NODE_TRANSIT_HPP_
+#endif // NEPOMUK_BINDINGS_NODE_HPP_

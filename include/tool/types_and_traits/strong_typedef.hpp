@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TOOL_TYPES_AND_TRAITS_STRONG_TYPEDEF_HPP
-#define TRANSIT_TOOL_TYPES_AND_TRAITS_STRONG_TYPEDEF_HPP
+#ifndef NEPOMUK_TOOL_TYPES_AND_TRAITS_STRONG_TYPEDEF_HPP
+#define NEPOMUK_TOOL_TYPES_AND_TRAITS_STRONG_TYPEDEF_HPP
 
 #include <cstddef>
 #include <functional>
@@ -68,4 +68,4 @@
     };                                                                                             \
     }
 
-#endif // TRANSIT_TOOL_TYPES_AND_TRAITS_STRONG_TYPEDEF_HPP
+#endif // NEPOMUK_TOOL_TYPES_AND_TRAITS_STRONG_TYPEDEF_HPP

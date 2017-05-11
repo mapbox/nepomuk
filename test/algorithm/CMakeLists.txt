@@ -1,7 +1,7 @@
 set(algorithmLIBS
         ${Boost_LIBRARIES}
-        transittool
-        transitalgorithm)
+        NEPOMUKtool
+        NEPOMUKalgorithm)
 
 set(algorithmINCLUDES
         ${Boost_INCLUDE_DIRS})

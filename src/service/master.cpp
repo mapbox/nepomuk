@@ -17,7 +17,7 @@
 #include <utility>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -188,4 +188,4 @@ algorithm::StronglyConnectedComponent const &Master::components()
 }
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk

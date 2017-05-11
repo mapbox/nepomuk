@@ -1,7 +1,7 @@
 #include "gtfs/date.hpp"
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -22,4 +22,4 @@ Date::Date(std::string const &encoded_date)
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

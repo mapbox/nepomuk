@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TOOL_CONTAINER_ERRORS_HPP_
-#define TRANSIT_TOOL_CONTAINER_ERRORS_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_ERRORS_HPP_
+#define NEPOMUK_TOOL_CONTAINER_ERRORS_HPP_
 
 #include <stdexcept>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -24,6 +24,6 @@ struct SizeError : FatalError
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_ERRORS_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_ERRORS_HPP_

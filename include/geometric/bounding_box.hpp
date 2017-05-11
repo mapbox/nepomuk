@@ -1,10 +1,10 @@
-#ifndef TRANSIT_GEOMETRIC_BOUNDING_BOX_HPP_
-#define TRANSIT_GEOMETRIC_BOUNDING_BOX_HPP_
+#ifndef NEPOMUK_GEOMETRIC_BOUNDING_BOX_HPP_
+#define NEPOMUK_GEOMETRIC_BOUNDING_BOX_HPP_
 
 #include "geometric/coordinate.hpp"
 #include <cstdint>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
@@ -49,6 +49,6 @@ class MercatorBoundingBox
 };
 
 } // namespace geometric
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_GEOMETRIC_BOUNDING_BOX_HPP_
+#endif // NEPOMUK_GEOMETRIC_BOUNDING_BOX_HPP_

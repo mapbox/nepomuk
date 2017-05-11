@@ -15,7 +15,7 @@
 #include <utility>
 #include <vector> // for vector, vector<>::val...
 
-namespace transit
+namespace nepomuk
 {
 namespace adaptor
 {
@@ -83,4 +83,4 @@ void Dictionary::decode_into(tool::container::StringTable &dictionary,
 }
 
 } // namespace adaptor
-} // namespace transit
+} // namespace nepomuk

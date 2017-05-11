@@ -3,7 +3,7 @@
 #include <boost/assert.hpp>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -80,4 +80,4 @@ Dictionary::iterator_range Dictionary::get_lookup() const
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk

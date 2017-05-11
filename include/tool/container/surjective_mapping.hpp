@@ -1,11 +1,11 @@
-#ifndef TRANSIT_TOOL_CONTAINER_SURJECTIVE_MAPPING_HPP_
-#define TRANSIT_TOOL_CONTAINER_SURJECTIVE_MAPPING_HPP_
+#ifndef NEPOMUK_TOOL_CONTAINER_SURJECTIVE_MAPPING_HPP_
+#define NEPOMUK_TOOL_CONTAINER_SURJECTIVE_MAPPING_HPP_
 
 #include <boost/range/iterator_range.hpp>
 #include <cstddef>
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -87,6 +87,6 @@ std::size_t SurjectiveMapping<codomain_type, domain_type>::codomain_size() const
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TOOL_CONTAINER_SURJECTIVE_MAPPING_HPP_
+#endif // NEPOMUK_TOOL_CONTAINER_SURJECTIVE_MAPPING_HPP_

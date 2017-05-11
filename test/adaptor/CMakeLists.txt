@@ -1,8 +1,8 @@
 set(adaptorLIBS
         ${Boost_LIBRARIES}
-        transitadaptor
-        transitproto
-        transittool)
+        NEPOMUKadaptor
+        NEPOMUKproto
+        NEPOMUKtool)
 
 set(adaptorINCLUDES
         ${Boost_INCLUDE_DIRS}

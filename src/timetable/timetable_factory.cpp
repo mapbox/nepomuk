@@ -23,23 +23,23 @@
 #include <unordered_map>
 #include <utility>
 
-namespace transit
+namespace nepomuk
 {
 namespace geometric
 {
 class WGS84Coordinate;
 }
 }
-namespace transit
+namespace nepomuk
 {
 struct ShapeID;
 }
-namespace transit
+namespace nepomuk
 {
 struct StopID;
 }
 
-namespace transit
+namespace nepomuk
 {
 struct ShapeID;
 struct StopID;
@@ -195,4 +195,4 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

@@ -22,7 +22,7 @@
 #include <type_traits> // for enable_if<>::type
 #include <utility>     // for make_pair, pair
 
-namespace transit
+namespace nepomuk
 {
 namespace annotation
 {
@@ -305,4 +305,4 @@ void API::jsonify(std::ostream &os,
 }
 
 } // namespace annotation
-} // namespace transit
+} // namespace nepomuk

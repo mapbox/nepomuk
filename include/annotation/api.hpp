@@ -1,11 +1,11 @@
-#ifndef TRANSIT_ANNOTATION_API_HPP_
-#define TRANSIT_ANNOTATION_API_HPP_
+#ifndef NEPOMUK_ANNOTATION_API_HPP_
+#define NEPOMUK_ANNOTATION_API_HPP_
 
 #include <boost/assert.hpp> // for BOOST_ASSERT
 #include <iostream>
 #include <vector> // for vector
 
-namespace transit
+namespace nepomuk
 {
 
 // forward declaration
@@ -74,6 +74,6 @@ void API::chain_jsonify(std::ostream &os, object_type_itr begin, object_type_itr
 }
 
 } // namespace annotation
-} // namspace transit
+} // namespace transit
 
-#endif // TRANSIT_ANNOTATION_API_HPP_
+#endif // NEPOMUK_ANNOTATION_API_HPP_

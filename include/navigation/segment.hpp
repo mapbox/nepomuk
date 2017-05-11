@@ -1,5 +1,5 @@
-#ifndef TRANSIT_NAVIGATION_SEGMENT_HPP_
-#define TRANSIT_NAVIGATION_SEGMENT_HPP_
+#ifndef NEPOMUK_NAVIGATION_SEGMENT_HPP_
+#define NEPOMUK_NAVIGATION_SEGMENT_HPP_
 
 #include <boost/assert.hpp>
 #include <boost/range/iterator_range_core.hpp>
@@ -15,7 +15,7 @@
 #include "navigation/connection.hpp"
 #include "navigation/stop.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace navigation
 {
@@ -34,7 +34,7 @@ class Transit
     std::vector<Connection> _connections;
 
     // make sure routing algorithms are allowed to construct segments
-    friend class ::transit::navigation::RoutingAlgorithm;
+    friend class ::nepomuk::navigation::RoutingAlgorithm;
 
   public:
     date::UTCTimestamp departure() const;
@@ -67,7 +67,7 @@ class Transfer
     date::UTCTimestamp _arrival;
 
     // make sure routing algorithms are allowed to construct segments
-    friend class ::transit::navigation::RoutingAlgorithm;
+    friend class ::nepomuk::navigation::RoutingAlgorithm;
 };
 
 // a walking segment, usually in the begin/end of a route
@@ -89,7 +89,7 @@ class Walk
     date::UTCTimestamp _departure;
     date::UTCTimestamp _arrival;
     // make sure routing algorithms are allowed to construct segments
-    friend class ::transit::navigation::RoutingAlgorithm;
+    friend class ::nepomuk::navigation::RoutingAlgorithm;
 };
 
 } // namespace segment
@@ -166,6 +166,6 @@ template <typename visitor_type> visitor_type Segment::visit(visitor_type visito
 }
 
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_NAVIGATION_SEGMENT_HPP_
+#endif // NEPOMUK_NAVIGATION_SEGMENT_HPP_

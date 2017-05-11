@@ -1,12 +1,12 @@
-#ifndef TRANSIT_SERVICE_INTERFACE_HPP_
-#define TRANSIT_SERVICE_INTERFACE_HPP_
+#ifndef NEPOMUK_SERVICE_INTERFACE_HPP_
+#define NEPOMUK_SERVICE_INTERFACE_HPP_
 
 #include "service/earliest_arrival_parameters.hpp"
 #include "service/tile_parameters.hpp"
 
 #include <boost/variant.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -41,6 +41,6 @@ class Interface
 };
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SERVICE_INTERFACE_HPP_
+#endif // NEPOMUK_SERVICE_INTERFACE_HPP_

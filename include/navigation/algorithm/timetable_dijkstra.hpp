@@ -10,7 +10,7 @@
 
 #include <boost/optional.hpp>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace search
@@ -68,6 +68,6 @@ class TimeTableDijkstra : public RoutingAlgorithm
 
 } // namespace algorithm
 } // namespace navigation
-} // namespace transit
+} // namespace nepomuk
 
 #endif // TRANSIT_NAVIGATION_ALGORITHMS_TIMETABLE_DIJKSTRA_HPP_

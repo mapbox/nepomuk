@@ -4,7 +4,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -44,4 +44,4 @@ DepartureTable::const_iterator_range DepartureTable::list(date::Time starting_at
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

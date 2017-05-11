@@ -8,7 +8,7 @@
 #include "service/tile.hpp"
 #include "service/tile_parameters.hpp"
 
-using namespace transit;
+using namespace nepomuk;
 
 BOOST_AUTO_TEST_CASE(render_tiles)
 {

@@ -12,7 +12,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
-using namespace transit;
+using namespace nepomuk;
 
 const constexpr int num_ids = 10;
 
@@ -24,20 +24,20 @@ BOOST_AUTO_TEST_CASE(handle_different_ids)
 
     for (std::uint32_t i = 0; i < num_ids; ++i)
         BOOST_CHECK_EQUAL(
-            transit::tool::container::id_hash::get_id<AgencyID>(std::to_string(data[i]), "default"),
+            tool::container::id_hash::get_id<AgencyID>(std::to_string(data[i]), "default"),
             AgencyID{i});
 
     // make sure IDS don't change between hashes
     for (std::uint32_t i = 0; i < num_ids; ++i)
         BOOST_CHECK_EQUAL(
-            transit::tool::container::id_hash::get_id<AgencyID>(std::to_string(data[i]), "default"),
+            tool::container::id_hash::get_id<AgencyID>(std::to_string(data[i]), "default"),
             AgencyID{i});
 
     // reshuffle, check if types actually get their own IDs
     std::random_shuffle(data.begin(), data.end());
     for (std::uint64_t i = 0; i < num_ids; ++i)
         BOOST_CHECK_EQUAL(
-            transit::tool::container::id_hash::get_id<StopID>(std::to_string(data[i]), "default"),
+            tool::container::id_hash::get_id<StopID>(std::to_string(data[i]), "default"),
             StopID{i});
 }
 
@@ -49,13 +49,13 @@ BOOST_AUTO_TEST_CASE(handle_different_sources)
 
     for (std::uint32_t i = 0; i < num_ids; ++i)
         BOOST_CHECK_EQUAL(
-            transit::tool::container::id_hash::get_id<TripID>(std::to_string(data[i]), "default"),
+            tool::container::id_hash::get_id<TripID>(std::to_string(data[i]), "default"),
             TripID{i});
 
     std::random_shuffle(data.begin(), data.end());
     // make sure IDS don't change between hashes
     for (std::uint32_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(transit::tool::container::id_hash::get_id<TripID>(std::to_string(data[i]),
+        BOOST_CHECK_EQUAL(tool::container::id_hash::get_id<TripID>(std::to_string(data[i]),
                                                                             "other_source"),
                           TripID{i + num_ids});
 }

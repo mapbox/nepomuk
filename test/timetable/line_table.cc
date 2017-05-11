@@ -2,8 +2,8 @@
 #include "timetable/stop_table.hpp"
 #include "timetable/stop_table_factory.hpp"
 
-using namespace transit::timetable;
-using namespace transit::gtfs;
+using namespace nepomuk::timetable;
+using namespace nepomuk::gtfs;
 
 // make sure we get a new main function here
 #define BOOST_TEST_MAIN

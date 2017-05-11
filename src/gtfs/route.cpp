@@ -3,7 +3,7 @@
 
 #include <boost/optional.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -34,4 +34,4 @@ Route makeRoute(std::map<std::string, std::size_t> const &header,
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

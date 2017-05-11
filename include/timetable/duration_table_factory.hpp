@@ -1,12 +1,12 @@
-#ifndef TRANSIT_TIMETABLE_DURATION_TABLE_FACTORY_HPP_
-#define TRANSIT_TIMETABLE_DURATION_TABLE_FACTORY_HPP_
+#ifndef NEPOMUK_TIMETABLE_DURATION_TABLE_FACTORY_HPP_
+#define NEPOMUK_TIMETABLE_DURATION_TABLE_FACTORY_HPP_
 
 #include "gtfs/stop.hpp"
 #include "timetable/duration_table.hpp"
 
 #include <vector>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -19,6 +19,6 @@ class DurationTableFactory
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_DURATION_TABLE_FACTORY_HPP_
+#endif // NEPOMUK_TIMETABLE_DURATION_TABLE_FACTORY_HPP_

@@ -1,9 +1,9 @@
-#ifndef TRANSIT_TIMETABLE_EXCEPTIONS_HPP_
-#define TRANSIT_TIMETABLE_EXCEPTIONS_HPP_
+#ifndef NEPOMUK_TIMETABLE_EXCEPTIONS_HPP_
+#define NEPOMUK_TIMETABLE_EXCEPTIONS_HPP_
 
 #include <stdexcept>
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -21,6 +21,6 @@ struct InvalidInputError : TimeTableError
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_EXCEPTIONS_HPP_
+#endif // NEPOMUK_TIMETABLE_EXCEPTIONS_HPP_

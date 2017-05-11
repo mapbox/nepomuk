@@ -14,7 +14,7 @@
 #include <boost/assert.hpp>
 #include <boost/optional.hpp>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace gtfs
@@ -210,4 +210,4 @@ tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_in
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

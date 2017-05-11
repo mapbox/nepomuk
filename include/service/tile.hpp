@@ -1,5 +1,5 @@
-#ifndef TRANSIT_SERVICE_TILE_HPP_
-#define TRANSIT_SERVICE_TILE_HPP_
+#ifndef NEPOMUK_SERVICE_TILE_HPP_
+#define NEPOMUK_SERVICE_TILE_HPP_
 
 #include "annotation/stop_info.hpp"
 #include "search/coordinate_to_stop.hpp"
@@ -16,7 +16,7 @@
 
 #include <cstdint>
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -46,7 +46,7 @@ class Tile : public Interface
     search::CoordinateToStop const &stop_lookup;
     search::StopToLine const &stop_to_line;
     // to request coordinates / names
-    transit::tool::container::StringTable const &dictionary;
+    nepomuk::tool::container::StringTable const &dictionary;
     annotation::StopInfoTable const &stop_info_annotation;
     // the lines and their actual geometry
     annotation::Geometry const &geometry;
@@ -65,6 +65,6 @@ class Tile : public Interface
 };
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_SERVICE_TILE_HPP_
+#endif // NEPOMUK_SERVICE_TILE_HPP_

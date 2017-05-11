@@ -3,7 +3,7 @@
 
 #include <boost/assert.hpp>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -58,4 +58,4 @@ Trip makeTrip(std::map<std::string, std::size_t> const &header,
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk

@@ -7,7 +7,7 @@
 #include <set>
 #include <tuple>
 
-namespace transit
+namespace nepomuk
 {
 namespace service
 {
@@ -186,4 +186,4 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
 }
 
 } // namespace service
-} // namespace transit
+} // namespace nepomuk

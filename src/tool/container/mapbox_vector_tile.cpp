@@ -20,7 +20,7 @@
 
 #include "geometric/coordinate.hpp"
 
-namespace transit
+namespace nepomuk
 {
 namespace tool
 {
@@ -349,4 +349,4 @@ MapboxVectorTileLayer MapboxVectorTile::new_layer(std::string const &name)
 
 } // namespace container
 } // namespace tool
-} // namespace transit
+} // namespace nepomuk

@@ -1,5 +1,5 @@
-#ifndef TRANSIT_TIMETABLE_STOPTABLE_HPP_
-#define TRANSIT_TIMETABLE_STOPTABLE_HPP_
+#ifndef NEPOMUK_TIMETABLE_STOPTABLE_HPP_
+#define NEPOMUK_TIMETABLE_STOPTABLE_HPP_
 
 #include <cstdint>
 #include <vector>
@@ -8,7 +8,7 @@
 
 #include <boost/range/iterator_range.hpp>
 
-namespace transit
+namespace nepomuk
 {
 
 namespace search
@@ -38,10 +38,10 @@ class StopTable
     std::vector<StopID> stops;
 
     friend class StopTableFactory;
-    friend class transit::search::StopToLineFactory;
+    friend class nepomuk::search::StopToLineFactory;
 };
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk
 
-#endif // TRANSIT_TIMETABLE_STOPTABLE_HPP_
+#endif // NEPOMUK_TIMETABLE_STOPTABLE_HPP_

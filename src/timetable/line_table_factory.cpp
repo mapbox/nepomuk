@@ -21,7 +21,7 @@
 #include <set>
 #include <utility> // for pair
 
-namespace transit
+namespace nepomuk
 {
 namespace timetable
 {
@@ -185,4 +185,4 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
 }
 
 } // namespace timetable
-} // namespace transit
+} // namespace nepomuk

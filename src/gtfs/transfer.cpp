@@ -5,7 +5,7 @@
 
 #include <tuple>
 
-namespace transit
+namespace nepomuk
 {
 namespace gtfs
 {
@@ -46,4 +46,4 @@ bool Transfer::operator==(Transfer const &other) const
 }
 
 } // namespace gtfs
-} // namespace transit
+} // namespace nepomuk
