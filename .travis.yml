@@ -1,13 +1,17 @@
 language: generic
+
 sudo: required
 dist: trusty
+
 branches:
   only:
   - master
+  - latest
+
 env:
   global:
-  - secure: "IpTnG9wNPHbGToOA41tA3/+pbijU/07VJEPUuRz5Iiogz1H3qY4FGbImoRl8pyWK/2GVuIURo0H2xBdNazuXKxxP8HeA1yURDBinCVxfluIaEcSNrt7gCab8hRfR5k+Rqki9+61ZSzHIoPWz0BxdkULudInmdRMzwCf2BOZTs0eY2xcq1bVk5zjYwevPwpqWmlE10XdFvmOYiLt19693kSJgc5hPVn067vUogJKStfHljx3Bm472QBGFrxpaUCnIE5FkuX+53/JYZtkwpV7l3qu+VEEykoU33IdYO1amP0mNhiwvwts9AGajvV0kdYO2U+0TREfeOF6rUe7qyWka9muvNxhw7QOsUJ2+lTs/bI2vn96n2qIsCRXdjcMJQKwI+LR2z7kzoI/7zywK5jr4Wc/sV9gbtei7sOJlGAYNxNvOlQIxETpLYM6te3PzeBKkdhy1DANvVEIKY4Wx7eapy2Tu+fgVKIFM7ldY5P8iOup6V+RrmCSkKSeGE9/M99xvnWJQJxneWEW9VXtI3L1k+7D+z2kVrGMXuvNAjHUMRdZVOFzHHGp0Fsxv7k9Haftwc6t6kuUKSLnVgwFypvRhVI/7X2uhwQ7c0yle0I5w7GW8jTLsGaaT/pjDTPI14Mx1V3smWkdVoVlgaUwpuL8JlECzX++is2N7HGNI43LxypU="
-  - secure: "QgVzxWxrxYEtbwVU97o7nCq92t7+2lmdV0C810F0dX3RDMy07NdULvh8kt4ju0LxGr6fWQrsZ04TkTk/a/8BquQAPf4LAuAwBjShakYrkqzdxEIrfoVTdotQoFXTkvlShFwqtHa4UxyVtXliM38h/DayLhLUTqkGmGCDXWjXWQKt8Xs7l9xakDb86iTRqhOQ5YbVYG14i+WEwafJTiqaeRodniMaKVZYK1OI+C3jy/iPJGRjQuHARxBPvWLRmGTApatKaWGWQTSDBn7IzX8Mkiq2BV2ch+7W+59jVZ54E98MAnhlsgjw1tvehsCNB4NA8vwf5UE5RXcISeNR0D7UIzrXl/LhbLQ5bDBsuw2Gx05T7EkUV0tOj9dFuFJO2HWyVwDRxRKeGn22AmB9/zqFmjqS4vAG3McHJvywQcvBoczogZ97smhan7r5gciyWB37imoZReoEM4Wtg7WI0YGYkN4GiTYJDNEbdjSi88YCMJsan9Ow9+5LiTZrR5dmIwxlT1YLl9VmHBmX/ryDaCxbvqj4QCnvFgjGUFst02VOjEQwc2WshuGeKuN7TFolPDtNy9fiRzU4Hpn+LRzfrv19RGWViDbEXtAoBC88TFOG+xegU5PSG08OFEHXq63CspZcbMCihWH/oVcWjV//huaul6rxaaR0EYf6eKWCQ3Gp/o8="
+  - secure: "Q8bRDeSU/7TmlmStqpVQF6aK8z5YHDfpBe0qOei6FMgaObcJWFfJuV12zpk+CPnEAZfhuOIbAeAuqxcXu3+JLIHF3AXEnFbVgLuBpykaB2XX6wfg3wXOXw6Wy/pZt8xnP4LACtG6YCbyikLrcDhScFi+yX9IE6TxrhgYkOKsq6PO2/SAZqEbst0dKEXA1H0smROQpY7IWz8kHwJZc0FTaurjiAuPXGL0fcd7QCIIB98B6kl8ndmXhYnIpCPwQ0SzooWWsUkEE9x3AKIiJvZOyQQl7a+R9ZbvGeMJninyNKp/ThmoRJtESqJ0rv7nTsqxohSirmEw6dnHb7WKG9Ogix+a77FgPZPNlOQaOLmdXZ8pj3oMeajA2ar3LIZkzBMTLCK5eKhU7As+9EjCm3zTTLhZkv6uFu6DiHJeWopsqKb+GqA1TtRdIUksJ9RAEFjIE99D3OFhz9GVYt5pGfaMszZor48UdHNxt+OYAShRS3cIZdg7gSJM8Cya0Pme5kxQYSMQtjuxnsG/pPoZ3T7jOtZqun/LQX97X0ov64xgynYzxHm1PAMGhQLGuK6hYYFKvH8ICvEejnjaPeXbHSnL++5swUG8rdb+X/Jox08VPGlsaL0eBCLAUmzCtxNfNxRsN2vp1SyQVbkqDFfN7NkJIxNnm2PJjwrlHfV96rmo4eM="
+  - secure: "gWw2F0sqnko2pjCh3sqPMyg2ZzyHwBu7miifAPcJjowILgplhwW0UDtJ73R/uzgUsG0ALDjAtIUFzJyfu/WiLySeCujhiBrZ8pyRmgmwJ4Rp/ZMgZQx0B5tJ3l0jJDHcORN7tAg/PnDtAS57sMQPIHB19XPlqSDg5Nz0qzbj+eNFS+tZrMM4PV8nENITDrFVN137VhJzUtE86NTFmIsbCx9X5WMurQ0WrIVaDNEKGMR2wpV9t4fnEed/o6bGMBYMcGO7rK/AusDlX3PNd7OvcixeZaQsOloWs0IKYw1x9q98e5a7QGGOVPdzcNZ+WukBPfUYMek99gMfaotEN1eFcTfDva3BZKqn7DDcH6ZBCTTdTNZzPRNW7yiHfLuYNgvevOm3pbUUHWUwH8hl7IXdEZwmKswsrGSfInJyVLwENK1xue9ntnbfRiFU6jYCTTn2p/IVOQPzawQPiztd1Hb9SImCV7nINf4MdoK7j4upIIs+wjWpUtHuShchptLHsq7+xpWd8UHKbbm96x08HCap1aLOg9PSvrMS+QxK3MFhUolWF8h0REYPhS79BPC0pFJ4rbVvgRpARzt0jNrdfkdThyChqe8KcGVwGlna2YD6srkJ9Ov26KEx6RhQvOwZ4qxt6LXEdf4z5GcK/cUV+vhDz8v2lyFwlHBAcbQsJj/5HWU="
   - MASON_RELEASE=0.10.0
   - CMAKE_VERSION=3.7.1
   - CLANG_FORMAT_VERSION=3.8.1
@@ -16,6 +20,7 @@ cache:
   ccache: true
   apt: true
   yarn: true
+
 matrix:
   fast_finish: true
   include:
@@ -120,12 +125,12 @@ script:
   popd
 - |
   if [ -n "${NODEBINDINGS}" ]; then
-      if [ -z "${SANITIZE}" ]; then
-        pushd ${PROJECT_DIRECTORY}/node/nepomuk;
-        npm install;
-        npm test || travis_terminate 1;
-        popd;
-      fi
+    pushd ${PROJECT_DIRECTORY}/node/nepomuk;
+    npm install;
+    if [ -z "${SANITIZE}" ]; then
+      npm test || travis_terminate 1;
+    fi
+    popd;
   fi
 
 after_success:
@@ -136,6 +141,6 @@ after_success:
 - |
   if [ -n "${NODEBINDINGS}" ]; then
     pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
-    ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh;
+    ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
     popd;
   fi
