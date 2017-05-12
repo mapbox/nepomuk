@@ -63,15 +63,13 @@ BOOST_AUTO_TEST_CASE(handle_unopened_streams)
     auto binary_encoder = tool::io::makeBinaryEncoder(outstream);
     std::string test{"Don't panic!"};
 
-    BOOST_CHECK_THROW(tool::io::serialize(test, binary_encoder),
-                      tool::io::OutputStreamError);
+    BOOST_CHECK_THROW(tool::io::serialize(test, binary_encoder), tool::io::OutputStreamError);
 
     std::ifstream ifs;
     tool::io::StdInputStream instream(ifs);
     auto binary_decoder = tool::io::makeBinaryDecoder(instream);
     std::string result;
-    BOOST_CHECK_THROW(tool::io::deserialize(result, binary_decoder),
-                      tool::io::InputStreamError);
+    BOOST_CHECK_THROW(tool::io::deserialize(result, binary_decoder), tool::io::InputStreamError);
 }
 
 BOOST_AUTO_TEST_CASE(zero_length)
@@ -179,10 +177,8 @@ BOOST_AUTO_TEST_CASE(dont_write_newlines_in_line_stream)
 {
     {
         tool::io::StdLineOutputStream outstream(std::cout);
-        BOOST_CHECK_THROW(outstream.putline("Test For Throw\n"),
-                          tool::io::OutputStreamError);
-        BOOST_CHECK_THROW(outstream.putline("Test For Throw\r"),
-                          tool::io::OutputStreamError);
+        BOOST_CHECK_THROW(outstream.putline("Test For Throw\n"), tool::io::OutputStreamError);
+        BOOST_CHECK_THROW(outstream.putline("Test For Throw\r"), tool::io::OutputStreamError);
         BOOST_CHECK_NO_THROW(outstream.putline(""));
     }
 
@@ -190,7 +186,6 @@ BOOST_AUTO_TEST_CASE(dont_write_newlines_in_line_stream)
     {
         std::ofstream ofs;
         tool::io::StdLineOutputStream outstream(ofs);
-        BOOST_CHECK_THROW(outstream.putline("Test For Throw"),
-                          tool::io::OutputStreamError);
+        BOOST_CHECK_THROW(outstream.putline("Test For Throw"), tool::io::OutputStreamError);
     }
 }

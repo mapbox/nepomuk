@@ -13,7 +13,7 @@ set -o nounset
 OS=$(uname)
 CPUCOUNT=1
 if [[ $OS = "Linux" ]] ; then
-    CPUCOUNT=$(CPUCOUNT)
+    CPUCOUNT=$(nproc)
 elif [[ ${OS} = "Darwin" ]] ; then
     CPUCOUNT=$(sysctl -n hw.physicalcpu)
 fi

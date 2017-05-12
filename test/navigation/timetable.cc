@@ -30,30 +30,24 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 
     navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
 
-    auto route =
-        timetable_router(date::Time("00:00:00"), StopID{0}, StopID{7});
+    auto route = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(
-        (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(),
-        StopID{0});
+        (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(), StopID{0});
     BOOST_CHECK_EQUAL(
         (route->legs().begin()->segments().begin())->as_transit().connections().begin()->line(),
         LineID{0});
-    route =
-        timetable_router(date::Time("12:00:00"), StopID{0}, StopID{7});
+    route = timetable_router(date::Time("12:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(
-        (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(),
-        StopID{1});
+        (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(), StopID{1});
 
     auto leg_range = route->legs().begin()->segments();
     BOOST_CHECK_EQUAL(std::distance(leg_range.begin(), leg_range.end()), 2);
-    auto route2 =
-        timetable_router(date::Time("00:00:00"), StopID{0}, StopID{9});
+    auto route2 = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{9});
     BOOST_CHECK((bool)route2);
 
     // when cyclic times routes are implemented, this will return a route again
-    auto route3 =
-        timetable_router(date::Time("36:00:00"), StopID{0}, StopID{7});
+    auto route3 = timetable_router(date::Time("36:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)!route3);
 }

@@ -1,103 +1,140 @@
 language: generic
 sudo: required
 dist: trusty
-
 branches:
   only:
-    - master
-
+  - master
 env:
   global:
-    - CMAKE_VERSION=3.7.1
-
+  - MASON_RELEASE=0.10.0
+  - CMAKE_VERSION=3.7.1
+  - CLANG_FORMAT_VERSION=3.8.1
+  - secure: Su025qO9uAhbLA3s5XBaPx1mxxul6hkdp54ud32b4IVOkCoocwavThGYayvEG2hoLYq2MKlL4V2WLC+qv/je7wxE/rlWTW2zLx9BP2HV3lIrAp0v7ow2d7r36qZMjfe6EW21ipngw6Ooass79rOC+KOxt68t8Gk0czfpcQjBZJlzWjKxgCO5zGpJIQmcIY2WDqt7OdeOhubglfxyDorbzTFOoYJhoz6TCFez6CLp8Ii1MCmLH6Ro6IfgmCa91n+eKZQP2uw6mQI7m41dVZUSVMGpJSniKUjXzHY3xXFrX+k/mMjgUwamkDQ2bTogxD99sTR45piz82YSh+U6O9UOJ3uhYNR0hBuFYIdOp27eyvVYXFyd457D+YFx0QwcJSIlsm7jasNrynpfhf/rmKYrKtVuj9b09IBJB6tx1yscaXDeHgZWzI8dZ1CMbvR7ZvgLbmr6DcQqK3JXwosWRLqUyqY2EJuNwYSsz+VJDhSCrrgRO+6LMBPagR93jOkM8AAKH9gyXv5yfTsTpHnxZ9Toret7W0HI2zzG71kPqFz/K7e5U9HkRDH0r7w3CoN+vHSpJwQ9YNsBYrzTosdOVxTAmfJOE3EMJaJL54inyKtTUnBymj/Afby6a6j1KlwAK/YXfZmK2w2m7Tx8j5nIqqBGNh4TExtswKQL755cxT/XJpc=
+  - secure: vsVF8esgJV6c6isYNdQtX3QjYyD4q4xPobaUWlRcatCB7Xt0WEMZIqF0dbFGeVlXkwxv5GcJYYGcNCvpwq0CNwmcBtX8T6oNZn971Cm2NIXeT6uTgV748FaZXW01eoiHa/5/MfBeuIIF3NE0G2x3T7zxtGNCRfZQjJbdWT1yOYjGd8Cyh0eYFO6PGor6OgGERqvOEnXW5BSnrwGisfqkJf+IkswhM1kFW/wk5/w0Ns/3qH5w2m65FPjbZm2zpqY+J/0v7ofI7USk+cmuNyBvBhsKJxTuwT/r46722L2twTi8aOCJTScgKUIN6MOSNdukcMPxv1l6lxMmJzRA/jAqFX/MSD6Wbx+2DCiq+bpK3oLN6HMZLjKqD3nrsv1RX8w6rCFpsNx3Es5TpRmJthC35Omj3uzN6QhiCHRv8/KITHeuTK7gQ5UnZzOlqzKnMoAjmiHq/hY3iA99Rjz2rQHlt5+PQt97SibR2cE0aRXC5PpPA+q73dIqgvUer7iU93AyIgYSIuogxh7rqRk/LB1hyU3v7m2rtbIpXj4ABYnDVwWcYynAjXXkuUyX49v39RWAxEJ/vysdF87Qs7bS+aEgjFiz61DIrhtp3oTMmkbnwW2ZPRaYWNyBtFsABeSEr84Ys3RFFKA29QpOcIuJvtCQUbUBCqNEWQTb7AXzdYItDJY=
 cache:
-    ccache: true
-    apt: true
-    yarn: true
-
+  ccache: true
+  apt: true
+  yarn: true
 matrix:
   fast_finish: true
-
   include:
-
-    #Release Builds
-    - os: linux
-      node_js: 6
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release NODEBINDINGS=On NODE_VERSION=6
-
-    - os: linux
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Release
-
-    - os: osx
-      osx_image: xcode8.2
-      node_js: 4
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release NODEBINDINGS=On NODE_VERSION=4
-
-    - os: osx
-      osx_image: xcode8.2
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
-
-    #Debug Builds
-    - os: linux
-      node_js: 4
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On NODEBINDINGS=On NODE_VERSION=4
-
-    - os: linux
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5', 'cmake', 'libprotobuf-dev', 'protobuf-compiler']
-      env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Debug
-
-    - os: osx
-      osx_image: xcode8.2
-      node_js: 6
-      env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Debug SANITIZE=On NODEBINDINGS=On NODE_VERSION=6
+  - os: linux
+    node_js: 6
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-6
+        - cmake
+        - libprotobuf-dev
+        - protobuf-compiler
+    env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release NODEBINDINGS=On CHECK_FORMAT=Yes
+      NODE_VERSION=6
+  - os: linux
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-5
+        - cmake
+        - libprotobuf-dev
+        - protobuf-compiler
+    env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Release
+  - os: osx
+    osx_image: xcode8.2
+    node_js: 4
+    env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release NODEBINDINGS=On
+      NODE_VERSION=4
+  - os: osx
+    osx_image: xcode8.2
+    env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
+  - os: linux
+    node_js: 4
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-6
+        - cmake
+        - libprotobuf-dev
+        - protobuf-compiler
+    env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On
+      NODEBINDINGS=On NODE_VERSION=4
+  - os: linux
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-5
+        - cmake
+        - libprotobuf-dev
+        - protobuf-compiler
+    env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Debug
+  - os: osx
+    osx_image: xcode8.2
+    node_js: 6
+    env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Debug SANITIZE=On NODEBINDINGS=On
+      NODE_VERSION=6
 
 before_install:
-  - export CC=${CCOMPILER} CXX=${CXXCOMPILER}
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
-  - if [[ "${NODEBINDINGS}" == "On" ]]; then
-       nvm install ${NODE_VERSION};
-       nvm use ${NODE_VERSION};
-       ./scripts/configure-bindings.sh;
-    fi
-  - CMAKE_URL="https://mason-binaries.s3.amazonaws.com/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}.tar.gz"
-  - CMAKE_DIR="mason_packages/${TRAVIS_OS_NAME}-x86_64/cmake/${CMAKE_VERSION}"
-  - mkdir -p ${CMAKE_DIR}
-  - travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C ${CMAKE_DIR} || exit 1
+- export CC=${CCOMPILER} CXX=${CXXCOMPILER}
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf
+  ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
+- if [ -n "${NODEBINDINGS}" ];
+    then nvm install ${NODE_VERSION} || travis_terminate 1;
+    nvm use ${NODE_VERSION} || travis_terminate 1;
+    ./scripts/configure-bindings.sh || travis_terminate 1;
+  fi
+- |
+  mkdir ./mason
+  curl -sSfL https://github.com/mapbox/mason/archive/v${MASON_RELEASE}.tar.gz | tar --gunzip --extract --strip-components=1 --exclude="*md" --exclude="test*" --directory=./mason || travis_terminate 1
+- ./mason/mason install cmake ${CMAKE_VERSION}
+- ./mason/mason link cmake ${CMAKE_VERSION}
+- export PATH=./mason_packages/.link/bin/:${PATH}
+- |
+  if [ -n "${CHECK_FORMAT}" ]; then
+    ./mason/mason install clang-format ${CLANG_FORMAT_VERSION};
+    ./mason/mason link clang-format ${CLANG_FORMAT_VERSION}
+    ./scripts/format.sh || travis_terminate 1;
+  fi
+- export PROJECT_DIRECTORY=$(pwd)
+- export BUILD_DIRECTORY=${PROJECT_DIRECTORY}/build/${BUILD_TYPE}
+- mkdir -p ${BUILD_DIRECTORY}
 
 install:
-  - mkdir -p build
-  - mkdir -p build/${BUILD_TYPE}
-  - cd build/${BUILD_TYPE}
-  - cmake ../.. -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF} -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
-  - make -j 2
+- pushd ${BUILD_DIRECTORY}
+- cmake ${PROJECT_DIRECTORY} -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF}
+  -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
+- make -j 2
+- popd
 
 script:
-  - ctest --verbose #run unit test framework
-  - if [[ "${NODEBINDINGS}" == "On" ]]; then
-        cd ../../node/node-transit/;
+- |
+  pushd ${BUILD_DIRECTORY}
+  ctest --verbose
+  popd
+- |
+  if [ -n "${NODEBINDINGS}" ]; then
+      if [ -z "${SANITIZE}" ]; then
+        pushd ${PROJECT_DIRECTORY}/node/nepomuk;
         npm install;
-        npm test;
-        cd ../../build/${BUILD_TYPE};
-    fi
+        npm test || travis_terminate 1;
+        popd;
+      fi
+  fi
 
 after_success:
-  - cd ..
-  - |
-    if [ -n "${COVERAGE}" ]; then
-      bash <(curl -s https://codecov.io/bash)
-    fi
+- |
+  if [ -n "${COVERAGE}" ]; then
+    bash <(curl -s https://codecov.io/bash)
+  fi
+- |
+  if [ -n "${NODEBINDINGS}" ]; then
+    pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
+    ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh;
+    popd;
+  fi
