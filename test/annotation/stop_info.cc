@@ -57,8 +57,7 @@ BOOST_AUTO_TEST_CASE(annotate_stops)
     stops.push_back(make_stop(3, dictionary.add_string("fourth"), coordinate4));
 
     StringTable table;
-    adaptor::Dictionary::decode_into(table,
-                                              adaptor::Dictionary::encode(dictionary));
+    adaptor::Dictionary::decode_into(table, adaptor::Dictionary::encode(dictionary));
 
     StopInfoTable stop_info(stops);
 

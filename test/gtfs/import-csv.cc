@@ -108,8 +108,7 @@ void makeStops(std::string const &name)
            "Bahnhof\",,\"3.0000000\",\"3.0000000\",,00000550217,3,,\"us\",2\n";
 }
 
-void checkStopFixture(std::vector<Stop> const &stops,
-                      tool::container::Dictionary const &dictionary)
+void checkStopFixture(std::vector<Stop> const &stops, tool::container::Dictionary const &dictionary)
 {
     // we expect exactly three stops, see above
     BOOST_CHECK_EQUAL(stops.size(), 3);

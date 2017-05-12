@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(handle_different_sources)
     std::random_shuffle(data.begin(), data.end());
     // make sure IDS don't change between hashes
     for (std::uint32_t i = 0; i < num_ids; ++i)
-        BOOST_CHECK_EQUAL(tool::container::id_hash::get_id<TripID>(std::to_string(data[i]),
-                                                                            "other_source"),
-                          TripID{i + num_ids});
+        BOOST_CHECK_EQUAL(
+            tool::container::id_hash::get_id<TripID>(std::to_string(data[i]), "other_source"),
+            TripID{i + num_ids});
 }

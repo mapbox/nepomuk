@@ -14,6 +14,5 @@ BOOST_AUTO_TEST_CASE(construct_time)
                 gtfs::accessibility::makeWheelchair("0"));
     BOOST_CHECK(gtfs::accessibility::Wheelchair::SOME_OR_ALL ==
                 gtfs::accessibility::makeWheelchair("1"));
-    BOOST_CHECK(gtfs::accessibility::Wheelchair::NONE ==
-                gtfs::accessibility::makeWheelchair("2"));
+    BOOST_CHECK(gtfs::accessibility::Wheelchair::NONE == gtfs::accessibility::makeWheelchair("2"));
 }
