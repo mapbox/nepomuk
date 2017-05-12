@@ -28,7 +28,7 @@
     "node-pre-gyp": "^0.6.34"
   },
   "devDependencies": {
-    "aws-sdk": "^2.42.0",
+    "aws-sdk": "^2.50.0",
     "tap": "^10.3"
   },
   "bundledDependencies": ["node-pre-gyp"],
