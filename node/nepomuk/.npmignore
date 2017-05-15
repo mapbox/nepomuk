@@ -1,0 +1,6 @@
+*
+!LICENSE
+!README.md
+!lib/*.js
+!package.json
+!test/*
