@@ -30,4 +30,4 @@ When the correct branch is selected:
 - [ ] push the newly assigned tags `git push; git push --tags`
 - [ ] publish the binaries:
     - *FINAL RELEASES ONLY*: publish the release to npm via `npm publish`
-    - *PRE-RELEASES ONLY*: publish the release to npm via `npm publish --tag XXX` and use either `alpha` or `next` (this avoids updating `latest` which matches `\*` as aversion)
+    - *PRE-RELEASES ONLY*: publish the release to npm via `npm publish --tag XXX` and use either `alpha` or `next` (this avoids updating `latest` which matches `*` in npm versions)
