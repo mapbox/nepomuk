@@ -11,6 +11,7 @@ message(STATUS "Compiler: ${CXX_COMPILER}")
 set(NEPOMUK_VERSION_MAJOR 0)
 set(NEPOMUK_VERSION_MINOR 0)
 set(NEPOMUK_VERSION_PATCH 0)
+set(NEPOMUK_TAG -alpha.1)
 
 # fileformat versioning scheme
 set(NEPOMUK_FILEFORMAT_VERSION_MAJOR 0)
@@ -109,13 +110,13 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}")
 
 # pull in mason dependencies
-mason_use(libzmq VERSION 4.2.2)
-mason_use(cppzmq VERSION 4.2.1 HEADER_ONLY)
-set(Zmq_INCLUDE_DIRS
-    ${MASON_PACKAGE_libzmq_INCLUDE_DIRS}
-    ${MASON_PACKAGE_cppzmq_INCLUDE_DIRS})
-set(Zmq_LIBRARIES
-    ${MASON_PACKAGE_libzmq_STATIC_LIBS})
+#mason_use(libzmq VERSION 4.2.2)
+#mason_use(cppzmq VERSION 4.2.1 HEADER_ONLY)
+#set(Zmq_INCLUDE_DIRS
+#    ${MASON_PACKAGE_libzmq_INCLUDE_DIRS}
+#    ${MASON_PACKAGE_cppzmq_INCLUDE_DIRS})
+#set(Zmq_LIBRARIES
+#    ${MASON_PACKAGE_libzmq_STATIC_LIBS})
 
 mason_use(protozero VERSION 1.5.1 HEADER_ONLY)
 set(protozero_INCLUDE_DIRS

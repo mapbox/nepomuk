@@ -14,8 +14,7 @@ set(gtfs_SOURCES
     schedule.cpp
     stop.cpp
     transfer.cpp
-    trip.cpp
-    provider.cpp)
+    trip.cpp)
 
 # export source files as library
 add_library(NEPOMUKgtfs STATIC
@@ -31,5 +30,4 @@ target_link_libraries(NEPOMUKgtfs
 
 # define additional include directories
 target_include_directories(NEPOMUKgtfs SYSTEM PUBLIC
-    ${Boost_INCLUDE_DIRS}
-    ${Zmq_INCLUDE_DIRS})
+    ${Boost_INCLUDE_DIRS})

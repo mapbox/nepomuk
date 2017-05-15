@@ -1,6 +1,6 @@
 {
   "name": "nepomuk",
-  "version": "@NEPOMUK_VERSION_MAJOR@.@NEPOMUK_VERSION_MINOR@.@NEPOMUK_VERSION_PATCH@",
+  "version": "@NEPOMUK_VERSION_MAJOR@.@NEPOMUK_VERSION_MINOR@.@NEPOMUK_VERSION_PATCH@@NEPOMUK_TAG@",
   "description": "Native module for transit directions on gtfs feeds",
   "url": "https://github.com/mapbox/nepomuk",
   "repository": {
