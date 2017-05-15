@@ -28,4 +28,6 @@ When the correct branch is selected:
 - [ ] check travis again to ensure all binaries are published correctly
 - [ ] tag the release `git tag vx.y.z -a` and copy the changelog of the respective release into the commit message
 - [ ] push the newly assigned tags `git push; git push --tags`
-- [ ] *FINAL RELEASES ONLY*: publish the release to npm via `npm publish`
+- [ ] publish the binaries:
+    - *FINAL RELEASES ONLY*: publish the release to npm via `npm publish`
+    - *PRE-RELEASES ONLY*: publish the release to npm via `npm publish --tag XXX` and use either `alpha` or `next` (this avoids updating `latest` which matches `\*` as aversion)
