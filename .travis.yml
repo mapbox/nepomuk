@@ -6,7 +6,7 @@ dist: trusty
 branches:
   only:
   - master
-  - latest
+  - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 env:
   global:
