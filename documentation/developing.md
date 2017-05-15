@@ -35,6 +35,10 @@ We consider additions to the API forward-compatible. This excludes any additions
   - node API
   - FILEFORMATS might require recreation to gain access to new functionality (**UPDATE**)
 
+### Nodebindings
+
+We offer node bindings for Nepomuk via NPM. The bindings come in stable releases (npm install @mapbox/nepomuk), alpha releases (npm install @mapbox/nepomuk@alpha) and beta/release candidate versions (npm install @mapbox/nepomuk@next)
+
 ## Changelog
 
 Always update the changelog when providing a new PR. Ensure that each bugfix refers to the respective issue.
