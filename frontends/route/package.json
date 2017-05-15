@@ -32,6 +32,6 @@
     "leaflet": "^1.0.3",
     "leaflet-routing-machine": "^3.2.5",
     "leaflet.locatecontrol": "^0.60.0",
-    "lrm-nepomuk": "file:///Users/mokob/git/nepomuk/frontends/lrm-plugin"
+    "lrm-nepomuk": "file:../lrm-plugin"
   }
 }
