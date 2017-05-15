@@ -1,7 +1,6 @@
 {
   "name": "transit-server",
   "version": "0.0.0",
-  "private": true,
   "description": "Transit is an open source service for public transit routing on GTFS sources.",
   "dependencies": {
     "async": "^2.2.0",
