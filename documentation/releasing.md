@@ -23,8 +23,11 @@ We will support bugfixes only for the most recent releases.
 
 When the correct branch is selected:
 
+- [ ] update the version tag
+    - [ ] update CMakelists.txt
+    - [ ] change to build directory and source the CMakelists to propagate verion flags
 - [ ] ensure that tests are passing (https://travis-ci.org/mapbox/nepomuk).
-- [ ] push binaries to S3 by running `npm commit -m "[publish binary]" --allow-empty
+- [ ] push binaries to S3 by running `git commit -m "[publish binary]" --allow-empty && git push`
 - [ ] check travis again to ensure all binaries are published correctly
 - [ ] tag the release `git tag vx.y.z -a` and copy the changelog of the respective release into the commit message
 - [ ] push the newly assigned tags `git push; git push --tags`
