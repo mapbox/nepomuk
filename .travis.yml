@@ -19,7 +19,6 @@ env:
   - MASON_RELEASE=0.10.0
   - CMAKE_VERSION=3.7.1
   - CLANG_FORMAT_VERSION=3.8.1
-  - NODEBINDINGS=On
   matrix:
   - BUILD_TYPE=Release NODE_VERSION=4
   - BUILD_TYPE=Release NODE_VERSION=6
@@ -84,7 +83,7 @@ before_install:
 install:
 - pushd ${BUILD_DIRECTORY}
 - cmake ${PROJECT_DIRECTORY} -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Debug} -DSANITIZE=${SANITIZE:-OFF}
-  -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=${NODEBINDINGS:-OFF}
+  -DCOVERAGE=${COVERAGE:-OFF} -DNODEBINDINGS=On
 - make -j 2
 - popd
 
@@ -94,14 +93,12 @@ script:
   ctest --verbose
   popd
 - |
-  if [ -n "${NODEBINDINGS}" ]; then
-    pushd ${PROJECT_DIRECTORY}/node/nepomuk;
-    npm install;
-    if [ -z "${SANITIZE}" ]; then
-      npm test || travis_terminate 1;
-    fi
-    popd;
+  pushd ${PROJECT_DIRECTORY}/node/nepomuk;
+  npm install;
+  if [ -z "${SANITIZE}" ]; then
+    npm test || travis_terminate 1;
   fi
+  popd;
 
 after_success:
 - |
@@ -109,10 +106,8 @@ after_success:
     bash <(curl -s https://codecov.io/bash)
   fi
 - |
-  if [ -n "${NODEBINDINGS}" ]; then
-      if [ -z "${SANITIZE}" ]; then
-        pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
-        ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
-        popd;
-      fi
+  if [ -z "${SANITIZE}" ]; then
+    pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
+    ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
+    popd;
   fi
