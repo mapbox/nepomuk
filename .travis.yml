@@ -6,9 +6,11 @@ branches:
   - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
 
 cache:
-  ccache: true
-  apt: true
-  yarn: true
+  - ccache
+  - apt
+  - yarn
+  - directories:
+    - $HOME/Library/Caches/Homebrew
 
 env:
   global:
