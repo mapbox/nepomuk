@@ -1,12 +1,14 @@
 language: generic
 
-sudo: required
-dist: trusty
-
 branches:
   only:
   - master
   - /^v\d+\.\d+(\.\d+)?(-\S*)?$/
+
+cache:
+  ccache: true
+  apt: true
+  yarn: true
 
 env:
   global:
@@ -15,92 +17,58 @@ env:
   - MASON_RELEASE=0.10.0
   - CMAKE_VERSION=3.7.1
   - CLANG_FORMAT_VERSION=3.8.1
+  - NODEBINDINGS=On
+  matrix:
+  - BUILD_TYPE=Release NODE_VERSION=4
+  - BUILD_TYPE=Release NODE_VERSION=6
+  - BUILD_TYPE=Debug NODE_VERSION=4
+  - BUILD_TYPE=Debug NODE_VERSION=6
+  - BUILD_TYPE=Debug NODE_VERSION=4 SANITIZE=On
+  - BUILD_TYPE=Debug NODE_VERSION=4 SANITIZE=On CHECK_FORMAT=Yes COVERAGE=On
 
-cache:
-  ccache: true
-  apt: true
-  yarn: true
+dist: trusty
+sudo: required
+osx_image: xcode8.2
+
+os:
+  - linux
+  - osx
+
+node_js:
+  - 4
 
 matrix:
   fast_finish: true
-  include:
-  - os: linux
-    node_js: 6
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - g++-6
-        - cmake
-        - libprotobuf-dev
-        - protobuf-compiler
-    env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Release NODEBINDINGS=On CHECK_FORMAT=Yes
-      NODE_VERSION=6
-  - os: linux
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - g++-5
-        - cmake
-        - libprotobuf-dev
-        - protobuf-compiler
-    env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Release
-  - os: osx
-    osx_image: xcode8.2
-    node_js: 4
-    env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release NODEBINDINGS=On
-      NODE_VERSION=4
-  - os: osx
-    osx_image: xcode8.2
-    env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Release
-  - os: linux
-    node_js: 4
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - g++-6
-        - cmake
-        - libprotobuf-dev
-        - protobuf-compiler
-    env: CCOMPILER='gcc-6' CXXCOMPILER='g++-6' BUILD_TYPE=Debug COVERAGE=ON SANITIZE=On
-      NODEBINDINGS=On NODE_VERSION=4
-  - os: linux
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - g++-5
-        - cmake
-        - libprotobuf-dev
-        - protobuf-compiler
-    env: CCOMPILER='gcc-5' CXXCOMPILER='g++-5' BUILD_TYPE=Debug
-  - os: osx
-    osx_image: xcode8.2
-    node_js: 6
-    env: CCOMPILER='clang' CXXCOMPILER='clang++' BUILD_TYPE=Debug SANITIZE=On NODEBINDINGS=On
-      NODE_VERSION=6
+  exclude:
+    - os: osx
+      env: BUILD_TYPE=Debug NODE_VERSION=4 SANITIZE=On CHECK_FORMAT=Yes COVERAGE=On
+    - os: linux
+      env: BUILD_TYPE=Debug NODE_VERSION=4 SANITIZE=On
+
+addons:
+  apt:
+    sources: ['ubuntu-toolchain-r-test']
+    packages: ['libprotobuf-dev','protobuf-compiler','g++-6']
 
 before_install:
-- export CC=${CCOMPILER} CXX=${CXXCOMPILER}
 - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf
   ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
-- if [ -n "${NODEBINDINGS}" ];
-    then nvm install ${NODE_VERSION} || travis_terminate 1;
-    nvm use ${NODE_VERSION} || travis_terminate 1;
-    ./scripts/configure-bindings.sh || travis_terminate 1;
+- |
+  if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+    export CC=gcc-6;
+    export CXX=g++-6;
   fi
+- |
+  nvm install ${NODE_VERSION}
+  nvm use ${NODE_VERSION}
+  ./scripts/configure-bindings.sh
 - |
   mkdir ./mason
   curl -sSfL https://github.com/mapbox/mason/archive/v${MASON_RELEASE}.tar.gz | tar --gunzip --extract --strip-components=1 --exclude="*md" --exclude="test*" --directory=./mason || travis_terminate 1
-- ./mason/mason install cmake ${CMAKE_VERSION}
-- ./mason/mason link cmake ${CMAKE_VERSION}
-- export PATH=./mason_packages/.link/bin/:${PATH}
+- |
+  ./mason/mason install cmake ${CMAKE_VERSION}
+  ./mason/mason link cmake ${CMAKE_VERSION}
+  export PATH=./mason_packages/.link/bin/:${PATH}
 - |
   if [ -n "${CHECK_FORMAT}" ]; then
     ./mason/mason install clang-format ${CLANG_FORMAT_VERSION};
@@ -139,7 +107,7 @@ after_success:
     bash <(curl -s https://codecov.io/bash)
   fi
 - |
-  if [ -n "${NODEBINDINGS}" ]; then
+  if [ [-n "${NODEBINDINGS}"] && [-z "${SANITIZE}"] ]; then
     pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
     ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
     popd;
