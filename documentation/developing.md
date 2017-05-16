@@ -37,7 +37,7 @@ We consider additions to the API forward-compatible. This excludes any additions
 
 ### Nodebindings
 
-We offer node bindings for Nepomuk via NPM. The bindings come in stable releases (npm install @mapbox/nepomuk), alpha releases (npm install @mapbox/nepomuk@alpha) and beta/release candidate versions (npm install @mapbox/nepomuk@next)
+We offer node bindings for Nepomuk via NPM. The bindings come in stable releases (npm install nepomuk), alpha releases (npm install nepomuk@alpha) and beta/release candidate versions (npm install nepomuk@next)
 
 ## Changelog
 
