@@ -53,7 +53,7 @@ addons:
     packages: ['libprotobuf-dev','protobuf-compiler','g++-6']
 
 before_install:
-- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf && brew install ccache
   ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
 - |
   if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
