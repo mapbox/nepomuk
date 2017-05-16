@@ -109,8 +109,10 @@ after_success:
     bash <(curl -s https://codecov.io/bash)
   fi
 - |
-  if [ [-n "${NODEBINDINGS}"] && [-z "${SANITIZE}"] ]; then
-    pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
-    ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
-    popd;
+  if [ -n "${NODEBINDINGS}" ]; then
+      if [ -z "${SANITIZE}" ]; then
+        pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
+        ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
+        popd;
+      fi
   fi
