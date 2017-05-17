@@ -49,10 +49,10 @@ matrix:
 addons:
   apt:
     sources: ['ubuntu-toolchain-r-test']
-    packages: ['libprotobuf-dev','protobuf-compiler','g++-6']
+    packages: ['g++-6']
 
 before_install:
-- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install protobuf && brew install ccache
+- if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then brew update && brew install ccache
   ccache && PATH=$PATH:/usr/local/opt/ccache/libexec; fi
 - |
   if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
