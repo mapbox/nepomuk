@@ -1,5 +1,7 @@
+include(${PROJECT_SOURCE_DIR}/cmake/protoc.cmake)
+
 # define a set of sources to compile
-PROTOBUF_GENERATE_CPP(proto_SOURCES local_proto_HEADERS
+PROTOBUF_GENERATE_CPP(local_proto_HEADERS proto_SOURCES
     proto/accessibility.proto
     proto/calendar.proto
     proto/dictionary.proto
@@ -20,7 +22,9 @@ add_library(NEPOMUKproto
     ${local_proto_HEADERS})
 
 target_link_libraries(NEPOMUKproto
-    ${PROTOBUF_LIBRARIES})
+    ${protobuf_LIBRARIES})
+
+message(STATUS "Protobuf libs: ${protobuf_LIBRARIES}")
 
 # add protobuf include dir to parent scope
 set(PROTOBUF_INCLUDE_DIRS ${PROTOBUF_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)

@@ -30,8 +30,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(nepomuk_os mac)
-  link_directories(/usr/local/lib)
-  include_directories(/usr/local/include)
+#  link_directories(/usr/local/lib)
+#  include_directories(SYSTEM AFTER /usr/local/include)
 
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
   message(FATAL_ERROR "Windows not yet supported")
@@ -43,7 +43,7 @@ endif()
 
 # set compile flags based on optimisation / debug mode
 add_compile_options(${CMAKE_CXX_FLAGS} -std=c++14)
-add_compile_options(${CMAKE_CXX_FLAGS} -fvisibility=hidden)
+add_compile_options(${CMAKE_CXX_FLAGS} -fvisibility-inlines-hidden)
 add_compile_options(${CMAKE_CXX_FLAGS} -fPIC)
 add_compile_options(${CMAKE_CXX_FLAGS} -W)
 add_compile_options(${CMAKE_CXX_FLAGS} -Wall)
@@ -135,6 +135,7 @@ mason_use(boost_libdate_time VERSION ${BOOST_VERSION})
 #mason_use(boost_libthread VERSION ${BOOST_VERSION})
 mason_use(boost_libsystem VERSION ${BOOST_VERSION})
 
+
 set(Boost_INCLUDE_DIRS ${MASON_PACKAGE_boost_INCLUDE_DIRS})
 set(Boost_LIBRARIES
   ${MASON_PACKAGE_boost_libfilesystem_STATIC_LIBS}
@@ -150,7 +151,12 @@ set(Boost_LIBRARIES
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
 # Optional Protobuf + ZeroMQ networking example
-find_package(Protobuf 2.4.1 REQUIRED)
+mason_use(protobuf VERSION 3.3.0)
+set(protobuf_LIBRARIES
+  "${MASON_PACKAGE_protobuf_PREFIX}/lib/libprotobuf.a")
+set(Mason_PROTOC
+  "${MASON_PACKAGE_protobuf_PREFIX}/bin/protoc")
+include_directories(SYSTEM BEFORE ${MASON_PACKAGE_protobuf_INCLUDE_DIRS})
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
 # tool needs to be first to set proto headers

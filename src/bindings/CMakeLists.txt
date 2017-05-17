@@ -16,8 +16,7 @@ add_nodejs_module(${PROJECT_NAME} node.cpp)
 
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC "src"
     ${Boost_INCLUDE_DIRS}
-    ${protozero_INCLUDE_DIRS}
-    ${PROTOBUF_INCLUDE_DIRS})
+    ${protozero_INCLUDE_DIRS})
 
 target_link_libraries(${PROJECT_NAME}
     NEPOMUKadaptor
