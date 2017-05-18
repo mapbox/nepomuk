@@ -7,10 +7,9 @@ const async = require('async');
 var corsOptions = {maxAge : 3600e3, origin : '*'};
 
 module.exports =
-  function() {
+  function(dataset) {
   var app = express();
-  //var engine = new nepomuk.Engine("../data/berlin-gtfs");
-  var engine = new nepomuk.Engine("../../data/sf");
+  var engine = new nepomuk.Engine(dataset);
 
   // register plugins
   engine.plug("tile");
