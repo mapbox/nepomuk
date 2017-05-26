@@ -44,8 +44,7 @@ std::shared_ptr<service::Interface>
 Master::register_plugin(std::string const &identifier,
                         std::shared_ptr<service::Interface> interface)
 {
-    auto const current_itr = plugins.find(identifier);
-    auto current = current_itr != plugins.end() ? current_itr->second : nullptr;
+    auto current = get(identifier);
     plugins[identifier] = std::move(interface);
     return current;
 }
@@ -54,9 +53,7 @@ Master::register_plugin(std::string const &identifier,
 // one existed
 std::shared_ptr<service::Interface> Master::deregister(std::string const &identifier)
 {
-    auto const current_itr = plugins.find(identifier);
-    auto current = current_itr != plugins.end() ? current_itr->second : nullptr;
-
+    auto current = get(identifier);
     plugins.erase(identifier);
     return current;
 }

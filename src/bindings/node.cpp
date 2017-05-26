@@ -86,13 +86,13 @@ service::TileParameters adaptTileParameters(v8::Local<v8::Object> const &object)
     v8::Local<v8::Value> x = array->Get(1);
     v8::Local<v8::Value> y = array->Get(2);
 
-    if (!x->IsUint32() && !x->IsUndefined())
+    if (x->IsUndefined() || !x->IsUint32())
         throw std::runtime_error("Tile x coordinate must be unsigned interger");
 
-    if (!y->IsUint32() && !y->IsUndefined())
+    if (y->IsUndefined() || !y->IsUint32())
         throw std::runtime_error("Tile y coordinate must be unsigned interger");
 
-    if (!z->IsUint32() && !z->IsUndefined())
+    if (z->IsUndefined() || !z->IsUint32())
         throw std::runtime_error("Tile z coordinate must be unsigned interger");
 
     service::TileParameters params(Nan::To<std::uint32_t>(x).FromJust(),
@@ -255,10 +255,6 @@ void Worker::HandleOKCallback() try
     }();
 
     auto result = Nan::New(std::cref(service_result_as_string)).ToLocalChecked();
-    /*
-    auto result = Nan::CopyBuffer(service_result_as_string.data(), service_result_as_string.size())
-                      .ToLocalChecked();
-    */
 
     const auto argc = 2u;
     v8::Local<v8::Value> argv[argc] = {Nan::Null(), std::move(result)};
@@ -330,10 +326,10 @@ catch (const std::exception &e)
 void Engine::plug(const Nan::FunctionCallbackInfo<v8::Value> &info) try
 {
     if (info.Length() != 1)
-        throw std::runtime_error("Create requires a single parameter (to gtfs dataset)");
+        throw std::runtime_error("Plug requires a single parameter (name of plugin)");
 
     if (!info[0]->IsString())
-        throw std::runtime_error("Parameter to create needs to be a single string.");
+        throw std::runtime_error("Parameter to plug needs to be a single string.");
 
     std::string plugin_name = *v8::String::Utf8Value(Nan::To<v8::String>(info[0]).ToLocalChecked());
 
@@ -372,13 +368,15 @@ void Engine::request(const Nan::FunctionCallbackInfo<v8::Value> &info) try
     if (!info[0]->IsString())
         throw std::runtime_error("First parameter needs to be the plugin name.");
 
-    auto const plugin_name = *v8::String::Utf8Value(Nan::To<v8::String>(info[0]).ToLocalChecked());
+    std::string const plugin_name =
+        *v8::String::Utf8Value(Nan::To<v8::String>(info[0]).ToLocalChecked());
 
     auto *const self = Nan::ObjectWrap::Unwrap<Engine>(info.Holder());
     auto service = self->master_service->get(plugin_name);
 
     if (!service)
-        throw std::runtime_error("Requesting plugin that hasn't been plugged in. "
+        throw std::runtime_error("Requesting plugin [" + plugin_name +
+                                 "] that hasn't been plugged in. "
                                  "Register the plugin first.");
 
     if (!info[2]->IsFunction())
