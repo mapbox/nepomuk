@@ -13,8 +13,8 @@ function main(process)
         return;
     }
     var app = require('./app.js');
-    app(process.argv[2]).listen(5000, ()=> {
-         console.log(`Listening on 0.0.0.0:5000`);
+    app(process.argv[2]).listen(7777, ()=> {
+         console.log(`Listening on 0.0.0.0:7777`);
     });
 }
 

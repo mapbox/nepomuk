@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "Transit is an open source service for public transit routing on GTFS sources.",
   "dependencies": {
-    "async": "^2.2.0",
     "cors": "^2.8.2",
     "express": "^4.15.2",
     "morgan": "^1.8.1",
