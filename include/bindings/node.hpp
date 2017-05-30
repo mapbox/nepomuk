@@ -9,35 +9,13 @@
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #include <nan.h>
 #pragma GCC diagnostic pop
-
-#include "service/interface.hpp"
-#include "service/master.hpp"
+#include "service/route_parameters.hpp"
+#include "service/tile_parameters.hpp"
 
 namespace nepomuk
 {
 namespace binding
 {
-
-// the poor worker that has to carry all the load
-class Worker final : public Nan::AsyncWorker
-{
-    using Base = Nan::AsyncWorker;
-
-  public:
-    Worker(std::shared_ptr<service::Master> master_service,
-           std::shared_ptr<service::Interface> service,
-           service::ServiceParameters service_parameters,
-           Nan::Callback *callback);
-
-    void Execute() override;
-    void HandleOKCallback() override;
-
-  private:
-    // to ensure the datasets stay valid
-    std::shared_ptr<service::Master> master_service;
-    std::shared_ptr<service::Interface> service;
-    service::ServiceParameters service_parameters;
-};
 
 // This struct provides a node wrapper for the transit service. This allows for querying a server
 // for transit routes in their various forms and the debug map. Every service provided by the engine
@@ -50,22 +28,22 @@ class Engine final : public Nan::ObjectWrap
 
   public:
     // basic set-up of the engine
-    // static NAN_MODULE_INIT(init);
-    static void init(v8::Local<v8::Object>, v8::Local<v8::Object> module);
-
-    // plugin a new engine element
-    // static NAN_METHOD(plug);
-    static void plug(const Nan::FunctionCallbackInfo<v8::Value> &);
+    // static void init(v8::Local<v8::Object>, v8::Local<v8::Object> module);
+    static NAN_MODULE_INIT(init);
 
     // the registered services
-    // static NAN_METHOD(request);
-    static void request(const Nan::FunctionCallbackInfo<v8::Value> &);
+    // static void request(const Nan::FunctionCallbackInfo<v8::Value> &);
+    static NAN_METHOD(request);
+
+    // the registered services
+    // static void request(const Nan::FunctionCallbackInfo<v8::Value> &);
+    static NAN_METHOD(send_shutdown);
 
   private:
-    // static NAN_METHOD(create);
-    static void create(const Nan::FunctionCallbackInfo<v8::Value> &);
+    // static void create(const Nan::FunctionCallbackInfo<v8::Value> &);
+    static NAN_METHOD(create);
 
-    Engine(std::string const &path);
+    Engine(std::string const &socket_id);
     Engine(Engine &&) = delete;
     Engine &operator=(Engine &&) = delete;
 
@@ -75,7 +53,7 @@ class Engine final : public Nan::ObjectWrap
     static Nan::Persistent<v8::Function> &construct();
 
   private:
-    std::shared_ptr<service::Master> master_service;
+    std::string socket_id;
 };
 
 } // namespace binding

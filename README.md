@@ -23,6 +23,17 @@ cmake -DCMAKE_BUILD_TYPE=Release ../..
 make
 ```
 
+## IPC Infrastructure / Running a service
+
+There are multiple ways you can run Nepomuk. Nepomuk comes with its own IPC service (ipc-provider) found within the apps directory.
+This ipc-provider can listen to any port (tcp/ipc/...) supported by zeroMQ (http://zeromq.org/). It expects messages in the form of PBF (https://github.com/mapbox/nepomuk/tree/master/src/ipc/proto).
+It will process the message and return an appropriate PBF response.
+To run a server, you can simply start up an ipc-provider in the background, specifying a port to listen on and a dataset to use.
+After, you can perform your own Req/Rep pattern against this IPC service.
+
+For convenience, we also offer traditional node bindings that hide the IPC communication. You still have to start up the backhround process, but afterwards you can use a normal parameterised scheme to access Nepomuk.
+Simply perform tile/route requests and the bindings take care of the IPC part to the ipc-provider.
+
 ### Tests
 
 Tests are using ctest. Run `ctest` (or `ctest --verbose`) from within your build directory.

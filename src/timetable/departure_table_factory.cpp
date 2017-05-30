@@ -39,7 +39,7 @@ DepartureTable DepartureTableFactory::produce(std::vector<gtfs::Frequency>::iter
 
     table.departures.reserve(std::distance(begin, end));
 
-    const auto to_departure = [](auto const &frequency) -> DepartureTable::Departure {
+    const auto to_departure = [](auto const &frequency) -> Departure {
         return {frequency.begin,
                 frequency.end,
                 boost::numeric_cast<std::uint32_t>(frequency.headway),

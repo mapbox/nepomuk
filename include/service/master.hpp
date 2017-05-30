@@ -9,7 +9,6 @@
 #include <boost/optional.hpp>
 
 #include "gtfs/dataset.hpp"
-#include "service/interface.hpp"
 
 // the basic timetable
 #include "timetable/segment_table.hpp"
@@ -25,6 +24,7 @@
 // annotation
 #include "annotation/api.hpp"
 #include "annotation/geometry.hpp"
+#include "annotation/pbf.hpp"
 #include "annotation/stop_info.hpp"
 
 // graph measures
@@ -35,25 +35,13 @@ namespace nepomuk
 namespace service
 {
 
-// The master service is a meta-service that simply delegates tasks to the respective sub-services.
-// The main reason for having it is to ensure that all data remains active, when we do asynchronous
-// calls, without having to realy on shared pointers all over the code. Services can be registered,
-// as long as they follow the interface characteristic.
+// The master service is a meta-service that takes care of all datastructure creation. Many
+// different plugins require the same data-structures. The master service can create them and keeps
+// them alive.
 class Master
 {
   public:
     Master(std::string const &path);
-
-    // request the plugin from the master service
-    std::shared_ptr<service::Interface> get(std::string const &identifier);
-
-    // register an interface. If the identifer did exist beforehand, the old plugin is returned
-    std::shared_ptr<service::Interface>
-    register_plugin(std::string const &identifier, std::shared_ptr<service::Interface> interface);
-
-    // remove a service from the plugin architecture, returns the plugin that was in ther service if
-    // one existed
-    std::shared_ptr<service::Interface> deregister(std::string const &identifier);
 
     // routing data
     timetable::TimeTable const &timetable();
@@ -70,6 +58,7 @@ class Master
     annotation::Geometry const &geometry_annotation();
     annotation::StopInfoTable const &stop_info_annotation();
     annotation::API const &api_annotation();
+    annotation::PBF const &pbf_annotation();
 
     // graph measurements
     algorithm::StronglyConnectedComponent const &components();
@@ -93,12 +82,10 @@ class Master
     std::unique_ptr<annotation::Geometry> _geometry_annotation;
     std::unique_ptr<annotation::StopInfoTable> _stop_info_annotation;
     std::unique_ptr<annotation::API> _api_annotation;
+    std::unique_ptr<annotation::PBF> _pbf_annotation;
 
     // graph measures
     std::unique_ptr<algorithm::StronglyConnectedComponent> _components;
-
-    // plugins
-    std::map<std::string, std::shared_ptr<service::Interface>> plugins;
 };
 
 } // namespace service

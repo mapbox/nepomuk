@@ -1,0 +1,93 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+import "coordinate.proto";
+
+message Stop
+{
+    optional string name = 1;
+    optional Coordinate location = 2;
+    optional fixed32 utc_arrival = 3;
+    optional fixed32 utc_departure = 4;
+}
+
+message Connection
+{
+    optional string headsign = 1;
+    optional string name = 2;
+    optional string name_color_text = 3;
+    optional string name_color_background = 4;
+    optional fixed32 utc_departure = 5;
+    optional fixed32 utc_arrival = 6;
+}
+
+message WalkingSegment
+{
+    optional fixed32 utc_departure = 1;
+    optional fixed32 utc_arrival = 2;
+    optional string polyline = 3;
+
+    optional fixed32 duration = 4;
+    optional fixed32 distance = 5;
+}
+
+message TransitSegment
+{
+    optional fixed32 utc_departure = 1;
+    optional fixed32 utc_arrival = 2;
+    optional string polyline = 3;
+
+    optional uint32 duration = 4;
+    repeated Stop stops = 5;
+    repeated Connection connections = 6;
+}
+
+message TransferSegment
+{
+    optional fixed32 utc_departure = 1;
+    optional fixed32 utc_arrival = 2;
+    optional string polyline = 3;
+
+    optional uint32 duration = 4;
+    optional Stop origin = 5;
+    optional Stop destination = 6;
+}
+
+message Segment
+{
+    // mutually exclusive
+    oneof segment_type
+    {
+        WalkingSegment walk = 1;
+        TransitSegment transit = 2;
+        TransferSegment transfer = 3;
+    }
+}
+
+message Leg
+{
+    repeated Segment segments = 1;
+    optional fixed32 utc_arrival = 2;
+    optional fixed32 utc_departure = 3;
+    optional uint32 duration = 4;
+}
+
+message Route
+{
+    repeated Leg legs = 1;
+    optional fixed32 utc_arrival = 2;
+    optional fixed32 utc_departure = 3;
+    optional uint32 duration = 4;
+}
+
+message Waypoint
+{
+    required Coordinate snapped_coordinate = 1;
+}
+
+message RouteResponse
+{
+    repeated Route routes = 1;
+    repeated Waypoint waypoints = 2;
+}

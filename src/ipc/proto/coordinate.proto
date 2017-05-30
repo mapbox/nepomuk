@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+message Coordinate
+{
+    required double longitude = 1;
+    required double latitude = 2;
+}

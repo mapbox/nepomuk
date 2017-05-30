@@ -190,7 +190,6 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
                                                               dataset.stops,
                                                               stop_lookup);
     }
-
     return result;
 }
 

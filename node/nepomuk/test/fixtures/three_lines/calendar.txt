@@ -1,0 +1,4 @@
+service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date
+weekdays,1,1,1,1,1,0,0,20170101,20171231
+weekends,0,0,0,0,0,1,1,20170101,20171231
+allweek,1,1,1,1,1,1,1,20170101,20171231

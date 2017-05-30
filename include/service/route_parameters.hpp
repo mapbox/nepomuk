@@ -1,5 +1,5 @@
-#ifndef NEPOMUK_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
-#define NEPOMUK_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
+#ifndef NEPOMUK_SERVICE_ROUTE_PARAMETERS_HPP_
+#define NEPOMUK_SERVICE_ROUTE_PARAMETERS_HPP_
 
 #include <boost/optional.hpp>
 
@@ -11,17 +11,17 @@ namespace nepomuk
 namespace service
 {
 
-class EarliestArrivalParameters final
+class RouteParameters final
 {
   public:
-    EarliestArrivalParameters(geometric::WGS84Coordinate origin,
-                              geometric::WGS84Coordinate destination,
-                              boost::optional<date::UTCTimestamp> departure,
-                              boost::optional<date::UTCTimestamp> arrival,
-                              double walking_radius,
-                              // adjust to prefer walking
-                              double walking_speed,
-                              double transfer_scale);
+    RouteParameters(geometric::WGS84Coordinate origin,
+                    geometric::WGS84Coordinate destination,
+                    boost::optional<date::UTCTimestamp> departure,
+                    boost::optional<date::UTCTimestamp> arrival,
+                    double walking_radius,
+                    // adjust to prefer walking
+                    double walking_speed,
+                    double transfer_scale);
     bool valid() const;
 
     // from / to
@@ -39,9 +39,6 @@ class EarliestArrivalParameters final
     // how strongly to penalise transfers
     double transfer_scale() const;
 
-    auto const &result() const { return _result; }
-    auto &result() { return _result; }
-
   private:
     // the start/stop of the route in forms of coordinates
     geometric::WGS84Coordinate _origin;
@@ -53,13 +50,9 @@ class EarliestArrivalParameters final
     double _walking_radius;
     double _walking_speed;
     double _transfer_scale;
-
-    // result in json format, serialised to string
-    std::string _result;
-    friend class EarliestArrival;
 };
 
 } // namespace service
 } // namespace nepomuk
 
-#endif // NEPOMUK_SERVICE_EARLIEST_ARRIVAL_PARAMETERS_HPP_
+#endif // NEPOMUK_SERVICE_ROUTE_PARAMETERS_HPP_

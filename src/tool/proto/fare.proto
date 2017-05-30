@@ -5,7 +5,7 @@ package nepomuk.io.gtfs.proto;
 message Fare
 {
     required uint32 id = 1;
-    required sfixed32 price = 2;
+    required float price = 2;
     required uint32 currency_code = 3;
 
     enum PaymentType

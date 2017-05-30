@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+import "route_response.proto";
+import "tile_response.proto";
+
+message Response
+{
+    // a kill switch will shut down the service
+    optional uint32 code   = 1;
+    oneof response_data {
+        string code_message = 2;
+        RouteResponse route = 3;
+        TileResponse  tile = 4;
+    }
+}

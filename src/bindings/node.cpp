@@ -1,6 +1,7 @@
 #include "bindings/node.hpp"
+#include "bindings/workers.hpp"
 
-#include "service/earliest_arrival.hpp"
+#include "service/route.hpp"
 #include "service/tile.hpp"
 
 #include "date/time.hpp"
@@ -151,11 +152,11 @@ std::vector<geometric::WGS84Coordinate> parse_coordinates(v8::Local<v8::Array> c
     return result;
 }
 
-service::EarliestArrivalParameters adaptEAPParameters(v8::Local<v8::Object> const &value)
+service::RouteParameters adaptRouteParameters(v8::Local<v8::Object> const &value)
 {
     // needs to be an object
     if (!value->IsObject())
-        throw std::runtime_error("Earliest arrival requires an object as parameter.");
+        throw std::runtime_error("Route requires an object as parameter.");
 
     auto const object = Nan::To<v8::Object>(value).ToLocalChecked();
     // requires three parameters, date, departure, and coordinates. Coordinates has to be an array
@@ -164,7 +165,7 @@ service::EarliestArrivalParameters adaptEAPParameters(v8::Local<v8::Object> cons
     auto const coordinates = parse_coordinates(v8::Local<v8::Array>::Cast(v8_coordinates));
 
     if (coordinates.size() != 2)
-        throw std::runtime_error("Earliest Arrival Queries need to specify exactly two locations");
+        throw std::runtime_error("Route Queries need to specify exactly two locations");
 
     auto const optional_radius = get_optional<double>("walking_radius", object);
     auto const optional_speed = get_optional<double>("walking_speed", object);
@@ -186,88 +187,18 @@ service::EarliestArrivalParameters adaptEAPParameters(v8::Local<v8::Object> cons
     boost::optional<date::UTCTimestamp> departure =
         optional_departure ? boost::optional<date::UTCTimestamp>{*optional_departure} : boost::none;
 
-    return service::EarliestArrivalParameters(coordinates[0],
-                                              coordinates[1],
-                                              departure,
-                                              arrival,
-                                              walking_radius,
-                                              walking_speed,
-                                              transfer_scale);
+    return service::RouteParameters(coordinates[0],
+                                    coordinates[1],
+                                    departure,
+                                    arrival,
+                                    walking_radius,
+                                    walking_speed,
+                                    transfer_scale);
 }
-
-service::ServiceParameters get_parameters(std::string const &plugin_identifier,
-                                          v8::Local<v8::Object> const &object)
-{
-    if (plugin_identifier == "tile")
-        return {service::PluginType::TILE, adaptTileParameters(object)};
-    else if (plugin_identifier == "eap")
-        return {service::PluginType::EAP, adaptEAPParameters(object)};
-    else
-        throw std::runtime_error("Plugin parameters are not supported.");
-};
 
 } // namespace
 
-Worker::Worker(std::shared_ptr<service::Master> master_service,
-               std::shared_ptr<service::Interface> service,
-               service::ServiceParameters service_parameters,
-               Nan::Callback *callback)
-    : Base(callback), master_service(std::move(master_service)), service(std::move(service)),
-      service_parameters(std::move(service_parameters))
-{
-}
-
-void Worker::Execute()
-{
-    auto const result = (*service)(service_parameters);
-
-    if (result != service::ServiceStatus::SUCCESS)
-    {
-        // TODO this should become a error string based on the type of error / some internal status
-        SetErrorMessage("Failed to fulfill request");
-    }
-}
-
-void Worker::HandleOKCallback() try
-{
-    Nan::HandleScope scope;
-
-    auto const extract_tile_result = [](auto const &service_parameters) {
-        auto const &tile_parameters =
-            boost::get<service::TileParameters>(service_parameters.parameters);
-        return static_cast<std::string>(tile_parameters.result());
-    };
-
-    auto const extract_eap_result = [](auto const &service_parameters) {
-        auto const &earliest_arrival_parameters =
-            boost::get<service::EarliestArrivalParameters>(service_parameters.parameters);
-        return earliest_arrival_parameters.result();
-    };
-
-    auto const service_result_as_string = [&]() {
-        switch (service_parameters.type)
-        {
-        case service::PluginType::TILE:
-            return extract_tile_result(service_parameters);
-        case service::PluginType::EAP:
-            return extract_eap_result(service_parameters);
-        }
-    }();
-
-    auto result = Nan::New(std::cref(service_result_as_string)).ToLocalChecked();
-
-    const auto argc = 2u;
-    v8::Local<v8::Value> argv[argc] = {Nan::Null(), std::move(result)};
-
-    callback->Call(argc, argv);
-}
-catch (const std::exception &e)
-{
-    std::cout << "[error] failed request due to: " << e.what() << std::endl;
-    return Nan::ThrowError(e.what());
-}
-
-Engine::Engine(std::string const &path) : master_service(std::make_shared<service::Master>(path)) {}
+Engine::Engine(std::string const &socket_id) : socket_id(socket_id) {}
 
 Nan::Persistent<v8::Function> &Engine::construct()
 {
@@ -275,7 +206,8 @@ Nan::Persistent<v8::Function> &Engine::construct()
     return init;
 }
 
-void Engine::init(v8::Local<v8::Object> target, v8::Local<v8::Object>)
+// void Engine::init(v8::Local<v8::Object> target, v8::Local<v8::Object>)
+NAN_MODULE_INIT(Engine::init)
 {
     auto const whoami = Nan::New("Engine").ToLocalChecked();
 
@@ -283,8 +215,8 @@ void Engine::init(v8::Local<v8::Object> target, v8::Local<v8::Object>)
     fnTp->InstanceTemplate()->SetInternalFieldCount(1);
     fnTp->SetClassName(whoami);
 
-    SetPrototypeMethod(fnTp, "plug", plug);
     SetPrototypeMethod(fnTp, "request", request);
+    SetPrototypeMethod(fnTp, "send_shutdown", send_shutdown);
 
     auto const fn = Nan::GetFunction(fnTp).ToLocalChecked();
 
@@ -294,8 +226,8 @@ void Engine::init(v8::Local<v8::Object> target, v8::Local<v8::Object>)
 }
 
 // initialise the internal data structures
-// NAN_METHOD(Engine::create)
-void Engine::create(const Nan::FunctionCallbackInfo<v8::Value> &info) try
+// void Engine::create(const Nan::FunctionCallbackInfo<v8::Value> &info) try
+NAN_METHOD(Engine::create) try
 {
     // Handle `new T()` as well as `T()`
     if (!info.IsConstructCall())
@@ -306,7 +238,8 @@ void Engine::create(const Nan::FunctionCallbackInfo<v8::Value> &info) try
     }
 
     if (info.Length() != 1)
-        throw std::runtime_error("Create requires a single parameter (to gtfs dataset)");
+        throw std::runtime_error(
+            "Create requires a single parameter (the socket ipc-provider is listening on)");
 
     if (!info[0]->IsString())
         throw std::runtime_error("Parameter to create needs to be a single string.");
@@ -322,44 +255,9 @@ catch (const std::exception &e)
     return Nan::ThrowError(e.what());
 }
 
-// NAN_METHOD(Engine::plug)
-void Engine::plug(const Nan::FunctionCallbackInfo<v8::Value> &info) try
-{
-    if (info.Length() != 1)
-        throw std::runtime_error("Plug requires a single parameter (name of plugin)");
-
-    if (!info[0]->IsString())
-        throw std::runtime_error("Parameter to plug needs to be a single string.");
-
-    std::string plugin_name = *v8::String::Utf8Value(Nan::To<v8::String>(info[0]).ToLocalChecked());
-
-    if (plugin_name == "tile")
-    {
-        // plug in a new service
-        auto *const self = Nan::ObjectWrap::Unwrap<Engine>(info.Holder());
-        self->master_service->register_plugin(
-            "tile", std::make_shared<service::Tile>(*self->master_service));
-    }
-    else if (plugin_name == "eap")
-    {
-        auto *const self = Nan::ObjectWrap::Unwrap<Engine>(info.Holder());
-        self->master_service->register_plugin(
-            "eap", std::make_shared<service::EarliestArrival>(*self->master_service));
-    }
-    else
-    {
-        throw std::runtime_error("Plugin [" + plugin_name + "] not implemented.");
-    }
-}
-catch (const std::exception &e)
-{
-    std::cout << "[error] failed request due to: " << e.what() << std::endl;
-    return Nan::ThrowError(e.what());
-}
-
-// do an asynchronous request against the master service with a set of parameters
-// NAN_METHOD(Engine::request)
-void Engine::request(const Nan::FunctionCallbackInfo<v8::Value> &info) try
+// do an asynchronous request against the ipc service with a set of parameters
+// void Engine::request(const Nan::FunctionCallbackInfo<v8::Value> &info) try
+NAN_METHOD(Engine::request) try
 {
     if (info.Length() < 3)
         throw std::runtime_error("Parameter missmatch: Requiring plugin name, plugin "
@@ -372,25 +270,56 @@ void Engine::request(const Nan::FunctionCallbackInfo<v8::Value> &info) try
         *v8::String::Utf8Value(Nan::To<v8::String>(info[0]).ToLocalChecked());
 
     auto *const self = Nan::ObjectWrap::Unwrap<Engine>(info.Holder());
-    auto service = self->master_service->get(plugin_name);
-
-    if (!service)
-        throw std::runtime_error("Requesting plugin [" + plugin_name +
-                                 "] that hasn't been plugged in. "
-                                 "Register the plugin first.");
 
     if (!info[2]->IsFunction())
         throw std::runtime_error("Last parameter needs to be the callback");
 
-    auto *worker = new Worker{self->master_service,
-                              std::move(service),
-                              get_parameters(plugin_name, info[1].As<v8::Object>()),
-                              new Nan::Callback{info[2].As<v8::Function>()}};
-    Nan::AsyncQueueWorker(worker);
+    if (plugin_name == "tile")
+    {
+        auto *worker =
+            new TaskWorker<service::TileParameters>{self->socket_id,
+                                                    adaptTileParameters(info[1].As<v8::Object>()),
+                                                    new Nan::Callback{info[2].As<v8::Function>()}};
+        Nan::AsyncQueueWorker(worker);
+    }
+    else if (plugin_name == "route")
+    {
+        auto *worker =
+            new TaskWorker<service::RouteParameters>{self->socket_id,
+                                                     adaptRouteParameters(info[1].As<v8::Object>()),
+                                                     new Nan::Callback{info[2].As<v8::Function>()}};
+        Nan::AsyncQueueWorker(worker);
+    }
+    else
+    {
+        throw std::runtime_error("The plugin \"" + plugin_name + "\" isn't implemented.");
+    }
 }
 catch (const std::exception &e)
 {
     std::cout << "[error] failed request due to: " << e.what() << std::endl;
+    return Nan::ThrowError(e.what());
+}
+
+// do an asynchronous request against the ipc service with a set of parameters
+// void Engine::request(const Nan::FunctionCallbackInfo<v8::Value> &info) try
+NAN_METHOD(Engine::send_shutdown) try
+{
+    if (info.Length() != 1)
+        throw std::runtime_error("Parameter missmatch: requiring only callback");
+
+    auto *const self = Nan::ObjectWrap::Unwrap<Engine>(info.Holder());
+
+    if (!info[0]->IsFunction())
+        throw std::runtime_error("Last parameter needs to be the callback");
+
+    auto *worker =
+        new ShutdownWorker{self->socket_id, new Nan::Callback{info[0].As<v8::Function>()}};
+    Nan::AsyncQueueWorker(worker);
+}
+catch (const std::exception &e)
+{
+    std::cout << "[error] failed to send shutdown request, reason: " << e.what() << std::endl;
     return Nan::ThrowError(e.what());
 }
 

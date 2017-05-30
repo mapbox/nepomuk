@@ -5,13 +5,9 @@ var morgan = require('morgan');
 
 var corsOptions = {maxAge : 3600e3, origin : '*'};
 
-module.exports = function(dataset) {
+module.exports = function(socket) {
     var app = express();
-    var engine = new nepomuk.Engine(dataset);
-
-    // register plugins
-    engine.plug('tile');
-    engine.plug('eap');
+    var engine = new nepomuk.Engine(socket);
 
     // allow same origin and so on
     app.use(cors(corsOptions));
@@ -22,8 +18,8 @@ module.exports = function(dataset) {
     // register different urls to their services
     app.get('/directions/v5/:account/:profile/tiles/:z/:x/:y.mvt',
             tile_handler(engine));
-    app.get('/directions/v5/:account/:profile/eap/:waypoints/',
-            eap_handler(engine));
+    app.get('/directions/v5/:account/:profile/route/:waypoints/',
+            route_handler(engine));
 
     return app;
 }
@@ -49,7 +45,7 @@ function tile_handler(engine) {
     };
 }
 
-function eap_handler(engine) {
+function route_handler(engine) {
     // handle a route request
     return (req, res) => {
         var departure = String(req.params.departure);
@@ -90,7 +86,7 @@ function eap_handler(engine) {
                 return parseInt(value);
         };
 
-        var plugin = String('eap');
+        var plugin = String('route');
         var parameters = {
             coordinates: coordinates,
             departure: intOrUndefined(req.query.departure),

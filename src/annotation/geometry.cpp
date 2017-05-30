@@ -14,6 +14,7 @@ Geometry::Geometry(timetable::SegmentTable const &segment_table) : segment_table
 
 geometric::WGS84Coordinate Geometry::get(StopID const stop_id) const
 {
+    BOOST_ASSERT(stop_id.base() < stop_locations.size());
     return stop_locations[stop_id.base()];
 }
 

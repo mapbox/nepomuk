@@ -4,6 +4,8 @@ set(navigationLIBS
         NEPOMUKannotate
         NEPOMUKnavigation
         NEPOMUKtimetable
+        NEPOMUKipc
+        NEPOMUKipcproto
         NEPOMUKsearch
         NEPOMUKgtfs
         NEPOMUKservice

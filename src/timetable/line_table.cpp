@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <iterator>
 
+#include <boost/assert.hpp>
+
 namespace nepomuk
 {
 namespace timetable
@@ -24,7 +26,8 @@ boost::optional<LineTable::Trip> LineTable::get(StopID const stop,
 
     // find the next departure that actually is departing at a time larger, or equal to the desired
     // departure
-    auto const get_line_departure = [&](DepartureTable::Departure const &departure) {
+    auto const get_line_departure = [&](Departure const &departure) {
+        BOOST_ASSERT(departure.duration_table_index < duration_tables.size());
         auto time_delta = duration_tables[departure.duration_table_index].prefix_time(offset);
         auto line_depart_time =
             desired_departure - std::min(desired_departure.seconds_since_midnight, time_delta);
@@ -33,16 +36,16 @@ boost::optional<LineTable::Trip> LineTable::get(StopID const stop,
         return departure.get_next_departure(line_depart_time);
     };
 
-    auto itr = std::min_element(
-        local_departures.begin(),
-        local_departures.end(),
-        [&](DepartureTable::Departure const &lhs, DepartureTable::Departure const &rhs) {
-            return get_line_departure(lhs) < get_line_departure(rhs);
-        });
+    auto itr = std::min_element(local_departures.begin(),
+                                local_departures.end(),
+                                [&](Departure const &lhs, Departure const &rhs) {
+                                    return get_line_departure(lhs) < get_line_departure(rhs);
+                                });
 
     if (itr == local_departures.end() || itr->end < get_line_departure(*itr))
         return boost::none;
 
+    BOOST_ASSERT(itr->duration_table_index < duration_tables.size());
     Trip result = {stop_range,
                    duration_tables[itr->duration_table_index].list(offset),
                    get_line_departure(*itr) +

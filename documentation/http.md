@@ -62,6 +62,7 @@ We provide the following information about journeys, as far as it is available:
 | leg           | arrival       | guaranteed        | duplicated from last segment |
 | leg           | departure     | guaranteed        | duplicated from last segment |
 | leg           | duration      | guaranteed        | sum of all segments |
+| leg           | segments      | guaranteed        | the segments of the route |
 
 | collection    | member        | availability 	      | info |
 | ------------- | ------------- | ------------------- | ---- |

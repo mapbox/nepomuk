@@ -4,7 +4,7 @@ package nepomuk.io.gtfs.proto;
 
 message Coordinate
 {
-    required fixed64 longitude = 1;
-    required fixed64 latitude = 2;
+    required double longitude = 1;
+    required double latitude = 2;
 }
 

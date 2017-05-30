@@ -19,21 +19,21 @@ namespace timetable
 // stop we need to be able to access the next connections that are possible. The departuretable
 // itself assumes the stop, line, and the time of arrival are known and allows  quick access to the
 // next connection of the given departure. It only represents a single line.
+struct Departure
+{
+    date::Time begin;
+    date::Time end;
+    std::uint32_t headway;
+    std::size_t duration_table_index;
+
+    bool operator<(Departure const &other) const;
+
+    date::Time get_next_departure(date::Time const starting_at) const;
+};
+
 class DepartureTable
 {
   public:
-    struct Departure
-    {
-        date::Time begin;
-        date::Time end;
-        std::uint32_t headway;
-        std::size_t duration_table_index;
-
-        bool operator<(Departure const &other) const;
-
-        date::Time get_next_departure(date::Time const starting_at) const;
-    };
-
     // iterator types
     using const_iterator = std::vector<Departure>::const_iterator;
     using const_iterator_range = boost::iterator_range<const_iterator>;

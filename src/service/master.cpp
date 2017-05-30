@@ -31,33 +31,6 @@ Master::Master(std::string const &path)
     base_data.connect_stops_into_stations(100);
 }
 
-// request the plugin from the master service
-std::shared_ptr<service::Interface> Master::get(std::string const &identifier)
-{
-    auto const itr = plugins.find(identifier);
-
-    return itr != plugins.end() ? itr->second : nullptr;
-}
-
-// register an interface. If the identifier did exist beforehand, the old plugin is returned
-std::shared_ptr<service::Interface>
-Master::register_plugin(std::string const &identifier,
-                        std::shared_ptr<service::Interface> interface)
-{
-    auto current = get(identifier);
-    plugins[identifier] = std::move(interface);
-    return current;
-}
-
-// remove a service from the plugin architecture, returns the plugin that was in ther service if
-// one existed
-std::shared_ptr<service::Interface> Master::deregister(std::string const &identifier)
-{
-    auto current = get(identifier);
-    plugins.erase(identifier);
-    return current;
-}
-
 // routing data
 timetable::TimeTable const &Master::timetable()
 {
@@ -65,6 +38,7 @@ timetable::TimeTable const &Master::timetable()
     {
         tool::status::FunctionTimingGuard guard("Timetable creation");
         shape_from_line = std::make_unique<std::vector<boost::optional<ShapeID>>>();
+        BOOST_ASSERT(shape_from_line);
         _timetable = std::make_unique<timetable::TimeTable>(
             timetable::TimeTableFactory::produce(base_data, *shape_from_line));
     }
@@ -170,6 +144,17 @@ annotation::API const &Master::api_annotation()
     }
 
     return *_api_annotation;
+}
+
+annotation::PBF const &Master::pbf_annotation()
+{
+    if (!_pbf_annotation)
+    {
+        tool::status::FunctionTimingGuard guard("PBF Annotation - creation");
+        _pbf_annotation = std::make_unique<annotation::PBF>(geometry_annotation());
+    }
+
+    return *_pbf_annotation;
 }
 
 algorithm::StronglyConnectedComponent const &Master::components()

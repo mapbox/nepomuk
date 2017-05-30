@@ -4,3 +4,4 @@
 !lib/*.js
 !package.json
 !test/*
+!binding/*

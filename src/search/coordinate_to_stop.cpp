@@ -115,7 +115,6 @@ CoordinateToStop::all(geometric::WGS84Coordinate const &location, double const r
                                          radius;
                               }),
                  result.end());
-
     std::vector<value_type> as_value_type(result.size());
     std::transform(
         result.begin(), result.end(), as_value_type.begin(), [](auto const &pair) -> value_type {

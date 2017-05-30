@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+import "coordinate.proto";
+
+message RouteRequest
+{
+    // the via locations, in order
+    repeated Coordinate coordinates = 1;
+    optional fixed32 utc_departure = 2;
+    optional fixed32 utc_arrival = 3;
+
+    // maximal allowed walking radius by coordinates [meters]
+    repeated uint32 walking_radii = 4;
+    // [meters/second]
+    optional float walking_speed = 5;
+    // [slow/fast transfers]
+    optional float transfer_scale = 6;
+}
