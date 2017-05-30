@@ -4,8 +4,8 @@
 #include "annotation/stop_info.hpp"
 #include "search/coordinate_to_stop.hpp"
 #include "search/stop_to_line.hpp"
-#include "service/interface.hpp"
 #include "service/master.hpp"
+#include "service/tile_parameters.hpp"
 #include "timetable/segment_table.hpp"
 #include "timetable/timetable.hpp"
 
@@ -14,6 +14,7 @@
 #include "id/stop.hpp"
 #include "tool/container/mapbox_vector_tile.hpp"
 
+#include <boost/optional.hpp>
 #include <cstdint>
 
 namespace nepomuk
@@ -24,13 +25,12 @@ namespace service
 // The tile service creates a vector tile representation of a network. The parameters specify a
 // location x/y/zoom_level in slippy-map tiles. These tile IDs are translated into a graphical
 // representation for rendering.
-class Tile : public Interface
+class Tile
 {
   public:
     Tile(service::Master &master_service);
-    ~Tile() final override = default;
 
-    ServiceStatus operator()(ServiceParameters &parameters) const final override;
+    tool::container::MapboxVectorTile operator()(TileParameters &parameters) const;
 
   private:
     using StopsFromLookup = std::vector<search::CoordinateToStop::value_type>;

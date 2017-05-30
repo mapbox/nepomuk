@@ -3,6 +3,8 @@ set(searchLIBS
         ${PROTOBUF_LITE_LIBRARIES}
         NEPOMUKsearch
         NEPOMUKservice
+        NEPOMUKipc
+        NEPOMUKipcproto
         NEPOMUKtimetable
         NEPOMUKgtfs)
 

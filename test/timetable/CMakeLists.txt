@@ -3,6 +3,8 @@ set(timetableLIBS
         ${PROTOBUF_LITE_LIBRARIES}
         NEPOMUKservice
         NEPOMUKtimetable
+        NEPOMUKipc
+        NEPOMUKipcproto
         NEPOMUKgtfs)
 
 set(timetableINCLUDES

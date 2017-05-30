@@ -45,7 +45,7 @@ message StopTime
     }
     optional StopType pickup = 7;
     optional StopType dropoff = 8;
-    optional fixed64 shape_distance_travelled = 9;
+    optional uint64 shape_distance_travelled = 9;
     enum TimePointType
     {
         EXACT = 0;

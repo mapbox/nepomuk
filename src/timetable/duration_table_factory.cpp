@@ -37,27 +37,30 @@ template <typename iterator_type> void validate_input(iterator_type begin, itera
 DurationTable DurationTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
                                             const std::vector<gtfs::StopTime>::iterator end)
 {
+    DurationTable result;
+
     // make sure our input is fine
     validate_input(begin, end);
 
-    DurationTable result;
-    result.arrival_delta.reserve(std::distance(begin, end));
-    result.arrival_prefix.reserve(std::distance(begin, end));
+    result.arrival_delta.resize(std::distance(begin, end));
+    result.arrival_prefix.resize(std::distance(begin, end));
 
     // every stop is reached after X seconds, where X is
     // the different between the arrival at the
     // stop and the departure from the very first stop.
-    const auto to_delta = [ base_time = begin->departure, route_start = begin->departure, &result ](
-        auto const &stop_time) mutable
+
+    // this code would be nicer as a transform, it triggers an asan error though, if we use
+    // push_back or std::transform here
+    auto const route_start = begin->departure;
+    auto last_arrival = begin->departure;
+    std::size_t index = 0;
+    for (auto itr = begin; itr != end; ++itr)
     {
-        result.arrival_prefix.push_back(stop_time.arrival - route_start);
-        auto result = stop_time.arrival - base_time;
-        base_time = stop_time.arrival;
-        return result;
-    };
-
-    std::transform(begin, end, std::back_inserter(result.arrival_delta), to_delta);
-
+        result.arrival_prefix[index] = itr->arrival - route_start;
+        result.arrival_delta[index] = itr->arrival - last_arrival;
+        last_arrival = itr->arrival;
+        ++index;
+    }
     return result;
 }
 

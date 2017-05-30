@@ -32,6 +32,7 @@ coverage:
     - *\.proto
     - *\.md
     - .gitignore
+    - src/apps
 
 comment:
   layout: "header, diff"

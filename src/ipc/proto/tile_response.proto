@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+message TileResponse
+{
+    // the tile encoded as mvt
+    optional bytes result = 1;
+}

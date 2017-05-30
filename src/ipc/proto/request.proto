@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+import "route_request.proto";
+import "tile_request.proto";
+
+message Request
+{
+    // a kill switch will shut down the service
+    oneof Variant{
+        bool kill_switch   = 1;
+        RouteRequest route = 2;
+        TileRequest tile   = 3;
+    }
+}

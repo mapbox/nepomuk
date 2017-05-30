@@ -88,6 +88,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
         auto processed_until = range.first;
         while (processed_until != range.second)
         {
+
             std::set<StopID> distinct_stops;
             auto const add_stops_until_not_distinct = [&distinct_stops](auto const &stop_time) {
                 auto non_distinct = distinct_stops.count(stop_time.stop_id) > 0;
@@ -96,6 +97,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
             };
             auto distinct_end =
                 std::find_if(processed_until, range.second, add_stops_until_not_distinct);
+
             auto stop_table = StopTableFactory::produce(processed_until, distinct_end);
 
             if (distinct_end != range.second)
@@ -146,6 +148,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                 }
             }();
 
+            BOOST_ASSERT(processed_until != range.second);
             line_tables[line_index].departures.departures.push_back(
                 {processed_until->departure, processed_until->departure, 0, duration_index});
 
@@ -159,6 +162,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
 
             processed_until = distinct_end;
         }
+
     };
 
     algorithm::by_equal_ranges(begin, end, by_trip_id, output_inserter);

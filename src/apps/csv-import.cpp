@@ -1,12 +1,7 @@
-#include "gtfs/dataset.hpp"
-#include "gtfs/read_csv.hpp"
-
 #include "date/time.hpp"
 #include "geometric/coordinate.hpp"
 #include "id/stop.hpp"
 
-#include "annotation/api.hpp"
-#include "annotation/stop_info.hpp"
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "service/master.hpp"
@@ -52,7 +47,7 @@ int main(int argc, char **argv) try
                 geometric::makeLatLonFromDouble<geometric::FixedLatitude>(lat));
         };
 
-        nepomuk::annotation::API const &api_annotator = data_service.api_annotation();
+        auto &api_annotator = data_service.api_annotation();
 
         while (true)
         {

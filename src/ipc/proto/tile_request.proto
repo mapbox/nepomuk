@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package nepomuk.ipc;
+
+message TileRequest
+{
+    required uint32 zoom = 1;
+    required uint32 horizontal_tile = 2;
+    required uint32 vertical_tile = 3;
+}

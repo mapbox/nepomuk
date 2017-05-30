@@ -1,7 +1,7 @@
 #ifndef NEPOMUK_ADAPTOR_DICTIONARY_HPP
 #define NEPOMUK_ADAPTOR_DICTIONARY_HPP
 
-#include "dictionary.pb.h"
+#include "tool/dictionary.pb.h"
 
 namespace nepomuk
 {

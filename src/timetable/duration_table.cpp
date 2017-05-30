@@ -1,4 +1,5 @@
 #include "timetable/duration_table.hpp"
+#include <boost/assert.hpp>
 
 namespace nepomuk
 {
@@ -7,11 +8,13 @@ namespace timetable
 
 std::uint32_t DurationTable::prefix_time(std::size_t const offset) const
 {
+    BOOST_ASSERT(offset < arrival_prefix.size());
     return arrival_prefix[offset];
 }
 
 std::uint32_t DurationTable::duration(std::size_t const offset) const
 {
+    BOOST_ASSERT(offset < arrival_delta.size());
     return arrival_delta[offset];
 }
 

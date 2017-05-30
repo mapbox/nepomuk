@@ -9,12 +9,9 @@ namespace nepomuk
 namespace timetable
 {
 
-bool DepartureTable::Departure::operator<(DepartureTable::Departure const &other) const
-{
-    return end < other.end;
-}
+bool Departure::operator<(Departure const &other) const { return end < other.end; }
 
-date::Time DepartureTable::Departure::get_next_departure(date::Time const starting_at) const
+date::Time Departure::get_next_departure(date::Time const starting_at) const
 {
     // the next departue for a given starting time is defined by T = begin + x * headway with T >=
     // starting_at and x minimal among all x that fulfill T >= starting_at

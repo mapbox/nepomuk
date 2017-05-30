@@ -11,3 +11,4 @@
   - initial routing functionality
   - API proposal documentation
   - support for look-ups from coordinates to stations
+  - implement IPC infastructure for serving requests in PBF form. Connect any language to Nepomuk that offers IPC and protobuf

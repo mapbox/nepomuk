@@ -11,7 +11,7 @@ message(STATUS "Compiler: ${CXX_COMPILER}")
 set(NEPOMUK_VERSION_MAJOR 0)
 set(NEPOMUK_VERSION_MINOR 0)
 set(NEPOMUK_VERSION_PATCH 0)
-set(NEPOMUK_TAG -alpha.2)
+set(NEPOMUK_TAG -alpha.4)
 
 # fileformat versioning scheme
 set(NEPOMUK_FILEFORMAT_VERSION_MAJOR 0)
@@ -72,6 +72,10 @@ if(SANITIZE)
     endif()
 endif()
 
+if(${nepomuk_os} MATCHES "unix")
+    set(MAYBE_PHTREAD_LIBRARIES "-pthread")
+endif()
+
 if(COVERAGE)
     if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
         if(${nepomuk_os} MATCHES "unix")
@@ -110,13 +114,13 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}")
 
 # pull in mason dependencies
-#mason_use(libzmq VERSION 4.2.2)
-#mason_use(cppzmq VERSION 4.2.1 HEADER_ONLY)
-#set(Zmq_INCLUDE_DIRS
-#    ${MASON_PACKAGE_libzmq_INCLUDE_DIRS}
-#    ${MASON_PACKAGE_cppzmq_INCLUDE_DIRS})
-#set(Zmq_LIBRARIES
-#    ${MASON_PACKAGE_libzmq_STATIC_LIBS})
+mason_use(libzmq VERSION 4.2.2)
+mason_use(cppzmq VERSION 4.2.1 HEADER_ONLY)
+set(Zmq_INCLUDE_DIRS
+    ${MASON_PACKAGE_libzmq_INCLUDE_DIRS}
+    ${MASON_PACKAGE_cppzmq_INCLUDE_DIRS})
+set(Zmq_LIBRARIES
+    ${MASON_PACKAGE_libzmq_STATIC_LIBS})
 
 mason_use(protozero VERSION 1.5.1 HEADER_ONLY)
 set(protozero_INCLUDE_DIRS
@@ -132,7 +136,7 @@ mason_use(boost_libprogram_options VERSION ${BOOST_VERSION})
 #mason_use(boost_libregex VERSION ${BOOST_VERSION})
 mason_use(boost_libtest VERSION ${BOOST_VERSION})
 mason_use(boost_libdate_time VERSION ${BOOST_VERSION})
-#mason_use(boost_libthread VERSION ${BOOST_VERSION})
+mason_use(boost_libthread VERSION ${BOOST_VERSION})
 mason_use(boost_libsystem VERSION ${BOOST_VERSION})
 
 
@@ -144,23 +148,32 @@ set(Boost_LIBRARIES
 #  ${MASON_PACKAGE_boost_libregex_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libtest_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libdate_time_STATIC_LIBS}
-#  ${MASON_PACKAGE_boost_libthread_STATIC_LIBS}
+  ${MASON_PACKAGE_boost_libthread_STATIC_LIBS}
   ${MASON_PACKAGE_boost_libsystem_STATIC_LIBS})
 
 # required due to mason
 add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
-# Optional Protobuf + ZeroMQ networking example
 mason_use(protobuf VERSION 3.3.0)
 set(protobuf_LIBRARIES
   "${MASON_PACKAGE_protobuf_PREFIX}/lib/libprotobuf.a")
 set(Mason_PROTOC
   "${MASON_PACKAGE_protobuf_PREFIX}/bin/protoc")
+
 include_directories(SYSTEM BEFORE ${MASON_PACKAGE_protobuf_INCLUDE_DIRS})
+include_directories(SYSTEM BEFORE ${protozero_INCLUDE_DIRS})
+include_directories(SYSTEM BEFORE ${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM BEFORE ${Zmq_INCLUDE_DIRS})
+
+#for generated protobuf files
+include_directories("${CMAKE_BINARY_DIR}/src")
 
 # Register sub-projects: provide CMakeLists.txt themselves with project specifics such as dependencies
 # tool needs to be first to set proto headers
 add_subdirectory(src/tool)
+add_subdirectory(src/ipc)
+
+include_directories(PUBLIC ${PROTOBUF_INCLUDE_DIRS})
 
 add_subdirectory(src/adaptor)
 add_subdirectory(src/algorithm)

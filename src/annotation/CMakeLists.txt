@@ -3,6 +3,7 @@ set(annotate_SOURCES
     api.cpp
     geometry.cpp
     geometry_factory.cpp
+    pbf.cpp
     stop_info.cpp)
 
 
@@ -14,6 +15,8 @@ add_library(NEPOMUKannotate STATIC
 target_link_libraries(NEPOMUKannotate
     ${Boost_LIBRARIES}
     NEPOMUKgeometric
+    NEPOMUKipc
+    NEPOMUKipcproto
     NEPOMUKproto)
 
 # define additional include directories

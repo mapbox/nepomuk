@@ -11,7 +11,7 @@ namespace nepomuk
 
 namespace gtfs
 {
-class Stop;
+struct Stop;
 };
 
 namespace annotation

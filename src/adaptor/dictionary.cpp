@@ -4,12 +4,12 @@
 #include "tool/container/string_table.hpp"
 
 #include "id/dictionary.hpp"                   // for DictionaryID
+#include "tool/dictionary.pb.h"                // for DictionaryEntry, Dict...
 #include <algorithm>                           // for for_each, sort
 #include <boost/assert.hpp>                    // for BOOST_ASSERT
 #include <boost/range/iterator_range_core.hpp> // for iterator_range
 #include <cstdint>
-#include <dictionary.pb.h> // for DictionaryEntry, Dict...
-#include <iosfwd>          // for string
+#include <iosfwd> // for string
 #include <string>
 #include <type_traits> // for enable_if<>::type
 #include <utility>

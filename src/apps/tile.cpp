@@ -3,7 +3,6 @@
 
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/algorithm/timetable_dijkstra.hpp"
-#include "service/interface.hpp"
 #include "service/master.hpp"
 #include "service/tile.hpp"
 #include "service/tile_parameters.hpp"
@@ -53,15 +52,9 @@ int main(int argc, char **argv) try
             int x, y, z;
             std::cin >> x >> y >> z;
 
-            nepomuk::service::ServiceParameters parameters = {
-                nepomuk::service::PluginType::TILE, nepomuk::service::TileParameters(x, y, z)};
-            tile_service(parameters);
-
-            std::cout
-                << "[Tile]"
-                << (std::string)(
-                       boost::get<nepomuk::service::TileParameters>(parameters.parameters).result())
-                << std::endl;
+            nepomuk::service::TileParameters parameters(x, y, z);
+            auto result = tile_service(parameters);
+            std::cout << "[Tile]" << (std::string)(result) << std::endl;
         }
     }
     return EXIT_SUCCESS;

@@ -24,16 +24,8 @@ add_library(NEPOMUKproto
 target_link_libraries(NEPOMUKproto
     ${protobuf_LIBRARIES})
 
-message(STATUS "Protobuf libs: ${protobuf_LIBRARIES}")
-
-# add protobuf include dir to parent scope
-set(PROTOBUF_INCLUDE_DIRS ${PROTOBUF_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
-
 #since protoc generates a lot of warnings, we disable diagnostics for protoc files
 target_compile_options(NEPOMUKproto PUBLIC -w)
-
-#pass on variables to parent scope
-set(proto_HEADERS ${local_proto_HEADERS} PARENT_SCOPE)
 
 set(tool_SOURCES
     io/std_stream.cpp
@@ -51,8 +43,3 @@ add_library(NEPOMUKtool
 target_link_libraries(NEPOMUKtool
     ${Boost_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
-
-# define additional include directories
-TARGET_INCLUDE_DIRECTORIES(NEPOMUKtool SYSTEM PUBLIC
-    ${protozero_INCLUDE_DIRS}
-    ${Boost_INCLUDE_DIRS})

@@ -7,6 +7,8 @@
 #include <set>
 #include <tuple>
 
+#include <boost/assert.hpp>
+
 namespace nepomuk
 {
 namespace service
@@ -21,24 +23,16 @@ Tile::Tile(service::Master &master_service)
 {
 }
 
-ServiceStatus Tile::operator()(ServiceParameters &parameters) const
+tool::container::MapboxVectorTile Tile::operator()(TileParameters &parameters) const
 {
-    auto &tile_parameters = boost::get<TileParameters>(parameters.parameters);
+    BOOST_ASSERT(parameters.valid());
 
-    if (!tile_parameters.valid())
-        return ServiceStatus::ERROR;
-
-    geometric::WGS84BoundingBox const bounding_box(tile_parameters.horizontal_id(),
-                                                   tile_parameters.vertical_id(),
-                                                   tile_parameters.zoom_level(),
-                                                   256.0,
-                                                   1024);
-    tile_parameters._result = make_tile(tile_parameters.horizontal_id(),
-                                        tile_parameters.vertical_id(),
-                                        tile_parameters.zoom_level(),
-                                        stop_lookup.all(bounding_box));
-
-    return ServiceStatus::SUCCESS;
+    geometric::WGS84BoundingBox const bounding_box(
+        parameters.horizontal_id(), parameters.vertical_id(), parameters.zoom_level(), 256.0, 1024);
+    return make_tile(parameters.horizontal_id(),
+                     parameters.vertical_id(),
+                     parameters.zoom_level(),
+                     stop_lookup.all(bounding_box));
 }
 
 tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal,

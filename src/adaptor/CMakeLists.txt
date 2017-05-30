@@ -1,6 +1,7 @@
 # define a set of sources to compile
 set(adaptor_SOURCES
-    dictionary.cpp)
+    dictionary.cpp
+    ipc_response_to_json.cpp)
 
 # export source files as library
 add_library(NEPOMUKadaptor STATIC
