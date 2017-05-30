@@ -108,6 +108,10 @@ after_success:
 - |
   if [ -z "${SANITIZE}" ]; then
     pushd ${PROJECT_DIRECTORY}/node/nepomuk/;
-    ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
+    if [[ "${BUILD_TYPE}" == "Debug" ]]; then
+        ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh --debug || travis_terminate 1;
+    else
+        ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
+    fi
     popd;
   fi
