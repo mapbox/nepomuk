@@ -29,6 +29,8 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.50.0",
+    "child-process": "^1.0.2",
+    "fs": "0.0.1-security",
     "tap": "^10.3"
   },
   "bundledDependencies": ["node-pre-gyp"],
