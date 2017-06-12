@@ -112,6 +112,6 @@ after_success:
       else
           ${PROJECT_DIRECTORY}/scripts/publish-node-binaries.sh || travis_terminate 1;
       fi
+      popd;
     fi
-    popd;
   fi
