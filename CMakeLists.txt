@@ -11,7 +11,7 @@ message(STATUS "Compiler: ${CXX_COMPILER}")
 set(NEPOMUK_VERSION_MAJOR 0)
 set(NEPOMUK_VERSION_MINOR 1)
 set(NEPOMUK_VERSION_PATCH 0)
-set(NEPOMUK_TAG -rc.0)
+set(NEPOMUK_TAG -rc.1)
 
 # fileformat versioning scheme
 set(NEPOMUK_FILEFORMAT_VERSION_MAJOR 0)
