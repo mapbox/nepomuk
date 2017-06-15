@@ -1,5 +1,5 @@
-#ifndef NEPOMUK_ANNOTATION_STOP_INFO_HPP_
-#define NEPOMUK_ANNOTATION_STOP_INFO_HPP_
+#ifndef NEPOMUK_ANNOTATION_STOP_HPP_
+#define NEPOMUK_ANNOTATION_STOP_HPP_
 
 #include "id/dictionary.hpp"
 #include "id/stop.hpp"
@@ -23,11 +23,12 @@ struct StopInfo
     DictionaryID name_id;
 };
 
-class StopInfoTable
+class Stop
 {
   public:
-    StopInfoTable(std::vector<gtfs::Stop> const &stops);
-    StopInfo const &get_info(StopID const stop_id) const;
+    Stop(std::vector<gtfs::Stop> const &stops);
+
+    StopInfo const &operator()(StopID const stop_id) const;
 
   private:
     std::vector<StopInfo> stop_info;
@@ -36,4 +37,4 @@ class StopInfoTable
 } // namespace annotation
 } // namespace nepomuk
 
-#endif // NEPOMUK_ANNOTATION_STOP_INFO_HPP_
+#endif // NEPOMUK_ANNOTATION_STOP_HPP_

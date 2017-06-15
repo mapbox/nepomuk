@@ -25,18 +25,18 @@ const constexpr char *annotated_route =
     "{\"code\":\"Ok\",\"routes\":[{\"departure\":\"0\",\"arrival\":\"5400\",\"duration\":\"5400\","
     "\"legs\":[{\"departure\":\"0\",\"arrival\":\"5400\",\"duration\":\"5400\",\"segments\":[{"
     "\"departure\":\"4200\",\"arrival\":\"5400\",\"duration\":\"1200\",\"geometry\":\"s]g^Sw~@?c~@?"
-    "c~@\",\"stops\":[{\"name\":\"Names will show up "
-    "here\",\"arrival\":\"3600\",\"departure\":\"4200\",\"location\":[0.005000,0.004900]},{"
-    "\"name\":\"Names will show up "
-    "here\",\"arrival\":\"4200\",\"departure\":\"4200\",\"location\":[0.015200,0.005000]},{"
-    "\"name\":\"Names will show up "
-    "here\",\"arrival\":\"4200\",\"departure\":\"4200\",\"location\":[0.025300,0.005000]},{"
-    "\"name\":\"Names will show up "
-    "here\",\"arrival\":\"5400\",\"departure\":\"5400\",\"location\":[0.035400,0.005000]}],"
-    "\"connections\":[{\"headsign\":\"Headsigns are so important\",\"name\":\"Linenames even more "
-    "important\",\"name_color_text\":\"#000000\",\"name_color_background\":\"#FFFFFF\","
-    "\"departure\":\"4200\",\"arrival\":\"4200\"}]}]}]}],\"waypoints\":[{\"coordinate\":[[0.005000,"
-    "0.004900]]},{\"coordinate\":[[0.035400,0.005000]]}]}";
+    "c~@\",\"stops\":[{\"name\":\"Stop A Platform "
+    "2\",\"arrival\":\"3600\",\"departure\":\"4200\",\"location\":[0.005000,0.004900]},{\"name\":"
+    "\"Stop "
+    "B\",\"arrival\":\"4200\",\"departure\":\"4200\",\"location\":[0.015200,0.005000]},{\"name\":"
+    "\"Stop "
+    "C\",\"arrival\":\"4200\",\"departure\":\"4200\",\"location\":[0.025300,0.005000]},{\"name\":"
+    "\"Stop "
+    "D\",\"arrival\":\"5400\",\"departure\":\"5400\",\"location\":[0.035400,0.005000]}],"
+    "\"connections\":[{\"headsign\":\"ABCDE\",\"name\":\"Horizontal Route "
+    "Top\",\"name_color_text\":\"#000000\",\"name_color_background\":\"#FF0000\",\"departure\":"
+    "\"4200\",\"arrival\":\"4200\"}]}]}]}],\"waypoints\":[{\"coordinate\":[[0.005000,0.004900]]},{"
+    "\"coordinate\":[[0.035400,0.005000]]}]}";
 
 void run_service()
 {

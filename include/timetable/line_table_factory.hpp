@@ -7,7 +7,6 @@
 #include "gtfs/stop.hpp"
 #include "id/shape.hpp"
 
-#include <boost/optional.hpp>
 #include <vector>
 
 namespace nepomuk
@@ -24,12 +23,14 @@ namespace timetable
 
 class LineTable;
 
+// Stop trimes provide trips that all reach the same stops in order. These are transferred into
+// lines that we can follow. Each line follows the same sequence of stops. We identify lines to
+// offer the same information.
 class LineTableFactory
 {
   public:
     LineTableFactory(std::vector<gtfs::Transfer> &transfers,
-                     std::vector<gtfs::Trip> const &trips,
-                     std::vector<boost::optional<ShapeID>> &shape_by_line);
+                     std::vector<std::size_t> &trip_offsets_by_line);
 
     // create a line table from a list of stop_times
     std::vector<LineTable> produce(std::vector<gtfs::StopTime>::iterator const begin,
@@ -37,10 +38,9 @@ class LineTableFactory
 
   private:
     std::vector<gtfs::Transfer> &transfers;
-    // to look up shape ids
-    std::vector<gtfs::Trip> const &trips;
-    // to store mapping of shape ids
-    std::vector<boost::optional<ShapeID>> &shape_by_line;
+
+    // offset into the trip array so that each trip represents a full set of lines
+    std::vector<std::size_t> &trip_offsets_by_line;
 };
 
 } // namespace timetable

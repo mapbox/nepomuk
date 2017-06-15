@@ -1,5 +1,7 @@
 #include "annotation/pbf.hpp"
 #include "annotation/geometry.hpp"
+#include "annotation/line.hpp"
+#include "annotation/stop.hpp"
 
 #include "navigation/connection.hpp"
 #include "navigation/leg.hpp"
@@ -11,6 +13,7 @@
 #include "geometric/polyline.hpp"
 
 #include "date/time.hpp" // for UTCTimestamp
+#include "tool/container/string_table.hpp"
 
 #include "tool/io/string.hpp"
 
@@ -23,7 +26,14 @@ namespace nepomuk
 namespace annotation
 {
 
-PBF::PBF(Geometry const &geometry) : geometry(geometry) {}
+PBF::PBF(tool::container::StringTable const &string_table,
+         Geometry const &geometry,
+         Stop const &stop_annotation,
+         Line const &line_annotation)
+    : string_table(string_table), geometry(geometry), stop_annotation(stop_annotation),
+      line_annotation(line_annotation)
+{
+}
 
 void PBF::operator()(ipc::RouteResponse &result, std::vector<navigation::Route> const &routes) const
 {
@@ -152,10 +162,10 @@ void PBF::add(ipc::TransferSegment &target, navigation::segment::Transfer const 
     target.set_polyline(tool::io::to_escaped(geometric::Polyline::encode(100000, coordinates)));
 
     auto &origin = *target.mutable_origin();
-    origin.set_name("It's coming, some day");
+    origin.set_name(string_table.get_string(stop_annotation(transfer.origin()).name_id));
     add(*origin.mutable_location(), coordinates[0]);
     auto &destination = *target.mutable_destination();
-    destination.set_name("It's coming, some day");
+    destination.set_name(string_table.get_string(stop_annotation(transfer.destination()).name_id));
     add(*destination.mutable_location(), coordinates[1]);
 }
 
@@ -171,7 +181,7 @@ void PBF::add(ipc::WalkingSegment &target, navigation::segment::Walk const &walk
 
 void PBF::add(ipc::Stop &target, navigation::Stop const &stop) const
 {
-    target.set_name("Names will show up here");
+    target.set_name(string_table.get_string(stop_annotation(stop.id()).name_id));
     target.set_utc_departure(stop.departure().seconds_since_epoch);
     target.set_utc_arrival(stop.arrival().seconds_since_epoch);
     add(*target.mutable_location(), geometry.get(stop.id()));
@@ -185,12 +195,21 @@ void PBF::add(ipc::Coordinate &target, geometric::WGS84Coordinate const coordina
 
 void PBF::add(ipc::Connection &target, navigation::Connection const &connection) const
 {
-    target.set_headsign("Headsigns are so important");
-    target.set_name("Linenames even more important");
+    auto const &line_info = line_annotation(connection.line());
+
+    if (line_info.headsign)
+        target.set_headsign(string_table.get_string(*line_info.headsign));
+
+    if (line_info.name)
+        target.set_name(string_table.get_string(*line_info.name));
+
     target.set_utc_departure(connection.departure().seconds_since_epoch);
     target.set_utc_arrival(connection.departure().seconds_since_epoch);
-    target.set_name_color_text("#000000");
-    target.set_name_color_background("#FFFFFF");
+
+    if (line_info.text_color)
+        target.set_name_color_text(string_table.get_string(*line_info.text_color));
+    if (line_info.background_color)
+        target.set_name_color_background(string_table.get_string(*line_info.background_color));
 }
 
 } // namespace annotation

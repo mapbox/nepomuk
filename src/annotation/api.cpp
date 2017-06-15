@@ -1,5 +1,7 @@
 #include "annotation/api.hpp"
 #include "annotation/geometry.hpp"
+#include "annotation/line.hpp"
+#include "annotation/stop.hpp"
 
 #include "navigation/connection.hpp"
 #include "navigation/leg.hpp"
@@ -40,6 +42,15 @@ struct BraceGuard
     std::ostream &os;
 };
 
+std::string name_or_empty(boost::optional<DictionaryID> id,
+                          tool::container::StringTable const &string_table)
+{
+    if (id)
+        return string_table.get_string(*id);
+    else
+        return "";
+}
+
 void quote(std::ostream &os, std::string const &value) { os << "\"" << value << "\""; }
 void tag(std::ostream &os, std::string const &value)
 {
@@ -49,7 +60,14 @@ void tag(std::ostream &os, std::string const &value)
 
 } // namespace
 
-API::API(Geometry const &geometry) : geometry(geometry) {}
+API::API(tool::container::StringTable const &string_table,
+         Geometry const &geometry,
+         Stop const &stop_annotation,
+         Line const &line_annotation)
+    : string_table(string_table), geometry(geometry), stop_annotation(stop_annotation),
+      line_annotation(line_annotation)
+{
+}
 
 std::string API::operator()(std::vector<navigation::Route> const &routes) const
 {
@@ -199,8 +217,12 @@ void API::jsonify(std::ostream &os, navigation::segment::Transfer const &transfe
     tag(os, "arrive");
     os << transfer.arrival().seconds_since_epoch << ",";
 
-    tag(os, "stopname");
-    quote(os, "Stopname will be here, believe me.");
+    tag(os, "from_station");
+    quote(os, string_table.get_string(stop_annotation(transfer.origin()).name_id));
+    os << ",";
+
+    tag(os, "to_station");
+    quote(os, string_table.get_string(stop_annotation(transfer.destination()).name_id));
     os << ",";
 
     tag(os, "geometry");
@@ -241,7 +263,7 @@ void API::jsonify(std::ostream &os, navigation::Stop const &stop) const
 {
     BraceGuard brace_guard(os);
     tag(os, "name");
-    quote(os, "NAME HERE");
+    quote(os, string_table.get_string(stop_annotation(stop.id()).name_id));
     os << ",";
 
     tag(os, "location");
@@ -268,12 +290,20 @@ void API::jsonify(std::ostream &os, navigation::Connection const &connection) co
     tag(os, "duration");
     os << connection.duration() << ",";
 
+    auto const &line_info = line_annotation(connection.line());
     tag(os, "name");
-    quote(os, "CONNECTION NAME HERE");
+    quote(os, name_or_empty(line_info.name, string_table));
     os << ",";
 
+    if (line_info.abbreviation)
+    {
+        tag(os, "short_name");
+        quote(os, name_or_empty(line_info.abbreviation, string_table));
+        os << ",";
+    }
+
     tag(os, "headsign");
-    quote(os, "HEADSIGN HERE");
+    quote(os, name_or_empty(line_info.headsign, string_table));
 }
 
 void API::jsonify(std::ostream &os, geometric::WGS84Coordinate const coordinate) const

@@ -9,7 +9,7 @@ message(STATUS "Compiler: ${CXX_COMPILER}")
 # Major for breaking ABI changes. Minor for features. Patch for bugfixes.
 # see http://semver.org/ for context
 set(NEPOMUK_VERSION_MAJOR 0)
-set(NEPOMUK_VERSION_MINOR 1)
+set(NEPOMUK_VERSION_MINOR 2)
 set(NEPOMUK_VERSION_PATCH 0)
 set(NEPOMUK_TAG -rc.0)
 

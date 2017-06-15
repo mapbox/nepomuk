@@ -33,7 +33,9 @@ BOOST_AUTO_TEST_CASE(allocate_once)
     service::Master master_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     BOOST_CHECK(&master_service.coordinate_to_stop() == &master_service.coordinate_to_stop());
     BOOST_CHECK(&master_service.dictionary() == &master_service.dictionary());
-    BOOST_CHECK(&master_service.stop_info_annotation() == &master_service.stop_info_annotation());
+    BOOST_CHECK(&master_service.stop_annotation() == &master_service.stop_annotation());
     BOOST_CHECK(&master_service.components() == &master_service.components());
     BOOST_CHECK(&master_service.pbf_annotation() == &master_service.pbf_annotation());
+    BOOST_CHECK(&master_service.stop_annotation() == &master_service.stop_annotation());
+    BOOST_CHECK(&master_service.line_annotation() == &master_service.line_annotation());
 }

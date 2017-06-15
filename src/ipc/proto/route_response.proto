@@ -16,10 +16,11 @@ message Connection
 {
     optional string headsign = 1;
     optional string name = 2;
-    optional string name_color_text = 3;
-    optional string name_color_background = 4;
-    optional fixed32 utc_departure = 5;
-    optional fixed32 utc_arrival = 6;
+    optional string short_name = 3;
+    optional string name_color_text = 4;
+    optional string name_color_background = 5;
+    optional fixed32 utc_departure = 6;
+    optional fixed32 utc_arrival = 7;
 }
 
 message WalkingSegment

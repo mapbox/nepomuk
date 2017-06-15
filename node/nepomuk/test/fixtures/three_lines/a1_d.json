@@ -14,31 +14,29 @@
 				"duration": "1200",
 				"geometry": "g^g^?S?S?I?I?I?I?I?I",
 				"stops": [{
-					"name": "Names will show up here",
+					"name": "Stop A Platform 1",
 					"arrival": "0",
 					"departure": "600",
 					"location": [0.005000, 0.005100]
 				}, {
-					"name": "Names will show up here",
+					"name": "Stop B",
 					"arrival": "600",
 					"departure": "600",
 					"location": [0.015200, 0.005000]
 				}, {
-					"name": "Names will show up here",
+					"name": "Stop C",
 					"arrival": "600",
 					"departure": "600",
 					"location": [0.025300, 0.005000]
 				}, {
-					"name": "Names will show up here",
+					"name": "Stop D",
 					"arrival": "1800",
 					"departure": "1800",
 					"location": [0.035400, 0.005000]
 				}],
 				"connections": [{
-					"headsign": "Headsigns are so important",
-					"name": "Linenames even more important",
-					"name_color_text": "#000000",
-					"name_color_background": "#FFFFFF",
+					"headsign": "ABCDE",
+					"name": "Horizontal Route Top",
 					"departure": "600",
 					"arrival": "600"
 				}]

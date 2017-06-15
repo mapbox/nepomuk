@@ -33,15 +33,28 @@ class Walk;
 } // namespace segment
 } // namespace navigation
 
+namespace tool
+{
+namespace container
+{
+class StringTable;
+} // namespace container;
+} // namespace tool
+
 namespace annotation
 {
 
 class Geometry;
+class Stop;
+class Line;
 
 class PBF
 {
   public:
-    PBF(Geometry const &geometry);
+    PBF(tool::container::StringTable const &string_table,
+        Geometry const &geometry,
+        Stop const &stop,
+        Line const &line);
     void operator()(ipc::RouteResponse &result, std::vector<navigation::Route> const &route) const;
 
   private:
@@ -56,7 +69,13 @@ class PBF
     void add(ipc::Coordinate &target, geometric::WGS84Coordinate const coordinate) const;
     void add(ipc::Connection &target, navigation::Connection const &connection) const;
 
+    // Lookup to translate ids into strings
+    tool::container::StringTable const &string_table;
+
+    // sub-annotations to be used during the response generation
     Geometry const &geometry;
+    Stop const &stop_annotation;
+    Line const &line_annotation;
 };
 
 } // namespace annotation
