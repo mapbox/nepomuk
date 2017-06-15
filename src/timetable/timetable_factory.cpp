@@ -135,7 +135,7 @@ void produceByEqualRangesVector(std::vector<result_type> &output,
 } // namespace
 
 TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
-                                    std::vector<boost::optional<ShapeID>> &shape_from_line)
+                                    std::vector<std::size_t> &trip_offsets_by_line)
 {
     TimeTable result;
 
@@ -150,7 +150,7 @@ TimeTable TimeTableFactory::produce(gtfs::Dataset &dataset,
         if (!dataset.transfers)
             dataset.transfers = std::vector<gtfs::Transfer>();
 
-        LineTableFactory factory(*dataset.transfers, dataset.trips, shape_from_line);
+        LineTableFactory factory(*dataset.transfers, trip_offsets_by_line);
         produceByEqualRangesVector(
             result.line_tables,
             dataset.stop_times,

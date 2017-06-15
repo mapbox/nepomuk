@@ -1,7 +1,7 @@
 #ifndef NEPOMUK_SERVICE_TILE_HPP_
 #define NEPOMUK_SERVICE_TILE_HPP_
 
-#include "annotation/stop_info.hpp"
+#include "annotation/stop.hpp"
 #include "search/coordinate_to_stop.hpp"
 #include "search/stop_to_line.hpp"
 #include "service/master.hpp"
@@ -47,7 +47,7 @@ class Tile
     search::StopToLine const &stop_to_line;
     // to request coordinates / names
     nepomuk::tool::container::StringTable const &dictionary;
-    annotation::StopInfoTable const &stop_info_annotation;
+    annotation::Stop const &stop_annotation;
     // the lines and their actual geometry
     annotation::Geometry const &geometry;
     timetable::SegmentTable const &segment_table;

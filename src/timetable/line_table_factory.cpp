@@ -62,9 +62,8 @@ void interpolate_times(iterator_type begin, const iterator_type end)
 } // namspace
 
 LineTableFactory::LineTableFactory(std::vector<gtfs::Transfer> &transfers,
-                                   std::vector<gtfs::Trip> const &trips,
-                                   std::vector<boost::optional<ShapeID>> &shape_by_line)
-    : transfers(transfers), trips(trips), shape_by_line(shape_by_line)
+                                   std::vector<std::size_t> &trip_offsets_by_line)
+    : transfers(transfers), trip_offsets_by_line(trip_offsets_by_line)
 {
 }
 
@@ -120,7 +119,7 @@ std::vector<LineTable> LineTableFactory::produce(std::vector<gtfs::StopTime>::it
                 {
                     line_tables.push_back(LineTable());
                     // remember the trips shape id for later
-                    shape_by_line.push_back(trips[range.first->trip_id.base()].shape_id);
+                    trip_offsets_by_line.push_back(range.first->trip_id.base());
                     line_tables.back().stop_table = stop_table;
                     line_tables.back().time_deltas.resize(stop_table.list().size(), 0);
                     return line_tables.size() - 1;

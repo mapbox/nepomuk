@@ -24,6 +24,7 @@ We provide the following information about journeys, as far as it is available:
 | location              | coordinate    | The position of a stop in WGS84 coordinate (lon/lat) |
 | mode                  | string        | mode of transportation |
 | name (on connecions)  | string        | The name of a line (differs from headsign) |
+| short_name            | string        | A short version (e.g. number/code) of a connection name |
 | name (on stops)       | string        | The posted name of a stop/station (part of stop)|
 | name_color_background | hex           | color code of a line on the map / headsign |
 | name_color_text       | hex           | color code of a line on the map / headsign |
@@ -104,6 +105,7 @@ if segment.mode equals walk:
 | connection    | name_color_text       | optional     |      |
 | connection    | departure             | guaranteed   |      |
 | connection    | name                  | guaranteed   | name of the connection (line e.g. red line towards Downtown -> red line) |
+| connection    | short_name            | optional     | an abbreviated form (e.g. a code) of name |
 | connection    | headsign              | guaranteed   | usually describes the destination of the vehicle |
 
 | collection    | member        | availability | info |

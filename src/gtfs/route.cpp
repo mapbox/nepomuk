@@ -29,8 +29,10 @@ Route makeRoute(std::map<std::string, std::size_t> const &header,
             "route_desc", DictionaryConverter(dictionary), header, values),
         construct_as_optional<DictionaryID, false>(
             "route_url", DictionaryConverter(dictionary), header, values),
-        construct_as_optional<std::string, false>("route_color", forward, header, values),
-        construct_as_optional<std::string, false>("route_text_color", forward, header, values)};
+        construct_as_optional<DictionaryID, false>(
+            "route_color", DictionaryConverter(dictionary), header, values),
+        construct_as_optional<DictionaryID, false>(
+            "route_text_color", DictionaryConverter(dictionary), header, values)};
 }
 
 } // namespace gtfs

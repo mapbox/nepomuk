@@ -37,14 +37,12 @@ struct Route
     DictionaryID long_name;
     std::uint64_t type;
 
-    using HexColorCode = std::string;
-
     // optional additional features
     boost::optional<AgencyID> agency_id;
     boost::optional<DictionaryID> description;
     boost::optional<DictionaryID> url;
-    boost::optional<HexColorCode> color;
-    boost::optional<HexColorCode> text_color;
+    boost::optional<DictionaryID> color;
+    boost::optional<DictionaryID> text_color;
 };
 
 bool checkRouteCSVHeader(std::map<std::string, std::size_t> const &header);

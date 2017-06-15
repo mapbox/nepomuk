@@ -30,15 +30,28 @@ class Walk;
 } // namespace segment
 } // namespace navigation
 
+namespace tool
+{
+namespace container
+{
+class StringTable;
+} // namespace container
+} // namespace tool
+
 namespace annotation
 {
 
 class Geometry;
+class Stop;
+class Line;
 
 class API
 {
   public:
-    API(Geometry const &geometry);
+    API(tool::container::StringTable const &string_table,
+        Geometry const &geometry,
+        Stop const &stop_annotation,
+        Line const &line_annotation);
     std::string operator()(std::vector<navigation::Route> const &route) const;
 
   private:
@@ -59,7 +72,13 @@ class API
     template <typename object_type_itr>
     void chain_jsonify(std::ostream &os, object_type_itr begin, object_type_itr const end) const;
 
+    // data to annotate with (data tables)
+    tool::container::StringTable const &string_table;
+
+    // annotators to give information how to retrieve data
     Geometry const &geometry;
+    Stop const &stop_annotation;
+    Line const &line_annotation;
 };
 
 template <typename object_type_itr>

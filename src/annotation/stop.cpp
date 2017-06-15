@@ -1,4 +1,4 @@
-#include "annotation/stop_info.hpp"
+#include "annotation/stop.hpp"
 
 #include <algorithm>
 
@@ -9,7 +9,7 @@ namespace nepomuk
 namespace annotation
 {
 
-StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> const &stops)
+Stop::Stop(std::vector<gtfs::Stop> const &stops)
 {
     stop_info.resize(stops.size());
 
@@ -20,10 +20,7 @@ StopInfoTable::StopInfoTable(std::vector<gtfs::Stop> const &stops)
                    [this](auto const &stop) -> StopInfo { return {stop.name}; });
 }
 
-StopInfo const &StopInfoTable::get_info(StopID const stop_id) const
-{
-    return stop_info[stop_id.base()];
-}
+StopInfo const &Stop::operator()(StopID const stop_id) const { return stop_info[stop_id.base()]; }
 
 } // namespace annotation
 } // namespace nepomuk

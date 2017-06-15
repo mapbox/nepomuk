@@ -6,7 +6,7 @@
 
 #include "adaptor/dictionary.hpp"
 #include "annotation/geometry_factory.hpp"
-#include "annotation/stop_info.hpp"
+#include "annotation/line_factory.hpp"
 #include "search/stop_to_line_factory.hpp"
 #include "timetable/graph_adaptor.hpp"
 #include "timetable/timetable_factory.hpp"
@@ -37,13 +37,26 @@ timetable::TimeTable const &Master::timetable()
     if (!_timetable)
     {
         tool::status::FunctionTimingGuard guard("Timetable creation");
-        shape_from_line = std::make_unique<std::vector<boost::optional<ShapeID>>>();
-        BOOST_ASSERT(shape_from_line);
+        _trip_offsets_by_line = std::make_unique<std::vector<std::size_t>>();
+        BOOST_ASSERT(_trip_offsets_by_line);
         _timetable = std::make_unique<timetable::TimeTable>(
-            timetable::TimeTableFactory::produce(base_data, *shape_from_line));
+            timetable::TimeTableFactory::produce(base_data, *_trip_offsets_by_line));
     }
 
     return *_timetable;
+}
+
+std::vector<std::size_t> const &Master::trip_offsets_by_line()
+{
+    if (!_trip_offsets_by_line)
+    {
+        // the trip_offsets_by_line is a byproduct of computing the line tables (as part of the
+        // timetable creation). We cannot easily compute them in advance/independent of the
+        // timetable creation. Therefore we delegate the creation and compute timetables first.
+        timetable();
+        BOOST_ASSERT(_trip_offsets_by_line);
+    }
+    return *_trip_offsets_by_line;
 }
 
 // look-ups
@@ -104,30 +117,15 @@ timetable::SegmentTable const &Master::segment_table()
 }
 
 // annotation
-annotation::StopInfoTable const &Master::stop_info_annotation()
-{
-    if (!_stop_info_annotation)
-    {
-        tool::status::FunctionTimingGuard guard("Stop Info Annotation creation");
-        auto const &ttable = timetable();
-        BOOST_ASSERT(shape_from_line);
-        _stop_info_annotation = std::make_unique<annotation::StopInfoTable>(base_data.stops);
-    }
-
-    return *_stop_info_annotation;
-}
-
 annotation::Geometry const &Master::geometry_annotation()
 {
     if (!_geometry_annotation)
     {
         tool::status::FunctionTimingGuard guard("Geometry Annotation - creation");
-        // required to get shape_from_line
-        auto const &ttable = timetable();
-        (void)ttable;
         _geometry_annotation = std::make_unique<annotation::Geometry>(
             annotation::GeometryFactory::produce(base_data.stops,
-                                                 *shape_from_line,
+                                                 base_data.trips,
+                                                 trip_offsets_by_line(),
                                                  stop_to_line(),
                                                  timetable().lines(),
                                                  segment_table()));
@@ -135,12 +133,37 @@ annotation::Geometry const &Master::geometry_annotation()
     return *_geometry_annotation;
 }
 
+annotation::Stop const &Master::stop_annotation()
+{
+    if (!_stop_annotation)
+    {
+        tool::status::FunctionTimingGuard guard("Stop Annotation creation");
+        _stop_annotation = std::make_unique<annotation::Stop>(base_data.stops);
+    }
+
+    return *_stop_annotation;
+}
+
+annotation::Line const &Master::line_annotation()
+{
+    if (!_line_annotation)
+    {
+        tool::status::FunctionTimingGuard guard("Line Annotation creation");
+
+        _line_annotation = std::make_unique<annotation::Line>(annotation::LineFactory::produce(
+            trip_offsets_by_line(), base_data.routes, base_data.trips));
+    }
+
+    return *_line_annotation;
+}
+
 annotation::API const &Master::api_annotation()
 {
     if (!_api_annotation)
     {
         tool::status::FunctionTimingGuard guard("API Annotation - creation");
-        _api_annotation = std::make_unique<annotation::API>(geometry_annotation());
+        _api_annotation = std::make_unique<annotation::API>(
+            dictionary(), geometry_annotation(), stop_annotation(), line_annotation());
     }
 
     return *_api_annotation;
@@ -151,7 +174,8 @@ annotation::PBF const &Master::pbf_annotation()
     if (!_pbf_annotation)
     {
         tool::status::FunctionTimingGuard guard("PBF Annotation - creation");
-        _pbf_annotation = std::make_unique<annotation::PBF>(geometry_annotation());
+        _pbf_annotation = std::make_unique<annotation::PBF>(
+            dictionary(), geometry_annotation(), stop_annotation(), line_annotation());
     }
 
     return *_pbf_annotation;

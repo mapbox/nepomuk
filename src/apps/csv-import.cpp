@@ -36,7 +36,7 @@ int main(int argc, char **argv) try
         navigation::algorithm::TimeTable timetable_router(data_service.timetable(),
                                                           data_service.stop_to_line());
 #endif
-        auto stop_info = data_service.stop_info_annotation();
+        auto stop_info = data_service.stop_annotation();
 
         auto to_coordinate = [](std::string const &line) {
             std::istringstream iss(line);

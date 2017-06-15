@@ -25,7 +25,9 @@
 #include "annotation/api.hpp"
 #include "annotation/geometry.hpp"
 #include "annotation/pbf.hpp"
-#include "annotation/stop_info.hpp"
+
+#include "annotation/line.hpp"
+#include "annotation/stop.hpp"
 
 // graph measures
 #include "algorithm/scc.hpp"
@@ -56,16 +58,20 @@ class Master
 
     // annotation
     annotation::Geometry const &geometry_annotation();
-    annotation::StopInfoTable const &stop_info_annotation();
     annotation::API const &api_annotation();
     annotation::PBF const &pbf_annotation();
+
+    annotation::Stop const &stop_annotation();
+    annotation::Line const &line_annotation();
 
     // graph measurements
     algorithm::StronglyConnectedComponent const &components();
 
   private:
+    std::vector<std::size_t> const &trip_offsets_by_line();
+
     gtfs::Dataset base_data;
-    std::unique_ptr<std::vector<boost::optional<ShapeID>>> shape_from_line;
+    std::unique_ptr<std::vector<std::size_t>> _trip_offsets_by_line;
 
     // timetable
     std::unique_ptr<timetable::TimeTable> _timetable;
@@ -80,7 +86,9 @@ class Master
 
     // annotation
     std::unique_ptr<annotation::Geometry> _geometry_annotation;
-    std::unique_ptr<annotation::StopInfoTable> _stop_info_annotation;
+    std::unique_ptr<annotation::Stop> _stop_annotation;
+    std::unique_ptr<annotation::Line> _line_annotation;
+
     std::unique_ptr<annotation::API> _api_annotation;
     std::unique_ptr<annotation::PBF> _pbf_annotation;
 

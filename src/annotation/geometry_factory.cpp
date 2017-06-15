@@ -1,6 +1,7 @@
 #include "annotation/geometry_factory.hpp"
 
 #include "gtfs/stop.hpp"
+#include "gtfs/trip.hpp"
 #include "id/line.hpp"
 #include "id/shape.hpp"
 #include "id/stop.hpp"
@@ -19,7 +20,8 @@ namespace annotation
 {
 
 Geometry GeometryFactory::produce(std::vector<gtfs::Stop> const &stops,
-                                  std::vector<boost::optional<ShapeID>> const &shape_from_line,
+                                  std::vector<gtfs::Trip> const &trips,
+                                  std::vector<std::size_t> const &trip_offsets_by_line,
                                   search::StopToLine const &stop_to_line,
                                   std::vector<timetable::LineTable> const &line_tables,
                                   timetable::SegmentTable const &segment_table)
@@ -40,9 +42,10 @@ Geometry GeometryFactory::produce(std::vector<gtfs::Stop> const &stops,
             [&, index = std::uint64_t{0} ](auto const &line_table) mutable
         {
             // only actually add shapes, if there is a shape
-            if (shape_from_line[index])
+            auto const shape_id = trips[trip_offsets_by_line[index]].shape_id;
+            if (shape_id)
             {
-                auto const shape_index = shape_from_line[index]->base();
+                auto const shape_index = shape_id->base();
                 BOOST_ASSERT(shape_index < segment_table.category_size());
                 auto range = segment_table.crange(shape_index);
                 auto itr = range.begin();
@@ -84,7 +87,7 @@ Geometry GeometryFactory::produce(std::vector<gtfs::Stop> const &stops,
             geometry_annotation.shape_info.push_back(
                 stop_line_offset.stop.base(),
                 {stop_line_offset.line,
-                 *shape_from_line[stop_line_offset.line.base()],
+                 *trips[trip_offsets_by_line[stop_line_offset.line.base()]].shape_id,
                  stop_line_offset.offset});
             guard.print(++index);
         };

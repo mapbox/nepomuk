@@ -1,7 +1,6 @@
 #ifndef NEPOMUK_TIMETABLE_FACTORY_HPP_
 #define NEPOMUK_TIMETABLE_FACTORY_HPP_
 
-#include <boost/optional.hpp>
 #include <vector>
 
 #include "timetable/timetable.hpp"
@@ -22,7 +21,7 @@ class TimeTableFactory
 {
   public:
     static TimeTable produce(gtfs::Dataset &dataset,
-                             std::vector<boost::optional<ShapeID>> &shape_from_line);
+                             std::vector<std::size_t> &trip_offsets_by_line);
 };
 
 } // namespace timetable

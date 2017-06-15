@@ -17,7 +17,7 @@ namespace service
 Tile::Tile(service::Master &master_service)
     : timetable(master_service.timetable()), stop_lookup(master_service.coordinate_to_stop()),
       stop_to_line(master_service.stop_to_line()), dictionary(master_service.dictionary()),
-      stop_info_annotation(master_service.stop_info_annotation()),
+      stop_annotation(master_service.stop_annotation()),
       geometry(master_service.geometry_annotation()), segment_table(master_service.segment_table()),
       components(master_service.components())
 {
@@ -116,7 +116,7 @@ void Tile::add_stops(tool::container::MapboxVectorTile &vector_tile,
     stations.erase(std::unique(stations.begin(), stations.end()), stations.end());
 
     auto const add_station = [this, &station_layer](auto const station) {
-        auto const info = stop_info_annotation.get_info(station);
+        auto const info = stop_annotation(station);
         tool::container::MapboxVectorTile::FeatureList features;
         features.push_back(
             {"name",

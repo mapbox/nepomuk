@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#include "annotation/stop_info.hpp"
+#include "annotation/stop.hpp"
 #include "geometric/coordinate.hpp"
 #include "gtfs/stop.hpp"
 #include "id/stop.hpp"
@@ -11,8 +11,6 @@
 #include "tool/container/string_table.hpp"
 
 using namespace nepomuk;
-using namespace nepomuk::annotation;
-using namespace nepomuk::gtfs;
 using namespace nepomuk::tool::container;
 using namespace nepomuk::geometric;
 
@@ -22,7 +20,7 @@ using namespace nepomuk::geometric;
 
 namespace
 {
-Stop make_stop(std::uint64_t i, DictionaryID s, geometric::WGS84Coordinate c)
+gtfs::Stop make_stop(std::uint64_t i, DictionaryID s, geometric::WGS84Coordinate c)
 {
     return {StopID{i},
             s,
@@ -40,7 +38,7 @@ Stop make_stop(std::uint64_t i, DictionaryID s, geometric::WGS84Coordinate c)
 
 BOOST_AUTO_TEST_CASE(annotate_stops)
 {
-    std::vector<Stop> stops;
+    std::vector<gtfs::Stop> stops;
     Dictionary dictionary;
     WGS84Coordinate coordinate(makeLatLonFromDouble<FixedLongitude>(1.1),
                                makeLatLonFromDouble<FixedLatitude>(1.1));
@@ -59,17 +57,17 @@ BOOST_AUTO_TEST_CASE(annotate_stops)
     StringTable table;
     adaptor::Dictionary::decode_into(table, adaptor::Dictionary::encode(dictionary));
 
-    StopInfoTable stop_info(stops);
+    annotation::Stop stop_info(stops);
 
-    auto first = stop_info.get_info(StopID{0ull});
+    auto first = stop_info(StopID{0ull});
     BOOST_CHECK_EQUAL(table.get_string(first.name_id), "first");
 
-    auto second = stop_info.get_info(StopID{1ull});
+    auto second = stop_info(StopID{1ull});
     BOOST_CHECK_EQUAL(table.get_string(second.name_id), "second");
 
-    auto third = stop_info.get_info(StopID{2ull});
+    auto third = stop_info(StopID{2ull});
     BOOST_CHECK_EQUAL(table.get_string(third.name_id), "third");
 
-    auto fourth = stop_info.get_info(StopID{3ull});
+    auto fourth = stop_info(StopID{3ull});
     BOOST_CHECK_EQUAL(table.get_string(fourth.name_id), "fourth");
 }

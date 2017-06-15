@@ -4,7 +4,9 @@ set(annotate_SOURCES
     geometry.cpp
     geometry_factory.cpp
     pbf.cpp
-    stop_info.cpp)
+    stop.cpp
+    line.cpp
+    line_factory.cpp)
 
 
 # export source files as library
