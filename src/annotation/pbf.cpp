@@ -12,6 +12,8 @@
 
 #include "date/time.hpp" // for UTCTimestamp
 
+#include "tool/io/string.hpp"
+
 #include <boost/assert.hpp>
 
 #include <algorithm> // transform
@@ -129,7 +131,7 @@ void PBF::add(ipc::TransitSegment &target, navigation::segment::Transit const &t
                        std::back_inserter(coordinates),
                        [&](auto const &stop) { return geometry.get(stop.id()); });
     }
-    target.set_polyline(geometric::Polyline::encode(100000, coordinates));
+    target.set_polyline(tool::io::to_escaped(geometric::Polyline::encode(100000, coordinates)));
 
     for (auto const &stop : transit.stops())
         add(*target.add_stops(), stop);
@@ -147,7 +149,7 @@ void PBF::add(ipc::TransferSegment &target, navigation::segment::Transfer const 
     std::vector<geometric::WGS84Coordinate> coordinates = {geometry.get(transfer.origin()),
                                                            geometry.get(transfer.destination())};
 
-    target.set_polyline(geometric::Polyline::encode(100000, coordinates));
+    target.set_polyline(tool::io::to_escaped(geometric::Polyline::encode(100000, coordinates)));
 
     auto &origin = *target.mutable_origin();
     origin.set_name("It's coming, some day");
@@ -164,7 +166,7 @@ void PBF::add(ipc::WalkingSegment &target, navigation::segment::Walk const &walk
     target.set_duration(walk.duration());
     target.set_distance(walk.distance());
     std::vector<geometric::WGS84Coordinate> coordinates = {walk.origin(), walk.destination()};
-    target.set_polyline(geometric::Polyline::encode(100000, coordinates));
+    target.set_polyline(tool::io::to_escaped(geometric::Polyline::encode(100000, coordinates)));
 }
 
 void PBF::add(ipc::Stop &target, navigation::Stop const &stop) const
