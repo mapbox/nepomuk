@@ -1,13 +1,16 @@
 {
-  "name": "transit-server",
+  "name": "nepomuk-server",
   "version": "0.0.0",
-  "description": "Transit is an open source service for public transit routing on GTFS sources.",
+  "description": "Nepomuk is an open source service for public transit routing on GTFS sources.",
   "dependencies": {
     "cors": "^2.8.2",
     "express": "^4.15.2",
     "morgan": "^1.8.1",
-    "transit": "file:../nepomuk"
+    "nepomuk": "file:../nepomuk"
   },
-  "license": "ISC",
+  "scripts": {
+      "install": "cp ../nepomuk/binding/* node_modules/nepomuk/binding"
+  },
+  "license": "MIT",
   "main": "server.js"
 }
