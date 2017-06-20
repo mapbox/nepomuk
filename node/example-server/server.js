@@ -16,7 +16,7 @@ function main(process)
     }
 
     // start the backend server
-    exec('./node_modules/nepomuk/binding/ipc-provider ' + process.argv[3], (err, stdout, stderr) => {
+    exec('./node_modules/nepomuk/binding/ipc-provider ' + process.argv[3] + ' ' + process.argv[2], (err, stdout, stderr) => {
         if (err) {
             console.error(err);
             return;

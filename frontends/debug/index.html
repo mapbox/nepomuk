@@ -45,7 +45,7 @@ var map = new mapboxgl.Map({
 map.on('load', function () {
     map.addSource("transit", {
                         "type": 'vector',
-                        "tiles": ['http://0.0.0.0:7777/directions/v5/pumba/transit/tiles/{z}/{x}/{y}.mvt']
+                        "tiles": ['http://0.0.0.0:7777/directions/v5/nepomuk/transit/tiles/{z}/{x}/{y}.mvt']
                  });
 
     map.addLayer({

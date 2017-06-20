@@ -14,7 +14,7 @@ void Worker::HandleOKCallback()
 {
     Nan::HandleScope scope;
 
-    auto result = Nan::New(std::cref(json_result)).ToLocalChecked();
+    auto result = Nan::CopyBuffer(json_result.data(), json_result.size()).ToLocalChecked();
 
     const auto argc = 2u;
     v8::Local<v8::Value> argv[argc] = {Nan::Null(), std::move(result)};
