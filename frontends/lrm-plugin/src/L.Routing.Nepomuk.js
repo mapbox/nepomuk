@@ -151,10 +151,17 @@
                 legCount = responseRoute.legs.length,
                 i,
                 j,
+                k,
                 leg,
                 segment,
                 geometry,
-                modifier;
+                modifiier;
+
+            result.instructions.push({
+                type: 'walk',
+                stop: responseRoute.legs[0].segments[0].stops[0].name,
+                index: 0
+            });
 
             for (i = 0; i < legCount; i++) {
                 leg = responseRoute.legs[i];
@@ -163,17 +170,54 @@
                     geometry = this._decodePolyline(segment.geometry);
                     result.coordinates.push.apply(result.coordinates, geometry);
 
-                    result.instructions.push({
-                        type: segment.mode,
-                        distance: segment.distance != undefined ? segment.distance : 0,
-                        time: segment.duration,
-                        index: index,
-                        headsign: segment.mode == "transit" ? segment.connections[0].headsign : undefined,
-                        name: segment.mode == "transit" ? segment.connections[0].name : "Do something for walk/transfer"
-                    });
+                    // transit segment
+                    if( segment.connections )
+                    {
+                        // transfer at the end of the line
+                        if( j > 0 && leg.segments[j-1].connections )
+                        {
+                            result.instructions.push({
+                                type: 'transfer',
+                                origin: leg.segments[j-1].stops[leg.segments[j-1].stops.length-1].name,
+                                destination: segment.stops[0].name,
+                                index: index
+                            });
+                        }
+                        result.instructions.push({
+                            type: 'transit',
+                            time: segment.duration,
+                            index: index,
+                            headsign: segment.connections[0].headsign,
+                            name: segment.connections[0].name
+                        });
+                    } else if (segment.distance) {
+                        result.instructions.push({
+                            type: 'walk',
+                            distance: segment.distance,
+                            time: segment.duration,
+                            index: index
+                        });
+                    } else {
+                        result.instructions.push({
+                            type: 'transfer',
+                            time: segment.duration,
+                            origin: segment.origin.name,
+                            destination: segment.destination.name,
+                            index: index
+                        });
+                    }
 					index += geometry.length;
                 }
             }
+
+            var last_leg = responseRoute.legs[responseRoute.legs.length - 1];
+            var last_segment = last_leg.segments[last_leg.segments.length - 1];
+            var last_stop = last_segment.stops[last_segment.stops.length-1];
+            result.instructions.push({
+                type: 'walk',
+                stop: last_stop.name,
+                index: index
+            });
 
             return result;
         },
