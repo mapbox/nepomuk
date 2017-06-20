@@ -3,6 +3,8 @@
 #include <boost/assert.hpp>
 #include <sstream>
 
+#include "tool/io/string.hpp"
+
 namespace nepomuk
 {
 namespace adaptor

@@ -117,7 +117,9 @@ std::string handle_request(TileRequest const &request, service::Tile const &serv
         return invalid_parameters();
 
     Response pbf_response;
-    pbf_response.mutable_tile()->set_result(service(parameters));
+    auto &result_tile = *pbf_response.mutable_tile()->mutable_result();
+    result_tile = service(parameters);
+
     std::string buffer;
     pbf_response.SerializeToString(&buffer);
 

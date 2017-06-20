@@ -1,6 +1,7 @@
 #ifndef NEPOMUK_TOOL_IO_STRING_HPP_
 #define NEPOMUK_TOOL_IO_STRING_HPP_
 
+#include <algorithm>
 #include <cctype>
 #include <sstream>
 #include <string>
