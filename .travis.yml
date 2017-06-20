@@ -31,6 +31,8 @@ dist: trusty
 sudo: required
 osx_image: xcode8.2
 
+group: edge  # Add this
+
 os:
   - linux
   - osx
