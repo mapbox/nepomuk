@@ -103,11 +103,11 @@
 
 
 /* control positioning */
+/* control positioning */
 
 .leaflet-control {
 	position: relative;
-	z-index: 800;
-	pointer-events: visiblePainted; /* IE 9-10 doesn't have auto */
+	z-index: 7;
 	pointer-events: auto;
 	}
 .leaflet-top,
@@ -147,7 +147,6 @@
 .leaflet-right .leaflet-control {
 	margin-right: 10px;
 	}
-
 
 /* zoom and fade animations */
 

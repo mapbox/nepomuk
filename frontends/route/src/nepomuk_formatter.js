@@ -14,18 +14,21 @@ L.Routing.NepomukFormatter = L.Routing.Formatter.extend({
 	_getInstructionTemplate: function(instr, i) {
 		if( instr.type == "transit" )
 		{
-			return String("Take " + instr.name + " towards " + instr.headsign);
+			return String("Take the " + instr.name + " line towards " + instr.headsign);
 		}
 		else if( instr.type == "transfer")
 		{
-			return String("Transfer at " + instr.stopname);
+            if( instr.origin != instr.destination)
+    			return String("At " + instr.origin + " transfer to " + instr.destination);
+            else
+                return String("Transfer at " + instr.destination);
 		}
 		else
 		{
 			if( i == 0 )
-				return String("Walk towards station");
+				return String("Walk towards " + instr.stop);
 			else
-				return String("Walk towards destination");
+				return String("Exit at " + instr.stop + " and Walk towards your destination");
 		}
 	}
 });
