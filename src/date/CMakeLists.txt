@@ -1,5 +1,6 @@
 # define a set of sources to compile
 set(date_SOURCES
+    availability.cpp
     time.cpp)
 
 # export source files as library

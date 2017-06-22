@@ -8,3 +8,4 @@ set(dateINCLUDES
         ${PROTOBUF_INCLUDE_DIRS})
 
 add_unit_test(time time.cc "${dateLIBS}" "${dateINCLUDES}")
+add_unit_test(availability availability.cc "${dateLIBS}" "${dateINCLUDES}")
