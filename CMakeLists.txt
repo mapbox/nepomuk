@@ -139,6 +139,15 @@ mason_use(boost_libdate_time VERSION ${BOOST_VERSION})
 mason_use(boost_libthread VERSION ${BOOST_VERSION})
 mason_use(boost_libsystem VERSION ${BOOST_VERSION})
 
+# handling timezone codes
+mason_use(icu VERSION 58.1)
+set(icu_INCLUDE_DIRS
+    ${MASON_PACKAGE_icu_INCLUDE_DIRS})
+set(icu_LIBRARIES
+    ${MASON_PACKAGE_icu_STATIC_LIBS})
+
+message(STATUS "ICU Libs: ${icu_LIBRARIES}")
+
 
 set(Boost_INCLUDE_DIRS ${MASON_PACKAGE_boost_INCLUDE_DIRS})
 set(Boost_LIBRARIES
@@ -164,6 +173,7 @@ include_directories(SYSTEM BEFORE ${MASON_PACKAGE_protobuf_INCLUDE_DIRS})
 include_directories(SYSTEM BEFORE ${protozero_INCLUDE_DIRS})
 include_directories(SYSTEM BEFORE ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM BEFORE ${Zmq_INCLUDE_DIRS})
+include_directories(SYSTEM BEFORE ${icu_INCLUDE_DIRS})
 
 #for generated protobuf files
 include_directories("${CMAKE_BINARY_DIR}/src")
