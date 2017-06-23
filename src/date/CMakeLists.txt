@@ -1,6 +1,7 @@
 # define a set of sources to compile
 set(date_SOURCES
     availability.cpp
+    icu.cpp
     time.cpp
     timezone.cpp)
 

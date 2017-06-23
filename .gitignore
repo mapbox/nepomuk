@@ -3,6 +3,7 @@ data
 *.swp
 mason_packages
 include/version.h
+include/icu_data.h
 include/fixtures.h
 *node_modules
 *bundle.js

@@ -24,10 +24,10 @@ boost::optional<std::int32_t> Timezone::offset(std::string const &timezone)
 
 	zone->getOffset(curDate,true,standard_offset,daylight_saving_time_offset,success);
 
-    if( success != U_ZERO_ERROR )
-        std::cout << "OFfsets: " << standard_offset << " " << daylight_saving_time_offset << std::endl;
-	
-	return boost::none;
+    if( success == U_ZERO_ERROR )
+        return {standard_offset/1000};  //standard offset in seconds
+    else
+	    return boost::none;
 }
 
 } // namespace date

@@ -140,14 +140,20 @@ mason_use(boost_libthread VERSION ${BOOST_VERSION})
 mason_use(boost_libsystem VERSION ${BOOST_VERSION})
 
 # handling timezone codes
-mason_use(icu VERSION 58.1)
+set(ICU_VERSION 58.1)
+mason_use(icu VERSION ${ICU_VERSION})
 set(icu_INCLUDE_DIRS
     ${MASON_PACKAGE_icu_INCLUDE_DIRS})
 set(icu_LIBRARIES
-    ${MASON_PACKAGE_icu_STATIC_LIBS})
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicuuc.a"
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicutu.a"
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicui18n.a"
+#    "${MASON_PACKAGE_icu_PREFIX}/lib/libicutest.a"
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicudata.a")
 
-message(STATUS "ICU Libs: ${icu_LIBRARIES}")
-
+set(ICU_DATA_DIRECTORY ${MASON_PACKAGE_icu_PREFIX}/share/icu/${ICU_VERSION})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/icu_data.h.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/include/icu_data.h)
 
 set(Boost_INCLUDE_DIRS ${MASON_PACKAGE_boost_INCLUDE_DIRS})
 set(Boost_LIBRARIES
