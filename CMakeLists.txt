@@ -139,6 +139,21 @@ mason_use(boost_libdate_time VERSION ${BOOST_VERSION})
 mason_use(boost_libthread VERSION ${BOOST_VERSION})
 mason_use(boost_libsystem VERSION ${BOOST_VERSION})
 
+# handling timezone codes
+set(ICU_VERSION 58.1)
+mason_use(icu VERSION ${ICU_VERSION})
+set(icu_INCLUDE_DIRS
+    ${MASON_PACKAGE_icu_INCLUDE_DIRS})
+set(icu_LIBRARIES
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicuuc.a"
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicutu.a"
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicui18n.a"
+#    "${MASON_PACKAGE_icu_PREFIX}/lib/libicutest.a"
+    "${MASON_PACKAGE_icu_PREFIX}/lib/libicudata.a")
+
+set(ICU_DATA_DIRECTORY ${MASON_PACKAGE_icu_PREFIX}/share/icu/${ICU_VERSION})
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/icu_data.h.in
+               ${CMAKE_CURRENT_SOURCE_DIR}/include/icu_data.h)
 
 set(Boost_INCLUDE_DIRS ${MASON_PACKAGE_boost_INCLUDE_DIRS})
 set(Boost_LIBRARIES
@@ -164,6 +179,7 @@ include_directories(SYSTEM BEFORE ${MASON_PACKAGE_protobuf_INCLUDE_DIRS})
 include_directories(SYSTEM BEFORE ${protozero_INCLUDE_DIRS})
 include_directories(SYSTEM BEFORE ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM BEFORE ${Zmq_INCLUDE_DIRS})
+include_directories(SYSTEM BEFORE ${icu_INCLUDE_DIRS})
 
 #for generated protobuf files
 include_directories("${CMAKE_BINARY_DIR}/src")

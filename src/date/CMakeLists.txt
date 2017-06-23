@@ -1,6 +1,9 @@
 # define a set of sources to compile
 set(date_SOURCES
-    time.cpp)
+    availability.cpp
+    icu.cpp
+    time.cpp
+    timezone.cpp)
 
 # export source files as library
 add_library(NEPOMUKdate STATIC
@@ -9,6 +12,7 @@ add_library(NEPOMUKdate STATIC
 # link all required items
 target_link_libraries(NEPOMUKdate
     ${Boost_LIBRARIES}
+    ${icu_LIBRARIES}
     ${MAYBE_COVERAGE_LIBRARIES})
 
 # define additional include directories

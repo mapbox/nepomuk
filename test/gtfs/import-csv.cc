@@ -54,7 +54,7 @@ void checkAgencyFixture(Agency const &agency)
     BOOST_CHECK(valid_name);
     const auto valid_url = agency.url == "http://www.s-bahn-berlin.de";
     BOOST_CHECK(valid_url);
-    const auto valid_timezone = agency.timezone == "Europe/Berlin";
+    const auto valid_timezone = agency.utc_offset == 3600;
     BOOST_CHECK(valid_timezone);
     const auto valid_language = agency.language && *agency.language == "de";
     BOOST_CHECK(valid_language);
@@ -86,7 +86,7 @@ void checkMinimalAgencyFixture(Agency const &agency)
     BOOST_CHECK(valid_name);
     const auto valid_url = agency.url == "http://www.s-bahn-berlin.de";
     BOOST_CHECK(valid_url);
-    const auto valid_timezone = agency.timezone == "Europe/Berlin";
+    const auto valid_timezone = agency.utc_offset == 3600;
     BOOST_CHECK(valid_timezone);
 
     const auto no_optionals = !agency.id && !agency.language && !agency.phone && !agency.email;
@@ -100,12 +100,12 @@ void makeStops(std::string const &name)
            "\"location_type\",\"parent_station\",\"zone_id\",\"stop_url\",\"stop_timezone\","
            "\"wheelchair_boarding\"\n";
     ofs << "000008012716,\"123\",\"Rastow, "
-           "Bahnhof\",\"its\",\"1.0000000\",\"1.0000000\",0,00000550215,1,,\"de\",0\n";
+           "Bahnhof\",\"its\",\"1.0000000\",\"1.0000000\",0,00000550215,1,,\"Europe/Berlin\",0\n";
     ofs << "000008012717,\"456\",\"Restow, "
            "Bahnhof\",\"so beautiful\",\"2.0000000\",\"2.0000000\",1,00000550216,2,\"www.someurl."
-           "com\",\"de\",1\n";
+           "com\",\"Europe/Berlin\",1\n";
     ofs << "000008012718,\"\",\"Ristow, "
-           "Bahnhof\",,\"3.0000000\",\"3.0000000\",,00000550217,3,,\"us\",2\n";
+           "Bahnhof\",,\"3.0000000\",\"3.0000000\",,00000550217,3,,\"America/Los_Angeles\",2\n";
 }
 
 void checkStopFixture(std::vector<Stop> const &stops, tool::container::Dictionary const &dictionary)
@@ -167,9 +167,9 @@ void checkStopFixture(std::vector<Stop> const &stops, tool::container::Dictionar
                             !stops[2].url;
     BOOST_CHECK(valid_urls);
 
-    const auto valid_timezones = stops[0].timezone && (*stops[0].timezone == "de") &&
-                                 stops[1].timezone && (*stops[1].timezone == "de") &&
-                                 stops[2].timezone && (*stops[2].timezone == "us");
+    const auto valid_timezones = stops[0].utc_offset && (*stops[0].utc_offset == 3600) &&
+                                 stops[1].utc_offset && (*stops[1].utc_offset == 3600) &&
+                                 stops[2].utc_offset && (*stops[2].utc_offset == -28800);
     BOOST_CHECK(valid_timezones);
 
     const auto valid_wheelchair =
@@ -223,7 +223,7 @@ void checkMinimalStopFixture(std::vector<Stop> const &stops,
 
     const auto no_optionals = [](Stop const &stop) {
         return !stop.code && !stop.description && !stop.zone_id && !stop.url &&
-               !stop.location_type && !stop.parent_station && !stop.timezone &&
+               !stop.location_type && !stop.parent_station && !stop.utc_offset &&
                !stop.wheelchair_access;
     };
 

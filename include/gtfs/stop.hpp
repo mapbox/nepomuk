@@ -51,7 +51,7 @@ struct Stop
     boost::optional<DictionaryID> url;
     boost::optional<LocationType> location_type;
     boost::optional<StopID> parent_station;
-    boost::optional<std::string> timezone;
+    boost::optional<std::int32_t> utc_offset;
     boost::optional<accessibility::Wheelchair> wheelchair_access;
 };
 
