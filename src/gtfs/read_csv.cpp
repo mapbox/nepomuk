@@ -13,6 +13,8 @@
 #include <string>
 #include <vector> // for vector
 
+#include "date/icu.hpp"
+
 namespace
 {
 bool checkFile(boost::filesystem::path const &path, bool const required = false)
@@ -100,6 +102,9 @@ CSVDiscSource::CSVDiscSource(boost::filesystem::path base)
     checkFile(stops, REQUIRED);
     checkFile(stop_times, REQUIRED);
     checkFile(trips, REQUIRED);
+
+    // make sure timezone data is loaded
+    date::icu::init();
 }
 
 Dataset readCSV(CSVDiscSource const &source)

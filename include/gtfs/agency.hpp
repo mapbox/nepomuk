@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include <boost/optional.hpp>
 
@@ -19,7 +20,7 @@ struct Agency
 {
     std::string name;
     std::string url;
-    std::string timezone;
+    std::int32_t utc_offset;
     boost::optional<AgencyID> id;
     boost::optional<std::string> language;
     boost::optional<std::string> phone;

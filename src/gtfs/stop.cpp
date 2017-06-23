@@ -3,6 +3,8 @@
 
 #include <boost/assert.hpp>
 
+#include "date/timezone.hpp"
+
 namespace nepomuk
 {
 namespace gtfs
@@ -31,6 +33,13 @@ Stop makeStop(std::map<std::string, std::size_t> const &header,
     const double lat = std::stod(construct<std::string>("stop_lat", forward, header, values));
     const double lon = std::stod(construct<std::string>("stop_lon", forward, header, values));
 
+    auto const as_utc_offset = [](std::string const& timezone)
+    {
+        auto offset = date::Timezone::offset(timezone);
+        BOOST_ASSERT(offset);
+        return *offset;
+    };
+
     return {
         construct<StopID>("stop_id", stringToID<StopID>, header, values),
         construct<DictionaryID>("stop_name", DictionaryConverter(dictionary), header, values),
@@ -44,7 +53,7 @@ Stop makeStop(std::map<std::string, std::size_t> const &header,
             "stop_url", DictionaryConverter(dictionary), header, values),
         construct_as_optional<LocationType, true>("location_type", to_type, header, values),
         construct_as_optional<StopID, false>("parent_station", stringToID<StopID>, header, values),
-        construct_as_optional<std::string, false>("stop_timezone", forward, header, values),
+        construct_as_optional<std::int32_t, false>("stop_timezone", as_utc_offset, header, values),
         construct_as_optional<accessibility::Wheelchair, true>(
             "wheelchair_boarding", accessibility::makeWheelchair, header, values)};
 }

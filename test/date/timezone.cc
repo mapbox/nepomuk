@@ -13,5 +13,5 @@ BOOST_AUTO_TEST_CASE(construct_time)
     icu::init();
     auto offset = Timezone::offset("America/Los_Angeles");
     BOOST_CHECK(offset);
-    BOOST_CHECK_EQUAL(*offset, 8*60*60);
+    BOOST_CHECK_EQUAL(*offset, -8*60*60);
 }
