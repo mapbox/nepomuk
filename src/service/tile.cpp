@@ -16,7 +16,7 @@ namespace service
 
 Tile::Tile(service::Master &master_service)
     : timetable(master_service.timetable()), stop_lookup(master_service.coordinate_to_stop()),
-      stop_to_line(master_service.stop_to_line()), dictionary(master_service.dictionary()),
+      stop_to_trip(master_service.stop_to_trip()), dictionary(master_service.dictionary()),
       stop_annotation(master_service.stop_annotation()),
       geometry(master_service.geometry_annotation()), segment_table(master_service.segment_table()),
       components(master_service.components())
@@ -57,14 +57,15 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
 
     auto connection_layer = vector_tile.new_layer("lines");
 
-    std::set<std::tuple<StopID, StopID, LineID>> added_shapes;
+    std::set<std::tuple<StopID, StopID, TripID>> added_shapes;
 
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
-        auto const lines = stop_to_line(stop);
+        auto const lines = stop_to_trip(stop);
         for (auto const line_id : lines)
         {
+            /*
             auto const stop_range = timetable.line(line_id).stops().list(stop);
             if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             {
@@ -87,7 +88,7 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
                 else
                 {
                     auto const tuple =
-                        std::make_tuple(from_stop, to_stop, LineID{static_cast<std::uint64_t>(-1)});
+                        std::make_tuple(from_stop, to_stop, TripID{static_cast<std::uint64_t>(-1)});
                     if (added_shapes.count(tuple))
                         continue;
                     std::vector<geometric::WGS84Coordinate> line;
@@ -97,6 +98,7 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
                     added_shapes.insert(tuple);
                 }
             }
+            */
         }
     }
 }
@@ -158,9 +160,10 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
-        auto const lines = stop_to_line(stop);
+        auto const lines = stop_to_trip(stop);
         for (auto const line_id : lines)
         {
+            /*
             auto const stop_range = timetable.line(line_id).stops().list(stop);
             if (std::distance(stop_range.begin(), stop_range.end()) > 1)
             {
@@ -171,6 +174,7 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
                     component_layer.add_point(geometry.get(next_stop), to_features);
                 }
             }
+            */
         }
         if (components.size(components.component(stop.base())) == 1)
         {

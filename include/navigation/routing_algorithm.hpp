@@ -2,8 +2,8 @@
 #define NEPOMUK_NAVIGATION_ROUTING_ALGORITHM_HPP
 
 #include "date/time.hpp"
-#include "id/line.hpp"
 #include "id/stop.hpp"
+#include "id/trip.hpp"
 #include "navigation/connection.hpp"
 #include "navigation/route.hpp"
 #include "navigation/segment.hpp"
@@ -18,7 +18,7 @@ namespace nepomuk
 
 namespace timetable
 {
-class LineTable;
+class TimeTable;
 } // namespace timetable
 
 namespace navigation
@@ -38,7 +38,7 @@ class RoutingAlgorithm
         double meters;
     };
 
-    RoutingAlgorithm(std::vector<timetable::LineTable> const &line_tables);
+    RoutingAlgorithm(timetable::TimeTable const &time_table);
 
     virtual boost::optional<Route>
     operator()(date::Time const departure, StopID const origin, StopID const destination) const = 0;
@@ -48,22 +48,17 @@ class RoutingAlgorithm
                                               std::vector<ADLeg> const &destinations) const = 0;
 
   protected:
-    std::vector<timetable::LineTable> const &line_tables;
+    timetable::TimeTable const &time_table;
 
     // General Routing Structures to be used by all reference implementations
     struct PathEntry
     {
         StopID stop;
-        LineID line;
+        TripID line;
         date::Time arrival;
         date::Time departure;
     };
 
-    // since many lines can validly depart a stop but only one stop can be the best parent of a
-    // station, we store the departure of the parent with the destination. This allows to find the
-    // actual departure of the route that reaches a station/stop. To report our results, we now need
-    // to update the departures by shifting them one to the front.
-    void update_departures_and_arrivals(std::vector<PathEntry> &path) const;
     Route make_route(std::vector<PathEntry> path) const;
 
     // routing algorithms (to avoid problems with intermediate stops changing after traversing a
@@ -88,7 +83,7 @@ class RoutingAlgorithm
     void set_arrival(segment::Transfer &segment, date::UTCTimestamp time) const;
     void set_departure(segment::Walk &segment, date::UTCTimestamp time) const;
     void set_arrival(segment::Walk &segment, date::UTCTimestamp time) const;
-    void set_line(Connection &connection, LineID line) const;
+    void set_line(Connection &connection, TripID line) const;
 
     Segment make_segment(segment::Transfer transfer) const;
     Segment make_segment(segment::Transit transit) const;
@@ -97,7 +92,11 @@ class RoutingAlgorithm
     Stop make_stop(StopID const id,
                    date::UTCTimestamp const arrival,
                    date::UTCTimestamp const departure) const;
-    Connection make_connection(LineID const id,
+    Stop make_stop(StopID const id,
+                   TripID const trip_id,
+                   date::UTCTimestamp const arrival,
+                   date::UTCTimestamp const departure) const;
+    Connection make_connection(TripID const id,
                                date::UTCTimestamp const departure,
                                date::UTCTimestamp const arrival) const;
 };

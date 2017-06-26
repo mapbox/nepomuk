@@ -15,13 +15,14 @@ namespace timetable
 {
 
 class TimeTable;
+class StopToTrip;
 
 class TimetableToGraphAdaptor
 {
   public:
     // construct a graph representation for connectivity reasons of the timetable graph
     static tool::container::AdjacencyGraph adapt(TimeTable const &timetable,
-                                                 search::StopToLine const &stop_to_line);
+                                                 timetable::StopToTrip const &stop_to_trip);
 };
 
 } // namespace timetable

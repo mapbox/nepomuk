@@ -2,7 +2,7 @@
 #define NEPOMUK_ANNOTATION_NAME_FROM_ID_HPP_
 
 #include "id/dictionary.hpp"
-#include "id/line.hpp"
+#include "id/trip.hpp"
 #include "tool/container/dictionary.hpp"
 
 #include <boost/optional.hpp>
@@ -28,7 +28,7 @@ struct LineInfo
 class Line final
 {
   public:
-    LineInfo const &operator()(LineID const line) const;
+    LineInfo const &operator()(TripID const line) const;
 
   private:
     std::vector<LineInfo> line_information;

@@ -10,17 +10,18 @@ namespace nepomuk
 namespace annotation
 {
 
-Line LineFactory::produce(std::vector<size_t> const &trip_offset_by_line,
-                          std::vector<gtfs::Route> const &routes,
-                          std::vector<gtfs::Trip> const &trips)
+Line LineFactory::produce(std::vector<gtfs::Route> const &routes,
+                          std::vector<gtfs::Trip> const &trips,
+                          std::vector<TripID> const &internal_to_external_trip_id)
 {
     Line line_annotation;
 
-    auto const compute_line_info = [&](auto const trip_offset) {
+    auto const compute_line_info = [&](auto const external_trip_id) {
         LineInfo line_info;
-        line_info.headsign = trips[trip_offset].headsign;
+        auto const &trip = trips[external_trip_id.base()];
+        line_info.headsign = trip.headsign;
 
-        auto const &route = routes[trips[trip_offset].route_id.base()];
+        auto const &route = routes[trip.route_id.base()];
         line_info.name = route.long_name;
         line_info.abbreviation = route.short_name;
         line_info.background_color = route.color;
@@ -28,12 +29,12 @@ Line LineFactory::produce(std::vector<size_t> const &trip_offset_by_line,
         return line_info;
     };
 
-    line_annotation.line_information.reserve(trip_offset_by_line.size());
-    std::transform(trip_offset_by_line.begin(),
-                   trip_offset_by_line.end(),
+    line_annotation.line_information.reserve(internal_to_external_trip_id.size());
+
+    std::transform(internal_to_external_trip_id.begin(),
+                   internal_to_external_trip_id.end(),
                    std::back_inserter(line_annotation.line_information),
                    compute_line_info);
-
     return line_annotation;
 }
 

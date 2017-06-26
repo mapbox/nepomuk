@@ -4,6 +4,7 @@ set(annotationLIBS
         NEPOMUKgtfs
         NEPOMUKadaptor
         NEPOMUKtimetable
+        NEPOMUKnavigation
         NEPOMUKipc
         NEPOMUKipcproto
         NEPOMUKadaptor

@@ -1,4 +1,5 @@
 #include "gtfs/dataset.hpp"
+#include "algorithm/ranges.hpp"
 #include "geometric/coordinate.hpp"
 #include "tool/status/progress.hpp"
 
@@ -120,6 +121,40 @@ void Dataset::filter_unreachable_stops()
     }
 }
 
+void Dataset::remove_cyclic_dependencies()
+{
+    std::unordered_map<StopID, StopID> copies;
+    auto const on_trips = [](auto const &lhs, auto const &rhs) {
+        return lhs.trip_id < rhs.trip_id;
+    };
+
+    auto const break_cyclic_trips = [&](auto const range) {
+        std::unordered_set<StopID> seen;
+        auto const duplicate_if_seen = [&](auto &stop_time) {
+            if (!seen.count(stop_time.stop_id))
+            {
+                seen.insert(stop_time.stop_id);
+            }
+            else
+            {
+                if (!copies.count(stop_time.stop_id))
+                {
+                    copies[stop_time.stop_id] = StopID{stops.size()};
+                    BOOST_ASSERT(stop_time.stop_id.base() < stops.size());
+                    stops.push_back(stops[stop_time.stop_id.base()]);
+                    stops.back().id = copies[stop_time.stop_id];
+                    stops.back().parent_station = {stop_time.stop_id};
+                }
+                BOOST_ASSERT(stop_time.stop_id.base() < stops.size());
+                stop_time.stop_id = copies[stop_time.stop_id];
+            }
+        };
+        std::for_each(range.first, range.second, duplicate_if_seen);
+    };
+
+    algorithm::by_equal_ranges(stop_times.begin(), stop_times.end(), on_trips, break_cyclic_trips);
+}
+
 void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirement)
 {
     tool::status::FunctionTimingGuard guard("stops into stations");
@@ -132,6 +167,7 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
         if (static_cast<std::size_t>(std::distance(bucket_begin, bucket_end)) > 1)
         {
             auto const has_parent_station = [&](auto const &pair_name_offset) -> bool {
+                BOOST_ASSERT(pair_name_offset.second < stops.size());
                 return stops[pair_name_offset.second].parent_station != boost::none;
             };
             if (std::any_of(bucket_begin, bucket_end, has_parent_station))
@@ -142,6 +178,7 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
                     return lhs.second < rhs.second;
                 })->second;
 
+            BOOST_ASSERT(reference_index < stops.size());
             auto const reference_position = stops[reference_index].location;
             auto const are_close = [&](auto const &pair_name_offset) {
                 return geometric::distance(reference_position,
@@ -155,6 +192,7 @@ void Dataset::connect_stops_into_stations(std::uint32_t const proximity_requirem
                 // point cloud and check for half the proximity requirement
                 auto reference = stops[reference_index].id;
                 auto const assign_parent = [&](auto const &pair_name_offset) {
+                    BOOST_ASSERT(pair_name_offset.second < stops.size());
                     if (stops[pair_name_offset.second].id != reference)
                         stops[pair_name_offset.second].parent_station = reference;
                 };
@@ -198,7 +236,7 @@ tool::container::IndexedVector<geometric::WGS84Coordinate> Dataset::shapes_as_in
     tool::container::IndexedVector<geometric::WGS84Coordinate> result;
     result.reserve(shapes->size());
 
-    // groupe coordinates by their shape_id as category
+    // group coordinates by their shape_id as category
     auto const add_to_result = [&result](auto const &shape) {
         // it's either the same size, or one less, otherwise the id hashing went wrong
         BOOST_ASSERT((result.category_size() - shape.id.base()) <= 1);

@@ -19,7 +19,8 @@ struct Stop;
 namespace timetable
 {
 
-class LineTable;
+class TripTable;
+class StationTable;
 
 class TransferTableFactory
 {
@@ -30,7 +31,8 @@ class TransferTableFactory
     static TransferTable produce(std::vector<gtfs::Transfer>::iterator begin,
                                  std::vector<gtfs::Transfer>::iterator end,
                                  std::size_t const num_stops,
-                                 std::vector<LineTable> const &line_tables,
+                                 TripTable const &trip_table,
+                                 StationTable const &station_table,
                                  std::vector<gtfs::Stop> const &stops,
                                  search::CoordinateToStop const &stop_lookup);
 };

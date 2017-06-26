@@ -1,4 +1,6 @@
 #include "ipc/request_handler.hpp"
+#include "ipc/context.hpp"
+
 #include <algorithm>
 
 namespace nepomuk
@@ -7,7 +9,7 @@ namespace ipc
 {
 
 RequestHandler::RequestHandler(std::string const &socket_id)
-    : context(/*num_threads*/ 1), socket(context, ZMQ_REQ)
+    : context(get_context()), socket(context, ZMQ_REQ)
 {
     // open up a connection, no request yet
     socket.connect(socket_id);

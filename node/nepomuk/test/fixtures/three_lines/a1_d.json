@@ -2,16 +2,16 @@
 	"code": "Ok",
 	"routes": [{
 		"departure": "0",
-		"arrival": "1800",
-		"duration": "1800",
+		"arrival": "2400",
+		"duration": "2400",
 		"legs": [{
 			"departure": "0",
-			"arrival": "1800",
-			"duration": "1800",
+			"arrival": "2400",
+			"duration": "2400",
 			"segments": [{
 				"departure": "600",
-				"arrival": "1800",
-				"duration": "1200",
+				"arrival": "2400",
+				"duration": "1800",
 				"geometry": "g^g^?S?S?I?I?I?I?I?I",
 				"stops": [{
 					"name": "Stop A Platform 1",
@@ -20,18 +20,18 @@
 					"location": [0.005000, 0.005100]
 				}, {
 					"name": "Stop B",
-					"arrival": "600",
-					"departure": "600",
+					"arrival": "1200",
+					"departure": "1200",
 					"location": [0.015200, 0.005000]
 				}, {
 					"name": "Stop C",
-					"arrival": "600",
-					"departure": "600",
+					"arrival": "1800",
+					"departure": "1800",
 					"location": [0.025300, 0.005000]
 				}, {
 					"name": "Stop D",
-					"arrival": "1800",
-					"departure": "1800",
+					"arrival": "2400",
+					"departure": "2400",
 					"location": [0.035400, 0.005000]
 				}],
 				"connections": [{

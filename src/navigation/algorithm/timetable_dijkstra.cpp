@@ -1,7 +1,6 @@
 #include "navigation/algorithm/timetable_dijkstra.hpp"
 #include "navigation/leg.hpp"
 #include "navigation/route.hpp"
-#include "search/stop_to_line.hpp"
 #include "timetable/timetable.hpp"
 #include "tool/container/kary_heap.hpp"
 
@@ -20,8 +19,8 @@ namespace algorithm
 {
 
 TimeTableDijkstra::TimeTableDijkstra(timetable::TimeTable const &time_table,
-                                     search::StopToLine const &stop_to_line)
-    : RoutingAlgorithm(time_table.lines()), time_table(time_table), stop_to_line(stop_to_line)
+                                     timetable::StopToTrip const &stop_to_trip)
+    : RoutingAlgorithm(time_table), trip_table(time_table.trip_table()), stop_to_trip(stop_to_trip)
 {
 }
 
@@ -135,8 +134,9 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
     auto const reach = [&](StopID const stop,
                            date::Time const time,
                            StopID from_stop,
-                           LineID on_line,
+                           TripID on_line,
                            date::Time const parent_departure) {
+        BOOST_ASSERT(parent_departure <= time);
         // std::cout << "  [reached] " << stop << " " << time << " Parent: " << from_stop << " "
         //          << parent_departure << " Line: " << on_line << std::endl;
         if (!heap.reached(stop))
@@ -153,20 +153,21 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
             return false;
     };
 
-    auto const run_trip = [&](auto const from_stop_id, auto const from_line_id, auto const &trip) {
-        auto time = trip.departure;
-        if (std::distance(trip.stop_range.begin(), trip.stop_range.end()) == 0)
+    auto const run_trip = [&](auto const from_stop_id, auto const from_line_id, auto &trip) {
+        if (!trip || trip.is_last())
             return;
 
+        auto const depart = trip.departure();
         // iterator over all trips
-        auto duration_itr = trip.duration_range.begin();
-        for (auto stop_itr = trip.stop_range.begin(); stop_itr != trip.stop_range.end();
-             ++stop_itr, ++duration_itr)
+        // skip over self, relax all actual stops
+        while (++trip)
         {
-            auto const stop_id = *stop_itr;
+            BOOST_ASSERT(!trip.is_first());
+            auto const time = trip.arrival();
+            auto const stop_id = trip.stop();
             auto transfers = time_table.transfers(stop_id);
 
-            if (reach(stop_id, time, from_stop_id, from_line_id, trip.departure))
+            if (reach(stop_id, time, from_stop_id, from_line_id, depart))
             {
                 // add all transfers
                 for (auto transfer : transfers)
@@ -187,14 +188,7 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
                     }
                 }
             }
-            time = time + *duration_itr;
         }
-    };
-
-    auto const traverse_line = [&](auto const line_id, auto const stop_id, auto const time) {
-        auto const trip = time_table.line(line_id).get(stop_id, time);
-        if (trip)
-            run_trip(stop_id, line_id, *trip);
     };
 
     // found destination
@@ -202,10 +196,21 @@ void TimeTableDijkstra::relax_one(FourHeap &heap) const
     auto const arrival = heap.min_key();
     heap.delete_min();
 
-    auto const lines = stop_to_line(stop);
-    for (auto line_id : lines)
+    auto const trips = stop_to_trip(stop);
+    std::set<std::pair<std::size_t, std::size_t>> seen_trips;
+
+    for (auto trip_and_offset : trips)
     {
-        traverse_line(line_id, stop, arrival);
+        if (seen_trips.count(trip_table.identifier(trip_and_offset.trip_id)))
+            continue;
+
+        if (trip_table.reachable(trip_and_offset.trip_id, trip_and_offset.offset, arrival))
+        {
+            seen_trips.insert(trip_table.identifier(trip_and_offset.trip_id));
+
+            auto trip_itr = trip_table(trip_and_offset.trip_id, trip_and_offset.offset, arrival);
+            run_trip(stop, trip_and_offset.trip_id, trip_itr);
+        }
     }
 }
 
@@ -213,20 +218,22 @@ std::vector<TimeTableDijkstra::Base::PathEntry>
 TimeTableDijkstra::extract_path(StopID current_stop, FourHeap const &heap) const
 {
     std::vector<Base::PathEntry> path;
+
     path.push_back({current_stop,
                     heap.data(current_stop).on_line,
                     heap.key(current_stop),
-                    heap.data(current_stop).parent_departure});
+                    heap.key(current_stop)});
+    auto depart = heap.data(current_stop).parent_departure;
     do
     {
         current_stop = heap.data(current_stop).parent_stop;
-        path.push_back({current_stop,
-                        heap.data(current_stop).on_line,
-                        heap.key(current_stop),
-                        heap.data(current_stop).parent_departure});
+        path.push_back(
+            {current_stop, heap.data(current_stop).on_line, heap.key(current_stop), depart});
+        depart = heap.data(current_stop).parent_departure;
     } while (heap.data(current_stop).parent_stop != current_stop);
 
     std::reverse(path.begin(), path.end());
+
     return path;
 }
 

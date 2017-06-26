@@ -4,8 +4,8 @@
 #include "navigation/routing_algorithm.hpp"
 
 #include "date/time.hpp"
-#include "id/line.hpp"
 #include "id/stop.hpp"
+#include "id/trip.hpp"
 #include "tool/container/kary_heap.hpp"
 
 #include <boost/optional.hpp>
@@ -13,13 +13,11 @@
 namespace nepomuk
 {
 
-namespace search
-{
-class StopToLine;
-}
 namespace timetable
 {
 class TimeTable;
+class TripTable;
+class StopToTrip;
 }
 
 namespace navigation
@@ -35,7 +33,7 @@ class TimeTableDijkstra : public RoutingAlgorithm
   public:
     using Base = RoutingAlgorithm;
     TimeTableDijkstra(timetable::TimeTable const &time_table,
-                      search::StopToLine const &stop_to_line);
+                      timetable::StopToTrip const &stop_to_trip);
 
     // query a route between two stops
     boost::optional<Route> operator()(date::Time const departure,
@@ -47,19 +45,16 @@ class TimeTableDijkstra : public RoutingAlgorithm
                                       std::vector<ADLeg> const &destinations) const override final;
 
   private:
+    timetable::TripTable const &trip_table;
+    timetable::StopToTrip const &stop_to_trip;
+
     struct ReachedVia
     {
         StopID parent_stop;
-        LineID on_line;
+        TripID on_line;
         date::Time parent_departure;
     };
     using FourHeap = tool::container::KAryHeap<StopID, date::Time, 4, ReachedVia>;
-
-    // the unmodified timetable data to route on
-    timetable::TimeTable const &time_table;
-
-    // the look-up for lines from a given stop
-    search::StopToLine const &stop_to_line;
 
     void relax_one(FourHeap &heap) const;
 

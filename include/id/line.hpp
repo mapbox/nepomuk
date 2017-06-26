@@ -6,8 +6,6 @@
 namespace nepomuk
 {
 STRONG_ID_TYPE(std::uint64_t, LineID)
-
-auto const constexpr WALKING_TRANSFER = LineID{static_cast<std::uint64_t>(-1)};
 } // namespace nepomuk
 
 // needs to be outside of nepomuk namespace to ingest into std namespace

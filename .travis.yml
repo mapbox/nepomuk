@@ -19,6 +19,7 @@ env:
   - MASON_RELEASE=0.10.0
   - CMAKE_VERSION=3.7.1
   - CLANG_FORMAT_VERSION=3.8.1
+  - ASAN_OPTIONS=detect_container_overflow=0
   matrix:
   - BUILD_TYPE=Release NODE_VERSION=4
   - BUILD_TYPE=Release NODE_VERSION=6

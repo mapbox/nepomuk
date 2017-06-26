@@ -14,14 +14,10 @@
 
 namespace nepomuk
 {
-namespace search
-{
-class StopToLine;
-}
 namespace timetable
 {
-class TimeTable;
-}
+class StopToTrip;
+} // namespace timetable
 namespace navigation
 {
 class Route;
@@ -31,7 +27,7 @@ namespace algorithm
 class TimeTable : public RoutingAlgorithm
 {
   public:
-    TimeTable(timetable::TimeTable const &time_table, search::StopToLine const &stop_to_line);
+    TimeTable(timetable::TimeTable const &time_table, timetable::StopToTrip const &stop_to_trip);
 
     // query a route between two stops
     boost::optional<Route> operator()(date::Time const departure,
@@ -43,12 +39,6 @@ class TimeTable : public RoutingAlgorithm
                                       std::vector<ADLeg> const &destinations) const override final;
 
   private:
-    // the unmodified timetable data to route on
-    timetable::TimeTable const &time_table;
-
-    // the look-up for lines from a given stop
-    search::StopToLine const &stop_to_line;
-
     // internal structures
     struct State
     {
@@ -61,7 +51,7 @@ class TimeTable : public RoutingAlgorithm
         date::Time arrival;
         StopID parent;
         date::Time parent_departure;
-        LineID line_id;
+        TripID line_id;
     };
 
     using StateContainer = std::vector<State>;
@@ -80,6 +70,8 @@ class TimeTable : public RoutingAlgorithm
 
     std::vector<PathEntry> extract_path(StopID last_stop,
                                         ReachedStateContainer const &container) const;
+
+    timetable::StopToTrip const &stop_to_trip;
 };
 
 } // namespace algorithm

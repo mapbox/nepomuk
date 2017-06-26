@@ -8,7 +8,7 @@ namespace service
 
 Route::Route(service::Master &master_service)
     : coordinate_to_stop(master_service.coordinate_to_stop()),
-      navigator(master_service.timetable(), master_service.stop_to_line())
+      navigator(master_service.timetable(), master_service.stop_to_trip())
 {
 }
 

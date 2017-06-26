@@ -96,16 +96,16 @@ BOOST_AUTO_TEST_CASE(annotate_api_trip)
 {
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     navigation::algorithm::TimeTable timetable_router(data_service.timetable(),
-                                                      data_service.stop_to_line());
+                                                      data_service.stop_to_trip());
 
     annotation::API const &api = data_service.api_annotation();
 
     auto const &coordinate_to_stop = data_service.coordinate_to_stop();
 
     auto const from_coordinate = make_coordinate(0.005, 0.005);
-    auto const to_coordinate = make_coordinate(0.0556, 0.20601);
+    auto const to_coordinate = make_coordinate(0.0756, 0.20601);
     auto const from = coordinate_to_stop.all(make_coordinate(0.005, 0.005), 20);
-    auto const to = coordinate_to_stop.all(make_coordinate(0.0556, 0.20601), 20);
+    auto const to = coordinate_to_stop.all(make_coordinate(0.0756, 0.20601), 20);
 
     using input_type = navigation::RoutingAlgorithm::ADLeg;
     std::vector<input_type> origin;
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(annotate_api_trip)
     }
 
     {
-        MockNavigator mocked_navigator(data_service.timetable().lines());
+        MockNavigator mocked_navigator(data_service.timetable());
         auto mocked_trip = mocked_navigator(date::Time("1:00:00"), origin, destination);
         BOOST_CHECK(mocked_trip);
         if (mocked_trip)

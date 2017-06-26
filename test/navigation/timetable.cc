@@ -26,9 +26,8 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 
     std::vector<boost::optional<ShapeID>> shapes_by_line;
     auto const timetable = data_service.timetable();
-    auto const trip_look_up = data_service.stop_to_line();
 
-    navigation::algorithm::TimeTable timetable_router(timetable, trip_look_up);
+    navigation::algorithm::TimeTable timetable_router(timetable, data_service.stop_to_trip());
 
     auto route = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
@@ -36,7 +35,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(), StopID{0});
     BOOST_CHECK_EQUAL(
         (route->legs().begin()->segments().begin())->as_transit().connections().begin()->line(),
-        LineID{0});
+        TripID{0});
     route = timetable_router(date::Time("12:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK_EQUAL(

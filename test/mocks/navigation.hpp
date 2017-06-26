@@ -3,21 +3,22 @@
 
 #include "date/time.hpp"
 #include "geometric/coordinate.hpp"
-#include "id/line.hpp"
 #include "id/stop.hpp"
+#include "id/trip.hpp"
 #include "navigation/connection.hpp"
 #include "navigation/leg.hpp"
 #include "navigation/route.hpp"
 #include "navigation/routing_algorithm.hpp"
 #include "navigation/segment.hpp"
 #include "navigation/stop.hpp"
+#include "timetable/timetable.hpp"
 
 using namespace nepomuk;
 
 struct MockNavigator : public navigation::RoutingAlgorithm
 {
-    MockNavigator(std::vector<timetable::LineTable> const &line_tables)
-        : navigation::RoutingAlgorithm(line_tables)
+    MockNavigator(timetable::TimeTable const &time_tables)
+        : navigation::RoutingAlgorithm(time_tables)
     {
     }
 
@@ -29,8 +30,9 @@ struct MockNavigator : public navigation::RoutingAlgorithm
         navigation::segment::Transit transit;
         navigation::segment::Transfer transfer;
         navigation::Connection connection =
-            make_connection(LineID{0}, date::UTCTimestamp(0), date::UTCTimestamp(0));
-        navigation::Stop stop = make_stop(StopID{0}, date::UTCTimestamp(0), date::UTCTimestamp(0));
+            make_connection(TripID{0}, date::UTCTimestamp(0), date::UTCTimestamp(0));
+        navigation::Stop stop =
+            make_stop(StopID{0}, TripID{0}, date::UTCTimestamp(0), date::UTCTimestamp(0));
         set_origin(transfer, StopID{0});
         set_destination(transfer, StopID{0});
 

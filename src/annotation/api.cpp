@@ -183,8 +183,8 @@ void API::jsonify(std::ostream &os, navigation::segment::Transit const &transit)
     os << transit.duration() << ",";
     tag(os, "geometry");
     auto const range = geometry.get(transit.connections().front().line(),
-                                    transit.stops().front().id(),
-                                    transit.stops().back().id());
+                                    transit.stops().front().offset(),
+                                    transit.stops().back().offset());
     std::vector<geometric::WGS84Coordinate> coordinates(range.begin(), range.end());
     if (range.empty())
     {
