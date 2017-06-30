@@ -29,7 +29,7 @@ class TripTableFactory
                    std::vector<gtfs::StopTime>::iterator end);
 
     // extract the produced result from the factory
-    TripTable extract() { return std::move(table); }
+    TripTable extract() { std::cout << table.all_stops.size() << " Stops. " << table.all_durations.size() << std::endl; return std::move(table); }
     auto get_mapping() { return std::move(external_from_internal_trip_id); }
 
   private:

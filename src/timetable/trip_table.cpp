@@ -55,7 +55,7 @@ bool TripViewIterator::is_last() const
     return *(durations_itr + 1) == std::numeric_limits<std::uint32_t>::max();
 }
 
-bool TripTable::reachable(TripID const trip, std::size_t offset, date::Time departure) const
+bool TripTable::reachable(TripID const trip, std::size_t offset, date::Time const departure) const
 {
     auto const &trip_info = departures[trip.base()];
     // we store 2 values per station (arrival + departure)
@@ -91,6 +91,17 @@ TripViewIterator TripTable::operator()(TripID const trip, std::size_t offset) co
     BOOST_ASSERT(duration_offset < all_durations.size());
     return {
         all_stops.begin() + stop_offset, all_durations.begin() + duration_offset, trip_info.time};
+}
+
+TripViewIterator TripTable::operator()(TripID const trip, StopID const stop) const
+{
+    return (*this)(trip, offset(trip, stop));
+}
+
+TripViewIterator TripTable::
+operator()(TripID const trip, StopID const stop, date::Time const departure) const
+{
+    return (*this)(trip, offset(trip, stop), departure);
 }
 
 } // namespace timetable

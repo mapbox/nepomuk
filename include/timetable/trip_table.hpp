@@ -68,9 +68,16 @@ class TripTable
   public:
     bool reachable(TripID const trip, std::size_t offset, date::Time departure) const;
     // only get trips after a certain departure
-    TripViewIterator operator()(TripID const trip, std::size_t offset, date::Time departure) const;
+    TripViewIterator
+    operator()(TripID const trip, std::size_t offset, date::Time const departure) const;
     // all trips are fine
     TripViewIterator operator()(TripID const trip, std::size_t offset) const;
+
+    // if you know the offset, prefer the offset variant, since these operators here are looking up
+    // the offset in a linear search
+    TripViewIterator operator()(TripID const trip, StopID const stop) const;
+    TripViewIterator
+    operator()(TripID const trip, StopID const stop, date::Time const departure) const;
 
     std::pair<std::size_t, std::size_t> identifier(TripID const trip) const
     {
@@ -79,6 +86,7 @@ class TripTable
     }
 
     // find the offset of a stop along at trip
+    // linear search over all stops of the trip
     std::size_t offset(TripID const trip, StopID const stop) const;
 
   private:

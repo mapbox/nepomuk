@@ -15,10 +15,10 @@ namespace
 {
 
 // validate the input
-template <typename iterator_type> void validate_input_stops(iterator_type begin, iterator_type end)
+template <typename iterator_type> void validate_input(iterator_type begin, iterator_type end)
 {
     if (std::distance(begin, end) <= 1)
-        throw InvalidInputError("TripTableFacotry::Stops Stop times cannot be an empty set.");
+        throw InvalidInputError("TripTableFacotry: Stop times cannot be an empty set.");
 
     // trip has to be unique over all stop times
     const auto invalid_trip_id = [desired_id = begin->trip_id](auto const &stop_time)
@@ -35,35 +35,9 @@ template <typename iterator_type> void validate_input_stops(iterator_type begin,
     };
     if (!std::is_sorted(begin, end, compare_by_arrival))
     {
-        for (auto itr = begin; itr != end; ++itr)
-            std::cout << "Station: " << itr->stop_id << " " << itr->arrival << std::endl;
         throw InvalidInputError(
             "TripTableFactory::Stops Stop times need to be sorted by arrival time.");
     }
-}
-
-template <typename iterator_type>
-void validate_input_durations(iterator_type begin, iterator_type end)
-{
-    if (std::distance(begin, end) <= 1)
-        throw InvalidInputError("TripTableFactory::Durations Stop times cannot be an empty set.");
-
-    // trip has to be unique over all stop times
-    const auto invalid_trip_id = [desired_id = begin->trip_id](auto const &stop_time)
-    {
-        return stop_time.trip_id != desired_id;
-    };
-    if (std::any_of(begin, end, invalid_trip_id))
-        throw InvalidInputError(
-            "TripTableFactory::Durations Stop times have to belong to the same trip");
-
-    // stop times have to be sorted by arrival
-    const auto compare_by_arrival = [](auto const &lhs, auto const &rhs) {
-        return lhs.arrival < rhs.arrival;
-    };
-    if (!std::is_sorted(begin, end, compare_by_arrival))
-        throw InvalidInputError(
-            "TripTableFactory::Durations Stop times need to be sorted by arrival time.");
 }
 
 } // namespace
@@ -74,9 +48,6 @@ void validate_input_durations(iterator_type begin, iterator_type end)
 std::size_t TripTableFactory::produceStopOffset(std::vector<gtfs::StopTime>::iterator begin,
                                                 const std::vector<gtfs::StopTime>::iterator end)
 {
-    // make sure our input is sane
-    validate_input_stops(begin, end);
-
     auto existing_table = findStopOffset(begin, end);
     if (existing_table)
         return *existing_table;
@@ -140,9 +111,6 @@ TripTableFactory::findStopOffset(const std::vector<gtfs::StopTime>::iterator beg
 std::size_t TripTableFactory::produceDurationOffset(std::vector<gtfs::StopTime>::iterator begin,
                                                     const std::vector<gtfs::StopTime>::iterator end)
 {
-    // make sure our input is fine
-    validate_input_durations(begin, end);
-
     std::vector<std::uint32_t> as_durations;
     auto const add_offsets = [&](auto const &stop_time) {
         as_durations.push_back(stop_time.arrival - begin->departure);
@@ -210,6 +178,8 @@ TripTableFactory::TripTableFactory(std::int32_t utc_offset) : utc_offset(utc_off
 TripID TripTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
                                  std::vector<gtfs::StopTime>::iterator end)
 {
+    // ensures an appropriate size
+    validate_input(begin,end);
     // at some time frequency / stop time might need different checks, right now we are fine doing
     // it this way and miss-using the input validity template
 

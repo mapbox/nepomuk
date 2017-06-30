@@ -58,6 +58,12 @@ add_compile_options(${CMAKE_CXX_FLAGS} -Wstrict-overflow=2)
 add_compile_options(${CMAKE_CXX_FLAGS} -U_FORTIFY_SOURCE)
 add_compile_options(${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2)
 
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    add_compile_options(${CMAKE_CXX_FLAGS} -O0)
+    add_compile_options(${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer)
+    add_compile_options(${CMAKE_CXX_FLAGS} -fno-inline)
+endif()
+
 if(nepomuk_os MATCHES "unix")
     add_compile_options(${CMAKE_CXX_FLAGS} -fext-numeric-literals)
 endif()
