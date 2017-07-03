@@ -179,7 +179,7 @@ TripID TripTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
                                  std::vector<gtfs::StopTime>::iterator end)
 {
     // ensures an appropriate size
-    validate_input(begin,end);
+    validate_input(begin, end);
     // at some time frequency / stop time might need different checks, right now we are fine doing
     // it this way and miss-using the input validity template
 

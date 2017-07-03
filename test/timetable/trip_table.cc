@@ -1,8 +1,8 @@
 #include "timetable/exceptions.hpp"
 #include "timetable/trip_table_factory.hpp"
 
-#include "id/trip.hpp"
 #include "id/stop.hpp"
+#include "id/trip.hpp"
 
 using namespace nepomuk;
 using namespace nepomuk::timetable;
@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
     TripTableFactory factory(0);
 
     std::vector<StopTime> data;
-    BOOST_CHECK_THROW(factory.produce(data.begin(),data.end()), InvalidInputError);
+    BOOST_CHECK_THROW(factory.produce(data.begin(), data.end()), InvalidInputError);
 
     StopTime first = {TripID{0},
                       date::Time("00:10:00"),
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
 
     data.push_back(first);
     data.push_back(second_invalid_trip);
-    BOOST_CHECK_THROW(factory.produce(data.begin(),data.end()), InvalidInputError);
+    BOOST_CHECK_THROW(factory.produce(data.begin(), data.end()), InvalidInputError);
 
     data.pop_back();
     data.push_back(second);
@@ -62,31 +62,31 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
 
     // check equal comparison
     TripTableFactory factory_valid(0);
-    auto const trip_id = factory_valid.produce(data.begin(),data.end());
+    auto const trip_id = factory_valid.produce(data.begin(), data.end());
     auto const trip_table = factory_valid.extract();
 
-    auto itr = trip_table(trip_id,0);
-    BOOST_CHECK_EQUAL(itr.departure(),date::Time("00:11:00"));
-    BOOST_CHECK_EQUAL(itr.stop(),StopID{0});
+    auto itr = trip_table(trip_id, 0);
+    BOOST_CHECK_EQUAL(itr.departure(), date::Time("00:11:00"));
+    BOOST_CHECK_EQUAL(itr.stop(), StopID{0});
     auto copy = itr;
     auto post = ++itr;
     auto pre = copy++;
 
-    BOOST_CHECK_EQUAL(itr.arrival(),copy.arrival());
-    BOOST_CHECK_EQUAL(itr.departure(),copy.departure());
-    BOOST_CHECK_EQUAL(itr.stop(),copy.stop());
+    BOOST_CHECK_EQUAL(itr.arrival(), copy.arrival());
+    BOOST_CHECK_EQUAL(itr.departure(), copy.departure());
+    BOOST_CHECK_EQUAL(itr.stop(), copy.stop());
 
-    BOOST_CHECK_EQUAL(itr.stop(),StopID{1});
-    BOOST_CHECK_EQUAL(itr.arrival(),date::Time("00:15:00"));
+    BOOST_CHECK_EQUAL(itr.stop(), StopID{1});
+    BOOST_CHECK_EQUAL(itr.arrival(), date::Time("00:15:00"));
 
-    BOOST_CHECK_EQUAL(pre.departure(),date::Time("00:11:00"));
-    BOOST_CHECK_EQUAL(pre.stop(),StopID{0});
+    BOOST_CHECK_EQUAL(pre.departure(), date::Time("00:11:00"));
+    BOOST_CHECK_EQUAL(pre.stop(), StopID{0});
 
-    BOOST_CHECK_EQUAL(post.stop(),StopID{1});
-    BOOST_CHECK_EQUAL(post.arrival(),date::Time("00:15:00"));
+    BOOST_CHECK_EQUAL(post.stop(), StopID{1});
+    BOOST_CHECK_EQUAL(post.arrival(), date::Time("00:15:00"));
 
     data.clear();
     data.push_back(second);
     data.push_back(first);
-    BOOST_CHECK_THROW(factory.produce(data.begin(),data.end()), InvalidInputError);
+    BOOST_CHECK_THROW(factory.produce(data.begin(), data.end()), InvalidInputError);
 }
