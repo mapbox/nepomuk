@@ -33,6 +33,10 @@ struct MockNavigator : public navigation::RoutingAlgorithm
             make_connection(TripID{0}, date::UTCTimestamp(0), date::UTCTimestamp(0));
         navigation::Stop stop =
             make_stop(StopID{0}, TripID{0}, date::UTCTimestamp(0), date::UTCTimestamp(0));
+
+        set_departure(stop, date::UTCTimestamp(0));
+        set_arrival(stop, date::UTCTimestamp(0));
+
         set_origin(transfer, StopID{0});
         set_destination(transfer, StopID{0});
 

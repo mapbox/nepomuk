@@ -48,6 +48,7 @@ BOOST_AUTO_TEST_CASE(check_compare)
     BOOST_CHECK(b < c);
     BOOST_CHECK(a <= a);
     BOOST_CHECK(a <= b);
+    BOOST_CHECK(c - (60 * 60 - 1) == a);
 }
 
 BOOST_AUTO_TEST_CASE(check_addition)
