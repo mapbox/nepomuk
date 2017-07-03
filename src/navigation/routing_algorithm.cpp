@@ -219,17 +219,6 @@ Segment RoutingAlgorithm::make_segment(segment::Walk walk) const
 }
 
 Stop RoutingAlgorithm::make_stop(StopID const id,
-                                 date::UTCTimestamp const arrival,
-                                 date::UTCTimestamp const departure) const
-{
-    Stop stop;
-    stop._id = id;
-    stop._arrival = arrival;
-    stop._departure = departure;
-    return stop;
-}
-
-Stop RoutingAlgorithm::make_stop(StopID const id,
                                  TripID const trip_id,
                                  date::UTCTimestamp const arrival,
                                  date::UTCTimestamp const departure) const

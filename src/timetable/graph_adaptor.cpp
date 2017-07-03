@@ -61,17 +61,20 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
     };
     std::set<std::pair<StopID, StopID>> seen_edges;
     auto const count_connections = [&num_edges, &timetable, &seen_edges](auto trip_itr) {
-        if (trip_itr.valid() && trip_itr.has_next())
+        if (!trip_itr.valid())
+            return;
+
+        if (!trip_itr.has_next())
+            return;
+
+        auto const from = trip_itr.stop();
+        ++trip_itr;
+        auto const to = trip_itr.stop();
+        auto pair = std::make_pair(from, to);
+        if (!seen_edges.count(pair))
         {
-            auto const from = trip_itr.stop();
-            ++trip_itr;
-            auto const to = trip_itr.stop();
-            auto pair = std::make_pair(from, to);
-            if (!seen_edges.count(pair))
-            {
-                seen_edges.insert(pair);
-                ++num_edges;
-            }
+            seen_edges.insert(pair);
+            ++num_edges;
         }
     };
     auto const count_direct_connections = [&num_edges, &timetable](auto const stop_id) {
@@ -101,18 +104,21 @@ TimetableToGraphAdaptor::adapt(TimeTable const &timetable,
     };
 
     auto const add_next_stop_on_line = [&graph, &factory, &timetable, &seen_edges](auto trip_itr) {
-        if (trip_itr.valid() && trip_itr.has_next())
-        {
-            auto const from = trip_itr.stop();
-            ++trip_itr;
-            auto const to = trip_itr.stop();
-            auto pair = std::make_pair(from, to);
+        if (!trip_itr.valid())
+            return;
 
-            if (!seen_edges.count(pair))
-            {
-                seen_edges.insert(pair);
-                factory.add_edge(graph, pair.second.base());
-            }
+        if (!trip_itr.has_next())
+            return;
+
+        auto const from = trip_itr.stop();
+        ++trip_itr;
+        auto const to = trip_itr.stop();
+        auto pair = std::make_pair(from, to);
+
+        if (!seen_edges.count(pair))
+        {
+            seen_edges.insert(pair);
+            factory.add_edge(graph, pair.second.base());
         }
     };
 
