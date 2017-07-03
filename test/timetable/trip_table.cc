@@ -68,6 +68,12 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
     auto itr = trip_table(trip_id, 0);
     BOOST_CHECK_EQUAL(itr.departure(), date::Time("00:11:00"));
     BOOST_CHECK_EQUAL(itr.stop(), StopID{0});
+    auto by_stop = trip_table(trip_id, StopID{0});
+    BOOST_CHECK_EQUAL(itr.departure(), by_stop.departure());
+    BOOST_CHECK_EQUAL(itr.stop(), by_stop.stop());
+    auto by_stop_and_time = trip_table(trip_id, StopID{0}, date::Time("00:10:00"));
+    BOOST_CHECK_EQUAL(itr.departure(), by_stop_and_time.departure());
+    BOOST_CHECK_EQUAL(itr.stop(), by_stop_and_time.stop());
     auto copy = itr;
     auto post = ++itr;
     auto pre = copy++;
