@@ -58,47 +58,49 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
     auto connection_layer = vector_tile.new_layer("lines");
 
     std::set<std::tuple<StopID, StopID, TripID>> added_shapes;
+    auto trip_table = timetable.trip_table();
 
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
         auto const lines = stop_to_trip(stop);
-        for (auto const line_id : lines)
+        for (auto const line : lines)
         {
-            /*
-            auto const stop_range = timetable.line(line_id).stops().list(stop);
-            if (std::distance(stop_range.begin(), stop_range.end()) > 1)
-            {
-                // find the appropriate line id in both entries stop_info_annotation:
-                auto const from_stop = *stop_range.begin();
-                auto const to_stop = *(stop_range.begin() + 1);
+            auto itr = trip_table(line.trip_id, line.offset);
+            if (!itr.has_next())
+                continue;
 
-                // ask for an inclusive range (to is an actual valid value, not the end)
-                auto range = geometry.get(line_id, from_stop, to_stop);
-                if (!range.empty())
+            // find the appropriate line id in both entries stop_info_annotation:
+            auto const from_stop = itr.stop();
+            itr++;
+            auto const to_stop = itr.stop();
+
+            // ask for an inclusive range (to is an actual valid value, not the end)
+            auto range = geometry.get(line.trip_id,
+                                      trip_table.offset(line.trip_id, from_stop),
+                                      trip_table.offset(line.trip_id, to_stop));
+            if (!range.empty())
+            {
+                auto tuple = std::make_tuple(from_stop, to_stop, line.trip_id);
+                if (!added_shapes.count(tuple))
                 {
-                    auto tuple = std::make_tuple(from_stop, to_stop, line_id);
-                    if (!added_shapes.count(tuple))
-                    {
-                        std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
-                        connection_layer.add_line(line, {});
-                        added_shapes.insert(tuple);
-                    }
-                }
-                else
-                {
-                    auto const tuple =
-                        std::make_tuple(from_stop, to_stop, TripID{static_cast<std::uint64_t>(-1)});
-                    if (added_shapes.count(tuple))
-                        continue;
-                    std::vector<geometric::WGS84Coordinate> line;
-                    line.push_back(geometry.get(from_stop));
-                    line.push_back(geometry.get(to_stop));
+                    std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
                     connection_layer.add_line(line, {});
                     added_shapes.insert(tuple);
                 }
             }
-            */
+            else
+            {
+                auto const tuple =
+                    std::make_tuple(from_stop, to_stop, TripID{static_cast<std::uint64_t>(-1)});
+                if (added_shapes.count(tuple))
+                    continue;
+                std::vector<geometric::WGS84Coordinate> line;
+                line.push_back(geometry.get(from_stop));
+                line.push_back(geometry.get(to_stop));
+                connection_layer.add_line(line, {});
+                added_shapes.insert(tuple);
+            }
         }
     }
 }
