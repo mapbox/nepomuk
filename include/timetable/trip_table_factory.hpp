@@ -1,9 +1,9 @@
 #ifndef NEPOMUK_TIMETABLE_TRIP_TABLE_FACTORY_HPP
 #define NEPOMUK_TIMETABLE_TRIP_TABLE_FACTORY_HPP
 
-#include "gtfs/trip.hpp"
 #include "gtfs/schedule.hpp"
 #include "gtfs/stop.hpp"
+#include "gtfs/trip.hpp"
 
 #include "timetable/stop_table.hpp"
 #include "timetable/trip_table.hpp"
@@ -22,7 +22,7 @@ namespace timetable
 class TripTableFactory
 {
   public:
-    TripTableFactory(std::int32_t utc_offset, std::vector<gtfs::Trip> const& trips);
+    TripTableFactory(std::int32_t utc_offset, std::vector<gtfs::Trip> const &trips);
 
     // in case frequencies are not specified, we detect trips from the stop_time tables
     TripID produce(std::vector<gtfs::StopTime>::iterator begin,
@@ -44,7 +44,7 @@ class TripTableFactory
     // contain holes in the ID space)
     std::vector<TripID> external_from_internal_trip_id;
     std::int32_t utc_offset;
-    std::vector<gtfs::Trip> const& trips;
+    std::vector<gtfs::Trip> const &trips;
 
     //
     // Handling of stops

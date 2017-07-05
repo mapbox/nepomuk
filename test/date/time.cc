@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(check_compare)
     BOOST_CHECK(b < c);
     BOOST_CHECK(a <= a);
     BOOST_CHECK(a <= b);
-    auto const d = c - (60*60-1);
+    auto const d = c - (60 * 60 - 1);
     BOOST_CHECK(d == a);
 }
 

@@ -213,7 +213,9 @@ void Dataset::ensure_ordered()
     std::stable_sort(routes.begin(), routes.end(), by_id);
     std::stable_sort(trips.begin(), trips.end(), by_id);
 
-    auto const by_trip_id = [](auto const&lhs, auto const &rhs){ return lhs.trip_id < rhs.trip_id; };
+    auto const by_trip_id = [](auto const &lhs, auto const &rhs) {
+        return lhs.trip_id < rhs.trip_id;
+    };
     std::stable_sort(stop_times.begin(), stop_times.end(), by_trip_id);
 
     if (fare_attributes)

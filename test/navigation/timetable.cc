@@ -68,12 +68,10 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 
     std::transform(
         from.begin(), from.end(), std::back_inserter(origin), make_converter(from[0].second));
-    std::transform(to.begin(),
-                   to.end(),
-                   std::back_inserter(destination),
-                   make_converter(to[0].second));
+    std::transform(
+        to.begin(), to.end(), std::back_inserter(destination), make_converter(to[0].second));
 
-	auto empty = origin;
+    auto empty = origin;
     empty.clear();
 
     const auto route_4 = timetable_router(date::Time{"00:00:00"}, origin, destination);

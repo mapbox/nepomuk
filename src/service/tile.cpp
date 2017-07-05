@@ -60,7 +60,7 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
     auto trip_table = timetable.trip_table();
 
     std::vector<geometric::WGS84Coordinate> line_coordinates;
-    std::set<std::pair<StopID,StopID>> seen;
+    std::set<std::pair<StopID, StopID>> seen;
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
@@ -74,8 +74,8 @@ void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
             // find the appropriate line id in both entries stop_info_annotation:
             itr++;
             auto const to_stop = itr.stop();
-            auto connection = std::make_pair(stop,to_stop);
-            if( seen.count(connection) )
+            auto connection = std::make_pair(stop, to_stop);
+            if (seen.count(connection))
                 continue;
             seen.insert(connection);
 
@@ -168,7 +168,7 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
     to_features.push_back({"destinantion", {tool::container::VectorTileValueType::BOOL, true}});
     auto const &trip_table = timetable.trip_table();
     std::size_t t_count = 0;
-    std::set<std::pair<StopID,StopID>> seen;
+    std::set<std::pair<StopID, StopID>> seen;
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
@@ -181,8 +181,8 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
             {
                 ++itr;
                 auto const next_stop = itr.stop();
-                auto pair = std::make_pair(stop,next_stop);
-                if( seen.count(pair) )
+                auto pair = std::make_pair(stop, next_stop);
+                if (seen.count(pair))
                     continue;
                 seen.insert(pair);
 
