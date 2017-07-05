@@ -90,7 +90,6 @@ CSVDiscSource::CSVDiscSource(boost::filesystem::path base)
       frequencies(setIfExists(base.string() + "/frequencies.txt")),
       shapes(setIfExists(base.string() + "/shapes.txt")),
       transfers(setIfExists(base.string() + "/transfers.txt"))
-
 {
     // validate the source
     constexpr const bool REQUIRED = true;
@@ -105,7 +104,6 @@ CSVDiscSource::CSVDiscSource(boost::filesystem::path base)
 Dataset readCSV(CSVDiscSource const &source)
 {
     Dataset data;
-
     std::cout << "Reading agencies..." << std::flush;
     readData(source.agency, data.agencies, makeAgency, checkAgencyCSVHeader);
     std::cout << " done." << std::endl;
@@ -191,6 +189,7 @@ Dataset readCSV(CSVDiscSource const &source)
     }
     // order all ided types by their ID
     data.ensure_ordered();
+
     return data;
 }
 

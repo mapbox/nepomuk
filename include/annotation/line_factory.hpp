@@ -8,6 +8,7 @@
 namespace nepomuk
 {
 
+struct TripID;
 namespace gtfs
 {
 struct Trip;
@@ -22,9 +23,9 @@ namespace annotation
 class LineFactory
 {
   public:
-    static Line produce(std::vector<size_t> const &trip_offset_by_line,
-                        std::vector<gtfs::Route> const &route,
-                        std::vector<gtfs::Trip> const &trips);
+    static Line produce(std::vector<gtfs::Route> const &route,
+                        std::vector<gtfs::Trip> const &trips,
+                        std::vector<TripID> const &internal_to_external_trip_id);
 };
 
 } // namespace annotation

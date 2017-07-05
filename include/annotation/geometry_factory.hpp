@@ -5,6 +5,7 @@
 
 #include "annotation/geometry.hpp"
 #include "timetable/segment_table.hpp"
+#include "timetable/trip_table.hpp"
 
 namespace nepomuk
 {
@@ -16,15 +17,10 @@ struct Trip;
 
 namespace timetable
 {
-class LineTable;
-} // namespace timetable
+class TripTable;
+};
 
 struct ShapeID;
-
-namespace search
-{
-class StopToLine;
-} // namespace search
 
 namespace annotation
 {
@@ -32,11 +28,10 @@ namespace annotation
 class GeometryFactory
 {
   public:
-    static Geometry produce(std::vector<gtfs::Stop> const &stops,
+    static Geometry produce(timetable::TripTable const &trip_table,
+                            std::vector<TripID> const &internal_to_external_trip_mapping,
+                            std::vector<gtfs::Stop> const &stops,
                             std::vector<gtfs::Trip> const &trips,
-                            std::vector<std::size_t> const &trip_offsets_by_line,
-                            search::StopToLine const &stop_to_line,
-                            std::vector<timetable::LineTable> const &line_tables,
                             timetable::SegmentTable const &segment_table);
 };
 

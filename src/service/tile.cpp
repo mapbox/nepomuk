@@ -16,7 +16,7 @@ namespace service
 
 Tile::Tile(service::Master &master_service)
     : timetable(master_service.timetable()), stop_lookup(master_service.coordinate_to_stop()),
-      stop_to_line(master_service.stop_to_line()), dictionary(master_service.dictionary()),
+      stop_to_trip(master_service.stop_to_trip()), dictionary(master_service.dictionary()),
       stop_annotation(master_service.stop_annotation()),
       geometry(master_service.geometry_annotation()), segment_table(master_service.segment_table()),
       components(master_service.components())
@@ -54,48 +54,59 @@ tool::container::MapboxVectorTile Tile::make_tile(std::uint32_t const horizontal
 void Tile::add_lines(tool::container::MapboxVectorTile &vector_tile,
                      StopsFromLookup const &stops) const
 {
-
     auto connection_layer = vector_tile.new_layer("lines");
 
-    std::set<std::tuple<StopID, StopID, LineID>> added_shapes;
+    std::set<std::tuple<StopID, StopID, TripID>> added_shapes;
+    auto trip_table = timetable.trip_table();
 
+    std::vector<geometric::WGS84Coordinate> line_coordinates;
+    std::set<std::pair<StopID, StopID>> seen;
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
-        auto const lines = stop_to_line(stop);
-        for (auto const line_id : lines)
+        auto const lines = stop_to_trip(stop);
+        for (auto const line : lines)
         {
-            auto const stop_range = timetable.line(line_id).stops().list(stop);
-            if (std::distance(stop_range.begin(), stop_range.end()) > 1)
-            {
-                // find the appropriate line id in both entries stop_info_annotation:
-                auto const from_stop = *stop_range.begin();
-                auto const to_stop = *(stop_range.begin() + 1);
+            auto itr = trip_table(line.trip_id, line.offset);
+            if (!itr.has_next())
+                continue;
 
-                // ask for an inclusive range (to is an actual valid value, not the end)
-                auto range = geometry.get(line_id, from_stop, to_stop);
-                if (!range.empty())
+            // find the appropriate line id in both entries stop_info_annotation:
+            itr++;
+            auto const to_stop = itr.stop();
+            auto connection = std::make_pair(stop, to_stop);
+            if (seen.count(connection))
+                continue;
+            seen.insert(connection);
+
+            // ask for an inclusive range (to is an actual valid value, not the end)
+            auto const offset = trip_table.offset(line.trip_id) + line.offset;
+            auto range = geometry.get(line.trip_id, offset, offset + 1);
+
+            if (!range.empty())
+            {
+                auto tuple = std::make_tuple(stop, to_stop, line.trip_id);
+                if (!added_shapes.count(tuple))
                 {
-                    auto tuple = std::make_tuple(from_stop, to_stop, line_id);
-                    if (!added_shapes.count(tuple))
-                    {
-                        std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
-                        connection_layer.add_line(line, {});
-                        added_shapes.insert(tuple);
-                    }
-                }
-                else
-                {
-                    auto const tuple =
-                        std::make_tuple(from_stop, to_stop, LineID{static_cast<std::uint64_t>(-1)});
-                    if (added_shapes.count(tuple))
-                        continue;
-                    std::vector<geometric::WGS84Coordinate> line;
-                    line.push_back(geometry.get(from_stop));
-                    line.push_back(geometry.get(to_stop));
-                    connection_layer.add_line(line, {});
+                    line_coordinates.clear();
+                    line_coordinates.resize(range.size());
+                    std::copy(range.begin(), range.end(), line_coordinates.begin());
+                    // std::vector<geometric::WGS84Coordinate> line(range.begin(), range.end());
+                    connection_layer.add_line(line_coordinates, {});
                     added_shapes.insert(tuple);
                 }
+            }
+            else
+            {
+                auto const tuple =
+                    std::make_tuple(stop, to_stop, TripID{static_cast<std::uint64_t>(-1)});
+                if (added_shapes.count(tuple))
+                    continue;
+                line_coordinates.clear();
+                line_coordinates.push_back(geometry.get(stop));
+                line_coordinates.push_back(geometry.get(to_stop));
+                connection_layer.add_line(line_coordinates, {});
+                added_shapes.insert(tuple);
             }
         }
     }
@@ -155,16 +166,26 @@ void Tile::add_components(tool::container::MapboxVectorTile &vector_tile,
     tool::container::MapboxVectorTile::FeatureList to_features;
     from_features.push_back({"origin", {tool::container::VectorTileValueType::BOOL, true}});
     to_features.push_back({"destinantion", {tool::container::VectorTileValueType::BOOL, true}});
+    auto const &trip_table = timetable.trip_table();
+    std::size_t t_count = 0;
+    std::set<std::pair<StopID, StopID>> seen;
     for (auto const pair : stops)
     {
         auto const stop = pair.first;
-        auto const lines = stop_to_line(stop);
-        for (auto const line_id : lines)
+        auto const lines = stop_to_trip(stop);
+        for (auto const line : lines)
         {
-            auto const stop_range = timetable.line(line_id).stops().list(stop);
-            if (std::distance(stop_range.begin(), stop_range.end()) > 1)
+            ++t_count;
+            auto itr = trip_table(line.trip_id, line.offset);
+            if (itr.has_next())
             {
-                auto const next_stop = *(stop_range.begin() + 1);
+                ++itr;
+                auto const next_stop = itr.stop();
+                auto pair = std::make_pair(stop, next_stop);
+                if (seen.count(pair))
+                    continue;
+                seen.insert(pair);
+
                 if (components.component(stop.base()) != components.component(next_stop.base()))
                 {
                     component_layer.add_point(geometry.get(stop), from_features);

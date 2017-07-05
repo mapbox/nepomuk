@@ -7,6 +7,7 @@
 #include "service/tile.hpp"
 
 #include <string>
+#include <zmq.hpp>
 
 namespace nepomuk
 {
@@ -48,6 +49,8 @@ class Service
     service::Tile tile;
 
     annotation::PBF const &pbf_annotator;
+
+    zmq::context_t &context;
 };
 
 } // namespace ipc

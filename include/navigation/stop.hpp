@@ -15,10 +15,12 @@ class Stop
     StopID id() const;
     date::UTCTimestamp departure() const;
     date::UTCTimestamp arrival() const;
+    std::size_t offset() const;
 
   private:
     // the stop/station that has been reached
     StopID _id;
+    std::size_t _offset;
 
     // the arrival/departure at the stop
     date::UTCTimestamp _arrival;

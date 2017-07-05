@@ -31,10 +31,9 @@ int main(int argc, char **argv) try
 
 #if 1
         navigation::algorithm::TimeTableDijkstra timetable_router(data_service.timetable(),
-                                                                  data_service.stop_to_line());
+                                                                  data_service.stop_to_trip());
 #else
-        navigation::algorithm::TimeTable timetable_router(data_service.timetable(),
-                                                          data_service.stop_to_line());
+        navigation::algorithm::TimeTable timetable_router(data_service.timetable());
 #endif
         auto stop_info = data_service.stop_annotation();
 

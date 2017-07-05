@@ -9,6 +9,7 @@ namespace nepomuk
 {
 
 struct ShapeID;
+struct TripID;
 namespace gtfs
 {
 struct Dataset;
@@ -20,8 +21,10 @@ namespace timetable
 class TimeTableFactory
 {
   public:
-    static TimeTable produce(gtfs::Dataset &dataset,
-                             std::vector<std::size_t> &trip_offsets_by_line);
+    static TimeTable
+    produce(gtfs::Dataset &dataset,
+            // if required, we can remember an output mpaaing from internal to external trip ids
+            std::vector<TripID> *trip_mapping = NULL);
 };
 
 } // namespace timetable

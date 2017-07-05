@@ -2,16 +2,15 @@
 #define NEPOMUK_TIMETABLE_HPP_
 
 #include "id/stop.hpp"
-#include "timetable/line_table.hpp"
 #include "timetable/station_table.hpp"
+#include "timetable/stop_to_trip.hpp"
 #include "timetable/transfer_table.hpp"
+#include "timetable/trip_table.hpp"
 
 #include <vector>
 
 namespace nepomuk
 {
-
-struct LineID;
 
 namespace search
 {
@@ -27,11 +26,9 @@ class TimeTable
 {
   public:
     // get a line by its id
-    LineTable const &line(LineID const &line) const;
-    std::vector<LineTable> const &lines() const;
-
     // get all proposed transfers at a stop
     TransferTable::iterator_range transfers(StopID const stop) const;
+    auto const &trip_table() const { return _trip_table; }
 
     // map stations to/from stops
     auto station(StopID const stop_id) const { return station_table.station(stop_id); }
@@ -40,7 +37,8 @@ class TimeTable
     auto num_stops() const { return station_table.num_stops(); }
     auto num_stations() const { return station_table.num_stations(); }
   private:
-    std::vector<LineTable> line_tables;
+    TripTable _trip_table;
+
     TransferTable transfer_table;
     StationTable station_table;
 

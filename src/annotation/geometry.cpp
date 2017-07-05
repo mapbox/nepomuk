@@ -19,34 +19,20 @@ geometric::WGS84Coordinate Geometry::get(StopID const stop_id) const
 }
 
 timetable::SegmentTable::const_iterator_range
-Geometry::get(LineID const line, StopID const from, StopID const to) const
+Geometry::get(TripID const line, std::size_t from_offset, std::size_t to_offset) const
 {
     // if the line isn't a line, return
-    if (line == WALKING_TRANSFER || segment_table.category_size() <= line.base())
+    if (line == WALKING_TRANSFER || !shape_by_trip[line.base()])
         return boost::make_iterator_range(segment_table.cend(), segment_table.cend());
 
-    auto const from_info = shape_info.crange(from.base());
-    auto const to_info = shape_info.crange(to.base());
+    BOOST_ASSERT(shape_by_trip[line.base()]->base() < segment_table.category_size());
+    BOOST_ASSERT(to_offset + 1 < geometry_offsets.size());
 
-    auto const has_desired_line = [line](auto const &sol) { return sol.line_id == line; };
+    auto const range = segment_table.crange(shape_by_trip[line.base()]->base());
+    BOOST_ASSERT(geometry_offsets[to_offset] + 1 <= range.size());
 
-    auto const from_sol_itr = std::find_if(from_info.begin(), from_info.end(), has_desired_line);
-    auto const to_sol_itr = std::find_if(to_info.begin(), to_info.end(), has_desired_line);
-
-    // make sure we find the line on both entries
-    if ((from_sol_itr == from_info.end()) || (to_sol_itr == to_info.end()))
-        return boost::make_iterator_range(segment_table.cend(), segment_table.cend());
-    else
-    {
-        // TODO remove after resolving https://github.com/mapbox/nepomuk/issues/88
-        if (from_sol_itr->offset > to_sol_itr->offset)
-            return boost::make_iterator_range(segment_table.cend(), segment_table.cend());
-        BOOST_ASSERT(from_sol_itr->shape_id == to_sol_itr->shape_id);
-        BOOST_ASSERT(from_sol_itr->offset <= to_sol_itr->offset);
-        // need to add +1 to the offset, since the offset is a start value, not end paradigm
-        return segment_table.crange(
-            from_sol_itr->shape_id.base(), from_sol_itr->offset, to_sol_itr->offset + 1);
-    }
+    return boost::make_iterator_range(range.begin() + geometry_offsets[from_offset],
+                                      range.begin() + geometry_offsets[to_offset] + 1);
 }
 
 } // namespace annotation

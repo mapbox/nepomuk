@@ -43,6 +43,10 @@ cd build/release
 ctest
 ```
 
+# Sanitisers
+
+Using adress sanitizing with mac os triggers a false positive in zeromq context creation. To use address sanitation on the remaining code we require `ASAN_OPTIONS=detect_container_overflow=0`;
+
 ## Nodebindings
 
 Nodebindings can be build via node-cmake. To build the bindings, simply specify `-DNODEBINDINGS=On` when configuring the project.

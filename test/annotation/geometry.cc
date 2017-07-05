@@ -1,7 +1,7 @@
 #include "fixtures.h"
 #include "geometric/coordinate.hpp"
-#include "id/line.hpp"
 #include "id/stop.hpp"
+#include "id/trip.hpp"
 #include "service/master.hpp"
 
 #include "test/toolkit.hpp"
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(annotate_lines)
     expected_coordinates.push_back(make_coordinate(0.00545, 0.005));
     expected_coordinates.push_back(make_coordinate(0.0055, 0.005));
 
-    auto const range = geometry_annotation.get(LineID{0}, StopID{0}, StopID{5});
+    auto const range = geometry_annotation.get(TripID{0}, 0, 4);
     BOOST_CHECK_EQUAL_COLLECTIONS(
         range.begin(), range.end(), expected_coordinates.begin(), expected_coordinates.end());
 }

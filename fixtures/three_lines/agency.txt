@@ -1,2 +1,2 @@
 agency_id, agency_name,agency_url,agency_timezone,agency_phone,agency_lang
-FixtureBus,The Fixture Bus, www://fixtures-are-fun.de,Germany/Berlin,(030) 1234567,de
+FixtureBus,The Fixture Bus, www://fixtures-are-fun.de,Europe/Berlin,(030) 1234567,de

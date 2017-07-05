@@ -1,6 +1,7 @@
 #include "ipc/service.hpp"
 #include "ipc/service_configuration.hpp"
 
+#include "ipc/context.hpp"
 #include "ipc/request.pb.h"
 #include "ipc/response.pb.h"
 #include "ipc/route_request.pb.h"
@@ -122,27 +123,21 @@ std::string handle_request(TileRequest const &request, service::Tile const &serv
 
     std::string buffer;
     pbf_response.SerializeToString(&buffer);
-
     return buffer;
 }
 
 } // namespace
 
 Service::Service(ServiceConfiguration const &configuration)
-    : master(configuration.dataset()), route(master), tile(master),
+    : context(get_context()), master(configuration.dataset()), route(master), tile(master),
       pbf_annotator(master.pbf_annotation())
 {
 }
 
 void Service::listen(std::string const &socket_str)
 {
-    const int constexpr num_threads = 1;
-    zmq::context_t context(num_threads);
     zmq::socket_t socket(context, ZMQ_REP);
-
-    // listen on the requested port
     socket.bind(socket_str);
-
     auto const invalid_buffer = []() {
         Response pbf_response;
         pbf_response.set_code(400);

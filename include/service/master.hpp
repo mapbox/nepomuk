@@ -12,11 +12,11 @@
 
 // the basic timetable
 #include "timetable/segment_table.hpp"
+#include "timetable/stop_to_trip.hpp"
 #include "timetable/timetable.hpp"
 
 // look-ups
 #include "search/coordinate_to_stop.hpp"
-#include "search/stop_to_line.hpp"
 
 // pure data
 #include "tool/container/string_table.hpp"
@@ -47,9 +47,9 @@ class Master
 
     // routing data
     timetable::TimeTable const &timetable();
+    timetable::StopToTrip const &stop_to_trip();
 
     // look-ups
-    search::StopToLine const &stop_to_line();
     search::CoordinateToStop const &coordinate_to_stop();
 
     // plain data
@@ -67,6 +67,9 @@ class Master
     // graph measurements
     algorithm::StronglyConnectedComponent const &components();
 
+    // mappings
+    std::vector<TripID> const &trip_mapping();
+
   private:
     std::vector<std::size_t> const &trip_offsets_by_line();
 
@@ -75,9 +78,9 @@ class Master
 
     // timetable
     std::unique_ptr<timetable::TimeTable> _timetable;
+    std::unique_ptr<timetable::StopToTrip> _stop_to_trip;
 
     // look-ups
-    std::unique_ptr<search::StopToLine> _stop_to_line;
     std::unique_ptr<search::CoordinateToStop> _coordinate_to_stop;
 
     // plain data
@@ -94,6 +97,9 @@ class Master
 
     // graph measures
     std::unique_ptr<algorithm::StronglyConnectedComponent> _components;
+
+    // mappings
+    std::unique_ptr<std::vector<TripID>> _trip_mapping;
 };
 
 } // namespace service

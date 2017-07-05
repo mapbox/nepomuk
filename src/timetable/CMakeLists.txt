@@ -1,19 +1,13 @@
 # define a set of sources to compile
 SET(timetable_SOURCES
-    stop_table.cpp
-    stop_table_factory.cpp
-    line_table.cpp
-    departure_table.cpp
-    departure_table_factory.cpp
-    duration_table.cpp
-    duration_table_factory.cpp
     graph_adaptor.cpp
-    line_table.cpp
-    line_table_factory.cpp
     station_table.cpp
     station_table_factory.cpp
     timetable_factory.cpp
     timetable.cpp
+    stop_to_trip.cpp
+    trip_table.cpp
+    trip_table_factory.cpp
     transfer_table.cpp
     transfer_table_factory.cpp)
 

@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(annotate_pbf_trip)
 {
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     auto const &pbf = data_service.pbf_annotation();
-    MockNavigator mocked_navigator(data_service.timetable().lines());
+    MockNavigator mocked_navigator(data_service.timetable());
     auto mocked_trip = mocked_navigator(date::Time("1:00:00"), StopID{0}, StopID{1});
     BOOST_CHECK(mocked_trip);
 

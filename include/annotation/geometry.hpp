@@ -5,11 +5,13 @@
 #include <vector>
 
 #include "geometric/coordinate.hpp"
-#include "id/line.hpp"
 #include "id/shape.hpp"
 #include "id/stop.hpp"
+#include "id/trip.hpp"
 #include "timetable/segment_table.hpp"
 #include "tool/container/indexed_vector.hpp"
+
+#include <boost/optional.hpp>
 
 namespace nepomuk
 {
@@ -19,28 +21,27 @@ namespace annotation
 class Geometry
 {
   public:
-    // All information required to look up the gometry between two stops on a line. Shape and Offset
-    // are indices into the segment table, which contains coordinates categorized by line ids
-    struct LineShapeOffset
-    {
-        LineID line_id;
-        ShapeID shape_id;
-        std::size_t offset;
-    };
-
     geometric::WGS84Coordinate get(StopID const stop) const;
 
     timetable::SegmentTable::const_iterator_range
-    get(LineID const line, StopID const from, StopID const to) const;
+    get(TripID const line, std::size_t from_offset, std::size_t to_offset) const;
 
   private:
     Geometry(timetable::SegmentTable const &segment_table);
     friend class GeometryFactory;
 
+    // accessing the route-id from a trip id
+    std::vector<boost::optional<ShapeID>> shape_by_trip;
+
+    // the geometry offsets, in sync with the all_stops of the trip table
+    std::vector<std::size_t> geometry_offsets;
+
+    // the segment table provides geometries for segments. They can be accessed via a shape_id
+    // (shape_id_by_trip). The offsets along the shape are stored in the geometry_offsets array
     timetable::SegmentTable const &segment_table;
 
+    // every stop offers a dedicated coordinate, even if segments are not present
     std::vector<geometric::WGS84Coordinate> stop_locations;
-    tool::container::IndexedVector<LineShapeOffset> shape_info;
 };
 
 } // namespace annotation

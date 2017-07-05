@@ -59,6 +59,10 @@ struct Dataset
     // make sure all basic gtfs features are sorted by id, since we want to access stuff by its id
     void ensure_ordered();
 
+    // in all trips, ensure stops are uniques by adding additional stops that are just the same but
+    // connect to the original via a station
+    void remove_cyclic_dependencies();
+
     // not all stops in the stos.txt are reachable entities. To ensure high quality of our look-up /
     // connectivity between stops, we can filter out any unreachbale stops before creating further
     // structures from the dataset. Stops, stop_times, and transfers are being rehashed for their

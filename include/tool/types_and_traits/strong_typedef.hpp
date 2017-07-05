@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <functional>
 #include <iostream>
+#include <limits>
 #include <type_traits>
 
 // Tool to explicityly check for ID types
@@ -12,6 +13,8 @@
     {                                                                                              \
         using value_type = base_type;                                                              \
         base_type __value;                                                                         \
+                                                                                                   \
+        static id_type INVALID() { return id_type{std::numeric_limits<base_type>::max()}; }        \
                                                                                                    \
         /* explicit conversion */                                                                  \
         explicit operator base_type &() { return __value; }                                        \

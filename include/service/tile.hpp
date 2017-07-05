@@ -3,10 +3,10 @@
 
 #include "annotation/stop.hpp"
 #include "search/coordinate_to_stop.hpp"
-#include "search/stop_to_line.hpp"
 #include "service/master.hpp"
 #include "service/tile_parameters.hpp"
 #include "timetable/segment_table.hpp"
+#include "timetable/stop_to_trip.hpp"
 #include "timetable/timetable.hpp"
 
 #include "adaptor/dictionary.hpp"
@@ -44,7 +44,7 @@ class Tile
     timetable::TimeTable const &timetable;
     // looking up stations / stops by geometry
     search::CoordinateToStop const &stop_lookup;
-    search::StopToLine const &stop_to_line;
+    timetable::StopToTrip const &stop_to_trip;
     // to request coordinates / names
     nepomuk::tool::container::StringTable const &dictionary;
     annotation::Stop const &stop_annotation;

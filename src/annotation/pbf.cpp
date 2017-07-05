@@ -129,8 +129,8 @@ void PBF::add(ipc::TransitSegment &target, navigation::segment::Transit const &t
 
     // Get coordinates for items stored in geometry
     auto const range = geometry.get(transit.connections().front().line(),
-                                    transit.stops().front().id(),
-                                    transit.stops().back().id());
+                                    transit.stops().front().offset(),
+                                    transit.stops().back().offset());
     std::vector<geometric::WGS84Coordinate> coordinates(range.begin(), range.end());
 
     // or take the stops if we don't have geometry

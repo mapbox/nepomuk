@@ -36,7 +36,7 @@ class RequestHandler
     Response check_alive();
 
   private:
-    zmq::context_t context;
+    zmq::context_t &context;
     zmq::socket_t socket;
 
     // perform a request (request does not care what is inside, it's encoded in the pbf)

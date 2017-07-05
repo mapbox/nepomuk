@@ -21,12 +21,10 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
     // This needs to be replaced by a dedicated fixture (see
     // https://github.com/mapbox/nepomuk/issues/37)
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
+    auto const &timetable = data_service.timetable();
 
-    std::vector<boost::optional<ShapeID>> shapes_by_line;
-    auto const timetable = data_service.timetable();
-    auto const trip_look_up = data_service.stop_to_line();
-
-    navigation::algorithm::TimeTableDijkstra timetable_router(timetable, trip_look_up);
+    navigation::algorithm::TimeTableDijkstra timetable_router(timetable,
+                                                              data_service.stop_to_trip());
 
     auto route = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
@@ -36,7 +34,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
         (route->legs().begin()->segments().begin())->as_transit().stops().begin()->id(), StopID{0});
     BOOST_CHECK_EQUAL(
         (route->legs().begin()->segments().begin())->as_transit().connections().begin()->line(),
-        LineID{0});
+        TripID{0});
     route = timetable_router(date::Time("12:00:00"), StopID{0}, StopID{7});
     BOOST_CHECK((bool)route);
     BOOST_CHECK(route->legs().front().segments().size() > 1);
@@ -46,6 +44,7 @@ BOOST_AUTO_TEST_CASE(lookup_lines_from_stops)
 
     auto leg_range = route->legs().begin()->segments();
     BOOST_CHECK_EQUAL(std::distance(leg_range.begin(), leg_range.end()), 2);
+
     auto route2 = timetable_router(date::Time("00:00:00"), StopID{0}, StopID{9});
     BOOST_CHECK((bool)route2);
 
@@ -58,7 +57,7 @@ BOOST_AUTO_TEST_CASE(multi_source_target)
 {
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     navigation::algorithm::TimeTableDijkstra timetable_dijkstra(data_service.timetable(),
-                                                                data_service.stop_to_line());
+                                                                data_service.stop_to_trip());
 
     using input_type = navigation::RoutingAlgorithm::ADLeg;
     std::vector<input_type> origin;
@@ -79,7 +78,7 @@ BOOST_AUTO_TEST_CASE(multi_source_target_no_path)
 {
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     navigation::algorithm::TimeTableDijkstra timetable_dijkstra(data_service.timetable(),
-                                                                data_service.stop_to_line());
+                                                                data_service.stop_to_trip());
 
     using input_type = navigation::RoutingAlgorithm::ADLeg;
     std::vector<input_type> origin;
@@ -99,7 +98,7 @@ BOOST_AUTO_TEST_CASE(multi_source_long_walk)
 {
     service::Master data_service(TRANSIT_THREE_LINES_EXAMPLE_FIXTURE);
     navigation::algorithm::TimeTableDijkstra timetable_dijkstra(data_service.timetable(),
-                                                                data_service.stop_to_line());
+                                                                data_service.stop_to_trip());
 
     using input_type = navigation::RoutingAlgorithm::ADLeg;
     std::vector<input_type> origin;

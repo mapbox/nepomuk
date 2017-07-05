@@ -7,7 +7,6 @@
 #include "adaptor/dictionary.hpp"
 #include "annotation/geometry_factory.hpp"
 #include "annotation/line_factory.hpp"
-#include "search/stop_to_line_factory.hpp"
 #include "timetable/graph_adaptor.hpp"
 #include "timetable/timetable_factory.hpp"
 
@@ -28,6 +27,7 @@ Master::Master(std::string const &path)
     // the constructor only reads the base data. All other classes / look-ups are constructed on
     // demand
     base_data.filter_unreachable_stops();
+    base_data.remove_cyclic_dependencies();
     base_data.connect_stops_into_stations(100);
 }
 
@@ -37,41 +37,39 @@ timetable::TimeTable const &Master::timetable()
     if (!_timetable)
     {
         tool::status::FunctionTimingGuard guard("Timetable creation");
-        _trip_offsets_by_line = std::make_unique<std::vector<std::size_t>>();
-        BOOST_ASSERT(_trip_offsets_by_line);
+        _trip_mapping = std::make_unique<std::vector<TripID>>();
         _timetable = std::make_unique<timetable::TimeTable>(
-            timetable::TimeTableFactory::produce(base_data, *_trip_offsets_by_line));
+            timetable::TimeTableFactory::produce(base_data, _trip_mapping.get()));
     }
 
     return *_timetable;
 }
 
-std::vector<std::size_t> const &Master::trip_offsets_by_line()
+std::vector<TripID> const &Master::trip_mapping()
 {
-    if (!_trip_offsets_by_line)
+    if (!_trip_mapping)
     {
-        // the trip_offsets_by_line is a byproduct of computing the line tables (as part of the
-        // timetable creation). We cannot easily compute them in advance/independent of the
-        // timetable creation. Therefore we delegate the creation and compute timetables first.
+        // creates trip_mapping as a side-effect
         timetable();
-        BOOST_ASSERT(_trip_offsets_by_line);
     }
-    return *_trip_offsets_by_line;
+    return *_trip_mapping;
+}
+
+timetable::StopToTrip const &Master::stop_to_trip()
+{
+    if (!_stop_to_trip)
+    {
+        tool::status::FunctionTimingGuard guard("StopToTrip creation");
+        // creating the stop to trip layout requires access to the timetable
+        auto const &ttable = timetable();
+        _stop_to_trip =
+            std::make_unique<timetable::StopToTrip>(base_data.stops.size(), ttable.trip_table());
+    }
+
+    return *_stop_to_trip;
 }
 
 // look-ups
-search::StopToLine const &Master::stop_to_line()
-{
-    if (!_stop_to_line)
-    {
-        tool::status::FunctionTimingGuard guard("Stop To Line Lookup-creation");
-        _stop_to_line = std::make_unique<search::StopToLine>(
-            search::StopToLineFactory::produce(base_data.stops.size(), timetable().lines()));
-    }
-
-    return *_stop_to_line;
-}
-
 search::CoordinateToStop const &Master::coordinate_to_stop()
 {
     if (!_coordinate_to_stop)
@@ -123,11 +121,10 @@ annotation::Geometry const &Master::geometry_annotation()
     {
         tool::status::FunctionTimingGuard guard("Geometry Annotation - creation");
         _geometry_annotation = std::make_unique<annotation::Geometry>(
-            annotation::GeometryFactory::produce(base_data.stops,
+            annotation::GeometryFactory::produce(timetable().trip_table(),
+                                                 trip_mapping(),
+                                                 base_data.stops,
                                                  base_data.trips,
-                                                 trip_offsets_by_line(),
-                                                 stop_to_line(),
-                                                 timetable().lines(),
                                                  segment_table()));
     }
     return *_geometry_annotation;
@@ -140,7 +137,6 @@ annotation::Stop const &Master::stop_annotation()
         tool::status::FunctionTimingGuard guard("Stop Annotation creation");
         _stop_annotation = std::make_unique<annotation::Stop>(base_data.stops);
     }
-
     return *_stop_annotation;
 }
 
@@ -150,10 +146,9 @@ annotation::Line const &Master::line_annotation()
     {
         tool::status::FunctionTimingGuard guard("Line Annotation creation");
 
-        _line_annotation = std::make_unique<annotation::Line>(annotation::LineFactory::produce(
-            trip_offsets_by_line(), base_data.routes, base_data.trips));
+        _line_annotation = std::make_unique<annotation::Line>(
+            annotation::LineFactory::produce(base_data.routes, base_data.trips, trip_mapping()));
     }
-
     return *_line_annotation;
 }
 
@@ -186,7 +181,7 @@ algorithm::StronglyConnectedComponent const &Master::components()
     if (!_components)
     {
         tool::status::FunctionTimingGuard guard("Components creation");
-        auto graph = timetable::TimetableToGraphAdaptor::adapt(timetable(), stop_to_line());
+        auto graph = timetable::TimetableToGraphAdaptor::adapt(timetable(), stop_to_trip());
         _components =
             std::make_unique<algorithm::StronglyConnectedComponent>(algorithm::computeSCC(graph));
     }

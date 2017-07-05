@@ -1,6 +1,6 @@
 #include "navigation/algorithm/timetable.hpp"
 #include "navigation/route.hpp"
-#include "search/stop_to_line.hpp"
+#include "timetable/stop_to_trip.hpp"
 #include "timetable/timetable.hpp"
 
 #include "id/line.hpp"
@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <iterator>
 #include <limits>
+#include <set>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -23,8 +24,9 @@ namespace navigation
 namespace algorithm
 {
 
-TimeTable::TimeTable(timetable::TimeTable const &time_table, search::StopToLine const &stop_to_line)
-    : RoutingAlgorithm(time_table.lines()), time_table(time_table), stop_to_line(stop_to_line)
+TimeTable::TimeTable(timetable::TimeTable const &time_table,
+                     timetable::StopToTrip const &stop_to_trip)
+    : RoutingAlgorithm(time_table), stop_to_trip(stop_to_trip)
 {
 }
 
@@ -169,7 +171,7 @@ void TimeTable::relax(date::Time const &upper_bound,
     auto const add_if_improved = [&](StopID const stop,
                                      date::Time const time,
                                      StopID const parent,
-                                     LineID const line,
+                                     TripID const line,
                                      date::Time const departure) {
         if (!earliest_arrival.count(stop) || time < earliest_arrival[stop].arrival)
         {
@@ -177,48 +179,48 @@ void TimeTable::relax(date::Time const &upper_bound,
             earliest_arrival[stop] = {time, parent, departure, line};
             // std::cout << "\t\t[Reach] " << stop << " from " << parent << " at " << time << " via
             // "
-            //          << line << std::endl;
+            //<< line << " parent: " << earliest_arrival[stop].parent_departure
+            //<< std::endl;
             return true;
         }
         else
             return false;
     };
 
-    auto const relax_line = [&](auto const &state, auto const line_id) {
-        // std::cout << "-------" << std::endl;
-        auto const trip_optional = time_table.line(line_id).get(state.stop_id, state.arrival);
-        if (!trip_optional)
-            return;
+    auto const relax_line = [&](auto const &state, auto const trip_id, auto trip_itr) {
+        auto const departure_time = trip_itr.departure();
 
-        auto const &trip = *trip_optional;
-        auto time = trip.departure;
-
-        auto duration_itr = trip.duration_range.begin();
-        for (auto stop_itr = trip.stop_range.begin(); stop_itr != trip.stop_range.end();
-             ++stop_itr, ++duration_itr)
+        while (trip_itr.has_next())
         {
-            auto const stop_id = *stop_itr;
-            // std::cout << "\t\t" << stop_id << " " << time + *duration_itr << std::endl;
-            if (add_if_improved(stop_id, time, state.stop_id, line_id, trip.departure))
+            ++trip_itr;
+            auto const stop_id = trip_itr.stop();
+
+            if (add_if_improved(
+                    stop_id, trip_itr.arrival(), state.stop_id, trip_id, departure_time))
             {
                 auto transfers = time_table.transfers(stop_id);
                 // add all transfers
                 for (auto transfer : transfers)
                 {
-                    auto transfer_time = time + std::max<int>(transfer.duration, 60);
-                    if (add_if_improved(
-                            transfer.stop_id, transfer_time, stop_id, WALKING_TRANSFER, time) ||
+                    auto transfer_time = trip_itr.arrival() + std::max<int>(transfer.duration, 60);
+                    // std::cout << "\t\tChecking for transfer: " << transfer.stop_id << " "
+                    //          << transfer_time << std::endl;
+                    if (add_if_improved(transfer.stop_id,
+                                        transfer_time,
+                                        stop_id,
+                                        WALKING_TRANSFER,
+                                        trip_itr.arrival()) ||
                         (transfer.stop_id == stop_id))
                     {
                         // needs to be a transfer line instead of 0
-                        internal_state.push_back({transfer.stop_id, time + transfer.duration});
+                        internal_state.push_back({transfer.stop_id, transfer_time});
                     }
                 }
             }
-            time = time + *duration_itr;
         }
     };
 
+    auto const &trip_table = time_table.trip_table();
     // std::cout << "[Round]" << std::endl;
     while (count--)
     {
@@ -230,9 +232,23 @@ void TimeTable::relax(date::Time const &upper_bound,
             break; // sorted, all current states will be out of bound
 
         // get all lines at the given stop
-        auto trip_range = stop_to_line(state.stop_id);
-        for (auto line : trip_range)
-            relax_line(state, line);
+        auto trip_range = stop_to_trip(state.stop_id);
+        std::set<std::pair<std::size_t, std::size_t>> seen_trips;
+        for (auto const trip_and_offset : trip_range)
+        {
+            if (seen_trips.count(trip_table.identifier(trip_and_offset.trip_id)))
+                continue;
+
+            if (trip_table.reachable(
+                    trip_and_offset.trip_id, trip_and_offset.offset, state.arrival))
+            {
+                seen_trips.insert(trip_table.identifier(trip_and_offset.trip_id));
+
+                auto trip_itr =
+                    trip_table(trip_and_offset.trip_id, trip_and_offset.offset, state.arrival);
+                relax_line(state, trip_and_offset.trip_id, trip_itr);
+            }
+        }
     }
 }
 
@@ -241,15 +257,18 @@ TimeTable::extract_path(StopID current_stop, ReachedStateContainer const &earlie
 {
     std::vector<PathEntry> path;
     auto entry = earliest_arrival.find(current_stop)->second;
-    path.push_back({current_stop, entry.line_id, entry.arrival, entry.parent_departure});
+    path.push_back({current_stop, entry.line_id, entry.arrival, entry.arrival});
+    auto depart = entry.parent_departure;
     do
     {
         current_stop = entry.parent;
         entry = earliest_arrival.find(current_stop)->second;
-        path.push_back({current_stop, entry.line_id, entry.arrival, entry.parent_departure});
+        path.push_back({current_stop, entry.line_id, entry.arrival, depart});
+        depart = entry.parent_departure;
     } while (entry.parent != current_stop);
 
     std::reverse(path.begin(), path.end());
+
     return path;
 }
 
