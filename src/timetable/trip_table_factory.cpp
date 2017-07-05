@@ -17,7 +17,7 @@ namespace
 // validate the input
 template <typename iterator_type> void validate_input(iterator_type begin, iterator_type end)
 {
-    if (std::distance(begin, end) <= 1)
+    if (std::distance(begin, end) < 1)
         throw InvalidInputError("TripTableFacotry: Stop times cannot be an empty set.");
 
     // trip has to be unique over all stop times
@@ -74,12 +74,15 @@ TripTableFactory::findStopOffset(const std::vector<gtfs::StopTime>::iterator beg
 {
     auto const &locations = stop_locations_stops[begin->stop_id];
     auto const distance = std::distance(begin, end);
+    auto const shape_id = trips[begin->trip_id.base()].shape_id;
 
     // check if the stops at offset match the stop range
     auto const same_stops = [&](auto const offset) {
         auto const length = std::distance(begin, end);
         if (offset + length >= table.all_stops.size())
             return false;
+
+        auto const same_shape = shapes[offset] == shape_id;
 
         auto const has_same_id = [](auto const stop, auto const &stop_time) {
             return stop == stop_time.stop_id;
@@ -88,10 +91,10 @@ TripTableFactory::findStopOffset(const std::vector<gtfs::StopTime>::iterator beg
         auto const same_length =
             *(table.all_stops.begin() + offset + distance) == StopID::INVALID();
 
-        return same_length && std::equal(table.all_stops.begin() + offset,
-                                         table.all_stops.begin() + offset + distance,
-                                         begin,
-                                         has_same_id);
+        return same_shape && same_length && std::equal(table.all_stops.begin() + offset,
+                                                       table.all_stops.begin() + offset + distance,
+                                                       begin,
+                                                       has_same_id);
     };
 
     auto const itr = std::find_if(locations.begin(), locations.end(), same_stops);
@@ -129,6 +132,8 @@ std::size_t TripTableFactory::produceDurationOffset(std::vector<gtfs::StopTime>:
 
     // starting at the end of all stops
     auto from = table.all_durations.size();
+    BOOST_ASSERT(begin->trip_id.base() < trips.size());
+    shapes[from] = trips[begin->trip_id.base()].shape_id;
 
     // remember the current size, since stop_id can be foudn here
     BOOST_ASSERT(as_durations.size() > 2);
@@ -145,9 +150,8 @@ TripTableFactory::findDurationOffset(const std::vector<std::uint32_t>::iterator 
                                      const std::vector<std::uint32_t>::iterator end)
 {
     // select first non-zero duration
-    BOOST_ASSERT(std::distance(begin, end) > 3);
-    auto const &locations = locations_durations[*(begin + 2)];
     auto const distance = std::distance(begin, end);
+    auto const &locations = locations_durations[*(begin + std::min<std::size_t>(distance - 1, 2))];
 
     // check if the durations at offset match the stop range
     auto const same_durations = [&](auto const offset) {
@@ -173,7 +177,10 @@ TripTableFactory::findDurationOffset(const std::vector<std::uint32_t>::iterator 
 //
 // Overall handlings
 //
-TripTableFactory::TripTableFactory(std::int32_t utc_offset) : utc_offset(utc_offset) {}
+TripTableFactory::TripTableFactory(std::int32_t utc_offset, std::vector<gtfs::Trip> const &trips)
+    : utc_offset(utc_offset), trips(trips)
+{
+}
 
 TripID TripTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
                                  std::vector<gtfs::StopTime>::iterator end)
@@ -182,7 +189,6 @@ TripID TripTableFactory::produce(std::vector<gtfs::StopTime>::iterator begin,
     validate_input(begin, end);
     // at some time frequency / stop time might need different checks, right now we are fine doing
     // it this way and miss-using the input validity template
-
     // find a position of stops
     auto const stop_offset = produceStopOffset(begin, end);
     auto const duration_offset = produceDurationOffset(begin, end);

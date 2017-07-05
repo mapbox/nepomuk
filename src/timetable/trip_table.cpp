@@ -71,6 +71,12 @@ std::size_t TripTable::offset(TripID const trip, StopID const stop) const
     return std::distance(begin, std::find(begin, end, stop));
 }
 
+std::size_t TripTable::offset(TripID const trip) const
+{
+    // locate the stop along the line, report total offset
+    return departures[trip.base()].stop_offset;
+}
+
 TripViewIterator TripTable::
 operator()(TripID const trip, std::size_t offset, date::Time departure) const
 {

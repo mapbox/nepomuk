@@ -25,7 +25,12 @@ Geometry::get(TripID const line, std::size_t from_offset, std::size_t to_offset)
     if (line == WALKING_TRANSFER || !shape_by_trip[line.base()])
         return boost::make_iterator_range(segment_table.cend(), segment_table.cend());
 
+    BOOST_ASSERT(shape_by_trip[line.base()]->base() < segment_table.category_size());
+    BOOST_ASSERT(to_offset + 1 < geometry_offsets.size());
+
     auto const range = segment_table.crange(shape_by_trip[line.base()]->base());
+    BOOST_ASSERT(geometry_offsets[to_offset] + 1 <= range.size());
+
     return boost::make_iterator_range(range.begin() + geometry_offsets[from_offset],
                                       range.begin() + geometry_offsets[to_offset] + 1);
 }

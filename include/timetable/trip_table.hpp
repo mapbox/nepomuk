@@ -88,6 +88,7 @@ class TripTable
     // find the offset of a stop along at trip
     // linear search over all stops of the trip
     std::size_t offset(TripID const trip, StopID const stop) const;
+    std::size_t offset(TripID const trip) const;
 
   private:
     std::vector<Departures> departures;

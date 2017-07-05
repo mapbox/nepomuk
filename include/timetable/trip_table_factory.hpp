@@ -1,7 +1,7 @@
 #ifndef NEPOMUK_TIMETABLE_TRIP_TABLE_FACTORY_HPP
 #define NEPOMUK_TIMETABLE_TRIP_TABLE_FACTORY_HPP
 
-#include "gtfs/frequency.hpp"
+#include "gtfs/trip.hpp"
 #include "gtfs/schedule.hpp"
 #include "gtfs/stop.hpp"
 
@@ -22,7 +22,7 @@ namespace timetable
 class TripTableFactory
 {
   public:
-    TripTableFactory(std::int32_t utc_offset);
+    TripTableFactory(std::int32_t utc_offset, std::vector<gtfs::Trip> const& trips);
 
     // in case frequencies are not specified, we detect trips from the stop_time tables
     TripID produce(std::vector<gtfs::StopTime>::iterator begin,
@@ -31,8 +31,8 @@ class TripTableFactory
     // extract the produced result from the factory
     TripTable extract()
     {
-        std::cout << table.all_stops.size() << " Stops. " << table.all_durations.size()
-                  << std::endl;
+        std::cout << ">>> " << table.all_stops.size() << " Stops. " << table.all_durations.size()
+                  << " durations." << std::endl;
         return std::move(table);
     }
     auto get_mapping() { return std::move(external_from_internal_trip_id); }
@@ -44,10 +44,14 @@ class TripTableFactory
     // contain holes in the ID space)
     std::vector<TripID> external_from_internal_trip_id;
     std::int32_t utc_offset;
+    std::vector<gtfs::Trip> const& trips;
 
     //
     // Handling of stops
     //
+    // we need to ensuret that the stop locations correspond to unique shapes to ensure a matching
+    // between geometries and stops.
+    std::unordered_map<std::size_t, boost::optional<ShapeID>> shapes;
     std::unordered_map<StopID, std::vector<std::size_t>> stop_locations_stops;
 
     // handle stops. Add them to a list of all stops, remember one offset per trip

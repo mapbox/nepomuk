@@ -59,11 +59,13 @@ Geometry GeometryFactory::produce(timetable::TripTable const &trip_table,
                            geometric::distance(stops[stop.base()].location, rhs);
 
                 });
+
             candidate_begin = itr;
             *output_itr++ = std::distance(geometry_begin, itr);
         }
     };
 
+    std::map<std::size_t, boost::optional<ShapeID>> shapes_by_offset;
     auto const generate_geometry_entries =
         [&,
          mapped_id_itr = internal_to_external_trip_mapping.begin() ](auto const &departure) mutable
@@ -75,6 +77,9 @@ Geometry GeometryFactory::produce(timetable::TripTable const &trip_table,
         geometry_annotation.shape_by_trip.push_back(maybe_shape_id);
 
         // when there is a shape, we can try and set the offsets for the shape in the stop array
+        BOOST_ASSERT(shapes_by_offset.find(departure.stop_offset) == shapes_by_offset.end() ||
+                     shapes_by_offset[departure.stop_offset] == maybe_shape_id);
+        shapes_by_offset[departure.stop_offset] = maybe_shape_id;
         if (maybe_shape_id && !handled_offsets.count(departure.stop_offset))
         {
             // prevent doing work multiple times
@@ -99,6 +104,8 @@ Geometry GeometryFactory::produce(timetable::TripTable const &trip_table,
     std::for_each(
         trip_table.departures.begin(), trip_table.departures.end(), generate_geometry_entries);
 
+    std::cout << ">>> Geometry annotations " << geometry_annotation.geometry_offsets.size()
+              << std::endl;
     return geometry_annotation;
 }
 

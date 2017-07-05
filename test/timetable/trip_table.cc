@@ -14,12 +14,6 @@ using namespace nepomuk::gtfs;
 
 BOOST_AUTO_TEST_CASE(check_input_validity)
 {
-    // cannot use empty vectors
-    TripTableFactory factory(0);
-
-    std::vector<StopTime> data;
-    BOOST_CHECK_THROW(factory.produce(data.begin(), data.end()), InvalidInputError);
-
     StopTime first = {TripID{0},
                       date::Time("00:10:00"),
                       date::Time("00:11:00"),
@@ -52,6 +46,28 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
                                     boost::none,
                                     boost::none};
 
+    std::vector<Trip> trips;
+    Trip first_trip = {TripID{0},
+                       RouteID{0},
+                       ServiceID{0},
+                       boost::none,
+                       boost::none,
+                       boost::none,
+                       boost::none,
+                       boost::none,
+                       boost::none,
+                       boost::none};
+    Trip second_trip = first_trip;
+    second_trip.id = TripID{1};
+    trips.push_back(first_trip);
+    trips.push_back(second_trip);
+
+    TripTableFactory factory(0, trips);
+
+    // cannot use empty vectors
+    std::vector<StopTime> data;
+    BOOST_CHECK_THROW(factory.produce(data.begin(), data.end()), InvalidInputError);
+
     data.push_back(first);
     data.push_back(second_invalid_trip);
     BOOST_CHECK_THROW(factory.produce(data.begin(), data.end()), InvalidInputError);
@@ -61,7 +77,7 @@ BOOST_AUTO_TEST_CASE(check_input_validity)
     BOOST_CHECK_NO_THROW(factory.produce(data.begin(), data.end()));
 
     // check equal comparison
-    TripTableFactory factory_valid(0);
+    TripTableFactory factory_valid(0, trips);
     auto const trip_id = factory_valid.produce(data.begin(), data.end());
     auto const trip_table = factory_valid.extract();
 

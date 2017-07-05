@@ -16,7 +16,6 @@ namespace algorithm
 template <typename iterator_type, typename predicate, typename functor>
 functor by_equal_ranges(iterator_type begin, iterator_type end, predicate pred, functor fn)
 {
-    BOOST_ASSERT(std::is_sorted(begin, end, pred));
     while (begin != end)
     {
         auto range = std::equal_range(begin, end, *begin, pred);
